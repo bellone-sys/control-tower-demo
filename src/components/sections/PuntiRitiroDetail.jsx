@@ -93,13 +93,13 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
 
       <div className="detail-grid">
 
-        {/* Map */}
+        {/* Map — smaller */}
         <div className="detail-map-wrap">
           <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
           <div ref={mapRef} className="detail-map" />
         </div>
 
-        {/* Info + hours */}
+        {/* Info + Hours */}
         <div className="detail-info-col">
 
           {/* Info card */}
@@ -131,57 +131,49 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
             </ul>
           </div>
 
-          {/* CTA card */}
-          <div className="card detail-cta-card">
-            <p className="cta-name">{pudo.name} | Punto ritiro e spedizione fermopoint</p>
-            <p className="cta-address">CAP {pudo.cap}{pudo.civico ? ` – ${pudo.civico}` : ''} – Roma – RM</p>
-            <button className="btn-primary btn-cta">Prenota un ritiro</button>
+          {/* Hours table — al posto della CTA */}
+          <div className="card">
+            <div className="card-header">
+              <h3>Orari d'apertura</h3>
+              <span className="card-label">Settimana tipo</span>
+            </div>
+            <div className="hours-table-wrap">
+              <table className="hours-table">
+                <thead>
+                  <tr>
+                    {DAYS.map(d => (
+                      <th key={d} className={d === todayKey ? 'today' : ''}>{d}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from({ length: maxSlots }).map((_, slotIdx) => (
+                    <tr key={slotIdx}>
+                      {DAYS.map(d => {
+                        const slots = pudo.hours[d]
+                        const slot  = slots && slots[slotIdx]
+                        return (
+                          <td key={d} className={d === todayKey ? 'today' : ''}>
+                            {slot ? (
+                              <>
+                                <span className="slot-open">{slot.o}</span>
+                                <span className="slot-close">{slot.c}</span>
+                              </>
+                            ) : slots === null && slotIdx === 0 ? (
+                              <span className="slot-closed">Chiuso</span>
+                            ) : slots && slots.length === 0 && slotIdx === 0 ? (
+                              <span className="slot-closed">—</span>
+                            ) : null}
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Hours table */}
-      <div className="card">
-        <div className="card-header">
-          <h3>Orari d'apertura</h3>
-          <span className="card-label">Settimana tipo</span>
-        </div>
-        <div className="hours-table-wrap">
-          <table className="hours-table">
-            <thead>
-              <tr>
-                {DAYS.map((d, i) => (
-                  <th key={d} className={d === todayKey ? 'today' : ''}>
-                    {d}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: maxSlots }).map((_, slotIdx) => (
-                <tr key={slotIdx}>
-                  {DAYS.map(d => {
-                    const slots = pudo.hours[d]
-                    const slot  = slots && slots[slotIdx]
-                    return (
-                      <td key={d} className={d === todayKey ? 'today' : ''}>
-                        {slot ? (
-                          <>
-                            <span className="slot-open">{slot.o}</span>
-                            <span className="slot-close">{slot.c}</span>
-                          </>
-                        ) : slots === null && slotIdx === 0 ? (
-                          <span className="slot-closed">Chiuso</span>
-                        ) : slots && slots.length === 0 && slotIdx === 0 ? (
-                          <span className="slot-closed">—</span>
-                        ) : null}
-                      </td>
-                    )
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
