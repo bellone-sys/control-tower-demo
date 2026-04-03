@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Overview from './components/sections/Overview'
 import Spedizioni from './components/sections/Spedizioni'
 import PuntiRitiro from './components/sections/PuntiRitiro'
+import Flotta from './components/sections/Flotta'
 import Eccezioni from './components/sections/Eccezioni'
 import Report from './components/sections/Report'
 import { ECCEZIONI } from './data/stub'
@@ -24,6 +25,7 @@ export default function App() {
     overview:   <Overview />,
     spedizioni: <Spedizioni />,
     punti:      <PuntiRitiro />,
+    flotta:     <Flotta />,
     eccezioni:  <Eccezioni />,
     report:     <Report />,
   }

@@ -1,0 +1,47 @@
+/* ===== FLOTTA TABS ===== */
+.flotta-tabs-wrap {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 4px;
+  display: inline-flex;
+}
+
+.flotta-tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.flotta-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  border-radius: calc(var(--radius-lg) - 2px);
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fp-gray-mid);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.flotta-tab:hover { color: var(--fp-charcoal); background: var(--fp-bg); }
+.flotta-tab.active {
+  background: var(--fp-red);
+  color: #fff;
+}
+
+.flotta-tab-count {
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  background: rgba(0,0,0,.10);
+}
+.flotta-tab.active .flotta-tab-count { background: rgba(255,255,255,.25); }
