@@ -1,12 +1,14 @@
 import { useState, useMemo } from 'react'
 import pudosRoma from '../../data/pudosRoma.json'
 import PuntiRitiroDetail from './PuntiRitiroDetail'
+import MultiSelect from '../ui/MultiSelect'
 import './Sections.css'
 import './PuntiRitiro.css'
 
 const PAGE_SIZE = 25
 
-const CAPS = [...new Set(pudosRoma.map(p => p.cap))].sort()
+const CAPS     = [...new Set(pudosRoma.map(p => p.cap))].sort()
+const CAPS_OPT = CAPS.map(c => ({ value: c, label: c }))
 
 const SORT_OPTIONS = [
   { value: 'name-asc',  label: 'Nome A→Z' },
@@ -17,7 +19,7 @@ const SORT_OPTIONS = [
 
 export default function PuntiRitiro() {
   const [search, setSearch]     = useState('')
-  const [filterCap, setFilterCap] = useState('')
+  const [filterCap, setFilterCap] = useState([])
   const [sort, setSort]         = useState('name-asc')
   const [page, setPage]         = useState(1)
   const [selected, setSelected] = useState(null)
@@ -32,7 +34,7 @@ export default function PuntiRitiro() {
         p.cap.includes(q)
       )
     }
-    if (filterCap) list = list.filter(p => p.cap === filterCap)
+    if (filterCap.length) list = list.filter(p => filterCap.includes(p.cap))
 
     const [field, dir] = sort.split('-')
     list = [...list].sort((a, b) => {
@@ -48,7 +50,7 @@ export default function PuntiRitiro() {
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   function handleSearch(v) { setSearch(v); setPage(1) }
-  function handleCap(v)    { setFilterCap(v); setPage(1) }
+  function handleCap(v)    { setFilterCap(v);  setPage(1) }
   function handleSort(v)   { setSort(v); setPage(1) }
 
   if (selected) {
@@ -80,10 +82,12 @@ export default function PuntiRitiro() {
             )}
           </div>
 
-          <select className="pr-select" value={filterCap} onChange={e => handleCap(e.target.value)}>
-            <option value="">Tutti i CAP</option>
-            {CAPS.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
+          <MultiSelect
+            placeholder="Tutti i CAP"
+            options={CAPS_OPT}
+            value={filterCap}
+            onChange={handleCap}
+          />
 
           <select className="pr-select" value={sort} onChange={e => handleSort(e.target.value)}>
             {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}

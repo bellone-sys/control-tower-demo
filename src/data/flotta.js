@@ -36,14 +36,14 @@ export const MEZZI = [
 ]
 
 export const DRIVERS = [
-  { id: 'D001', nome: 'Marco',    cognome: 'Ferretti',   patente: 'B+C',  telefono: '+39 347 112 3344', email: 'ferretti.m@dpd.it',   dataNascita: '1985-03-12', stato: 'In servizio',  mezzoId: 'M003', km_anno: 42300 },
-  { id: 'D002', nome: 'Giulia',   cognome: 'Marchetti',  patente: 'B',    telefono: '+39 349 876 5432', email: 'marchetti.g@dpd.it',  dataNascita: '1991-07-24', stato: 'In servizio',  mezzoId: 'M007', km_anno: 38100 },
-  { id: 'D003', nome: 'Antonio',  cognome: 'De Luca',    patente: 'B+C',  telefono: '+39 333 245 6789', email: 'deluca.a@dpd.it',     dataNascita: '1978-11-05', stato: 'In servizio',  mezzoId: 'M001', km_anno: 55700 },
-  { id: 'D004', nome: 'Sara',     cognome: 'Rizzo',      patente: 'B',    telefono: '+39 320 987 1234', email: 'rizzo.s@dpd.it',      dataNascita: '1994-02-18', stato: 'In servizio',  mezzoId: 'M010', km_anno: 29800 },
-  { id: 'D005', nome: 'Luca',     cognome: 'Conforti',   patente: 'B+C',  telefono: '+39 346 543 8900', email: 'conforti.l@dpd.it',   dataNascita: '1982-09-30', stato: 'In servizio',  mezzoId: 'M005', km_anno: 48200 },
-  { id: 'D006', nome: 'Elena',    cognome: 'Caruso',     patente: 'B',    telefono: '+39 351 678 2211', email: 'caruso.e@dpd.it',     dataNascita: '1997-05-14', stato: 'In servizio',  mezzoId: 'M012', km_anno: 21400 },
-  { id: 'D007', nome: 'Roberto',  cognome: 'Gentile',    patente: 'B+C',  telefono: '+39 338 901 4455', email: 'gentile.r@dpd.it',    dataNascita: '1975-12-22', stato: 'Disponibile',  mezzoId: null,   km_anno: 61000 },
-  { id: 'D008', nome: 'Chiara',   cognome: 'Monti',      patente: 'B',    telefono: '+39 328 112 9900', email: 'monti.c@dpd.it',      dataNascita: '1989-08-07', stato: 'Disponibile',  mezzoId: null,   km_anno: 33500 },
-  { id: 'D009', nome: 'Francesco','cognome':'Palmieri',  patente: 'B+C',  telefono: '+39 342 654 3322', email: 'palmieri.f@dpd.it',   dataNascita: '1987-04-03', stato: 'Ferie',        mezzoId: null,   km_anno: 44800 },
-  { id: 'D010', nome: 'Valentina','cognome':'Greco',     patente: 'B',    telefono: '+39 335 789 6677', email: 'greco.v@dpd.it',      dataNascita: '1993-10-19', stato: 'Malattia',     mezzoId: null,   km_anno: 18700 },
+  { id: 'D001', nome: 'Marco',     cognome: 'Ferretti',  patente: 'B+C', telefono: '+39 347 112 3344', email: 'ferretti.m@fermopoint.it',  dataNascita: '1985-03-12', stato: 'In servizio',  mezzoId: 'M003', km_anno: 42300 },
+  { id: 'D002', nome: 'Giulia',    cognome: 'Marchetti', patente: 'B',   telefono: '+39 349 876 5432', email: 'marchetti.g@fermopoint.it', dataNascita: '1991-07-24', stato: 'In servizio',  mezzoId: 'M007', km_anno: 38100 },
+  { id: 'D003', nome: 'Antonio',   cognome: 'De Luca',   patente: 'B+C', telefono: '+39 333 245 6789', email: 'deluca.a@fermopoint.it',    dataNascita: '1978-11-05', stato: 'In servizio',  mezzoId: 'M001', km_anno: 55700 },
+  { id: 'D004', nome: 'Sara',      cognome: 'Rizzo',     patente: 'B',   telefono: '+39 320 987 1234', email: 'rizzo.s@fermopoint.it',     dataNascita: '1994-02-18', stato: 'In servizio',  mezzoId: 'M010', km_anno: 29800 },
+  { id: 'D005', nome: 'Luca',      cognome: 'Conforti',  patente: 'B+C', telefono: '+39 346 543 8900', email: 'conforti.l@fermopoint.it',  dataNascita: '1982-09-30', stato: 'In servizio',  mezzoId: 'M005', km_anno: 48200 },
+  { id: 'D006', nome: 'Elena',     cognome: 'Caruso',    patente: 'B',   telefono: '+39 351 678 2211', email: 'caruso.e@fermopoint.it',    dataNascita: '1997-05-14', stato: 'In servizio',  mezzoId: 'M012', km_anno: 21400 },
+  { id: 'D007', nome: 'Roberto',   cognome: 'Gentile',   patente: 'B+C', telefono: '+39 338 901 4455', email: 'gentile.r@fermopoint.it',   dataNascita: '1975-12-22', stato: 'Disponibile', mezzoId: null,   km_anno: 61000 },
+  { id: 'D008', nome: 'Chiara',    cognome: 'Monti',     patente: 'B',   telefono: '+39 328 112 9900', email: 'monti.c@fermopoint.it',     dataNascita: '1989-08-07', stato: 'Disponibile', mezzoId: null,   km_anno: 33500 },
+  { id: 'D009', nome: 'Francesco', cognome: 'Palmieri',  patente: 'B+C', telefono: '+39 342 654 3322', email: 'palmieri.f@fermopoint.it',  dataNascita: '1987-04-03', stato: 'Ferie',        mezzoId: null,   km_anno: 44800 },
+  { id: 'D010', nome: 'Valentina', cognome: 'Greco',     patente: 'B',   telefono: '+39 335 789 6677', email: 'greco.v@fermopoint.it',     dataNascita: '1993-10-19', stato: 'Malattia',     mezzoId: null,   km_anno: 18700 },
 ]

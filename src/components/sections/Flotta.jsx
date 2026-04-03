@@ -1,22 +1,24 @@
 import { useState } from 'react'
-import { DRIVERS, MEZZI, MODELLI_MEZZI } from '../../data/flotta'
+import { DRIVERS as D0, MEZZI as M0, MODELLI_MEZZI as MOD0 } from '../../data/flotta'
 import TabAutisti from './flotta/TabAutisti'
 import TabMezzi from './flotta/TabMezzi'
-import TabAssociazioni from './flotta/TabAssociazioni'
+import TabModelli from './flotta/TabModelli'
 import './Flotta.css'
 
-const TABS = [
-  { id: 'autisti',      label: 'Autisti',      count: DRIVERS.length },
-  { id: 'mezzi',        label: 'Mezzi',        count: MEZZI.length },
-  { id: 'associazioni', label: 'Associazioni', count: DRIVERS.filter(d => d.mezzoId).length },
-]
-
 export default function Flotta() {
-  const [tab, setTab] = useState('autisti')
+  const [tab,     setTab]     = useState('autisti')
+  const [drivers, setDrivers] = useState(D0)
+  const [mezzi,   setMezzi]   = useState(M0)
+  const [modelli, setModelli] = useState(MOD0)
+
+  const TABS = [
+    { id: 'autisti', label: 'Autisti', count: drivers.length },
+    { id: 'mezzi',   label: 'Mezzi',   count: mezzi.length   },
+    { id: 'modelli', label: 'Modelli', count: modelli.length  },
+  ]
 
   return (
     <div className="section-content">
-      {/* Tab bar */}
       <div className="flotta-tabs-wrap">
         <div className="flotta-tabs">
           {TABS.map(t => (
@@ -32,9 +34,25 @@ export default function Flotta() {
         </div>
       </div>
 
-      {tab === 'autisti'      && <TabAutisti />}
-      {tab === 'mezzi'        && <TabMezzi />}
-      {tab === 'associazioni' && <TabAssociazioni />}
+      {tab === 'autisti' && (
+        <TabAutisti
+          drivers={drivers} setDrivers={setDrivers}
+          mezzi={mezzi}     setMezzi={setMezzi}
+          modelli={modelli}
+        />
+      )}
+      {tab === 'mezzi' && (
+        <TabMezzi
+          mezzi={mezzi}     setMezzi={setMezzi}
+          modelli={modelli} drivers={drivers}
+        />
+      )}
+      {tab === 'modelli' && (
+        <TabModelli
+          modelli={modelli} setModelli={setModelli}
+          mezzi={mezzi}
+        />
+      )}
     </div>
   )
 }

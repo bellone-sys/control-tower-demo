@@ -1,0 +1,102 @@
+.ms-wrap { position: relative; display: inline-block; }
+
+.ms-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px 7px 12px;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  background: #fff;
+  font-size: 12px;
+  font-family: var(--fp-font);
+  color: var(--fp-charcoal);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--transition), background var(--transition);
+  user-select: none;
+}
+.ms-trigger:hover,
+.ms-trigger.open { border-color: var(--fp-red); }
+.ms-trigger.has-value {
+  border-color: var(--fp-red);
+  background: #fff8f9;
+  color: var(--fp-red);
+  font-weight: 500;
+}
+.ms-label { flex: 1; }
+.ms-caret {
+  flex-shrink: 0;
+  color: var(--fp-gray-mid);
+  transition: transform var(--transition);
+}
+.ms-trigger.open .ms-caret { transform: rotate(180deg); }
+
+.ms-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 200px;
+  max-width: 320px;
+  background: #fff;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px rgba(65,64,66,.16);
+  z-index: 500;
+  overflow: hidden;
+}
+
+.ms-search-wrap {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--fp-cool-gray);
+}
+.ms-search-input {
+  width: 100%;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: var(--fp-font);
+  outline: none;
+  color: var(--fp-charcoal);
+}
+.ms-search-input:focus { border-color: var(--fp-red); }
+
+.ms-clear-all {
+  display: block;
+  width: 100%;
+  padding: 7px 14px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--fp-cool-gray);
+  font-size: 11px;
+  font-family: var(--fp-font);
+  color: var(--fp-red);
+  cursor: pointer;
+  font-weight: 500;
+}
+.ms-clear-all:hover { background: #fff8f9; }
+
+.ms-options-list { max-height: 240px; overflow-y: auto; }
+
+.ms-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--fp-charcoal);
+  transition: background var(--transition);
+}
+.ms-option:hover { background: var(--fp-bg); }
+.ms-option.checked { background: #fff8f9; color: var(--fp-red); font-weight: 500; }
+.ms-option input[type="checkbox"] {
+  accent-color: var(--fp-red);
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.ms-empty { padding: 12px 14px; font-size: 12px; color: var(--fp-gray-light); }
