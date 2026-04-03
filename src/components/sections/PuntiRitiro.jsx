@@ -1,117 +1,195 @@
-import { PUNTI_RITIRO } from '../../data/stub'
+import { useState, useMemo } from 'react'
+import pudosRoma from '../../data/pudosRoma.json'
+import PuntiRitiroDetail from './PuntiRitiroDetail'
 import './Sections.css'
+import './PuntiRitiro.css'
 
-const STATO_CFG = {
-  'Attivo':       { color: '#2E7D32', bg: '#e8f5e9' },
-  'Pieno':        { color: '#F57C00', bg: '#fff3e0' },
-  'Manutenzione': { color: '#DC0032', bg: '#fff0f3' },
-}
+const PAGE_SIZE = 25
+
+const CAPS = [...new Set(pudosRoma.map(p => p.cap))].sort()
+
+const SORT_OPTIONS = [
+  { value: 'name-asc',  label: 'Nome A→Z' },
+  { value: 'name-desc', label: 'Nome Z→A' },
+  { value: 'id-asc',   label: 'Codice A→Z' },
+  { value: 'cap-asc',  label: 'CAP ↑' },
+]
 
 export default function PuntiRitiro() {
-  const attivi = PUNTI_RITIRO.filter(p => p.stato === 'Attivo').length
-  const pieni = PUNTI_RITIRO.filter(p => p.stato === 'Pieno').length
-  const manutenzione = PUNTI_RITIRO.filter(p => p.stato === 'Manutenzione').length
+  const [search, setSearch]     = useState('')
+  const [filterCap, setFilterCap] = useState('')
+  const [sort, setSort]         = useState('name-asc')
+  const [page, setPage]         = useState(1)
+  const [selected, setSelected] = useState(null)
+
+  const filtered = useMemo(() => {
+    let list = pudosRoma
+    if (search.trim()) {
+      const q = search.trim().toLowerCase()
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.id.toLowerCase().includes(q) ||
+        p.cap.includes(q)
+      )
+    }
+    if (filterCap) list = list.filter(p => p.cap === filterCap)
+
+    const [field, dir] = sort.split('-')
+    list = [...list].sort((a, b) => {
+      const av = a[field] ?? '', bv = b[field] ?? ''
+      return dir === 'asc'
+        ? String(av).localeCompare(String(bv))
+        : String(bv).localeCompare(String(av))
+    })
+    return list
+  }, [search, filterCap, sort])
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
+  const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+
+  function handleSearch(v) { setSearch(v); setPage(1) }
+  function handleCap(v)    { setFilterCap(v); setPage(1) }
+  function handleSort(v)   { setSort(v); setPage(1) }
+
+  if (selected) {
+    return <PuntiRitiroDetail pudo={selected} onBack={() => setSelected(null)} />
+  }
 
   return (
     <div className="section-content">
-
-      {/* Summary mini-KPI */}
-      <div className="mini-kpi-row">
-        <div className="mini-kpi">
-          <span className="mini-kpi-val" style={{ color: '#2E7D32' }}>{attivi}</span>
-          <span className="mini-kpi-label">Attivi</span>
-        </div>
-        <div className="mini-kpi">
-          <span className="mini-kpi-val" style={{ color: '#F57C00' }}>{pieni}</span>
-          <span className="mini-kpi-label">Pieni</span>
-        </div>
-        <div className="mini-kpi">
-          <span className="mini-kpi-val" style={{ color: '#DC0032' }}>{manutenzione}</span>
-          <span className="mini-kpi-label">Manutenzione</span>
-        </div>
-        <div className="mini-kpi">
-          <span className="mini-kpi-val">{PUNTI_RITIRO.length}</span>
-          <span className="mini-kpi-label">Totale (campione)</span>
-        </div>
-      </div>
-
-      {/* Map placeholder */}
-      <div className="card map-placeholder">
-        <div className="map-inner">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#A4A3A4" strokeWidth="1.5">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          <p>Mappa interattiva dei Punti Ritiro</p>
-          <span>Integrazione Google Maps / Leaflet disponibile in produzione</span>
-          <div className="map-pins">
-            {PUNTI_RITIRO.map(p => (
-              <div key={p.id} className={`map-pin pin-${p.stato.toLowerCase().replace(' ','-')}`} title={`${p.nome} — ${p.stato}`}>
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                </svg>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* List */}
       <div className="card">
         <div className="card-header">
-          <h3>Elenco Punti Ritiro</h3>
-          <span className="card-label">{PUNTI_RITIRO.length} punti</span>
+          <h3>Punti Ritiro — Roma</h3>
+          <span className="card-label">{filtered.length} punti su {pudosRoma.length}</span>
         </div>
+
+        {/* Toolbar */}
+        <div className="table-toolbar pr-toolbar">
+          <div className="search-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              type="text"
+              placeholder="Cerca per nome, codice o CAP…"
+              value={search}
+              onChange={e => handleSearch(e.target.value)}
+            />
+            {search && (
+              <button className="search-clear" onClick={() => handleSearch('')}>×</button>
+            )}
+          </div>
+
+          <select className="pr-select" value={filterCap} onChange={e => handleCap(e.target.value)}>
+            <option value="">Tutti i CAP</option>
+            {CAPS.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+
+          <select className="pr-select" value={sort} onChange={e => handleSort(e.target.value)}>
+            {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+
+        {/* Table */}
         <div className="table-wrap">
           <table className="data-table">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Codice</th>
                 <th>Nome</th>
-                <th>Comune</th>
-                <th>Indirizzo</th>
-                <th>Tipo</th>
-                <th>Occupazione</th>
-                <th>Stato</th>
+                <th>CAP</th>
+                <th>Civico</th>
+                <th>Coordinate</th>
+                <th>Orari</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              {PUNTI_RITIRO.map(p => {
-                const cfg = STATO_CFG[p.stato] || {}
-                const pct = Math.round((p.occupazione / p.capienza) * 100)
+              {pageData.map(p => {
+                const oggi = ['dom','lun','mar','mer','gio','ven','sab'][new Date().getDay()]
+                const orariOggi = p.hours[oggi]
                 return (
-                  <tr key={p.id}>
+                  <tr key={p.id} className="pr-row" onClick={() => setSelected(p)}>
                     <td><code className="id-code">{p.id}</code></td>
-                    <td><strong>{p.nome}</strong></td>
-                    <td>{p.comune}</td>
-                    <td className="td-small">{p.indirizzo}</td>
-                    <td>{p.tipo}</td>
-                    <td>
-                      <div className="occupazione-wrap">
-                        <div className="occupazione-bar">
-                          <div
-                            className="occupazione-fill"
-                            style={{
-                              width: `${pct}%`,
-                              background: pct >= 100 ? '#DC0032' : pct >= 70 ? '#F57C00' : '#2E7D32'
-                            }}
-                          />
-                        </div>
-                        <span className="td-small">{p.occupazione}/{p.capienza}</span>
-                      </div>
+                    <td className="pr-name">{p.name}</td>
+                    <td>{p.cap}</td>
+                    <td className="td-small">{p.civico || '—'}</td>
+                    <td className="td-small coord-cell">
+                      {p.lat.toFixed(4)}, {p.lng.toFixed(4)}
                     </td>
                     <td>
-                      <span className="status-badge" style={{ color: cfg.color, background: cfg.bg }}>
-                        {p.stato}
-                      </span>
+                      {orariOggi && orariOggi.length > 0 ? (
+                        <span className="orari-oggi">
+                          {orariOggi.map(s => `${s.o}–${s.c}`).join(' / ')}
+                        </span>
+                      ) : orariOggi === null ? (
+                        <span className="orari-chiuso">Chiuso oggi</span>
+                      ) : (
+                        <span className="orari-chiuso">—</span>
+                      )}
+                    </td>
+                    <td>
+                      <button className="btn-detail" onClick={e => { e.stopPropagation(); setSelected(p) }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        Dettaglio
+                      </button>
                     </td>
                   </tr>
                 )
               })}
             </tbody>
           </table>
+          {pageData.length === 0 && (
+            <div className="table-empty">Nessun punto ritiro trovato.</div>
+          )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button className="page-btn" onClick={() => setPage(1)} disabled={page === 1}>«</button>
+            <button className="page-btn" onClick={() => setPage(p => p - 1)} disabled={page === 1}>‹</button>
+            <PaginationPages current={page} total={totalPages} onPage={setPage} />
+            <button className="page-btn" onClick={() => setPage(p => p + 1)} disabled={page === totalPages}>›</button>
+            <button className="page-btn" onClick={() => setPage(totalPages)} disabled={page === totalPages}>»</button>
+            <span className="page-info">
+              {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} di {filtered.length}
+            </span>
+          </div>
+        )}
       </div>
     </div>
+  )
+}
+
+function PaginationPages({ current, total, onPage }) {
+  const pages = []
+  const delta = 2
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+      pages.push(i)
+    } else if (pages[pages.length - 1] !== '…') {
+      pages.push('…')
+    }
+  }
+  return (
+    <>
+      {pages.map((p, i) =>
+        p === '…' ? (
+          <span key={`e${i}`} className="page-ellipsis">…</span>
+        ) : (
+          <button
+            key={p}
+            className={`page-btn ${p === current ? 'active' : ''}`}
+            onClick={() => onPage(p)}
+          >
+            {p}
+          </button>
+        )
+      )}
+    </>
   )
 }

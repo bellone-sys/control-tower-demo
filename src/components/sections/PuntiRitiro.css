@@ -1,0 +1,117 @@
+.pr-toolbar {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pr-select {
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  padding: 7px 10px;
+  font-size: 13px;
+  color: var(--fp-charcoal);
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+.pr-select:focus { border-color: var(--fp-red); }
+
+.search-clear {
+  background: none;
+  border: none;
+  color: var(--fp-gray-light);
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.search-clear:hover { color: var(--fp-charcoal); }
+
+.pr-row { cursor: pointer; }
+.pr-row:hover td { background: #fff5f7 !important; }
+
+.pr-name { font-weight: 500; max-width: 220px; }
+
+.coord-cell { font-family: 'Courier New', monospace; font-size: 11px; }
+
+.orari-oggi {
+  font-size: 12px;
+  color: #2E7D32;
+  font-weight: 500;
+}
+.orari-chiuso {
+  font-size: 12px;
+  color: var(--fp-gray-light);
+}
+
+.btn-detail {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--fp-charcoal);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+.btn-detail:hover {
+  border-color: var(--fp-red);
+  color: var(--fp-red);
+  background: #fff0f3;
+}
+
+/* ===== PAGINATION ===== */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--fp-cool-gray);
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1.5px solid var(--fp-cool-gray);
+  background: #fff;
+  border-radius: var(--radius);
+  font-size: 13px;
+  color: var(--fp-charcoal);
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.page-btn:hover:not(:disabled) {
+  border-color: var(--fp-red);
+  color: var(--fp-red);
+}
+.page-btn.active {
+  background: var(--fp-red);
+  border-color: var(--fp-red);
+  color: #fff;
+  font-weight: 600;
+}
+.page-btn:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+.page-ellipsis {
+  color: var(--fp-gray-light);
+  font-size: 13px;
+  padding: 0 4px;
+}
+.page-info {
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+  margin-left: 8px;
+}
