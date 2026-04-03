@@ -1,0 +1,55 @@
+/* ===== FERMOPOINT BRAND VARIABLES ===== */
+:root {
+  /* Colors */
+  --fp-red: #DC0032;
+  --fp-red-dark: #A90034;
+  --fp-red-hover: #c0002b;
+  --fp-charcoal: #414042;
+  --fp-white: #FFFFFF;
+  --fp-gray-mid: #808285;
+  --fp-gray-light: #A4A3A4;
+  --fp-beige: #CAC4BE;
+  --fp-warm-gray: #E4E1DE;
+  --fp-cool-gray: #E6E7E8;
+  --fp-bg: #F5F5F6;
+
+  /* Status colors */
+  --fp-success: #2E7D32;
+  --fp-warning: #F57C00;
+  --fp-danger: #DC0032;
+  --fp-info: #1565C0;
+
+  /* Typography */
+  --fp-font: 'Inter', 'Calibri Light', 'Calibri', 'Trebuchet MS', sans-serif;
+
+  /* Spacing */
+  --radius: 6px;
+  --radius-lg: 10px;
+  --shadow: 0 1px 3px rgba(65,64,66,.10), 0 1px 2px rgba(65,64,66,.06);
+  --shadow-md: 0 4px 12px rgba(65,64,66,.12);
+  --transition: 150ms ease;
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--fp-font);
+  font-weight: 400;
+  color: var(--fp-charcoal);
+  background: var(--fp-bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button { cursor: pointer; font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+input, select, textarea { font-family: inherit; }
+
+/* ===== UTILITIES ===== */
+.text-red { color: var(--fp-red); }
+.text-gray { color: var(--fp-gray-mid); }
+.text-sm { font-size: 12px; }
+.text-lg { font-size: 16px; }
+.font-light { font-weight: 300; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
