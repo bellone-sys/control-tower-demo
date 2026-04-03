@@ -67,6 +67,23 @@
   color: var(--fp-gray-mid);
 }
 
+/* Hamburger — nascosto su desktop, mostrato su mobile da responsive.css */
+.hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  background: none;
+  color: var(--fp-charcoal);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+.hamburger:hover { border-color: var(--fp-charcoal); background: var(--fp-bg); }
+
 .btn-logout {
   width: 32px;
   height: 32px;

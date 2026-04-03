@@ -16,3 +16,18 @@
   padding: 24px;
   overflow-y: auto;
 }
+
+/* Backdrop mobile per drawer sidebar */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 199;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.sidebar-backdrop.show {
+  display: block;
+  opacity: 1;
+}

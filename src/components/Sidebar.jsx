@@ -11,11 +11,11 @@ const NAV_ITEMS = [
   { id: 'utenti',     label: 'Utenti',         icon: IconUsers, adminOnly: true },
 ]
 
-export default function Sidebar({ active, onNav, eccezioniCount, user }) {
+export default function Sidebar({ active, onNav, eccezioniCount, user, open, onClose }) {
   const isAdmin = user?.ruolo === 'admin'
   const visibleItems = NAV_ITEMS.filter(item => !item.adminOnly || isAdmin)
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${open ? ' open' : ''}`}>
       <div className="sidebar-logo">
         <svg viewBox="0 0 110 36" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="36" height="36" rx="4" fill="#DC0032"/>
@@ -23,6 +23,14 @@ export default function Sidebar({ active, onNav, eccezioniCount, user }) {
           <text x="44" y="14" fontSize="8" fontFamily="Inter,sans-serif" fontWeight="300" fill="rgba(255,255,255,.6)" letterSpacing="1.5">FERMOPOINT</text>
           <text x="44" y="27" fontSize="11" fontFamily="Inter,sans-serif" fontWeight="500" fill="white">Control Tower</text>
         </svg>
+
+        {/* Bottone chiusura drawer — visibile solo mobile via CSS */}
+        <button className="sidebar-close" onClick={onClose} aria-label="Chiudi menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
       </div>
 
       <nav className="sidebar-nav">

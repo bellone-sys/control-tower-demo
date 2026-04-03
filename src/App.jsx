@@ -16,11 +16,17 @@ import './App.css'
 export default function App() {
   const [user, setUser] = useState(null)
   const [section, setSection] = useState('overview')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const eccezioniAperte = ECCEZIONI.filter(e => e.stato === 'Aperta').length
 
   if (!user) {
     return <Login onLogin={setUser} />
+  }
+
+  function handleNav(id) {
+    setSection(id)
+    setSidebarOpen(false)
   }
 
   const SECTIONS = {
@@ -36,17 +42,26 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      {/* Backdrop mobile */}
+      <div
+        className={`sidebar-backdrop${sidebarOpen ? ' show' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+      />
+
       <Sidebar
         active={section}
-        onNav={setSection}
+        onNav={handleNav}
         eccezioniCount={eccezioniAperte}
         user={user}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
       <div className="app-main">
         <Header
           user={user}
           section={section}
           onLogout={() => setUser(null)}
+          onMenuToggle={() => setSidebarOpen(o => !o)}
         />
         <main className="app-content">
           {SECTIONS[section]}

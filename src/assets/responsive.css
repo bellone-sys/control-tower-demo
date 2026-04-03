@@ -1,0 +1,219 @@
+/*
+ * ╔══════════════════════════════════════════════════════════════╗
+ * ║  FERMOPOINT CONTROL TOWER — RESPONSIVE STYLESHEET            ║
+ * ║                                                              ║
+ * ║  Breakpoints:                                                ║
+ * ║    xl   > 1200px  — large desktop (stili base)              ║
+ * ║    lg  ≤ 1100px  — small desktop / tablet landscape grande   ║
+ * ║    md  ≤  900px  — tablet landscape                         ║
+ * ║    sm  ≤  768px  — tablet portrait (sidebar → drawer)       ║
+ * ║    xs  ≤  600px  — smartphone grande                        ║
+ * ║    xxs ≤  480px  — smartphone piccolo                       ║
+ * ║                                                              ║
+ * ║  ISTRUZIONI:                                                 ║
+ * ║  Per aggiungere regole responsive a nuovi componenti,        ║
+ * ║  aggiungere le media query in questo file nel blocco         ║
+ * ║  appropriato. Evitare di mettere breakpoint nei singoli      ║
+ * ║  file CSS dei componenti (eccetto `@media` già presenti).    ║
+ * ╚══════════════════════════════════════════════════════════════╝
+ */
+
+/* ================================================================
+   LG ≤ 1100px  —  small desktop / tablet landscape grande
+   ================================================================ */
+@media (max-width: 1100px) {
+
+  /* --- KPI grids 4 → 2 colonne --- */
+  .kpi-grid,
+  .mini-kpi-row,
+  .carb-kpi-grid,
+  .filiali-kpi-row,
+  .utenti-kpi-row   { grid-template-columns: repeat(2, 1fr); }
+
+  /* --- Layout overview --- */
+  .overview-bottom  { grid-template-columns: 1fr; }
+
+  /* --- Report --- */
+  .report-grid      { grid-template-columns: 1fr 1fr; }
+}
+
+/* ================================================================
+   MD ≤ 900px  —  tablet landscape
+   ================================================================ */
+@media (max-width: 900px) {
+
+  /* --- Report → 1 col --- */
+  .report-grid      { grid-template-columns: 1fr; }
+
+  /* --- Assoc summary 4 → 2 --- */
+  .assoc-summary    { grid-template-columns: repeat(2, 1fr); }
+
+  /* --- Sidebar più stretta --- */
+  .sidebar          { width: 200px; }
+}
+
+/* ================================================================
+   SM ≤ 768px  —  tablet portrait  (sidebar diventa drawer)
+   ================================================================ */
+@media (max-width: 768px) {
+
+  /* ----- App shell ----- */
+  .app-content      { padding: 14px; }
+  .section-content  { gap: 14px; }
+
+  /* ----- Sidebar: drawer da sinistra ----- */
+  .sidebar {
+    position: fixed !important;
+    left: 0; top: 0; bottom: 0;
+    z-index: 200;
+    width: 260px !important;
+    height: 100dvh !important;
+    transform: translateX(-100%);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 6px 0 32px rgba(0,0,0,.30);
+  }
+  /* Bottone × visibile solo mobile */
+  .sidebar-close    { display: flex !important; }
+
+  /* ----- Header ----- */
+  .hamburger        { display: flex !important; }
+  .header           { padding: 0 14px; gap: 10px; }
+  .header-date      { display: none; }
+
+  /* ----- Flotta tabs: scroll orizzontale ----- */
+  .flotta-tabs-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .flotta-tab       { flex-shrink: 0; }
+
+  /* ----- Toolbar ricerca ----- */
+  .table-toolbar    { padding: 10px 14px; gap: 8px; }
+  .search-box       { min-width: 0; flex: 1 1 100%; }
+
+  /* ----- Card header ----- */
+  .card-header      { padding: 12px 14px 10px; flex-wrap: wrap; gap: 8px; }
+  .data-table th,
+  .data-table td    { padding: 9px 12px; }
+
+  /* ----- Paginazione ----- */
+  .pagination       { padding: 10px 14px; gap: 3px; }
+  .page-btn         { min-width: 28px; height: 28px; font-size: 12px; }
+
+  /* ----- Modal: sheet dal basso ----- */
+  .modal-overlay    { padding: 0; align-items: flex-end; }
+  .modal-box        {
+    width: 100% !important;
+    max-height: 92dvh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .modal-header     { padding: 14px 16px; }
+  .modal-body       { padding: 14px 16px; }
+  .modal-footer     { padding: 12px 16px; }
+
+  /* ----- Form grid 2 → 1 col ----- */
+  .form-grid,
+  .form-grid-3      { grid-template-columns: 1fr; }
+
+  /* ----- Ruolo picker verticale ----- */
+  .ruolo-picker     { flex-direction: column; }
+  .ruolo-option     { min-width: 0; }
+
+  /* ----- MultiSelect: evita overflow ----- */
+  .ms-dropdown      { max-width: calc(100vw - 28px); }
+
+  /* ----- Carburanti ----- */
+  .carb-footer      { flex-direction: column; gap: 4px; }
+
+  /* ----- Detail punti ritiro ----- */
+  .detail-layout    { flex-direction: column !important; }
+}
+
+/* ================================================================
+   XS ≤ 600px  —  smartphone grande
+   ================================================================ */
+@media (max-width: 600px) {
+
+  /* ----- App ----- */
+  .app-content      { padding: 10px; }
+  .section-content  { gap: 10px; }
+
+  /* ----- KPI grids → 1 col ----- */
+  .kpi-grid,
+  .carb-kpi-grid,
+  .filiali-kpi-row,
+  .utenti-kpi-row   { grid-template-columns: 1fr; }
+
+  /* Mantieni mini-kpi 2 col (più compatto) */
+  .mini-kpi-row     { grid-template-columns: repeat(2, 1fr); }
+
+  /* ----- Cards ----- */
+  .card-header      { padding: 10px 12px 8px; }
+  .card-actions     { flex-wrap: wrap; gap: 6px; }
+  .btn-primary      { font-size: 11px; padding: 6px 10px; }
+
+  /* ----- Tabelle ----- */
+  .table-toolbar    { padding: 8px 10px; }
+  .data-table th,
+  .data-table td    { padding: 8px 10px; font-size: 12px; }
+
+  /* ----- KPI values ----- */
+  .kpi-value        { font-size: 22px; }
+  .filiali-kpi-val,
+  .utenti-kpi-val,
+  .mini-kpi-val,
+  .carb-kpi-value   { font-size: 20px; }
+
+  /* ----- Carburanti cards ----- */
+  .carb-kpi-card    { padding: 12px 14px 10px; }
+  .carb-range-tabs  { flex-wrap: wrap; }
+
+  /* ----- Login ----- */
+  .login-card       { padding: 28px 20px 24px; }
+}
+
+/* ================================================================
+   XXS ≤ 480px  —  smartphone piccolo
+   ================================================================ */
+@media (max-width: 480px) {
+
+  /* ----- Header minimale ----- */
+  .user-info        { display: none; }
+  .header-title     { font-size: 14px; }
+  .header-left      { gap: 6px; }
+
+  /* ----- Toolbar: colonna unica ----- */
+  .table-toolbar    { flex-direction: column; align-items: stretch; }
+  .ms-wrap          { width: 100%; }
+  .ms-trigger       { width: 100%; justify-content: space-between; box-sizing: border-box; }
+
+  /* ----- Flotta tabs più compatte ----- */
+  .flotta-tab       { padding: 7px 12px; font-size: 12px; }
+  .flotta-tab-count { font-size: 10px; min-width: 16px; height: 16px; }
+
+  /* ----- Tabelle ultra-compatte ----- */
+  .data-table th,
+  .data-table td    { padding: 7px 8px; font-size: 11px; }
+
+  /* ----- Paginazione ----- */
+  .page-info        { display: none; }
+  .page-btn         { min-width: 24px; height: 24px; font-size: 11px; }
+
+  /* ----- Modal full-height ----- */
+  .modal-box        { max-height: 96dvh; }
+
+  /* ----- Filiale chips ----- */
+  .filiale-chips    { max-width: 140px; }
+  .filiale-chip     { font-size: 10px; }
+
+  /* ----- Login ----- */
+  .login-card       { padding: 24px 14px 20px; border-radius: 10px; }
+
+  /* ----- Spec cells ----- */
+  .spec-val         { font-size: 12px; }
+  .spec-unit        { font-size: 9px; }
+}

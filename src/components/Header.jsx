@@ -1,29 +1,42 @@
 import './Header.css'
 
-export default function Header({ user, section, onLogout }) {
-  const SECTION_LABELS = {
-    overview: 'Panoramica',
-    spedizioni: 'Spedizioni',
-    punti: 'Punti Ritiro',
-    eccezioni: 'Eccezioni',
-    report: 'Report',
-  }
+const SECTION_LABELS = {
+  overview:   'Panoramica',
+  spedizioni: 'Spedizioni',
+  punti:      'Punti Ritiro',
+  flotta:     'Flotta',
+  filiali:    'Filiali',
+  utenti:     'Utenti',
+  eccezioni:  'Eccezioni',
+  report:     'Report',
+}
 
+export default function Header({ user, section, onLogout, onMenuToggle }) {
   const now = new Date()
   const dateStr = now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
   return (
     <header className="header">
       <div className="header-left">
-        <h1 className="header-title">{SECTION_LABELS[section]}</h1>
+        {/* Hamburger — nascosto su desktop, visibile su mobile via CSS */}
+        <button className="hamburger" onClick={onMenuToggle} aria-label="Apri menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6"  x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+
+        <h1 className="header-title">{SECTION_LABELS[section] ?? section}</h1>
         <span className="header-date">{dateStr}</span>
       </div>
+
       <div className="header-right">
         <div className="header-user">
           <div className="user-avatar">{user.avatar}</div>
           <div className="user-info">
             <span className="user-name">{user.name}</span>
-            <span className="user-role">{user.role}</span>
+            <span className="user-role">{user.ruolo}</span>
           </div>
         </div>
         <button className="btn-logout" onClick={onLogout} title="Esci">

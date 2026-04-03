@@ -12,8 +12,28 @@
 .sidebar-logo {
   padding: 20px 20px 16px;
   border-bottom: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.sidebar-logo svg { width: 110px; height: auto; }
+.sidebar-logo > svg { width: 110px; height: auto; flex-shrink: 0; }
+
+/* Bottone × chiusura drawer — nascosto di default, visibile solo mobile */
+.sidebar-close {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255,255,255,.1);
+  border-radius: var(--radius);
+  color: rgba(255,255,255,.7);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+.sidebar-close:hover { background: rgba(255,255,255,.2); color: #fff; }
 
 .sidebar-nav {
   flex: 1;
