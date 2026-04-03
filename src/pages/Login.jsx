@@ -117,7 +117,8 @@ export default function Login({ onLogin }) {
               Accedi
             </button>
             <div className="login-demo-hint">
-              <strong>Demo:</strong> admin@fermopoint.it / demo1234
+              <strong>Demo admin:</strong> admin@fermopoint.it / demo1234<br/>
+              <strong>Demo user:</strong> l.ferri@fermopoint.it / demo1234
             </div>
           </form>
         )}

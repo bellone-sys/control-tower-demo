@@ -1,9 +1,18 @@
 // ===== STUB DATA — Fermopoint Control Tower =====
 
-export const DEMO_USERS = [
-  { email: 'admin@fermopoint.it', password: 'demo1234', name: 'Marco Belloni', role: 'Admin', avatar: 'MB' },
-  { email: 'ops@fermopoint.it', password: 'demo1234', name: 'Sara Conti', role: 'Operations', avatar: 'SC' },
-]
+// DEMO_USERS è ora derivato da UTENTI_INIT in utenti.js
+// Manteniamo questo array per compatibilità col Login
+import { UTENTI_INIT } from './utenti'
+
+export const DEMO_USERS = UTENTI_INIT.map(u => ({
+  id:          u.id,
+  email:       u.email,
+  password:    u.password,
+  name:        u.nome,
+  ruolo:       u.ruolo,
+  filialiIds:  u.filialiIds,
+  avatar:      u.nome.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase(),
+}))
 
 export const KPI = {
   spedizioniOggi: 1248,

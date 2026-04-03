@@ -8,9 +8,12 @@ const NAV_ITEMS = [
   { id: 'filiali',    label: 'Filiali',        icon: IconBuilding },
   { id: 'eccezioni',  label: 'Eccezioni',      icon: IconAlert, badge: true },
   { id: 'report',     label: 'Report',         icon: IconChart },
+  { id: 'utenti',     label: 'Utenti',         icon: IconUsers, adminOnly: true },
 ]
 
-export default function Sidebar({ active, onNav, eccezioniCount }) {
+export default function Sidebar({ active, onNav, eccezioniCount, user }) {
+  const isAdmin = user?.ruolo === 'admin'
+  const visibleItems = NAV_ITEMS.filter(item => !item.adminOnly || isAdmin)
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
@@ -23,7 +26,7 @@ export default function Sidebar({ active, onNav, eccezioniCount }) {
       </div>
 
       <nav className="sidebar-nav">
-        {NAV_ITEMS.map(item => {
+        {visibleItems.map(item => {
           const Icon = item.icon
           const isActive = active === item.id
           return (
@@ -86,6 +89,16 @@ function IconChart() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
       <line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/>
+    </svg>
+  )
+}
+function IconUsers() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
     </svg>
   )
 }
