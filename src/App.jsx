@@ -6,6 +6,7 @@ import Overview from './components/sections/Overview'
 import Spedizioni from './components/sections/Spedizioni'
 import PuntiRitiro from './components/sections/PuntiRitiro'
 import Flotta from './components/sections/Flotta'
+import Filiali from './components/sections/Filiali'
 import Eccezioni from './components/sections/Eccezioni'
 import Report from './components/sections/Report'
 import { ECCEZIONI } from './data/stub'
@@ -26,6 +27,7 @@ export default function App() {
     spedizioni: <Spedizioni />,
     punti:      <PuntiRitiro />,
     flotta:     <Flotta />,
+    filiali:    <Filiali />,
     eccezioni:  <Eccezioni />,
     report:     <Report />,
   }

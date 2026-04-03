@@ -5,6 +5,7 @@ const NAV_ITEMS = [
   { id: 'spedizioni', label: 'Spedizioni',     icon: IconBox },
   { id: 'punti',      label: 'Punti Ritiro',   icon: IconMap },
   { id: 'flotta',     label: 'Flotta',         icon: IconTruck },
+  { id: 'filiali',    label: 'Filiali',        icon: IconBuilding },
   { id: 'eccezioni',  label: 'Eccezioni',      icon: IconAlert, badge: true },
   { id: 'report',     label: 'Report',         icon: IconChart },
 ]
@@ -85,6 +86,14 @@ function IconChart() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
       <line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/>
+    </svg>
+  )
+}
+function IconBuilding() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="1"/>
+      <path d="M3 9h18M9 21V9"/>
     </svg>
   )
 }
