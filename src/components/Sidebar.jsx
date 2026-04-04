@@ -55,6 +55,20 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
         })}
       </nav>
 
+      {/* Link documentazione */}
+      <div className="sidebar-docs-section">
+        <a
+          href="/control-tower-demo/glossario.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-item sidebar-docs-link"
+        >
+          <IconBook />
+          <span>Documentazione</span>
+          <span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
+        </a>
+      </div>
+
       <div className="sidebar-footer">
         <div className="sidebar-version">v{APP_VERSION} · Demo</div>
       </div>
@@ -126,6 +140,14 @@ function IconRoute() {
       <circle cx="6" cy="19" r="3"/>
       <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/>
       <circle cx="18" cy="5" r="3"/>
+    </svg>
+  )
+}
+function IconBook() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
     </svg>
   )
 }

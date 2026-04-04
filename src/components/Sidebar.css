@@ -96,3 +96,9 @@
   font-size: 11px;
   color: rgba(255,255,255,.3);
 }
+
+.sidebar-docs-section {
+  padding: 8px 8px 4px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.sidebar-docs-link { text-decoration: none; }
