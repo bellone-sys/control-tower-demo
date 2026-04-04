@@ -14,6 +14,7 @@ import Utenti from './components/sections/Utenti'
 import Eccezioni from './components/sections/Eccezioni'
 import Report from './components/sections/Report'
 import ProgressToast from './components/ui/ProgressToast'
+import { TutorialProvider } from './contexts/TutorialContext'
 import { ECCEZIONI } from './data/stub'
 import './App.css'
 
@@ -154,40 +155,42 @@ export default function App() {
   }
 
   return (
-    <div className="app-shell">
-      {/* Backdrop mobile */}
-      <div
-        className={`sidebar-backdrop${sidebarOpen ? ' show' : ''}`}
-        onClick={() => setSidebarOpen(false)}
-      />
-
-      <Sidebar
-        active={section}
-        onNav={handleNav}
-        eccezioniCount={eccezioniAperte}
-        user={user}
-        open={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
-
-      <div className="app-main">
-        <Header
-          user={user}
-          section={section}
-          onLogout={handleLogout}
-          onMenuToggle={() => setSidebarOpen(o => !o)}
-          notifications={notifications}
-          onMarkRead={markRead}
-          onMarkAllRead={markAllRead}
-          onClearNotif={clearNotif}
+    <TutorialProvider>
+      <div className="app-shell">
+        {/* Backdrop mobile */}
+        <div
+          className={`sidebar-backdrop${sidebarOpen ? ' show' : ''}`}
+          onClick={() => setSidebarOpen(false)}
         />
-        <main className="app-content">
-          {SECTIONS[section]}
-        </main>
-      </div>
 
-      {/* Global progress toast */}
-      <ProgressToast job={activeJob} />
-    </div>
+        <Sidebar
+          active={section}
+          onNav={handleNav}
+          eccezioniCount={eccezioniAperte}
+          user={user}
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+
+        <div className="app-main">
+          <Header
+            user={user}
+            section={section}
+            onLogout={handleLogout}
+            onMenuToggle={() => setSidebarOpen(o => !o)}
+            notifications={notifications}
+            onMarkRead={markRead}
+            onMarkAllRead={markAllRead}
+            onClearNotif={clearNotif}
+          />
+          <main className="app-content">
+            {SECTIONS[section]}
+          </main>
+        </div>
+
+        {/* Global progress toast */}
+        <ProgressToast job={activeJob} />
+      </div>
+    </TutorialProvider>
   )
 }

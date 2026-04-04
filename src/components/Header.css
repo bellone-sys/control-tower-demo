@@ -84,6 +84,25 @@
 }
 .hamburger:hover { border-color: var(--fp-charcoal); background: var(--fp-bg); }
 
+.btn-settings {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  background: none;
+  color: var(--fp-gray-mid);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-settings:hover {
+  border-color: var(--fp-charcoal);
+  color: var(--fp-charcoal);
+  background: var(--fp-bg);
+}
+
 .btn-logout {
   width: 32px;
   height: 32px;
@@ -94,6 +113,7 @@
   border-radius: var(--radius);
   background: none;
   color: var(--fp-gray-mid);
+  cursor: pointer;
   transition: all var(--transition);
 }
 .btn-logout:hover {

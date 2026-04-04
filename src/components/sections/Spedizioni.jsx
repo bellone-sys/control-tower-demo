@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { SPEDIZIONI_INIT } from '../../data/spedizioni'
 import MultiSelect from '../ui/MultiSelect'
 import ImportModal from './spedizioni/ImportModal'
+import TutorialOverlay from '../tutorials/TutorialOverlay'
 import './Sections.css'
 
 const PAGE_SIZE = 15
@@ -124,6 +125,13 @@ export default function Spedizioni({ onStartJob }) {
 
   return (
     <div className="section-content">
+      <TutorialOverlay
+        id="spedizioni_overview"
+        title="📦 Gestione Spedizioni"
+        description="Qui puoi importare, filtrare e visualizzare tutte le spedizioni. Usa i filtri e l'ordinamento per trovare rapidamente ciò che cerchi."
+        position="bottom-right"
+      />
+
       {/* KPI strip */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
         {[

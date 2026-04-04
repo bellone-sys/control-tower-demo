@@ -5,6 +5,7 @@ import { FILIALI_BRT } from '../../../../data/brtFiliali'
 import { PROVINCE_PER_REGIONE } from '../../../../data/province'
 import { getCiPudo } from '../../../../data/spedizioni'
 import pudosRoma from '../../../../data/pudosRoma.json'
+import TutorialOverlay from '../../../tutorials/TutorialOverlay'
 import 'leaflet/dist/leaflet.css'
 
 const PERIODI = [
@@ -151,6 +152,13 @@ export default function WizardStep1({ data, onChange }) {
 
   return (
     <div className="wizard-step-layout">
+      <TutorialOverlay
+        id="scenario_wizard_step1"
+        title="📍 Step 1: Area e Filiale"
+        description="Seleziona le province di interesse, scegli una filiale (Fermopoint o BRT), e configura il periodo CI. La mappa visualizza tutti i PUDO disponibili."
+        position="bottom-right"
+      />
+
       {/* Left panel */}
       <div className="wizard-side-panel">
         {/* Nome scenario */}
