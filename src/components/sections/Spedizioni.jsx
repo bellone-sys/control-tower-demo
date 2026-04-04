@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { SPEDIZIONI_INIT } from '../../data/spedizioni'
 import MultiSelect from '../ui/MultiSelect'
+import ImportModal from './spedizioni/ImportModal'
 import './Sections.css'
 
 const PAGE_SIZE = 15
@@ -50,16 +51,17 @@ function PaginationPages({ current, total, onPage }) {
   )
 }
 
-// KPI pre-calcolate sull'intero dataset (non cambiano con filtri)
-const KPI_TOTALI    = SPEDIZIONI_INIT.length
-const KPI_CONSEGNE  = SPEDIZIONI_INIT.filter(s => s.tipo === 'consegna').length
-const KPI_RITIRI    = SPEDIZIONI_INIT.filter(s => s.tipo === 'ritiro').length
-const KPI_PESO      = +(SPEDIZIONI_INIT.reduce((s, sp) => s + sp.peso, 0).toFixed(1))
+// KPI pre-calcolate sull'intero dataset
+const KPI_TOTALI   = SPEDIZIONI_INIT.length
+const KPI_CONSEGNE = SPEDIZIONI_INIT.filter(s => s.tipo === 'consegna').length
+const KPI_RITIRI   = SPEDIZIONI_INIT.filter(s => s.tipo === 'ritiro').length
+const KPI_PESO     = +(SPEDIZIONI_INIT.reduce((s, sp) => s + sp.peso, 0).toFixed(1))
 
-export default function Spedizioni() {
+export default function Spedizioni({ onStartJob }) {
   const [search,     setSearch]     = useState('')
   const [filterTipo, setFilterTipo] = useState([])
   const [page,       setPage]       = useState(1)
+  const [showImport, setShowImport] = useState(false)
 
   const filtered = useMemo(() => {
     let list = SPEDIZIONI_INIT
@@ -74,7 +76,6 @@ export default function Spedizioni() {
     if (filterTipo.length) {
       list = list.filter(s => filterTipo.includes(s.tipo))
     }
-    // Ordinamento: data desc poi id
     return [...list].sort((a, b) => {
       if (b.data !== a.data) return b.data.localeCompare(a.data)
       return a.id.localeCompare(b.id)
@@ -84,20 +85,33 @@ export default function Spedizioni() {
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
-  function handleSearch(v)    { setSearch(v);      setPage(1) }
-  function handleTipo(v)      { setFilterTipo(v);  setPage(1) }
+  function handleSearch(v) { setSearch(v);     setPage(1) }
+  function handleTipo(v)   { setFilterTipo(v); setPage(1) }
+
+  function handleImportConfirm(params) {
+    setShowImport(false)
+    const label = params.mode === 'api'
+      ? `Sincronizzazione AS/400 — ${params.mesi} ${params.mesi === 1 ? 'mese' : 'mesi'} · ${params.province.length} province`
+      : `Importazione file — ${params.fileName}`
+    onStartJob && onStartJob(label)
+  }
 
   return (
     <div className="section-content">
       {/* KPI strip */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
         {[
-          { val: KPI_TOTALI,           label: 'Spedizioni totali' },
-          { val: KPI_CONSEGNE,         label: 'Consegne' },
-          { val: KPI_RITIRI,           label: 'Ritiri' },
-          { val: `${KPI_PESO} kg`,     label: 'Peso totale' },
+          { val: KPI_TOTALI,        label: 'Spedizioni totali' },
+          { val: KPI_CONSEGNE,      label: 'Consegne' },
+          { val: KPI_RITIRI,        label: 'Ritiri' },
+          { val: `${KPI_PESO} kg`,  label: 'Peso totale' },
         ].map(({ val, label }) => (
-          <div key={label} style={{ background: '#fff', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow)', padding: '18px 20px' }}>
+          <div key={label} style={{
+            background: '#fff',
+            borderRadius: 'var(--radius-lg)',
+            boxShadow: 'var(--shadow)',
+            padding: '18px 20px',
+          }}>
             <div style={{ fontSize: 26, fontWeight: 600, color: 'var(--fp-charcoal)', lineHeight: 1 }}>{val}</div>
             <div style={{ fontSize: 12, color: 'var(--fp-gray-mid)', marginTop: 4 }}>{label}</div>
           </div>
@@ -108,7 +122,22 @@ export default function Spedizioni() {
       <div className="card">
         <div className="card-header">
           <h3>Spedizioni</h3>
-          <span className="card-label">{filtered.length} risultati</span>
+          <div className="card-actions">
+            <span className="card-label">{filtered.length} risultati</span>
+            <button className="btn-primary" onClick={() => setShowImport(true)}>
+              <svg
+                width="13" height="13" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2.5"
+                strokeLinecap="round" strokeLinejoin="round"
+                style={{ marginRight: 5 }}
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              Importa spedizioni
+            </button>
+          </div>
         </div>
 
         <div className="table-toolbar">
@@ -157,10 +186,7 @@ export default function Spedizioni() {
                   <tr key={s.id} className={s.priorita === 'high' ? 'row-high' : ''}>
                     <td><code className="id-code">{s.id}</code></td>
                     <td>
-                      <span
-                        className="status-badge"
-                        style={{ color: badge.color, background: badge.bg }}
-                      >
+                      <span className="status-badge" style={{ color: badge.color, background: badge.bg }}>
                         {s.tipo === 'consegna' ? '📦 Consegna' : '🔄 Ritiro'}
                       </span>
                     </td>
@@ -193,6 +219,14 @@ export default function Spedizioni() {
           </div>
         )}
       </div>
+
+      {/* Modal importazione */}
+      {showImport && (
+        <ImportModal
+          onClose={() => setShowImport(false)}
+          onConfirm={handleImportConfirm}
+        />
+      )}
     </div>
   )
 }

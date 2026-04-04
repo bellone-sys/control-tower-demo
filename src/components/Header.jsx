@@ -1,8 +1,10 @@
+import NotificationBell from './ui/NotificationBell'
 import './Header.css'
 
 const SECTION_LABELS = {
   overview:   'Panoramica',
   spedizioni: 'Spedizioni',
+  giri:       'Giri',
   punti:      'PUDO',
   flotta:     'Flotta',
   filiali:    'Filiali',
@@ -11,9 +13,14 @@ const SECTION_LABELS = {
   report:     'Report',
 }
 
-export default function Header({ user, section, onLogout, onMenuToggle }) {
+export default function Header({
+  user, section, onLogout, onMenuToggle,
+  notifications = [], onMarkRead, onMarkAllRead, onClearNotif,
+}) {
   const now = new Date()
-  const dateStr = now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  const dateStr = now.toLocaleDateString('it-IT', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  })
 
   return (
     <header className="header">
@@ -32,6 +39,14 @@ export default function Header({ user, section, onLogout, onMenuToggle }) {
       </div>
 
       <div className="header-right">
+        {/* Campanella notifiche */}
+        <NotificationBell
+          notifications={notifications}
+          onMarkRead={onMarkRead}
+          onMarkAllRead={onMarkAllRead}
+          onClear={onClearNotif}
+        />
+
         <div className="header-user">
           <div className="user-avatar">{user.avatar}</div>
           <div className="user-info">
@@ -39,6 +54,7 @@ export default function Header({ user, section, onLogout, onMenuToggle }) {
             <span className="user-role">{user.ruolo}</span>
           </div>
         </div>
+
         <button className="btn-logout" onClick={onLogout} title="Esci">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
