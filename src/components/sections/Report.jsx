@@ -5,7 +5,7 @@ const REPORT_LIST = [
   { nome: 'Report consegne settimanale', tipo: 'Excel', data: '2026-03-31', dimensione: '142 KB' },
   { nome: 'Analisi eccezioni Q1 2026', tipo: 'PDF', data: '2026-03-31', dimensione: '2.3 MB' },
   { nome: 'KPI rete Fermopoint — Marzo 2026', tipo: 'PDF', data: '2026-03-31', dimensione: '890 KB' },
-  { nome: 'Performance punti ritiro', tipo: 'Excel', data: '2026-03-28', dimensione: '312 KB' },
+  { nome: 'Performance PUDO', tipo: 'Excel', data: '2026-03-28', dimensione: '312 KB' },
   { nome: 'Dashboard mensile operativo', tipo: 'PDF', data: '2026-02-28', dimensione: '1.1 MB' },
 ]
 

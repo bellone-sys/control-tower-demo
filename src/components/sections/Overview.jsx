@@ -32,7 +32,7 @@ export default function Overview() {
           alert
         />
         <KpiCard
-          label="Punti ritiro attivi"
+          label="PUDO attivi"
           value={KPI.puntiRitiroAttivi}
           delta={KPI.puntiRitiroDelta}
           unit=""

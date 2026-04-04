@@ -4,6 +4,31 @@ import './PuntiRitiroDetail.css'
 const DAYS = ['lun','mar','mer','gio','ven','sab','dom']
 const DAYS_LABEL = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica']
 
+function getPudoTipo(pudo) {
+  const name = (pudo.name || '').toLowerCase()
+  if (
+    name.includes('locker') ||
+    name.includes('solo locker') ||
+    name.includes('automatico') ||
+    name.includes('mail boxes')
+  ) return 'locker'
+  return 'negozio'
+}
+
+function getPudoVolumeM3(pudo) {
+  const n = parseInt(pudo.id.replace(/\D/g, ''), 10) || 0
+  return getPudoTipo(pudo) === 'locker'
+    ? +(0.20 + (n % 30) / 100).toFixed(2)
+    : +(0.80 + (n % 200) / 100).toFixed(2)
+}
+
+function getPudoVolumeLibero(pudo) {
+  const tot = getPudoVolumeM3(pudo)
+  const n = parseInt(pudo.id.replace(/\D/g, ''), 10) || 0
+  const pct = 0.30 + (n % 51) / 100
+  return +(tot * (1 - pct)).toFixed(2)
+}
+
 export default function PuntiRitiroDetail({ pudo, onBack }) {
   const mapRef = useRef(null)
   const mapInstance = useRef(null)
@@ -87,7 +112,7 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
           Torna all'elenco
         </button>
         <h2 className="detail-title">
-          Dettagli del <span className="text-red">negozio</span>
+          Dettagli <span className="text-red">PUDO</span>
         </h2>
       </div>
 
@@ -104,7 +129,7 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
 
           {/* Info card */}
           <div className="card detail-info-card">
-            <h3>Informazioni sul negozio</h3>
+            <h3>Informazioni PUDO</h3>
             <ul className="info-list">
               <li>
                 <span className="info-label">FIP</span>
@@ -127,6 +152,16 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
                     ? `Aperto oggi: ${pudo.hours[todayKey].map(s => `${s.o}–${s.c}`).join(', ')}`
                     : 'Chiuso oggi'}
                 </span>
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                <span className="info-label">Vol. totale</span>
+                <span className="info-value">{getPudoVolumeM3(pudo)} m³</span>
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span className="info-label">Vol. disponibile</span>
+                <span className="info-value" style={{ color: '#2E7D32', fontWeight: 600 }}>{getPudoVolumeLibero(pudo)} m³</span>
               </li>
             </ul>
           </div>

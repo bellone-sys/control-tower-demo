@@ -3,7 +3,7 @@ import './Header.css'
 const SECTION_LABELS = {
   overview:   'Panoramica',
   spedizioni: 'Spedizioni',
-  punti:      'Punti Ritiro',
+  punti:      'PUDO',
   flotta:     'Flotta',
   filiali:    'Filiali',
   utenti:     'Utenti',

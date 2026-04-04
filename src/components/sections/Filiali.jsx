@@ -173,7 +173,7 @@ export default function Filiali() {
         </div>
         <div className="filiali-kpi">
           <span className="filiali-kpi-val">{filiali.reduce((s, f) => s + f.puntiRitiro, 0).toLocaleString('it-IT')}</span>
-          <span className="filiali-kpi-label">Punti ritiro gestiti</span>
+          <span className="filiali-kpi-label">PUDO gestiti</span>
         </div>
         <div className="filiali-kpi">
           <span className="filiali-kpi-val">{filiali.reduce((s, f) => s + f.superficie, 0).toLocaleString('it-IT')} m²</span>
@@ -216,7 +216,7 @@ export default function Filiali() {
                 <th>Indirizzo</th>
                 <SortTh field="regione"     sk={sortKey} sd={sortDir} onSort={handleSort}>Regione</SortTh>
                 <th>Responsabile</th>
-                <SortTh field="puntiRitiro" sk={sortKey} sd={sortDir} onSort={handleSort} style={{ textAlign: 'right' }}>Punti ritiro</SortTh>
+                <SortTh field="puntiRitiro" sk={sortKey} sd={sortDir} onSort={handleSort} style={{ textAlign: 'right' }}>PUDO</SortTh>
                 <SortTh field="superficie"  sk={sortKey} sd={sortDir} onSort={handleSort} style={{ textAlign: 'right' }}>Superficie</SortTh>
                 <SortTh field="dataApertura"sk={sortKey} sd={sortDir} onSort={handleSort}>Apertura</SortTh>
                 <SortTh field="stato"       sk={sortKey} sd={sortDir} onSort={handleSort}>Stato</SortTh>
@@ -382,7 +382,7 @@ export default function Filiali() {
                   <input type="number" className="form-input" value={form.superficie} onChange={setF('superficie')} min="0" />
                 </div>
                 <div className="form-field">
-                  <label className="form-label">Punti ritiro gestiti</label>
+                  <label className="form-label">PUDO gestiti</label>
                   <input type="number" className="form-input" value={form.puntiRitiro} onChange={setF('puntiRitiro')} min="0" />
                 </div>
                 <div className="form-field">
