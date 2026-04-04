@@ -32,6 +32,7 @@
 .pr-row:hover td { background: #fff5f7 !important; }
 
 .pr-name { font-weight: 500; max-width: 220px; }
+.pudo-tipo-icon { margin-right: 6px; font-size: 14px; }
 
 .coord-cell { font-family: 'Courier New', monospace; font-size: 11px; }
 

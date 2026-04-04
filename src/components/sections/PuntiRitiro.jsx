@@ -10,6 +10,24 @@ const PAGE_SIZE = 25
 const CAPS     = [...new Set(pudosRoma.map(p => p.cap))].sort()
 const CAPS_OPT = CAPS.map(c => ({ value: c, label: c }))
 
+const TIPO_OPT = [
+  { value: 'negozio', label: '🏪 Negozio' },
+  { value: 'locker',  label: '🔒 Locker'  },
+]
+
+function getPudoTipo(pudo) {
+  const name = (pudo.name || '').toLowerCase()
+  if (
+    name.includes('locker') ||
+    name.includes('solo locker') ||
+    name.includes('automatico') ||
+    name.includes('mail boxes')
+  ) {
+    return 'locker'
+  }
+  return 'negozio'
+}
+
 const SORT_OPTIONS = [
   { value: 'name-asc',  label: 'Nome A→Z' },
   { value: 'name-desc', label: 'Nome Z→A' },
@@ -20,6 +38,7 @@ const SORT_OPTIONS = [
 export default function PuntiRitiro() {
   const [search, setSearch]     = useState('')
   const [filterCap, setFilterCap] = useState([])
+  const [filterTipo, setFilterTipo] = useState([])
   const [sort, setSort]         = useState('name-asc')
   const [page, setPage]         = useState(1)
   const [selected, setSelected] = useState(null)
@@ -34,7 +53,8 @@ export default function PuntiRitiro() {
         p.cap.includes(q)
       )
     }
-    if (filterCap.length) list = list.filter(p => filterCap.includes(p.cap))
+    if (filterCap.length)  list = list.filter(p => filterCap.includes(p.cap))
+    if (filterTipo.length) list = list.filter(p => filterTipo.includes(getPudoTipo(p)))
 
     const [field, dir] = sort.split('-')
     list = [...list].sort((a, b) => {
@@ -44,13 +64,14 @@ export default function PuntiRitiro() {
         : String(bv).localeCompare(String(av))
     })
     return list
-  }, [search, filterCap, sort])
+  }, [search, filterCap, filterTipo, sort])
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   function handleSearch(v) { setSearch(v); setPage(1) }
   function handleCap(v)    { setFilterCap(v);  setPage(1) }
+  function handleTipo(v)   { setFilterTipo(v); setPage(1) }
   function handleSort(v)   { setSort(v); setPage(1) }
 
   if (selected) {
@@ -89,6 +110,13 @@ export default function PuntiRitiro() {
             onChange={handleCap}
           />
 
+          <MultiSelect
+            placeholder="Tutti i tipi"
+            options={TIPO_OPT}
+            value={filterTipo}
+            onChange={handleTipo}
+          />
+
           <select className="pr-select" value={sort} onChange={e => handleSort(e.target.value)}>
             {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
@@ -115,7 +143,10 @@ export default function PuntiRitiro() {
                 return (
                   <tr key={p.id} className="pr-row" onClick={() => setSelected(p)}>
                     <td><code className="id-code">{p.id}</code></td>
-                    <td className="pr-name">{p.name}</td>
+                    <td className="pr-name">
+                      <span className="pudo-tipo-icon">{getPudoTipo(p) === 'locker' ? '🔒' : '🏪'}</span>
+                      {p.name}
+                    </td>
                     <td>{p.cap}</td>
                     <td className="td-small">{p.civico || '—'}</td>
                     <td className="td-small coord-cell">
