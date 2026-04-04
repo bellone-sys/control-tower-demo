@@ -4,6 +4,7 @@ import { APP_VERSION } from '../version'
 const NAV_ITEMS = [
   { id: 'overview',   label: 'Panoramica',    icon: IconGrid },
   { id: 'spedizioni', label: 'Spedizioni',     icon: IconBox },
+  { id: 'giri',       label: 'Giri',           icon: IconRoute },
   { id: 'punti',      label: 'Punti Ritiro',   icon: IconMap },
   { id: 'flotta',     label: 'Flotta',         icon: IconTruck },
   { id: 'filiali',    label: 'Filiali',        icon: IconBuilding },
@@ -116,6 +117,15 @@ function IconBuilding() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="3" width="18" height="18" rx="1"/>
       <path d="M3 9h18M9 21V9"/>
+    </svg>
+  )
+}
+function IconRoute() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="6" cy="19" r="3"/>
+      <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/>
+      <circle cx="18" cy="5" r="3"/>
     </svg>
   )
 }

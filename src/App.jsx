@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import Overview from './components/sections/Overview'
 import Spedizioni from './components/sections/Spedizioni'
+import Giri from './components/sections/Giri'
 import PuntiRitiro from './components/sections/PuntiRitiro'
 import Flotta from './components/sections/Flotta'
 import Filiali from './components/sections/Filiali'
@@ -32,6 +33,7 @@ export default function App() {
   const SECTIONS = {
     overview:   <Overview />,
     spedizioni: <Spedizioni />,
+    giri:       <Giri />,
     punti:      <PuntiRitiro />,
     flotta:     <Flotta />,
     filiali:    <Filiali />,
