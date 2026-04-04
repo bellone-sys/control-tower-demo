@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet'
-import * as L from 'leaflet'
+import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { FILIALI } from '../../../data/filiali'
 import { DRIVERS, MEZZI, MODELLI_MEZZI } from '../../../data/flotta'
