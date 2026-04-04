@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet'
-import { divIcon } from 'leaflet'
+import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { FILIALI } from '../../../data/filiali'
 import { DRIVERS, MEZZI, MODELLI_MEZZI } from '../../../data/flotta'
@@ -123,7 +123,7 @@ export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate })
             {/* Depot */}
             <Marker
               position={[depot.lat, depot.lng]}
-              icon={divIcon({
+              icon={L.divIcon({
                 html: '<div class="giro-marker depot">🏢</div>',
                 className: '',
                 iconSize: [28, 28],
@@ -138,7 +138,7 @@ export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate })
               <Marker
                 key={tappa.pudoId}
                 position={[tappa.lat, tappa.lng]}
-                icon={divIcon({
+                icon={L.divIcon({
                   html: `<div class="giro-marker ${tappa.tipo}">${tappa.ordine}</div>`,
                   className: '',
                   iconSize: [28, 28],
