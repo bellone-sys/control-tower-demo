@@ -142,7 +142,7 @@ export default function App() {
   const SECTIONS = {
     overview:   <Overview />,
     spedizioni: <Spedizioni onStartJob={startJob} addNotification={addNotification} />,
-    giri:       <Giri />,
+    giri:       <Giri onStartJob={startJob} addNotification={addNotification} />,
     punti:      <PuntiRitiro />,
     flotta:     <Flotta />,
     filiali:    <Filiali />,

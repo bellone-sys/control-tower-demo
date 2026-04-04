@@ -1,10 +1,12 @@
 import { useState, useMemo } from 'react'
 import { FILIALI } from '../../../data/filiali'
 import { getCiScenario, getCiGiro } from '../../../data/spedizioni'
+import ScenarioWizard from './wizard/ScenarioWizard'
 import './TabScenari.css'
+import './wizard/ScenarioWizard.css'
 import '../flotta/TabCarburanti.css'
 
-const PERIODI = [7, 14, 30]
+const PERIODI = [7, 14, 30, 60]
 
 function ciColor(ci) {
   if (ci >= 4)   return '#2E7D32'
@@ -18,9 +20,11 @@ function formatData(iso) {
   return `${d}/${m}/${y}`
 }
 
-export default function TabScenari({ giri }) {
-  const [periodo,    setPeriodo]    = useState(30)
-  const [expandedId, setExpandedId] = useState(null)
+export default function TabScenari({ giri, onStartJob, addNotification }) {
+  const [periodo,     setPeriodo]     = useState(30)
+  const [expandedId,  setExpandedId]  = useState(null)
+  const [showWizard,  setShowWizard]  = useState(false)
+  const [editScenario, setEditScenario] = useState(null) // null = new, otherwise existing data
 
   const scenari = useMemo(() => {
     return FILIALI.map(f => {
@@ -38,7 +42,6 @@ export default function TabScenari({ giri }) {
     }).filter(Boolean)
   }, [giri, periodo])
 
-  // KPI globali
   const ciMedioGlobale = scenari.length
     ? +(scenari.reduce((s, sc) => s + sc.ci, 0) / scenari.length).toFixed(2)
     : 0
@@ -46,10 +49,22 @@ export default function TabScenari({ giri }) {
     const set = new Set(giri.flatMap(g => g.tappe.map(t => t.pudoId)))
     return set.size
   })()
-  const giriTotali   = scenari.reduce((s, sc) => s + sc.giri.length, 0)
+  const giriTotali = scenari.reduce((s, sc) => s + sc.giri.length, 0)
 
   function toggleExpand(id) {
     setExpandedId(prev => (prev === id ? null : id))
+  }
+
+  function handleWizardConfirm(data) {
+    setShowWizard(false)
+    setEditScenario(null)
+    const label = `Ottimizzazione OptimoRoute — ${data.nomeScenario} · ${data.pudoSelezionati.size} PUDO`
+    onStartJob && onStartJob(label)
+    addNotification && addNotification(
+      'info',
+      'Scenario inviato',
+      `"${data.nomeScenario}" è in elaborazione su OptimoRoute.`
+    )
   }
 
   return (
@@ -58,7 +73,7 @@ export default function TabScenari({ giri }) {
       <div className="scenari-toolbar">
         <span className="scenari-title">Scenari per filiale</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span className="scenari-period-label">Periodo:</span>
+          <span className="scenari-period-label">Periodo CI:</span>
           <div className="carb-range-tabs">
             {PERIODI.map(p => (
               <button
@@ -70,6 +85,16 @@ export default function TabScenari({ giri }) {
               </button>
             ))}
           </div>
+          <button
+            className="btn-primary"
+            style={{ marginLeft: 8 }}
+            onClick={() => { setEditScenario(null); setShowWizard(true) }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 5 }}>
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Nuovo scenario
+          </button>
         </div>
       </div>
 
@@ -90,6 +115,19 @@ export default function TabScenari({ giri }) {
 
       {/* Grid scenari */}
       <div className="scenari-grid">
+        {/* New scenario card */}
+        <button
+          className="scenario-card-new"
+          onClick={() => { setEditScenario(null); setShowWizard(true) }}
+        >
+          <div className="scenario-card-new-icon">＋</div>
+          <div className="scenario-card-new-label">Nuovo scenario</div>
+          <div className="scenario-card-new-sub">
+            Definisci area, filiale, PUDO e parametri OptimoRoute per calcolare nuovi giri
+          </div>
+        </button>
+
+        {/* Existing scenarios */}
         {scenari.map(sc => {
           const isOpen = expandedId === sc.filiale.id
           const initial = sc.filiale.nome.charAt(0).toUpperCase()
@@ -125,12 +163,11 @@ export default function TabScenari({ giri }) {
                 </div>
               </div>
 
-              {/* Bottone expand */}
+              {/* Expand */}
               <button className="scenario-expand-btn" onClick={() => toggleExpand(sc.filiale.id)}>
                 {isOpen ? '▲ Nascondi giri' : '▼ Mostra giri'}
               </button>
 
-              {/* Lista giri espansa */}
               {isOpen && (
                 <div className="scenario-giri-list">
                   {sc.giri.map(g => (
@@ -158,10 +195,44 @@ export default function TabScenari({ giri }) {
                   ))}
                 </div>
               )}
+
+              {/* Actions */}
+              <div className="scenario-card-actions">
+                <button
+                  className="scenario-action-btn"
+                  onClick={() => {
+                    setEditScenario({
+                      nomeScenario: `${sc.filiale.nome} — Modifica`,
+                      filialeId: sc.filiale.id,
+                    })
+                    setShowWizard(true)
+                  }}
+                >
+                  ✏️ Modifica
+                </button>
+                <button
+                  className="scenario-action-btn primary"
+                  onClick={() => {
+                    setEditScenario(null)
+                    setShowWizard(true)
+                  }}
+                >
+                  + Nuovo giro
+                </button>
+              </div>
             </div>
           )
         })}
       </div>
+
+      {/* Wizard */}
+      {showWizard && (
+        <ScenarioWizard
+          existingScenario={editScenario}
+          onClose={() => { setShowWizard(false); setEditScenario(null) }}
+          onConfirm={handleWizardConfirm}
+        />
+      )}
     </div>
   )
 }

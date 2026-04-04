@@ -6,7 +6,7 @@ import TabTemplate from './giri/TabTemplate'
 import TabScenari from './giri/TabScenari'
 import './Giri.css'
 
-export default function Giri() {
+export default function Giri({ onStartJob, addNotification }) {
   const [tab,       setTab]       = useState('giri')
   const [giri,      setGiri]      = useState(GIRI_INIT)
   const [templates, setTemplates] = useState(TEMPLATE_INIT)
@@ -48,7 +48,7 @@ export default function Giri() {
           onUseTemplate={() => setTab('giri')}
         />
       )}
-      {tab === 'scenari' && <TabScenari giri={giri} />}
+      {tab === 'scenari' && <TabScenari giri={giri} onStartJob={onStartJob} addNotification={addNotification} />}
     </div>
   )
 }
