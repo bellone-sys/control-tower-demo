@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import './PuntiRitiroDetail.css'
 
 const DAYS = ['lun','mar','mer','gio','ven','sab','dom']
@@ -37,58 +39,51 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
   const todayKey = DAYS[todayIdx]
 
   useEffect(() => {
-    // Load leaflet dynamically
-    let L, map, marker
-    async function initMap() {
-      if (mapInstance.current) {
-        mapInstance.current.remove()
-        mapInstance.current = null
-      }
+    let map
 
-      const leaflet = await import('leaflet')
-      L = leaflet.default
-
-      // Fix default marker icon path broken by Vite
-      delete L.Icon.Default.prototype._getIconUrl
-      L.Icon.Default.mergeOptions({
-        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-      })
-
-      if (!mapRef.current) return
-
-      map = L.map(mapRef.current, { zoomControl: true, scrollWheelZoom: false }).setView(
-        [pudo.lat, pudo.lng], 15
-      )
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-        maxZoom: 19,
-      }).addTo(map)
-
-      // Custom red marker
-      const redIcon = L.divIcon({
-        html: `<div class="fp-map-marker">
-          <svg viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 9 12 24 12 24S24 21 24 12C24 5.37 18.63 0 12 0z" fill="#DC0032"/>
-            <circle cx="12" cy="12" r="5" fill="white"/>
-          </svg>
-          <span>FP</span>
-        </div>`,
-        className: '',
-        iconSize: [36, 40],
-        iconAnchor: [18, 40],
-        popupAnchor: [0, -40],
-      })
-
-      marker = L.marker([pudo.lat, pudo.lng], { icon: redIcon }).addTo(map)
-      marker.bindPopup(`<strong>${pudo.name}</strong><br>${pudo.cap}`)
-
-      mapInstance.current = map
+    if (mapInstance.current) {
+      mapInstance.current.remove()
+      mapInstance.current = null
     }
 
-    initMap()
+    // Fix default marker icon path broken by Vite
+    delete L.Icon.Default.prototype._getIconUrl
+    L.Icon.Default.mergeOptions({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    })
+
+    if (!mapRef.current) return
+
+    map = L.map(mapRef.current, { zoomControl: true, scrollWheelZoom: false }).setView(
+      [pudo.lat, pudo.lng], 15
+    )
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map)
+
+    // Custom red marker
+    const redIcon = L.divIcon({
+      html: `<div class="fp-map-marker">
+        <svg viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 9 12 24 12 24S24 21 24 12C24 5.37 18.63 0 12 0z" fill="#DC0032"/>
+          <circle cx="12" cy="12" r="5" fill="white"/>
+        </svg>
+        <span>FP</span>
+      </div>`,
+      className: '',
+      iconSize: [36, 40],
+      iconAnchor: [18, 40],
+      popupAnchor: [0, -40],
+    })
+
+    L.marker([pudo.lat, pudo.lng], { icon: redIcon }).addTo(map)
+      .bindPopup(`<strong>${pudo.name}</strong><br>${pudo.cap}`)
+
+    mapInstance.current = map
 
     return () => {
       if (mapInstance.current) {
@@ -120,7 +115,6 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
 
         {/* Map — smaller */}
         <div className="detail-map-wrap">
-          <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
           <div ref={mapRef} className="detail-map" />
         </div>
 
