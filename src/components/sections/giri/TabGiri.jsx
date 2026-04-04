@@ -84,6 +84,12 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
   const [selectedId,    setSelectedId]    = useState(null)
   const [savedMsg,      setSavedMsg]      = useState('')
 
+  // Set degli id giro già salvati come template (via sourceGiroId)
+  const savedGiroIds = useMemo(
+    () => new Set(templates.map(t => t.sourceGiroId).filter(Boolean)),
+    [templates]
+  )
+
   const oggi = new Date().toISOString().slice(0, 10) // '2026-04-03'
 
   // KPI
@@ -120,21 +126,29 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
 
   function handleSearch(v) { setSearch(v); setPage(1) }
 
-  function handleSaveTemplate(giro) {
-    const tpl = {
-      id: 'TPL' + Date.now(),
-      nome: 'Template ' + giro.nome,
-      filialeId: giro.filialeId,
-      autoreId: giro.autoreId,
-      mezzoId: giro.mezzoId,
-      depotLat: giro.depotLat,
-      depotLng: giro.depotLng,
-      note: '',
-      tappe: giro.tappe,
+  function handleToggleTemplate(giro) {
+    const exists = templates.find(t => t.sourceGiroId === giro.id)
+    if (exists) {
+      // già salvato → rimuovi
+      setTemplates(prev => prev.filter(t => t.sourceGiroId !== giro.id))
+    } else {
+      // non salvato → crea template
+      const tpl = {
+        id: 'TPL' + Date.now(),
+        nome: 'Template ' + giro.nome,
+        filialeId: giro.filialeId,
+        autoreId: giro.autoreId,
+        mezzoId: giro.mezzoId,
+        depotLat: giro.depotLat,
+        depotLng: giro.depotLng,
+        note: '',
+        sourceGiroId: giro.id,
+        tappe: giro.tappe,
+      }
+      setTemplates(prev => [tpl, ...prev])
+      setSavedMsg('Template salvato!')
+      setTimeout(() => setSavedMsg(''), 2500)
     }
-    setTemplates(prev => [tpl, ...prev])
-    setSavedMsg('Template salvato!')
-    setTimeout(() => setSavedMsg(''), 2500)
   }
 
   const selectedGiro = selectedId ? giri.find(g => g.id === selectedId) : null
@@ -274,12 +288,11 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
                           </svg>
                         </button>
                         <button
-                          className="btn-icon"
-                          title="Salva come template"
-                          onClick={() => handleSaveTemplate(g)}
-                          style={{ fontSize: 14 }}
+                          className={`btn-icon btn-star${savedGiroIds.has(g.id) ? ' saved' : ''}`}
+                          title={savedGiroIds.has(g.id) ? 'Rimuovi template' : 'Salva come template'}
+                          onClick={() => handleToggleTemplate(g)}
                         >
-                          ★
+                          {savedGiroIds.has(g.id) ? '★' : '☆'}
                         </button>
                       </div>
                     </td>
@@ -317,7 +330,8 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
         <DetailGiro
           giro={selectedGiro}
           onClose={() => setSelectedId(null)}
-          onSaveTemplate={handleSaveTemplate}
+          isSaved={savedGiroIds.has(selectedGiro.id)}
+          onToggleTemplate={handleToggleTemplate}
         />
       </div>
     )
