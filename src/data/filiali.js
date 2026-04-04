@@ -2,6 +2,25 @@
 
 export const FILIALI = [
   {
+    id: 'F_ROMA',
+    nome: 'Roma Laurentina',
+    via: 'Via Laurentina, 723',
+    cap: '00142',
+    citta: 'Roma',
+    provincia: 'RM',
+    regione: 'Lazio',
+    lat: 41.8322,
+    lng: 12.4834,
+    telefono: '+39 06 123 4567',
+    email: 'roma.laurentina@fermopoint.it',
+    responsabile: 'Roberto Rossi',
+    emailResponsabile: 'rossi.r@fermopoint.it',
+    stato: 'Attiva',
+    superficie: 1500,
+    puntiRitiro: 256,
+    dataApertura: '2018-06-01',
+  },
+  {
     id: 'F001',
     nome: 'Napoli Centro',
     via: 'Via Borsellino, 158',
