@@ -152,7 +152,7 @@ export default function Spedizioni() {
             <tbody>
               {pageData.map(s => {
                 const badge = TIPO_BADGE[s.tipo] || {}
-                const vol   = (s.volume / 1000).toFixed(1)
+                const vol   = (s.volume / 1_000_000).toFixed(4)
                 return (
                   <tr key={s.id} className={s.priorita === 'high' ? 'row-high' : ''}>
                     <td><code className="id-code">{s.id}</code></td>
@@ -169,7 +169,7 @@ export default function Spedizioni() {
                     <td className="td-small">{formatData(s.data)}</td>
                     <td className="td-small">{s.peso.toFixed(1)} kg</td>
                     <td className="td-small">{s.dimensioni.l}×{s.dimensioni.h}×{s.dimensioni.p} cm</td>
-                    <td className="td-small">{vol} L</td>
+                    <td className="td-small">{vol} m³</td>
                   </tr>
                 )
               })}

@@ -53,10 +53,10 @@ export const PUNTI_RITIRO = [
 
 export const ECCEZIONI = [
   { id: 'EC001', spedizioneId: 'FP240004', tipo: 'Scaduto', descrizione: 'Pacco non ritirato entro 6 giorni lavorativi', comune: 'Napoli', gravita: 'alta', data: '2026-04-02', assegnato: 'Ops Team', stato: 'Aperta' },
-  { id: 'EC002', spedizioneId: 'FP240007', tipo: 'Indirizzo errato', descrizione: 'Destinatario sconosciuto al punto di ritiro', comune: 'Genova', gravita: 'alta', data: '2026-04-02', assegnato: 'Ops Team', stato: 'In gestione' },
+  { id: 'EC002', spedizioneId: 'FP240007', tipo: 'Indirizzo errato', descrizione: 'Destinatario sconosciuto al PUDO', comune: 'Genova', gravita: 'alta', data: '2026-04-02', assegnato: 'Ops Team', stato: 'In gestione' },
   { id: 'EC003', spedizioneId: 'FP240011', tipo: 'Scaduto', descrizione: 'Pacco non ritirato entro 5 giorni lavorativi', comune: 'Bari', gravita: 'alta', data: '2026-04-01', assegnato: 'Ops Team', stato: 'Aperta' },
   { id: 'EC004', spedizioneId: 'FP240003', tipo: 'Ritardo consegna', descrizione: 'Ritardo stimato di 24h per condizioni meteo', comune: 'Torino', gravita: 'media', data: '2026-04-03', assegnato: 'Corriere', stato: 'Monitoraggio' },
-  { id: 'EC005', spedizioneId: 'FP240009', tipo: 'Punto pieno', descrizione: 'Punto di ritiro ha raggiunto capienza massima', comune: 'Venezia', gravita: 'media', data: '2026-04-03', assegnato: 'Ops Team', stato: 'In gestione' },
+  { id: 'EC005', spedizioneId: 'FP240009', tipo: 'Punto pieno', descrizione: 'PUDO ha raggiunto la capienza massima', comune: 'Venezia', gravita: 'media', data: '2026-04-03', assegnato: 'Ops Team', stato: 'In gestione' },
   { id: 'EC006', spedizioneId: 'FP240006', tipo: 'Documento mancante', descrizione: 'Manca documento di identità destinatario', comune: 'Firenze', gravita: 'bassa', data: '2026-04-03', assegnato: 'Customer Care', stato: 'Aperta' },
 ]
 

@@ -5,7 +5,7 @@ const NAV_ITEMS = [
   { id: 'overview',   label: 'Panoramica',    icon: IconGrid },
   { id: 'spedizioni', label: 'Spedizioni',     icon: IconBox },
   { id: 'giri',       label: 'Giri',           icon: IconRoute },
-  { id: 'punti',      label: 'Punti Ritiro',   icon: IconMap },
+  { id: 'punti',      label: 'PUDO',            icon: IconMap },
   { id: 'flotta',     label: 'Flotta',         icon: IconTruck },
   { id: 'filiali',    label: 'Filiali',        icon: IconBuilding },
   { id: 'eccezioni',  label: 'Eccezioni',      icon: IconAlert, badge: true },

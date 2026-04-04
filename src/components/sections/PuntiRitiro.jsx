@@ -28,6 +28,21 @@ function getPudoTipo(pudo) {
   return 'negozio'
 }
 
+function getPudoVolumeM3(pudo) {
+  const n = parseInt(pudo.id.replace(/\D/g, ''), 10) || 0
+  return getPudoTipo(pudo) === 'locker'
+    ? +(0.20 + (n % 30) / 100).toFixed(2)
+    : +(0.80 + (n % 200) / 100).toFixed(2)
+}
+
+function getPudoVolumeLibero(pudo) {
+  const tot = getPudoVolumeM3(pudo)
+  // occupazione simulata deterministica: 30–80% del volume
+  const n = parseInt(pudo.id.replace(/\D/g, ''), 10) || 0
+  const pct = 0.30 + (n % 51) / 100
+  return +(tot * (1 - pct)).toFixed(2)
+}
+
 const SORT_OPTIONS = [
   { value: 'name-asc',  label: 'Nome A→Z' },
   { value: 'name-desc', label: 'Nome Z→A' },
@@ -82,8 +97,8 @@ export default function PuntiRitiro() {
     <div className="section-content">
       <div className="card">
         <div className="card-header">
-          <h3>Punti Ritiro — Roma</h3>
-          <span className="card-label">{filtered.length} punti su {pudosRoma.length}</span>
+          <h3>PUDO — Roma</h3>
+          <span className="card-label">{filtered.length} PUDO su {pudosRoma.length}</span>
         </div>
 
         {/* Toolbar */}
@@ -132,6 +147,7 @@ export default function PuntiRitiro() {
                 <th>CAP</th>
                 <th>Civico</th>
                 <th>Coordinate</th>
+                <th>Vol. disp.</th>
                 <th>Orari</th>
                 <th></th>
               </tr>
@@ -151,6 +167,9 @@ export default function PuntiRitiro() {
                     <td className="td-small">{p.civico || '—'}</td>
                     <td className="td-small coord-cell">
                       {p.lat.toFixed(4)}, {p.lng.toFixed(4)}
+                    </td>
+                    <td className="td-small">
+                      {getPudoVolumeLibero(p)} m³
                     </td>
                     <td>
                       {orariOggi && orariOggi.length > 0 ? (
@@ -178,7 +197,7 @@ export default function PuntiRitiro() {
             </tbody>
           </table>
           {pageData.length === 0 && (
-            <div className="table-empty">Nessun punto ritiro trovato.</div>
+            <div className="table-empty">Nessun PUDO trovato.</div>
           )}
         </div>
 
