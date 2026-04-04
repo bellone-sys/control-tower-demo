@@ -16,6 +16,18 @@ const TIPO_BADGE = {
   ritiro:   { color: '#E65100', bg: '#fff3e0' },
 }
 
+const PUDO_OPT = [...new Set(SPEDIZIONI_INIT.map(s => s.pudoNome))].sort()
+  .map(n => ({ value: n, label: n }))
+
+const SORT_OPT = [
+  { value: 'data-desc',   label: 'Data (recente)' },
+  { value: 'data-asc',    label: 'Data (vecchia)' },
+  { value: 'peso-desc',   label: 'Peso ↓' },
+  { value: 'peso-asc',    label: 'Peso ↑' },
+  { value: 'volume-desc', label: 'Volume ↓' },
+  { value: 'volume-asc',  label: 'Volume ↑' },
+]
+
 function formatData(iso) {
   if (!iso) return '—'
   const [y, m, d] = iso.split('-')
@@ -58,10 +70,12 @@ const KPI_RITIRI   = SPEDIZIONI_INIT.filter(s => s.tipo === 'ritiro').length
 const KPI_PESO     = +(SPEDIZIONI_INIT.reduce((s, sp) => s + sp.peso, 0).toFixed(1))
 
 export default function Spedizioni({ onStartJob }) {
-  const [search,     setSearch]     = useState('')
-  const [filterTipo, setFilterTipo] = useState([])
-  const [page,       setPage]       = useState(1)
-  const [showImport, setShowImport] = useState(false)
+  const [search,      setSearch]      = useState('')
+  const [filterTipo,  setFilterTipo]  = useState([])
+  const [filterPudo,  setFilterPudo]  = useState([])
+  const [sort,        setSort]        = useState('data-desc')
+  const [page,        setPage]        = useState(1)
+  const [showImport,  setShowImport]  = useState(false)
 
   const filtered = useMemo(() => {
     let list = SPEDIZIONI_INIT
@@ -76,17 +90,29 @@ export default function Spedizioni({ onStartJob }) {
     if (filterTipo.length) {
       list = list.filter(s => filterTipo.includes(s.tipo))
     }
+    if (filterPudo.length) {
+      list = list.filter(s => filterPudo.includes(s.pudoNome))
+    }
+
     return [...list].sort((a, b) => {
-      if (b.data !== a.data) return b.data.localeCompare(a.data)
-      return a.id.localeCompare(b.id)
+      switch (sort) {
+        case 'data-asc':    return a.data.localeCompare(b.data) || a.id.localeCompare(b.id)
+        case 'peso-desc':   return b.peso - a.peso
+        case 'peso-asc':    return a.peso - b.peso
+        case 'volume-desc': return b.volume - a.volume
+        case 'volume-asc':  return a.volume - b.volume
+        default:            return b.data.localeCompare(a.data) || a.id.localeCompare(b.id)
+      }
     })
-  }, [search, filterTipo])
+  }, [search, filterTipo, filterPudo, sort])
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
-  function handleSearch(v) { setSearch(v);     setPage(1) }
-  function handleTipo(v)   { setFilterTipo(v); setPage(1) }
+  function handleSearch(v) { setSearch(v);      setPage(1) }
+  function handleTipo(v)   { setFilterTipo(v);  setPage(1) }
+  function handlePudo(v)   { setFilterPudo(v);  setPage(1) }
+  function handleSort(v)   { setSort(v);         setPage(1) }
 
   function handleImportConfirm(params) {
     setShowImport(false)
@@ -162,6 +188,35 @@ export default function Spedizioni({ onStartJob }) {
             value={filterTipo}
             onChange={handleTipo}
           />
+
+          <MultiSelect
+            placeholder="Tutti i PUDO"
+            options={PUDO_OPT}
+            value={filterPudo}
+            onChange={handlePudo}
+          />
+
+          <select
+            className="sort-select"
+            value={sort}
+            onChange={e => handleSort(e.target.value)}
+            style={{
+              height: 34,
+              border: '1px solid var(--fp-border)',
+              borderRadius: 'var(--radius)',
+              padding: '0 10px',
+              fontSize: 13,
+              color: 'var(--fp-charcoal)',
+              background: '#fff',
+              cursor: 'pointer',
+              outline: 'none',
+              minWidth: 150,
+            }}
+          >
+            {SORT_OPT.map(o => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
         </div>
 
         <div className="table-wrap">

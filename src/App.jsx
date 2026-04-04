@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
@@ -15,14 +16,36 @@ import ProgressToast from './components/ui/ProgressToast'
 import { ECCEZIONI } from './data/stub'
 import './App.css'
 
+const SESSION_KEY = 'fp_ct_user'
+
 let _notifCounter = 1
 
+function loadSavedUser() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY)
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
 export default function App() {
-  const [user, setUser]               = useState(null)
+  const [user, setUser]               = useState(() => loadSavedUser())
+  // page: 'landing' | 'login' | 'app'
+  const [page, setPage]               = useState(() => loadSavedUser() ? 'app' : 'landing')
   const [section, setSection]         = useState('overview')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [notifications, setNotifications] = useState([])
-  const [activeJob, setActiveJob]     = useState(null) // { id, label, progress, status, detail }
+  const [activeJob, setActiveJob]     = useState(null)
+
+  // Sincronizza user su localStorage
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify(user))
+    } else {
+      localStorage.removeItem(SESSION_KEY)
+    }
+  }, [user])
 
   const eccezioniAperte = ECCEZIONI.filter(e => e.stato === 'Aperta').length
 
@@ -83,8 +106,34 @@ export default function App() {
     setTimeout(tick, 400)
   }, [addNotification])
 
-  if (!user) return <Login onLogin={setUser} />
+  // ── Auth handlers ──────────────────────────────────────────────
+  function handleLogin(u) {
+    setUser(u)
+    setPage('app')
+  }
 
+  function handleLogout() {
+    setUser(null)
+    setPage('landing')
+    setSection('overview')
+  }
+
+  // ── Routing ────────────────────────────────────────────────────
+  if (page === 'landing') {
+    return (
+      <Landing
+        isAuthenticated={!!user}
+        onGoToDashboard={() => setPage('app')}
+        onGoToLogin={() => setPage('login')}
+      />
+    )
+  }
+
+  if (page === 'login' || !user) {
+    return <Login onLogin={handleLogin} />
+  }
+
+  // page === 'app'
   function handleNav(id) {
     setSection(id)
     setSidebarOpen(false)
@@ -123,7 +172,7 @@ export default function App() {
         <Header
           user={user}
           section={section}
-          onLogout={() => setUser(null)}
+          onLogout={handleLogout}
           onMenuToggle={() => setSidebarOpen(o => !o)}
           notifications={notifications}
           onMarkRead={markRead}
