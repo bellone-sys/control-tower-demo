@@ -280,6 +280,35 @@
     .data-table tr:last-child td { border-bottom: none; }
     .data-table tr:nth-child(even) td { background: #fafafa; }
 
+    /* Top bar */
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; gap: 12px; flex-wrap: wrap;
+    }
+
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--charcoal); border: none;
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 13px; color: #fff;
+      cursor: pointer; font-family: var(--font);
+      transition: background .15s;
+    }
+    .pdf-btn:hover { background: #555; }
+
+    /* Sidebar other links */
+    .sidebar-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,.08);
+      margin: 8px 12px;
+    }
+    .sidebar-other-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: 6px;
+      color: rgba(255,255,255,.4); font-size: 12px;
+      text-decoration: none; transition: background .15s, color .15s;
+    }
+    .sidebar-other-link:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.7); }
+
     /* Footer */
     .page-footer {
       margin-top: 60px;
@@ -287,6 +316,18 @@
       border-top: 1px solid var(--cool-gray);
       font-size: 12px;
       color: var(--gray);
+    }
+
+    /* Print */
+    @media print {
+      body { display: block; background: #fff; }
+      .sidebar, .top-bar { display: none !important; }
+      .main { padding: 20px; max-width: 100%; }
+      .doc-section { break-inside: avoid; }
+      .data-table th { background: #414042 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .info-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      a { color: inherit; text-decoration: none; }
+      @page { margin: 2cm 1.5cm; }
     }
   </style>
 </head>
@@ -312,21 +353,32 @@
     <a href="#ci">      <span class="dot"></span>CI — Consolidation Index</a>
     <a href="#filiali"> <span class="dot"></span>Filiali</a>
     <a href="#template"><span class="dot"></span>Template</a>
+
+    <hr class="sidebar-divider"/>
+    <div class="sidebar-label">Documenti</div>
+    <a href="/control-tower-demo/playbook.html" class="sidebar-other-link">
+      <span class="dot"></span>Playbook Operativo
+    </a>
   </nav>
 
-  <div class="sidebar-footer">v0.3.1 · Aprile 2026</div>
+  <div class="sidebar-footer">v0.5.0 · Aprile 2026</div>
 </aside>
 
 <!-- ── MAIN ── -->
 <main class="main">
-  <button class="back-btn" onclick="history.back() || (window.location='/control-tower-demo/')">
-    ← Torna all'app
-  </button>
+  <div class="top-bar">
+    <button class="back-btn" onclick="history.back() || (window.location='/control-tower-demo/')">
+      ← Torna all'app
+    </button>
+    <button class="pdf-btn" onclick="window.print()">
+      ⬇ Scarica PDF
+    </button>
+  </div>
 
   <h1 class="page-title">Documentazione</h1>
   <p class="page-subtitle">
     Fermopoint Control Tower — Regole di business
-    <span>v0.3.1</span>
+    <span>v0.5.0</span>
   </p>
 
   <!-- Introduzione -->
@@ -552,7 +604,7 @@
   </section>
 
   <footer class="page-footer">
-    Fermopoint Control Tower — Documentazione interna — versione 0.3.1 — Aggiornato: Aprile 2026
+    Fermopoint Control Tower — Documentazione interna — versione 0.5.0 — Aggiornato: Aprile 2026
   </footer>
 </main>
 

@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playbook Operativo — Fermopoint Control Tower</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #414042;
+      --red: #DC0032;
+      --bg: #f5f5f7;
+      --white: #ffffff;
+      --gray: #808285;
+      --cool-gray: #e8e8ea;
+      --sidebar-w: 260px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--charcoal);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-logo-badge {
+      width: 36px; height: 36px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .sidebar-logo-text { display: flex; flex-direction: column; }
+    .sidebar-logo-brand {
+      font-size: 8px; letter-spacing: 1.5px; color: rgba(255,255,255,.5);
+      text-transform: uppercase; font-weight: 300;
+    }
+    .sidebar-logo-title { font-size: 11px; color: #fff; font-weight: 500; }
+
+    .sidebar-nav {
+      flex: 1; padding: 16px 8px;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+
+    .sidebar-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: rgba(255,255,255,.3);
+      padding: 8px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: 6px;
+      color: rgba(255,255,255,.6); font-size: 13px;
+      text-decoration: none; transition: background .15s, color .15s;
+      line-height: 1.3;
+    }
+    .sidebar-nav a:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+    .sidebar-nav a.active { background: var(--red); color: #fff; }
+    .sidebar-nav a .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,.3); flex-shrink: 0;
+    }
+    .sidebar-nav a.active .dot { background: rgba(255,255,255,.7); }
+
+    .sidebar-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,.08);
+      margin: 8px 12px;
+    }
+
+    .sidebar-other-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: 6px;
+      color: rgba(255,255,255,.4); font-size: 12px;
+      text-decoration: none; transition: background .15s, color .15s;
+    }
+    .sidebar-other-link:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.7); }
+
+    .sidebar-footer {
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      font-size: 11px; color: rgba(255,255,255,.3);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1; min-width: 0;
+      padding: 40px 48px;
+      max-width: 960px;
+    }
+
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; gap: 12px; flex-wrap: wrap;
+    }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--white); border: 1px solid var(--cool-gray);
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 13px; color: var(--charcoal);
+      text-decoration: none; cursor: pointer; font-family: var(--font);
+      transition: background .15s, border-color .15s;
+    }
+    .back-btn:hover { background: var(--bg); border-color: #ccc; }
+
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--charcoal); border: none;
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 13px; color: #fff;
+      cursor: pointer; font-family: var(--font);
+      transition: background .15s;
+    }
+    .pdf-btn:hover { background: #555; }
+
+    .page-title {
+      font-size: 28px; font-weight: 700;
+      color: var(--charcoal); margin-bottom: 6px; line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: 14px; color: var(--gray); margin-bottom: 40px;
+    }
+    .page-subtitle span {
+      display: inline-block; background: var(--red); color: #fff;
+      font-size: 11px; font-weight: 600; padding: 2px 8px;
+      border-radius: 4px; margin-left: 8px; vertical-align: middle;
+    }
+
+    /* Sections */
+    .doc-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 32px;
+    }
+    .doc-section h2 {
+      font-size: 20px; font-weight: 700; color: var(--charcoal);
+      margin-bottom: 16px; padding-bottom: 8px;
+      border-bottom: 2px solid var(--red); display: inline-block;
+    }
+    .doc-section h3 {
+      font-size: 15px; font-weight: 700; color: var(--charcoal);
+      margin: 24px 0 10px;
+    }
+    .doc-section p {
+      font-size: 14px; line-height: 1.7; color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+    .doc-section ul, .doc-section ol {
+      padding-left: 20px; margin-bottom: 12px;
+    }
+    .doc-section ul li, .doc-section ol li {
+      font-size: 14px; line-height: 1.7; color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+    .doc-section strong { font-weight: 600; }
+
+    /* Inline code */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px; background: #f0f0f0;
+      border: 1px solid #e0e0e0; border-radius: 4px;
+      padding: 1px 6px; color: var(--red);
+    }
+
+    /* Data tables */
+    .table-responsive { overflow-x: auto; margin: 16px 0; }
+    .data-table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+    }
+    .data-table th {
+      background: var(--charcoal); color: #fff; text-align: left;
+      padding: 10px 14px; font-weight: 600; font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 14px; border-bottom: 1px solid var(--cool-gray);
+      vertical-align: top; line-height: 1.5;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: #fafafa; }
+
+    /* Note/callout boxes */
+    .box {
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px; margin: 16px 0;
+      font-size: 14px; line-height: 1.6; color: var(--charcoal);
+    }
+    .box-info {
+      background: #e3f0fb; border-left: 4px solid #1565C0;
+    }
+    .box-warn {
+      background: #fff8e1; border-left: 4px solid #F57C00;
+    }
+    .box-tip {
+      background: #e8f5e9; border-left: 4px solid #2E7D32;
+    }
+    .box strong { font-weight: 700; }
+    .box ul { margin: 8px 0 0 16px; }
+    .box ul li { font-size: 14px; margin-bottom: 4px; }
+
+    /* Checklist */
+    .checklist {
+      list-style: none; padding: 0; margin: 12px 0;
+    }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; line-height: 1.6; color: var(--charcoal);
+      margin-bottom: 6px; padding: 6px 10px;
+      background: var(--white); border-radius: 6px;
+      border: 1px solid var(--cool-gray);
+    }
+    .checklist li::before {
+      content: '☐'; font-size: 16px; color: var(--gray);
+      flex-shrink: 0; line-height: 1.4;
+    }
+
+    /* Step list */
+    .step-list {
+      list-style: none; padding: 0; margin: 12px 0; counter-reset: steps;
+    }
+    .step-list > li {
+      counter-increment: steps;
+      display: flex; gap: 16px; margin-bottom: 16px;
+      align-items: flex-start;
+    }
+    .step-list > li::before {
+      content: counter(steps);
+      min-width: 28px; height: 28px;
+      background: var(--red); color: #fff;
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-list > li > div { flex: 1; }
+    .step-list > li > div strong {
+      display: block; margin-bottom: 6px; font-size: 14px;
+    }
+    .step-list > li > div ul { margin: 4px 0 0 16px; }
+    .step-list > li > div ul li { font-size: 13px; margin-bottom: 3px; color: var(--charcoal); }
+
+    /* Priority badges */
+    .badge {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 4px; font-size: 11px; font-weight: 700;
+    }
+    .badge-red { background: #ffe5ec; color: #DC0032; }
+    .badge-orange { background: #fff3e0; color: #E65100; }
+    .badge-yellow { background: #fffde7; color: #F57F17; }
+
+    /* Footer */
+    .page-footer {
+      margin-top: 60px; padding-top: 24px;
+      border-top: 1px solid var(--cool-gray);
+      font-size: 12px; color: var(--gray);
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { display: block; background: #fff; }
+      .sidebar, .top-bar { display: none !important; }
+      .main { padding: 20px; max-width: 100%; }
+      .doc-section { break-inside: avoid; }
+      .data-table th { background: #414042 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .step-list > li::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      a { color: inherit; text-decoration: none; }
+      @page { margin: 2cm 1.5cm; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-badge">FP</div>
+    <div class="sidebar-logo-text">
+      <span class="sidebar-logo-brand">Fermopoint</span>
+      <span class="sidebar-logo-title">Control Tower</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-label">Sezioni</div>
+    <a href="#glossario"    class="active"><span class="dot"></span>0 · Glossario</a>
+    <a href="#prerequisiti"><span class="dot"></span>1 · Prerequisiti</a>
+    <a href="#optimoroute"><span class="dot"></span>2 · OptimoRoute</a>
+    <a href="#nuovo-giro">  <span class="dot"></span>3 · Nuovo Giro</a>
+    <a href="#manutenzione"><span class="dot"></span>4 · Manutenzione</a>
+    <a href="#economia">    <span class="dot"></span>5 · Analisi Economica</a>
+    <a href="#nuova-filiale"><span class="dot"></span>6 · Nuova Filiale</a>
+    <a href="#punti-aperti"><span class="dot"></span>7 · Punti Aperti</a>
+
+    <hr class="sidebar-divider"/>
+    <div class="sidebar-label">Documenti</div>
+    <a href="/control-tower-demo/glossario.html" class="sidebar-other-link">
+      <span class="dot"></span>Documentazione
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">v0.5.0 · Aprile 2026</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <div class="top-bar">
+    <button class="back-btn" onclick="history.back() || (window.location='/control-tower-demo/')">
+      ← Torna all'app
+    </button>
+    <button class="pdf-btn" onclick="window.print()">
+      ⬇ Scarica PDF
+    </button>
+  </div>
+
+  <h1 class="page-title">Playbook Operativo</h1>
+  <p class="page-subtitle">
+    Giri Fissi Milk Run — Fermopoint Control Tower
+    <span>v0.5.0</span>
+  </p>
+
+  <div class="box box-info">
+    <strong>📘 Playbook Operativo – Giri Fissi Milk Run</strong><br>
+    Manuale per la creazione e manutenzione dei giri di consegna e ritiro presso i PUDO Fermopoint.
+    Strumento di riferimento operativo per la pianificazione su OptimoRoute.
+  </div>
+
+  <!-- 0. Glossario -->
+  <section class="doc-section" id="glossario">
+    <h2>0 · Glossario e Riferimenti Rapidi</h2>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr><th>Termine</th><th>Definizione</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>PUDO</strong></td><td>Pick-Up Drop-Off: punto fisico di ritiro e consegna pacchi</td></tr>
+          <tr><td><strong>Giro fisso</strong></td><td>Percorso pianificato con sequenza e orari stabiliti, ripetuto quotidianamente</td></tr>
+          <tr><td><strong>CI (Consolidation Index)</strong></td><td>Numero medio giornaliero di pacchi consegnati/ritirati per PUDO. Parametro chiave di efficienza</td></tr>
+          <tr><td><strong>Filiale</strong></td><td>Hub logistico BRT da cui partono i giri Milk Run</td></tr>
+          <tr><td><strong>OptimoRoute</strong></td><td>Software di routing e pianificazione giri utilizzato per la gestione delle rotte</td></tr>
+          <tr><td><strong>Driver App FP</strong></td><td>App OptimoRoute lato autista per la navigazione e l'esitazione del servizio</td></tr>
+          <tr><td><strong>Esitazione</strong></td><td>Registrazione dell'avvenuta consegna/ritiro presso il PUDO</td></tr>
+          <tr><td><strong>FTE</strong></td><td>Full-Time Equivalent, giornata lavorativa intera</td></tr>
+          <tr><td><strong>ZTL</strong></td><td>Zona a Traffico Limitato</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 1. Prerequisiti -->
+  <section class="doc-section" id="prerequisiti">
+    <h2>1 · Prerequisiti e Raccolta Dati</h2>
+    <p>Prima di avviare la configurazione su OptimoRoute è necessario raccogliere e validare tutti i dati di input.</p>
+
+    <h3>1.1 Dati sui PUDO</h3>
+    <p>Per ogni PUDO da inserire nel giro raccogliere:</p>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Campo</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>Nome commerciale</td><td>Denominazione del punto</td></tr>
+          <tr><td>Codice identificativo BRT/FP</td><td>ID univoco nel sistema AS/400</td></tr>
+          <tr><td>Indirizzo completo</td><td>Via, numero civico, CAP, città</td></tr>
+          <tr><td>Coordinate geografiche</td><td>Lat/Long per il geocoding corretto in OptimoRoute</td></tr>
+          <tr><td>Orari di apertura</td><td>Fascia oraria e giorni di apertura. Definisce la time window di consegna</td></tr>
+          <tr><td>CI atteso</td><td>Da storico AS/400: media pacchi consegnati/ritirati per giorno</td></tr>
+          <tr><td>Peso medio per pacco</td><td>In kg, da storico AS/400</td></tr>
+          <tr><td>Volume medio per pacco</td><td>In m³ o dm³, da storico AS/400</td></tr>
+          <tr><td>Vincoli di accesso</td><td>ZTL, zone pedonali, parcheggio difficile, accesso con orari specifici</td></tr>
+          <tr><td>Tipo PUDO</td><td>Negozio, locker, tabacchi, ecc.</td></tr>
+          <tr><td>Referente PUDO</td><td>Nome e contatto del gestore</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box box-warn">
+      <strong>⚠️ Punto aperto:</strong> Definire la soglia minima di CI al di sotto della quale un PUDO è escluso dal giro fisso.
+      Valore proposto da validare con Alberto Luisi / Luca Montanari.
+    </div>
+
+    <div class="box box-tip">
+      <strong>📌 Regola — Frequenza e orario del passaggio al PUDO:</strong><br>
+      I giri fissi operano <strong>tutti i giorni feriali dal lunedì al venerdì, sempre alla stessa ora</strong>.
+      Il routing viene quindi pianificato con un <strong>unico orario di passaggio fisso</strong> per ogni PUDO, valido per tutti i giorni della settimana.
+      In fase di analisi di un nuovo giro o di rifacimento di un giro esistente, la time window da inserire in OptimoRoute deve essere la
+      <strong>fascia oraria comune a tutti i giorni feriali</strong> del PUDO.
+      Se il PUDO ha un giorno di chiusura infrasettimanale (es. chiude il mercoledì), quel giorno viene ignorato nel calcolo:
+      si considerano solo i giorni di apertura feriali rimanenti e si usa la finestra comune a quelli.
+      Questo garantisce che l'orario di passaggio pianificato sia sempre rispettabile indipendentemente dal giorno della settimana.
+    </div>
+
+    <h3>1.2 Dati sulla Filiale / Deposito</h3>
+    <ul>
+      <li>Indirizzo e coordinate del deposito (punto di partenza e arrivo dei giri)</li>
+      <li>Orario di apertura filiale e orario di uscita autisti</li>
+      <li>Capacità di handling: spazio disponibile per PUDO/giro (m² per stazione di carico)</li>
+      <li>Orario limite di rientro autisti</li>
+    </ul>
+
+    <h3>1.3 Dati sui Driver</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Campo</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>Numero di driver disponibili</td><td>Distinto per tipologia contratto (dipendente / vettore esterno)</td></tr>
+          <tr><td>Orario di lavoro</td><td>Inizio turno, fine turno, pausa pranzo</td></tr>
+          <tr><td>Patente / abilitazioni</td><td>Rilevante per tipologia mezzo assegnato</td></tr>
+          <tr><td>Costo driver</td><td>Costo orario o giornaliero (necessario per analisi economica giro)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>1.4 Dati sui Mezzi</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Campo</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>Targa / identificativo</td><td>Codice univoco del mezzo</td></tr>
+          <tr><td>Tipologia</td><td>Furgone, cassonato, ecc.</td></tr>
+          <tr><td>Capacità volumetrica</td><td>In m³</td></tr>
+          <tr><td>Portata peso</td><td>In kg</td></tr>
+          <tr><td>Capacità numerica pacchi</td><td>Numero massimo pacchi trasportabili (es. 500 per cassonato)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>1.5 Criteri di Esclusione PUDO</h3>
+    <p>Non tutti i PUDO vengono inseriti nel giro fisso. Applicare le seguenti verifiche:</p>
+    <ul>
+      <li><strong>CI sotto soglia</strong> → escludere (soglia da definire — vedi punto aperto §1.1)</li>
+      <li><strong>Distanza eccessiva dalla filiale</strong> → escludere se supera il limite km
+        <span style="color:#E65100"> ⚠️ Punto aperto: definire limite km massimo accettabile</span></li>
+      <li><strong>Inaccessibilità con mezzo</strong> → escludere PUDO in zone pedonali, locker in centri commerciali con accesso problematico, o PUDO con restrizioni orarie incompatibili</li>
+      <li><strong>PUDO accessibile solo a piedi</strong> → escludere sempre: il driver non può parcheggiare il mezzo e raggiungere il PUDO a piedi in modo efficiente. Questo comporta ritorni su zone già servite e degrado delle performance del giro</li>
+      <li><strong>Orari di apertura incompatibili</strong> con la finestra operativa del giro</li>
+    </ul>
+  </section>
+
+  <!-- 2. OptimoRoute -->
+  <section class="doc-section" id="optimoroute">
+    <h2>2 · Configurazione OptimoRoute</h2>
+
+    <h3>2.1 Configurazione Veicoli</h3>
+    <p>Per ogni mezzo inserito in OptimoRoute configurare i seguenti parametri di capacità:</p>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Parametro</th><th>Descrizione</th><th>Come si calcola</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Capacità numerica</strong></td>
+            <td>Numero massimo di pacchi trasportabili</td>
+            <td>Somma dei (CI_pudo × N_PUDO) serviti dal giro. Max 500 per cassonato</td>
+          </tr>
+          <tr>
+            <td><strong>Capacità peso (kg)</strong></td>
+            <td>Portata massima del mezzo in kg</td>
+            <td>Somma dei (peso_medio_pudo × CI_pudo × N_PUDO). ⚠️ Valori per tipologia mezzo da definire</td>
+          </tr>
+          <tr>
+            <td><strong>Capacità volumetrica (m³)</strong></td>
+            <td>Volume massimo caricabile</td>
+            <td>Somma dei (volume_medio_pudo × CI_pudo × N_PUDO). ⚠️ Valori per tipologia mezzo da definire</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box box-warn">
+      <strong>⚠️ Punto aperto:</strong> Definire e documentare la tabella di capacità per ogni tipologia di mezzo in uso
+      (furgone standard, cassonato, ecc.) con valori di peso e volume validati dalle Operations.
+    </div>
+
+    <h3>2.2 Configurazione Driver</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Parametro</th><th>Valore</th></tr></thead>
+        <tbody>
+          <tr><td>Velocità media</td><td>1.1× slower (valore validato su test Napoli — più cautelativo dello standard)</td></tr>
+          <tr><td>Orario inizio turno</td><td>Da definire per filiale (es. 07:00)</td></tr>
+          <tr><td>Orario fine turno</td><td>Da definire per filiale</td></tr>
+          <tr><td>Pausa pranzo</td><td>60 minuti, da pianificare tra le 12:00 e le 14:00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box box-tip">
+      <strong>📌 Nota — Giorno di riferimento per il routing:</strong><br>
+      Impostare sempre il routing prendendo come riferimento un giorno feriale <strong>che non sia il lunedì</strong>.
+      Il lunedì gli orari di chiusura dei PUDO per turno sono atipici rispetto agli altri giorni della settimana.
+      Usare un giorno mid-week (martedì–giovedì) garantisce la massima ottimizzazione chilometrica per la maggior parte delle giornate operative.
+    </div>
+
+    <h3>2.3 Parametri del Giro</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Parametro</th><th>Valore / Regola</th></tr></thead>
+        <tbody>
+          <tr><td>Limite capienza massima giro</td><td>~500 pacchi (basato su CI)</td></tr>
+          <tr><td>Tempo di servizio per PUDO</td><td>Proporzionale al CI del PUDO. ⚠️ Punto aperto: Definire formula: <code>tempo_minimo_base + (CI × fattore_tempo)</code>. Valore base e fattore da validare con Operations</td></tr>
+          <tr><td>Time window di consegna</td><td>Derivata dagli orari di apertura del PUDO</td></tr>
+          <tr><td>Punto di partenza</td><td>Coordinate filiale</td></tr>
+          <tr><td>Punto di arrivo</td><td>Coordinate filiale (giro circolare)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2.4 Impostazioni di Pianificazione Rotte</h3>
+    <ul>
+      <li><strong>Compartimentazione:</strong> attivare per separare geograficamente i giri ed evitare sovrapposizioni tra driver</li>
+      <li><strong>Bilanciamento per working time:</strong> attivare per distribuire equamente il carico di lavoro tra i driver disponibili</li>
+      <li><strong>Ottimizzazione:</strong> minimizzare tempo totale / distanza percorsa nel rispetto delle time window</li>
+    </ul>
+    <div class="box box-warn">
+      <strong>⚠️ Punto aperto:</strong> Definire e documentare i parametri specifici di compartimentazione per ogni filiale
+      (es. divisione per quadranti geografici, per zone postali, ecc.).
+    </div>
+  </section>
+
+  <!-- 3. Nuovo Giro -->
+  <section class="doc-section" id="nuovo-giro">
+    <h2>3 · Creazione di un Nuovo Giro</h2>
+
+    <h3>3.1 Processo Step-by-Step</h3>
+    <ol class="step-list">
+      <li>
+        <div>
+          <strong>Analisi della domanda</strong>
+          <ul>
+            <li>Estrarre da AS/400 lo storico consegne e ritiri per PUDO degli ultimi 30–60 giorni</li>
+            <li>Calcolare CI medio per PUDO</li>
+            <li>Identificare i PUDO candidati al giro (sopra soglia CI, geograficamente coerenti)</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Definizione del perimetro geografico</strong>
+          <ul>
+            <li>Identificare le zone da coprire con ciascun giro</li>
+            <li>Verificare assenza di sovrapposizioni con giri esistenti</li>
+            <li>Verificare vincoli di accesso (ZTL, orari, tipo mezzo)</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Inserimento dati in OptimoRoute</strong>
+          <ul>
+            <li>Caricare anagrafica PUDO (indirizzo, coordinate, time window, tempo di servizio)</li>
+            <li>Configurare veicoli e driver come da §2.1 e §2.2</li>
+            <li>Impostare parametri giro come da §2.3</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Generazione e validazione del piano</strong>
+          <ul>
+            <li>Lanciare l'ottimizzazione in OptimoRoute</li>
+            <li>Verificare che tutti i PUDO vengano serviti (nessun PUDO non assegnato)</li>
+            <li>Verificare rispetto delle time window</li>
+            <li>Verificare che i giri rientrino nei limiti di orario dei driver</li>
+            <li>Verificare coerenza con capacità mezzo (no overflow)</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Revisione operativa</strong>
+          <ul>
+            <li>Condividere il piano con il responsabile di filiale per validazione</li>
+            <li>Effettuare eventuali aggiustamenti manuali su sequenze critiche</li>
+            <li>Documentare le eccezioni rispetto al piano ottimizzato</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Attivazione</strong>
+          <ul>
+            <li>Pubblicare il piano su OptimoRoute</li>
+            <li>Comunicare agli autisti via Driver App FP</li>
+            <li>Prima settimana: monitoraggio giornaliero delle deviazioni</li>
+          </ul>
+        </div>
+      </li>
+    </ol>
+
+    <h3>3.2 Checklist Pre-Attivazione</h3>
+    <ul class="checklist">
+      <li>Tutti i PUDO hanno coordinate geografiche verificate</li>
+      <li>Tutti i PUDO hanno time window inserite e <strong>verificate sul campo</strong> (non solo da anagrafica — orari reali spesso differiscono da quelli registrati in AS/400)</li>
+      <li>Tempi di servizio configurati per ogni PUDO</li>
+      <li>Capacità veicoli configurate correttamente</li>
+      <li>Orari driver inseriti con pausa pranzo</li>
+      <li>Nessun PUDO in overflow di capacità</li>
+      <li>Piano validato dal responsabile di filiale</li>
+      <li>Driver briefing effettuato</li>
+      <li>Driver App FP installata e funzionante su dispositivo autista</li>
+    </ul>
+  </section>
+
+  <!-- 4. Manutenzione -->
+  <section class="doc-section" id="manutenzione">
+    <h2>4 · Manutenzione dei Giri Esistenti</h2>
+
+    <h3>4.1 Monitoraggio Continuativo</h3>
+    <p><strong>Attività quotidiane:</strong></p>
+    <ul>
+      <li>Verificare via OptimoRoute l'esecuzione del piano (completamento stop, ritardi)</li>
+      <li>Raccogliere segnalazioni driver via app (problemi accesso PUDO, PUDO chiusi, ecc.)</li>
+      <li>Verificare scan compliance (esitazione corretta di ogni stop)</li>
+    </ul>
+    <p><strong>Attività settimanali:</strong></p>
+    <ul>
+      <li>Analisi KPI operativi (on-time delivery, stop/ora, ore/giro)</li>
+      <li>Confronto CI effettivo vs CI pianificato per PUDO</li>
+      <li>Identificare PUDO con performance anomale (CI molto superiore o inferiore alle attese)</li>
+    </ul>
+
+    <h3>4.2 Revisione Mensile dei Giri</h3>
+    <p>Ogni mese eseguire una revisione strutturata:</p>
+    <ol>
+      <li>Aggiornare CI per ogni PUDO con i dati del mese precedente da AS/400</li>
+      <li>Ricalcolare capacità dei giri con i nuovi CI</li>
+      <li>Identificare PUDO da rivedere:
+        <ul>
+          <li>CI sceso sotto soglia → valutare esclusione o riduzione frequenza</li>
+          <li>CI cresciuto significativamente → valutare split del giro o aggiunta driver</li>
+        </ul>
+      </li>
+      <li>Verificare variazioni orari PUDO (cambi stagionali, festività, ecc.)</li>
+      <li>Aggiornare OptimoRoute con le nuove configurazioni</li>
+      <li>Documentare le modifiche effettuate e le motivazioni</li>
+    </ol>
+
+    <h3>4.3 Aggiunta di un PUDO a Giro Esistente</h3>
+    <ol>
+      <li>Verificare che il nuovo PUDO superi la soglia CI</li>
+      <li>Verificare la coerenza geografica con il giro candidato</li>
+      <li>Stimare impatto su capienza mezzo e tempo giro</li>
+      <li>Simulare in OptimoRoute con il PUDO aggiunto</li>
+      <li>Verificare che il giro rimanga nei limiti operativi (orario driver, capienza)</li>
+      <li>Se il giro supera i limiti → valutare split del giro o assegnazione a giro diverso</li>
+      <li>Validare con responsabile di filiale e attivare</li>
+    </ol>
+
+    <h3>4.4 Rimozione di un PUDO da Giro Esistente</h3>
+    <ol>
+      <li>Documentare la motivazione (CI sotto soglia, chiusura PUDO, inaccessibilità, ecc.)</li>
+      <li>Verificare se il PUDO può essere servito con frequenza ridotta o tramite rete BRT standard</li>
+      <li>Aggiornare OptimoRoute rimuovendo il PUDO</li>
+      <li>Comunicare la variazione al responsabile di filiale</li>
+      <li>Aggiornare la documentazione anagrafica PUDO</li>
+    </ol>
+
+    <h3>4.5 Gestione Anomalie e Fallback</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Situazione</th><th>Azione</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>PUDO chiuso il giorno della consegna</td>
+            <td>Autista segnala via app → pacco torna in filiale → ripianificazione giorno successivo</td>
+          </tr>
+          <tr>
+            <td>Driver assente</td>
+            <td>Redistribuzione manuale dei PUDO su altri driver del giorno. Se impossibile, escalation al responsabile di filiale</td>
+          </tr>
+          <tr>
+            <td>OptimoRoute non disponibile</td>
+            <td>Utilizzare il piano del giorno precedente come fallback. ⚠️ Punto aperto: Definire e documentare formalmente la procedura di fallback operativo</td>
+          </tr>
+          <tr>
+            <td>Mezzo in avaria</td>
+            <td>Sostituzione mezzo. Verificare compatibilità di capacità con il nuovo mezzo assegnato</td>
+          </tr>
+          <tr>
+            <td>Traffico / ritardi sistemici</td>
+            <td>Driver comunica via app. Responsabile di filiale valuta se saltare PUDO a bassa priorità</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5. Analisi Economica -->
+  <section class="doc-section" id="economia">
+    <h2>5 · Analisi Economica del Giro</h2>
+
+    <h3>5.1 Metriche di Efficienza</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>KPI</th><th>Formula</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>CI medio giro</strong></td>
+            <td>Totale pacchi / N. PUDO serviti</td>
+            <td>~18 (target business plan)</td>
+          </tr>
+          <tr>
+            <td><strong>Costo per stop</strong></td>
+            <td>Costo totale giro / N. PUDO serviti</td>
+            <td>Da definire per filiale</td>
+          </tr>
+          <tr>
+            <td><strong>Costo per parcel</strong></td>
+            <td>Costo totale giro / N. pacchi consegnati</td>
+            <td>Target: 0,6 €</td>
+          </tr>
+          <tr>
+            <td><strong>Stop/ora</strong></td>
+            <td>N. PUDO serviti / ore giro</td>
+            <td>Da rilevare e ottimizzare</td>
+          </tr>
+          <tr>
+            <td><strong>On-time delivery</strong></td>
+            <td>% PUDO serviti nella time window (tolleranza ±5 min)</td>
+            <td>&gt;95%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>5.2 Valutazione Make-or-Buy</h3>
+    <p>Per ogni giro valutare se conviene gestione interna (driver FP) o esterna (vettore):</p>
+    <ul>
+      <li>Calcolare costo driver interno (costo orario × ore giro)</li>
+      <li>Calcolare costo vettore esterno per lo stesso giro</li>
+      <li>Considerare variabili: affidabilità, flessibilità, controllo qualità</li>
+      <li>Documentare la scelta e le motivazioni</li>
+    </ul>
+    <div class="box box-warn">
+      <strong>⚠️ Punto aperto:</strong> Definire template standardizzato per l'analisi make-or-buy da utilizzare per ogni nuova filiale.
+    </div>
+  </section>
+
+  <!-- 6. Nuova Filiale -->
+  <section class="doc-section" id="nuova-filiale">
+    <h2>6 · Apertura di una Nuova Filiale</h2>
+    <p style="color:var(--gray); font-size:13px;">Conversione da rete BRT Standard a rete Fermopoint Milk Run</p>
+
+    <h3>6.1 To-Do List Pre-Conversione</h3>
+    <ul class="checklist">
+      <li>Raccolta dati PUDO completa (§1.1)</li>
+      <li>Verifica CI su storico AS/400 (minimo 30 giorni)</li>
+      <li>Analisi make-or-buy completata</li>
+      <li>Driver identificati e contrattualizzati</li>
+      <li>Mezzi disponibili e configurati</li>
+      <li>OptimoRoute configurato con veicoli, driver e parametri filiale</li>
+      <li>Giri pianificati e validati in simulazione</li>
+      <li>Driver App FP installata su tutti i dispositivi</li>
+      <li>Briefing operativo con tutti i driver</li>
+      <li>Responsabile di filiale formato sull'uso della Control Tower</li>
+      <li>Piano di monitoraggio prima settimana definito</li>
+      <li>Piano di rollback concordato <em style="color:var(--gray)">(⚠️ Punto aperto: Definire criteri e procedura di rollback a rete BRT standard)</em></li>
+    </ul>
+
+    <h3>6.2 Parametri Macro di Valutazione</h3>
+    <p>Prima di procedere alla conversione verificare:</p>
+    <ul>
+      <li>CI medio atteso ≥ soglia (target ~18)</li>
+      <li>Numero PUDO sufficiente a giustificare giri dedicati</li>
+      <li>Disponibilità di almeno N driver <em style="color:var(--gray)">(⚠️ Punto aperto: definire numero minimo driver per apertura filiale)</em></li>
+      <li>Spazio fisico in filiale adeguato per handling Milk Run</li>
+    </ul>
+
+    <h3>6.3 Timeline Tipo di Apertura</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Settimana</th><th>Attività</th></tr></thead>
+        <tbody>
+          <tr><td><strong>W−4</strong></td><td>Raccolta dati, analisi CI, definizione perimetro</td></tr>
+          <tr><td><strong>W−3</strong></td><td>Configurazione OptimoRoute, simulazioni, make-or-buy</td></tr>
+          <tr><td><strong>W−2</strong></td><td>Validazione piano, contrattualizzazione driver, briefing</td></tr>
+          <tr><td><strong>W−1</strong></td><td><strong>Test drive</strong> (giri di prova con pacchi reali — vedi §6.4)</td></tr>
+          <tr><td><strong>W0</strong></td><td>Go-live. Monitoraggio giornaliero</td></tr>
+          <tr><td><strong>W+2</strong></td><td>Prima revisione operativa post-lancio</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>6.4 Istruzioni per i Giri di Prova (Test Drive)</h3>
+    <p>I giri di prova servono a <strong>validare la correttezza del routing</strong> prima del go-live.
+    Devono essere condotti rispettando alcune regole fondamentali emerse dall'esperienza sul campo.</p>
+
+    <p><strong>Configurazione OptimoRoute per il test:</strong></p>
+    <ul>
+      <li>Impostare il tempo di servizio per ogni stop a <strong>7 minuti</strong> (valore fisso per il test — indipendente dal CI)</li>
+      <li>Verificare che il giorno di riferimento del routing non sia lunedì (vedi §2.2)</li>
+    </ul>
+
+    <p><strong>Istruzioni operative per i driver durante il test:</strong></p>
+    <ul>
+      <li>I driver <strong>devono rispettare i 7 minuti completi per ogni stop</strong>, anche se il servizio fisico è più rapido. Solo così è possibile validare se i tempi del routing sono realistici in una giornata tipo</li>
+      <li>Se un PUDO è chiuso o il driver arriva fuori orario, l'esito va registrato come <strong>"Failed"</strong> — <strong>mai come "Completed"</strong>. Un esito completato non corrispondente alla realtà falsa i dati del test</li>
+      <li>Se un PUDO non viene raggiunto per mancanza di tempo, l'esito va registrato come <strong>"Rejected"</strong></li>
+    </ul>
+
+    <p><strong>Analisi post-test:</strong></p>
+    <ul>
+      <li>Verificare i giri con ritardi sistemici: ripetere il giorno successivo facendo partire il driver in orario, per isolare se il problema è il routing o una partenza in ritardo</li>
+      <li>Identificare PUDO con orario errato in anagrafica (es. chiude alle 14:00 e non alle 14:30) e correggere prima del go-live</li>
+      <li>Identificare PUDO raggiungibili solo a piedi → valutare esclusione (vedi §1.5)</li>
+      <li>Segnalare eventuali problemi con i dispositivi dei driver (palmari, app) prima del go-live</li>
+    </ul>
+  </section>
+
+  <!-- 7. Punti Aperti -->
+  <section class="doc-section" id="punti-aperti">
+    <h2>7 · Punti Aperti — Riepilogo</h2>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr><th>#</th><th>Punto Aperto</th><th>Owner Suggerito</th><th>Priorità</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Definire soglia CI minima per inclusione PUDO nel giro</td>
+            <td>Alberto Luisi / Luca Montanari</td>
+            <td><span class="badge badge-red">🔴 Alta</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Definire limite km massimo per inclusione PUDO</td>
+            <td>Operations FP</td>
+            <td><span class="badge badge-red">🔴 Alta</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Definire tabella capacità mezzi (peso e volume per tipologia)</td>
+            <td>Operations FP / BRT</td>
+            <td><span class="badge badge-red">🔴 Alta</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Definire formula tempo di servizio per PUDO (base + fattore CI)</td>
+            <td>Elipse + Operations FP</td>
+            <td><span class="badge badge-red">🔴 Alta</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Definire parametri di compartimentazione per filiale</td>
+            <td>Elipse + Operations FP</td>
+            <td><span class="badge badge-orange">🟡 Media</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Formalizzare procedura di fallback operativo (OptimoRoute down)</td>
+            <td>Elipse + Alberto Luisi</td>
+            <td><span class="badge badge-red">🔴 Alta</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Definire template analisi make-or-buy</td>
+            <td>Elipse (PM)</td>
+            <td><span class="badge badge-orange">🟡 Media</span></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>Definire criteri e procedura di rollback a rete BRT standard</td>
+            <td>Alberto Luisi / Reisinger Stephan</td>
+            <td><span class="badge badge-orange">🟡 Media</span></td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>Definire numero minimo driver per apertura nuova filiale</td>
+            <td>Operations FP</td>
+            <td><span class="badge badge-orange">🟡 Media</span></td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>Definire KPI economici target per filiale (costo/stop, costo/parcel)</td>
+            <td>Alberto Luisi / Luca Montanari</td>
+            <td><span class="badge badge-red">🔴 Alta</span></td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td>Definizione periodo iniziale di tracking GPS dei driver. Non è possibile mantenere tracking GPS per sempre</td>
+            <td>Luca Montanari</td>
+            <td><span class="badge badge-red">🔴 Alta</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    Fermopoint Control Tower — Playbook Operativo — versione 0.5.0 — Aggiornato: Aprile 2026
+  </footer>
+</main>
+
+<script>
+  const sections = document.querySelectorAll('.doc-section[id]')
+  const navLinks  = document.querySelectorAll('.sidebar-nav a[href^="#"]')
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'))
+        const link = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`)
+        if (link) link.classList.add('active')
+      }
+    })
+  }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 })
+
+  sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>
