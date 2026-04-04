@@ -9,7 +9,7 @@ export const CI_BASE = {
 }
 
 // Fattore periodo: periodo più breve = CI leggermente più alto (volatilità)
-const PERIOD_FACTOR = { 7: 1.12, 14: 1.06, 30: 1.0 }
+const PERIOD_FACTOR = { 7: 1.12, 14: 1.06, 30: 1.0, 60: 0.95 }
 
 export function getCiPudo(pudoId, periodGg = 30) {
   const base = CI_BASE[pudoId] ?? 0
