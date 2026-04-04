@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Login from './pages/Login'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
@@ -11,19 +11,79 @@ import Filiali from './components/sections/Filiali'
 import Utenti from './components/sections/Utenti'
 import Eccezioni from './components/sections/Eccezioni'
 import Report from './components/sections/Report'
+import ProgressToast from './components/ui/ProgressToast'
 import { ECCEZIONI } from './data/stub'
 import './App.css'
 
+let _notifCounter = 1
+
 export default function App() {
-  const [user, setUser] = useState(null)
-  const [section, setSection] = useState('overview')
+  const [user, setUser]               = useState(null)
+  const [section, setSection]         = useState('overview')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [notifications, setNotifications] = useState([])
+  const [activeJob, setActiveJob]     = useState(null) // { id, label, progress, status, detail }
 
   const eccezioniAperte = ECCEZIONI.filter(e => e.stato === 'Aperta').length
 
-  if (!user) {
-    return <Login onLogin={setUser} />
-  }
+  // ── Notification helpers ────────────────────────────────────────
+  const addNotification = useCallback((type, title, message) => {
+    const n = { id: _notifCounter++, type, title, message, ts: new Date(), read: false }
+    setNotifications(prev => [n, ...prev])
+  }, [])
+
+  const markRead = useCallback((id) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n))
+  }, [])
+
+  const markAllRead = useCallback(() => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })))
+  }, [])
+
+  const clearNotif = useCallback((id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id))
+  }, [])
+
+  // ── Background job simulation ───────────────────────────────────
+  const startJob = useCallback((label, onDone) => {
+    const jobId = Date.now()
+    setActiveJob({ id: jobId, label, progress: 0, status: 'running', detail: 'Connessione al sistema AS/400…' })
+
+    const steps = [
+      { pct: 8,  detail: 'Autenticazione…' },
+      { pct: 18, detail: 'Recupero lista spedizioni…' },
+      { pct: 32, detail: 'Download dati provincia 1/4…' },
+      { pct: 48, detail: 'Download dati provincia 2/4…' },
+      { pct: 62, detail: 'Download dati provincia 3/4…' },
+      { pct: 76, detail: 'Download dati provincia 4/4…' },
+      { pct: 88, detail: 'Elaborazione e normalizzazione…' },
+      { pct: 96, detail: 'Validazione record…' },
+      { pct: 100, detail: null },
+    ]
+
+    let stepIdx = 0
+    const MIN_STEP = 600, MAX_STEP = 1800
+
+    function tick() {
+      if (stepIdx >= steps.length) {
+        setActiveJob(j => ({ ...j, progress: 100, status: 'done', detail: 'Completato' }))
+        setTimeout(() => {
+          setActiveJob(null)
+          addNotification('success', label, 'Importazione completata con successo.')
+          onDone && onDone()
+        }, 2200)
+        return
+      }
+      const { pct, detail } = steps[stepIdx++]
+      setActiveJob(j => j?.id === jobId ? { ...j, progress: pct, detail: detail ?? 'Finalizzazione…' } : j)
+      const delay = MIN_STEP + Math.random() * (MAX_STEP - MIN_STEP)
+      setTimeout(tick, delay)
+    }
+
+    setTimeout(tick, 400)
+  }, [addNotification])
+
+  if (!user) return <Login onLogin={setUser} />
 
   function handleNav(id) {
     setSection(id)
@@ -32,7 +92,7 @@ export default function App() {
 
   const SECTIONS = {
     overview:   <Overview />,
-    spedizioni: <Spedizioni />,
+    spedizioni: <Spedizioni onStartJob={startJob} addNotification={addNotification} />,
     giri:       <Giri />,
     punti:      <PuntiRitiro />,
     flotta:     <Flotta />,
@@ -58,17 +118,25 @@ export default function App() {
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
+
       <div className="app-main">
         <Header
           user={user}
           section={section}
           onLogout={() => setUser(null)}
           onMenuToggle={() => setSidebarOpen(o => !o)}
+          notifications={notifications}
+          onMarkRead={markRead}
+          onMarkAllRead={markAllRead}
+          onClearNotif={clearNotif}
         />
         <main className="app-content">
           {SECTIONS[section]}
         </main>
       </div>
+
+      {/* Global progress toast */}
+      <ProgressToast job={activeJob} />
     </div>
   )
 }

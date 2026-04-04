@@ -353,6 +353,8 @@
     <a href="#ci">      <span class="dot"></span>CI — Consolidation Index</a>
     <a href="#filiali"> <span class="dot"></span>Filiali</a>
     <a href="#template"><span class="dot"></span>Template</a>
+    <a href="#importazione"><span class="dot"></span>Importazione spedizioni</a>
+    <a href="#notifiche"><span class="dot"></span>Notifiche</a>
 
     <hr class="sidebar-divider"/>
     <div class="sidebar-label">Documenti</div>
@@ -603,8 +605,60 @@
     </div>
   </section>
 
+  <!-- Importazione Spedizioni -->
+  <section class="doc-section" id="importazione">
+    <h2>Importazione Spedizioni</h2>
+    <p>
+      La sezione Spedizioni consente di caricare dati storici o aggiornati tramite due modalità:
+    </p>
+    <ul>
+      <li><strong>Sincronizzazione API</strong> — scarica le spedizioni direttamente dal sistema AS/400 selezionando il periodo storico (1, 3, 6 o 12 mesi) e le province di interesse, raggruppate per regione.</li>
+      <li><strong>Upload file</strong> — carica un file CSV o XLSX compilato secondo il template ufficiale scaricabile dall'interfaccia.</li>
+    </ul>
+    <p>
+      Al termine della conferma, il processo viene eseguito <strong>in background</strong> e può richiedere diversi minuti. Una barra di avanzamento mostra il progresso in tempo reale nell'angolo in basso a destra dell'interfaccia. Al completamento compare una <strong>notifica</strong> nel pannello campanella.
+    </p>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Campo CSV</th><th>Tipo</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>id</code></td><td>stringa</td><td>Identificativo univoco spedizione</td></tr>
+          <tr><td><code>tipo</code></td><td>enum</td><td><code>consegna</code> | <code>ritiro</code></td></tr>
+          <tr><td><code>destinatario</code></td><td>stringa</td><td>Nome destinatario / mittente</td></tr>
+          <tr><td><code>pudoId</code></td><td>stringa</td><td>Codice PUDO (es. IT10006)</td></tr>
+          <tr><td><code>pudoNome</code></td><td>stringa</td><td>Nome commerciale PUDO</td></tr>
+          <tr><td><code>peso_kg</code></td><td>numero</td><td>Peso in kg (es. 1.5)</td></tr>
+          <tr><td><code>dim_l_cm</code></td><td>numero</td><td>Larghezza in cm</td></tr>
+          <tr><td><code>dim_h_cm</code></td><td>numero</td><td>Altezza in cm</td></tr>
+          <tr><td><code>dim_p_cm</code></td><td>numero</td><td>Profondità in cm</td></tr>
+          <tr><td><code>priorita</code></td><td>enum</td><td><code>normal</code> | <code>high</code></td></tr>
+          <tr><td><code>data</code></td><td>data</td><td>Formato ISO: <code>YYYY-MM-DD</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Notifiche -->
+  <section class="doc-section" id="notifiche">
+    <h2>Sistema di Notifiche</h2>
+    <p>
+      Il Control Tower include un sistema di notifiche in-app accessibile tramite la <strong>campanella</strong> nella barra superiore (a sinistra dell'utente). Il badge rosso indica il numero di notifiche non lette.
+    </p>
+    <ul>
+      <li><strong>✅ Successo</strong> — operazione completata correttamente (es. importazione riuscita)</li>
+      <li><strong>⚠️ Avviso</strong> — situazione da monitorare</li>
+      <li><strong>ℹ️ Info</strong> — aggiornamento informativo</li>
+      <li><strong>❌ Errore</strong> — operazione fallita</li>
+    </ul>
+    <p>
+      Le notifiche vengono generate automaticamente al termine di operazioni in background (importazione spedizioni, sincronizzazione API). È possibile segnare le notifiche come lette singolarmente o tutte insieme, oppure eliminarle con il pulsante ×.
+    </p>
+  </section>
+
   <footer class="page-footer">
-    Fermopoint Control Tower — Documentazione interna — versione 0.5.0 — Aggiornato: Aprile 2026
+    Fermopoint Control Tower — Documentazione interna — versione 0.6.0 — Aggiornato: Aprile 2026
   </footer>
 </main>
 
