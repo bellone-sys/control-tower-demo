@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react'
 import { FILIALI } from '../../../../data/filiali'
 import { getCiPudo } from '../../../../data/spedizioni'
 import pudosRoma from '../../../../data/pudosRoma.json'
+import { toggleFavorite, isFavorite, generateScenarioId } from '../../../../services/scenarioFavorites'
 
 function formatData(iso) {
   if (!iso) return '—'
@@ -20,6 +22,18 @@ function ciColor(ci) {
 }
 
 export default function WizardStep5({ data }) {
+  const [isFav, setIsFav] = useState(false)
+  const scenarioId = generateScenarioId(data)
+
+  useEffect(() => {
+    setIsFav(isFavorite(scenarioId))
+  }, [scenarioId])
+
+  const handleToggleFavorite = () => {
+    const newState = toggleFavorite(scenarioId)
+    setIsFav(newState)
+  }
+
   const allFiliali = [...FILIALI, ...(data.extraFiliali || [])]
   const filiale = allFiliali.find(f => f.id === data.filialeId)
 
@@ -42,7 +56,24 @@ export default function WizardStep5({ data }) {
 
         {/* Scenario */}
         <div className="wc-card">
-          <div className="wc-card-title">Scenario</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <div className="wc-card-title">Scenario</div>
+            <button
+              className="favorite-btn"
+              onClick={handleToggleFavorite}
+              title={isFav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: 20,
+                opacity: isFav ? 1 : 0.5,
+                transition: 'opacity 150ms ease',
+              }}
+            >
+              {isFav ? '❤️' : '🤍'}
+            </button>
+          </div>
           <div className="wc-row">
             <span className="wc-key">Nome</span>
             <span className="wc-val red">{data.nomeScenario || '—'}</span>

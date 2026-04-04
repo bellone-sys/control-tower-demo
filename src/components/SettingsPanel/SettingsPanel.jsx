@@ -200,7 +200,7 @@ export default function SettingsPanel({ onClose }) {
                   </svg>
                 </div>
                 <div className="settings-about-title">Control Tower</div>
-                <div className="settings-about-version">v0.9.0</div>
+                <div className="settings-about-version">v0.10.0</div>
                 <div className="settings-about-desc">
                   Sistema di gestione logistica con raccolta DPD
                 </div>
@@ -210,7 +210,7 @@ export default function SettingsPanel({ onClose }) {
                 <div className="settings-about-info">
                   <div className="settings-about-item">
                     <span className="settings-about-label">Versione:</span>
-                    <span>0.9.0 - Phase 1 Architecture</span>
+                    <span>0.10.0 - Phase 2 Features</span>
                   </div>
                   <div className="settings-about-item">
                     <span className="settings-about-label">Ultimo aggiornamento:</span>
