@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentazione — Fermopoint Control Tower</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #414042;
+      --red: #DC0032;
+      --bg: #f5f5f7;
+      --white: #ffffff;
+      --gray: #808285;
+      --cool-gray: #e8e8ea;
+      --sidebar-w: 240px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--charcoal);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-logo-badge {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .sidebar-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-logo-brand {
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+    .sidebar-logo-title {
+      font-size: 11px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      padding: 8px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 6px;
+      color: rgba(255,255,255,.6);
+      font-size: 13px;
+      text-decoration: none;
+      transition: background .15s, color .15s;
+    }
+    .sidebar-nav a:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+    .sidebar-nav a.active { background: var(--red); color: #fff; }
+    .sidebar-nav a .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      flex-shrink: 0;
+    }
+    .sidebar-nav a.active .dot { background: rgba(255,255,255,.7); }
+
+    .sidebar-footer {
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      font-size: 11px;
+      color: rgba(255,255,255,.3);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px;
+      max-width: 900px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--white);
+      border: 1px solid var(--cool-gray);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--charcoal);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background .15s, border-color .15s;
+      margin-bottom: 32px;
+    }
+    .back-btn:hover { background: var(--bg); border-color: #ccc; }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    .page-subtitle span {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Sections */
+    .doc-section {
+      margin-bottom: 48px;
+      scroll-margin-top: 32px;
+    }
+    .doc-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--red);
+      display: inline-block;
+    }
+    .doc-section p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+    .doc-section ul {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+    .doc-section ul li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+    .doc-section strong { font-weight: 600; }
+
+    /* Inline code */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--red);
+    }
+
+    /* Formula box */
+    .formula-box {
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+    .formula-box table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .formula-box th {
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray);
+      padding: 6px 12px 6px 0;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .formula-box td {
+      font-size: 13px;
+      color: var(--charcoal);
+      padding: 6px 12px 6px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .formula-box tr:last-child td { border-bottom: none; }
+
+    /* Info box */
+    .info-box {
+      background: #e3f0fb;
+      border-left: 4px solid #1565C0;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* Filiali table */
+    .table-responsive { overflow-x: auto; margin: 16px 0; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .data-table th {
+      background: var(--charcoal);
+      color: #fff;
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--cool-gray);
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: #fafafa; }
+
+    /* Footer */
+    .page-footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--cool-gray);
+      font-size: 12px;
+      color: var(--gray);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-badge">FP</div>
+    <div class="sidebar-logo-text">
+      <span class="sidebar-logo-brand">Fermopoint</span>
+      <span class="sidebar-logo-title">Control Tower</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-label">Sezioni</div>
+    <a href="#intro"     class="active"><span class="dot"></span>Introduzione</a>
+    <a href="#pudo">    <span class="dot"></span>PUDO</a>
+    <a href="#spedizioni"><span class="dot"></span>Spedizioni</a>
+    <a href="#giro">    <span class="dot"></span>Giro</a>
+    <a href="#scenario"><span class="dot"></span>Scenario</a>
+    <a href="#ci">      <span class="dot"></span>CI — Consolidation Index</a>
+    <a href="#filiali"> <span class="dot"></span>Filiali</a>
+    <a href="#template"><span class="dot"></span>Template</a>
+  </nav>
+
+  <div class="sidebar-footer">v0.3.1 · Aprile 2026</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+  <button class="back-btn" onclick="history.back() || (window.location='/control-tower-demo/')">
+    ← Torna all'app
+  </button>
+
+  <h1 class="page-title">Documentazione</h1>
+  <p class="page-subtitle">
+    Fermopoint Control Tower — Regole di business
+    <span>v0.3.1</span>
+  </p>
+
+  <!-- Introduzione -->
+  <section class="doc-section" id="intro">
+    <h2>Introduzione</h2>
+    <p>
+      Questo documento raccoglie le definizioni e le regole di business del sistema
+      Fermopoint Control Tower. Viene aggiornato ad ogni rilascio.
+    </p>
+    <div class="info-box">
+      Il Control Tower è uno strumento operativo interno per il monitoraggio e la
+      pianificazione delle attività di ritiro e consegna presso i punti PUDO della
+      rete Fermopoint. I dati presenti nella versione demo sono fittizi a scopo
+      illustrativo.
+    </div>
+  </section>
+
+  <!-- PUDO -->
+  <section class="doc-section" id="pudo">
+    <h2>PUDO</h2>
+    <p>
+      <strong>Pickup and Delivery Point.</strong> Punto fisico (negozio o locker) dove i
+      pacchi vengono consegnati o ritirati. Ogni PUDO ha un codice univoco (es.
+      <code>IT10006</code>), un tipo (<em>Negozio</em> o <em>Locker</em>) e degli orari
+      di apertura.
+    </p>
+    <ul>
+      <li><strong>Locker</strong> — punti automatici attivi 24h, senza personale.</li>
+      <li><strong>Negozio</strong> — punti con personale, con orari di apertura fissi.</li>
+    </ul>
+    <p>
+      I PUDO sono identificati da codici nel formato <code>ITxxxxx</code> (prefisso paese
+      + 5 cifre). Ogni PUDO è associato ad una filiale di competenza e può essere incluso
+      in uno o più giri.
+    </p>
+  </section>
+
+  <!-- Spedizioni -->
+  <section class="doc-section" id="spedizioni">
+    <h2>Spedizioni</h2>
+    <p>
+      Una spedizione rappresenta un singolo collo in transito. Può essere di tipo:
+    </p>
+    <ul>
+      <li><strong>Consegna</strong> — il pacco arriva al PUDO per essere ritirato dal destinatario.</li>
+      <li><strong>Ritiro</strong> — il pacco viene raccolto dal PUDO da un corriere.</li>
+    </ul>
+    <p>Campi principali di una spedizione:</p>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Campo</th><th>Tipo</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>id</code></td><td>stringa</td><td>Identificativo univoco (es. FP240001)</td></tr>
+          <tr><td><code>tipo</code></td><td>enum</td><td><code>consegna</code> | <code>ritiro</code></td></tr>
+          <tr><td><code>pudoId</code></td><td>stringa</td><td>Codice PUDO di destinazione/origine</td></tr>
+          <tr><td><code>peso</code></td><td>numero</td><td>Peso in kg (es. 1.2)</td></tr>
+          <tr><td><code>dimensioni</code></td><td>oggetto</td><td>Larghezza × Altezza × Profondità in cm</td></tr>
+          <tr><td><code>volume</code></td><td>numero</td><td>Volume in cm³ = L × H × P</td></tr>
+          <tr><td><code>priorita</code></td><td>enum</td><td><code>normal</code> | <code>high</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Il volume in dm³ (litri) si ottiene dividendo il volume in cm³ per 1000.
+      Le spedizioni con <strong>priorità alta</strong> vengono evidenziate nell'interfaccia.
+    </p>
+  </section>
+
+  <!-- Giro -->
+  <section class="doc-section" id="giro">
+    <h2>Giro</h2>
+    <p>
+      Un giro è un percorso ottimizzato effettuato da un autista con un mezzo specifico,
+      partendo e tornando al deposito della filiale. Ogni giro comprende una sequenza
+      ordinata di tappe (PUDO) con orari di passaggio pianificati.
+    </p>
+    <p>
+      I giri vengono generati dall'ottimizzatore <strong>OptimoRoute</strong> sulla base di:
+    </p>
+    <ul>
+      <li>Lista PUDO da servire</li>
+      <li>Driver disponibili</li>
+      <li>Mezzo assegnato</li>
+      <li>Finestre orarie</li>
+      <li>Punto di partenza/arrivo (filiale)</li>
+    </ul>
+    <p>Ogni giro appartiene ad una sola filiale. Gli stati possibili di un giro sono:</p>
+    <ul>
+      <li><strong>Pianificato</strong> — giro programmato, non ancora avviato.</li>
+      <li><strong>In corso</strong> — l'autista è in giro.</li>
+      <li><strong>Completato</strong> — giro terminato con successo.</li>
+      <li><strong>Annullato</strong> — giro cancellato.</li>
+    </ul>
+  </section>
+
+  <!-- Scenario -->
+  <section class="doc-section" id="scenario">
+    <h2>Scenario</h2>
+    <p>
+      Uno scenario è l'insieme di tutti i giri pianificati per una filiale. Rappresenta
+      la fotografia operativa di una filiale in un determinato periodo.
+    </p>
+    <p>
+      Lo scenario è identificato dalla filiale e include tutti i giri ad essa associati.
+      Il CI dello scenario è calcolato come media del CI di tutti i PUDO unici che
+      compongono i giri dello scenario (vedi sezione <a href="#ci">CI</a>).
+    </p>
+    <div class="info-box">
+      La vista Scenari consente di confrontare rapidamente l'intensità operativa tra
+      le diverse filiali e di esplorare la composizione di ciascun scenario giro per giro.
+    </div>
+  </section>
+
+  <!-- CI -->
+  <section class="doc-section" id="ci">
+    <h2>CI — Consolidation Index</h2>
+    <p>
+      Il <strong>Consolidation Index (CI)</strong> misura l'intensità operativa di un
+      PUDO, giro o scenario. È espresso come numero medio di spedizioni
+      (consegne + ritiri) giornaliere in un determinato periodo.
+    </p>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Livello</th><th>Formula</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>CI di un PUDO</strong></td>
+            <td>Numero totale di spedizioni nel periodo ÷ numero di giorni del periodo</td>
+          </tr>
+          <tr>
+            <td><strong>CI di un Giro</strong></td>
+            <td>Media aritmetica del CI di tutti i PUDO che compongono il giro</td>
+          </tr>
+          <tr>
+            <td><strong>CI di uno Scenario</strong></td>
+            <td>Media aritmetica del CI di tutti i PUDO unici dei giri dello scenario</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Il CI è un indicatore <strong>dinamico</strong>: varia al variare del periodo di
+      analisi (7, 14, 30 giorni). Periodi più brevi producono valori leggermente più alti
+      per effetto della volatilità a breve termine (fattore moltiplicativo applicato).
+    </p>
+    <p>Soglie orientative di classificazione:</p>
+    <ul>
+      <li><strong style="color:#2E7D32">CI ≥ 4.0</strong> — Alta intensità (verde)</li>
+      <li><strong style="color:#E65100">CI ≥ 2.5</strong> — Media intensità (arancio)</li>
+      <li><strong style="color:#1565C0">CI &lt; 2.5</strong> — Bassa intensità (blu)</li>
+    </ul>
+    <p>
+      Un CI alto indica un PUDO ad alta frequentazione, quindi potenzialmente prioritario
+      nella pianificazione dei giri.
+    </p>
+  </section>
+
+  <!-- Filiali -->
+  <section class="doc-section" id="filiali">
+    <h2>Filiali</h2>
+    <p>
+      Le filiali sono i centri operativi di Fermopoint. Ogni filiale gestisce un bacino
+      di PUDO ed è il punto di partenza e arrivo di tutti i giri ad essa associati.
+    </p>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Codice</th>
+            <th>Nome</th>
+            <th>Città</th>
+            <th>Provincia</th>
+            <th>Stato</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>F001</code></td>
+            <td>Napoli Centro</td>
+            <td>Casandrino</td>
+            <td>NA</td>
+            <td>Attiva</td>
+          </tr>
+          <tr>
+            <td><code>F002</code></td>
+            <td>Milano Bovisa</td>
+            <td>Milano</td>
+            <td>MI</td>
+            <td>Attiva</td>
+          </tr>
+          <tr>
+            <td><code>F003</code></td>
+            <td>Stezzano</td>
+            <td>Stezzano</td>
+            <td>BG</td>
+            <td>Attiva</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Template -->
+  <section class="doc-section" id="template">
+    <h2>Template</h2>
+    <p>
+      Un template è un giro salvato come modello riutilizzabile. Conserva la struttura
+      delle tappe, il driver e il mezzo suggeriti.
+    </p>
+    <p>
+      Può essere applicato per pre-compilare rapidamente un nuovo giro. Il template
+      <strong>non ha una data associata</strong> e non viene incluso nel calcolo dei
+      CI o degli scenari operativi.
+    </p>
+    <div class="info-box">
+      I template vengono creati a partire da giri esistenti e sono modificabili
+      dalla sezione "★ Template" nella vista Giri.
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    Fermopoint Control Tower — Documentazione interna — versione 0.3.1 — Aggiornato: Aprile 2026
+  </footer>
+</main>
+
+<script>
+  // IntersectionObserver per highlight sezione attiva nella sidebar
+  const sections = document.querySelectorAll('.doc-section[id]')
+  const navLinks  = document.querySelectorAll('.sidebar-nav a')
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'))
+        const link = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`)
+        if (link) link.classList.add('active')
+      }
+    })
+  }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 })
+
+  sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>

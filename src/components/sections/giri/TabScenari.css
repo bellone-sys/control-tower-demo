@@ -1,0 +1,122 @@
+/* Selettore periodo */
+.scenari-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.scenari-title { font-size: 15px; font-weight: 600; color: var(--fp-charcoal); }
+.scenari-period-label { font-size: 12px; color: var(--fp-gray-mid); }
+
+/* KPI scenari */
+.scenari-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.scenari-kpi {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 16px 18px;
+}
+.scenari-kpi-val { font-size: 24px; font-weight: 600; color: var(--fp-charcoal); line-height: 1; }
+.scenari-kpi-label { font-size: 12px; color: var(--fp-gray-mid); margin-top: 4px; }
+
+/* Grid scenari */
+.scenari-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Scenario card */
+.scenario-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.scenario-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--fp-cool-gray);
+}
+.scenario-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  background: var(--fp-red);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.scenario-nome { font-size: 14px; font-weight: 600; color: var(--fp-charcoal); }
+.scenario-citta { font-size: 11px; color: var(--fp-gray-mid); }
+.scenario-ci-wrap { margin-left: auto; text-align: right; }
+.scenario-ci-val { font-size: 22px; font-weight: 700; line-height: 1; }
+.scenario-ci-label { font-size: 10px; color: var(--fp-gray-mid); text-transform: uppercase; letter-spacing: .5px; }
+
+.scenario-stats {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--fp-cool-gray);
+}
+.scenario-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  border-right: 1px solid var(--fp-cool-gray);
+}
+.scenario-stat:last-child { border-right: none; }
+.scenario-stat-val { font-size: 18px; font-weight: 600; color: var(--fp-charcoal); line-height: 1; }
+.scenario-stat-label { font-size: 10px; color: var(--fp-gray-mid); margin-top: 3px; text-align: center; }
+
+.scenario-expand-btn {
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 10px 18px;
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition), color var(--transition);
+  font-family: var(--fp-font);
+}
+.scenario-expand-btn:hover { background: var(--fp-bg); color: var(--fp-charcoal); }
+
+.scenario-giri-list { border-top: 1px solid var(--fp-cool-gray); }
+.scenario-giro-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 12px;
+}
+.scenario-giro-row:last-child { border-bottom: none; }
+.sgiro-nome { font-weight: 500; color: var(--fp-charcoal); }
+.sgiro-data { color: var(--fp-gray-mid); font-size: 11px; }
+.sgiro-ci { font-weight: 700; font-size: 13px; }
+
+/* Responsive */
+@media (max-width: 1100px) { .scenari-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px) {
+  .scenari-grid { grid-template-columns: 1fr; }
+  .scenari-kpi-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) { .scenari-kpi-row { grid-template-columns: 1fr; } }
