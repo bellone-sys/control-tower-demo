@@ -1,4 +1,5 @@
 import './Sidebar.css'
+import { APP_VERSION } from '../version'
 
 const NAV_ITEMS = [
   { id: 'overview',   label: 'Panoramica',    icon: IconGrid },
@@ -54,7 +55,7 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
       </nav>
 
       <div className="sidebar-footer">
-        <div className="sidebar-version">v2.1 · Demo</div>
+        <div className="sidebar-version">v{APP_VERSION} · Demo</div>
       </div>
     </aside>
   )

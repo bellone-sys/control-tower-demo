@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { APP_VERSION } from '../version'
 import { DEMO_USERS } from '../data/stub'
 import './Login.css'
 
@@ -125,7 +126,7 @@ export default function Login({ onLogin }) {
       </div>
 
       <p className="login-footer">
-        © 2026 DPD Italy — Fermopoint Control Tower v2.1 · Demo
+        © 2026 DPD Italy — Fermopoint Control Tower v{APP_VERSION} · Demo
       </p>
     </div>
   )
