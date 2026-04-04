@@ -1,3 +1,14 @@
+/* ===== STELLINA TEMPLATE ===== */
+/* Bottone ☆/★ nelle righe tabella giri */
+.btn-star {
+  font-size: 16px;
+  color: #ccc;
+  transition: color var(--transition), transform var(--transition);
+  line-height: 1;
+}
+.btn-star:hover { color: #F57C00; transform: scale(1.2); }
+.btn-star.saved { color: #F57C00; }
+
 /* ===== KPI GIRI ===== */
 .giri-kpi-row {
   display: grid;

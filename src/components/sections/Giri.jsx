@@ -16,7 +16,7 @@ export default function Giri() {
         <div className="flotta-tabs">
           {[
             { id: 'giri',     label: 'Giri',     count: giri.length      },
-            { id: 'template', label: 'Template',  count: templates.length },
+            { id: 'template', label: '★ Template', count: templates.length },
           ].map(t => (
             <button
               key={t.id}

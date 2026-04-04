@@ -11,7 +11,7 @@
   overflow: hidden;
   position: sticky;
   top: 16px;
-  max-height: calc(100vh - 112px);
+  height: calc(100vh - 112px);  /* height esplicita: necessaria per leaflet */
 }
 
 /* ── Header ── */
@@ -79,7 +79,14 @@
   transition: all var(--transition);
 }
 .btn-template:hover { border-color: #F57C00; color: #F57C00; }
-.btn-template.saved { border-color: #2E7D32; color: #2E7D32; background: #e8f5e9; }
+/* Stellina gialla = template già salvato */
+.btn-template.is-saved {
+  border-color: #F57C00;
+  color: #F57C00;
+  background: #fff8f0;
+}
+.btn-template.is-saved .star-icon { color: #F57C00; }
+.btn-template.just-saved { border-color: #2E7D32; color: #2E7D32; background: #e8f5e9; }
 
 .giro-detail-close {
   display: flex;
@@ -108,8 +115,9 @@
 }
 
 .giro-map-col {
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
+  min-height: 280px;   /* fallback: garantisce altezza a leaflet */
   position: relative;
 }
 

@@ -18,7 +18,6 @@ function calcBounds(points) {
   ]
 }
 
-// Aggiunge N minuti a una stringa "HH:MM"
 function addMinutes(timeStr, min) {
   const [h, m] = timeStr.split(':').map(Number)
   const total = h * 60 + m + min
@@ -27,12 +26,11 @@ function addMinutes(timeStr, min) {
   return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`
 }
 
-// Sottrae N minuti a una stringa "HH:MM"
 function subMinutes(timeStr, min) {
   const [h, m] = timeStr.split(':').map(Number)
   const total = h * 60 + m - min
   const hh = Math.max(0, Math.floor(total / 60))
-  const mm = total % 60
+  const mm = ((total % 60) + 60) % 60
   return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`
 }
 
@@ -53,60 +51,61 @@ function getStatoClass(stato) {
   return map[stato] || ''
 }
 
-export default function DetailGiro({ giro, onClose, onSaveTemplate }) {
-  const [savedMsg, setSavedMsg] = useState(false)
+export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate }) {
+  const [justSaved, setJustSaved] = useState(false)
 
   const filiale = FILIALI.find(f => f.id === giro.filialeId)
   const driver  = DRIVERS.find(d => d.id === giro.autoreId)
   const mezzo   = MEZZI.find(m => m.id === giro.mezzoId)
   const modello = mezzo ? MODELLI_MEZZI.find(mm => mm.catalogoId === mezzo.catalogoId) : null
 
-  // Tutti i punti: depot + tappe (ordinate)
-  const tappeOrd = [...giro.tappe].sort((a, b) => a.ordine - b.ordine)
-  const depot = { lat: giro.depotLat, lng: giro.depotLng }
+  const tappeOrd  = [...giro.tappe].sort((a, b) => a.ordine - b.ordine)
+  const depot     = { lat: giro.depotLat, lng: giro.depotLng }
   const allPoints = [depot, ...tappeOrd, depot]
-  const bounds = calcBounds([depot, ...tappeOrd])
+  const bounds    = calcBounds([depot, ...tappeOrd])
+  const polyline  = allPoints.map(p => [p.lat, p.lng])
 
-  // Polyline coords per react-leaflet
-  const polyline = allPoints.map(p => [p.lat, p.lng])
-
-  // Orario partenza stimato (primo arrivo - 15min)
   const oraPartenza = tappeOrd.length > 0 ? subMinutes(tappeOrd[0].oraArrivo, 15) : '07:00'
-  // Orario rientro stimato (ultima partenza + 20min)
-  const oraRientro = tappeOrd.length > 0 ? addMinutes(tappeOrd[tappeOrd.length - 1].oraPartenza, 20) : '—'
+  const oraRientro  = tappeOrd.length > 0 ? addMinutes(tappeOrd[tappeOrd.length - 1].oraPartenza, 20) : '—'
 
-  function handleSaveTemplate() {
-    onSaveTemplate(giro)
-    setSavedMsg(true)
-    setTimeout(() => setSavedMsg(false), 2500)
+  function handleToggle() {
+    onToggleTemplate(giro)
+    if (!isSaved) {
+      // appena salvato: feedback breve
+      setJustSaved(true)
+      setTimeout(() => setJustSaved(false), 2000)
+    }
   }
+
+  // Classe bottone: giallo se già salvato, verde breve se appena salvato
+  const btnClass = [
+    'btn-template',
+    justSaved  ? 'just-saved' : '',
+    isSaved && !justSaved ? 'is-saved' : '',
+  ].filter(Boolean).join(' ')
 
   return (
     <div className="giro-detail-panel">
       {/* Header */}
       <div className="giro-detail-header">
-        <button className="giro-detail-back" onClick={onClose} title="Chiudi">
-          ←
-        </button>
+        <button className="giro-detail-back" onClick={onClose} title="Chiudi">←</button>
         <span className="giro-detail-title">{giro.nome}</span>
         <span className={`giro-stato-badge ${getStatoClass(giro.stato)}`}>{giro.stato}</span>
-        <button
-          className={`btn-template${savedMsg ? ' saved' : ''}`}
-          onClick={handleSaveTemplate}
-          title="Salva come template"
-        >
-          ★ {savedMsg ? 'Salvato!' : 'Template'}
+        <button className={btnClass} onClick={handleToggle} title={isSaved ? 'Rimuovi template' : 'Salva come template'}>
+          <span className="star-icon">{isSaved ? '★' : '☆'}</span>
+          {justSaved ? 'Salvato!' : isSaved ? 'Template' : 'Template'}
         </button>
         <button className="giro-detail-close" onClick={onClose} title="Chiudi">×</button>
       </div>
 
-      {/* Body */}
+      {/* Body: mappa + timeline */}
       <div className="giro-detail-body">
-        {/* Mappa */}
+        {/* Mappa — key={giro.id} forza rimount quando cambia giro */}
         <div className="giro-map-col">
           <MapContainer
+            key={giro.id}
             bounds={bounds}
-            boundsOptions={{ padding: [16, 16] }}
+            boundsOptions={{ padding: [20, 20] }}
             style={{ width: '100%', height: '100%' }}
             zoomControl={true}
             scrollWheelZoom={false}
@@ -116,13 +115,12 @@ export default function DetailGiro({ giro, onClose, onSaveTemplate }) {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {/* Polyline del percorso */}
             <Polyline
               positions={polyline}
               pathOptions={{ color: '#808285', weight: 2.5, dashArray: '6 4', opacity: 0.8 }}
             />
 
-            {/* Marker depot */}
+            {/* Depot */}
             <Marker
               position={[depot.lat, depot.lng]}
               icon={divIcon({
@@ -132,13 +130,10 @@ export default function DetailGiro({ giro, onClose, onSaveTemplate }) {
                 iconAnchor: [14, 14],
               })}
             >
-              <Popup>
-                <strong>Deposito</strong><br />
-                {filiale ? filiale.nome : 'Deposito'}
-              </Popup>
+              <Popup><strong>{filiale ? filiale.nome : 'Deposito'}</strong></Popup>
             </Marker>
 
-            {/* Marker tappe */}
+            {/* Tappe */}
             {tappeOrd.map(tappa => (
               <Marker
                 key={tappa.pudoId}
@@ -162,7 +157,6 @@ export default function DetailGiro({ giro, onClose, onSaveTemplate }) {
 
         {/* Timeline */}
         <div className="giro-timeline-col">
-          {/* Partenza */}
           <div className="timeline-item">
             <div className="timeline-num depot">🏢</div>
             <div className="timeline-info">
@@ -171,7 +165,6 @@ export default function DetailGiro({ giro, onClose, onSaveTemplate }) {
             </div>
           </div>
 
-          {/* Tappe */}
           {tappeOrd.map(tappa => (
             <div className="timeline-item" key={tappa.pudoId}>
               <div className={`timeline-num ${tappa.tipo}`}>{tappa.ordine}</div>
@@ -185,7 +178,6 @@ export default function DetailGiro({ giro, onClose, onSaveTemplate }) {
             </div>
           ))}
 
-          {/* Rientro */}
           <div className="timeline-item">
             <div className="timeline-num depot">🏢</div>
             <div className="timeline-info">
@@ -209,12 +201,8 @@ export default function DetailGiro({ giro, onClose, onSaveTemplate }) {
             {modello && <span style={{ color: 'var(--fp-gray-light)', marginLeft: 4 }}>{modello.marca} {modello.modello.split(' ')[0]}</span>}
           </span>
         )}
-        <span className="footer-item">
-          📍 <strong>{giro.distanzaKm} km</strong>
-        </span>
-        <span className="footer-item">
-          ⏱ <strong>{formatDurata(giro.durataMin)}</strong>
-        </span>
+        <span className="footer-item">📍 <strong>{giro.distanzaKm} km</strong></span>
+        <span className="footer-item">⏱ <strong>{formatDurata(giro.durataMin)}</strong></span>
       </div>
     </div>
   )
