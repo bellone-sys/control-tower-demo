@@ -72,6 +72,8 @@ export default function ScenarioWizard({ existingScenario, onClose, onConfirm })
   const [data, setData]   = useState(existingScenario ? { ...INIT_DATA, ...existingScenario } : { ...INIT_DATA })
   const [errors, setErrors] = useState([])
 
+  console.log('[ScenarioWizard] render — step:', step, '| filialeId:', data.filialeId, '| mode:', existingScenario ? 'edit' : 'new')
+
   function updateData(partial) {
     setData(prev => ({ ...prev, ...partial }))
     if (errors.length) setErrors([])

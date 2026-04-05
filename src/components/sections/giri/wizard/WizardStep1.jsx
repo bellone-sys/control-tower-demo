@@ -92,6 +92,7 @@ function BrtModal({ onSelect, onClose }) {
 }
 
 export default function WizardStep1({ data, onChange }) {
+  console.log('[WizardStep1] render — filialeId:', data.filialeId, '| periodoGg:', data.periodoGg, '| province:', data.province.length)
   const [showBrt, setShowBrt] = useState(false)
   const [showProvinceDropdown, setShowProvinceDropdown] = useState(false)
   const [provSearch, setProvSearch] = useState('')
@@ -146,6 +147,8 @@ export default function WizardStep1({ data, onChange }) {
   const mapCenter = selectedFiliale
     ? [selectedFiliale.lat, selectedFiliale.lng]
     : [41.9028, 12.4964]
+
+  console.log('[WizardStep1] mapCenter:', mapCenter, '| pudosWithCi:', pudosWithCi.length, '| selectedFiliale:', selectedFiliale?.nome ?? null)
 
   return (
     <div className="wizard-step-layout">
@@ -307,6 +310,7 @@ export default function WizardStep1({ data, onChange }) {
 
       {/* Map panel */}
       <div className="wizard-map-panel">
+        {console.log('[WizardStep1] MapContainer PRE-RENDER — key:', `step1-${data.filialeId}`, '| center:', mapCenter) || null}
         <MapContainer
           key={`step1-${data.filialeId}`}
           center={mapCenter}
