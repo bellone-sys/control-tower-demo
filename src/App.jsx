@@ -9,6 +9,7 @@ import Giri from './components/sections/Giri'
 import PuntiRitiro from './components/sections/PuntiRitiro'
 import Flotta from './components/sections/Flotta'
 import Filiali from './components/sections/Filiali'
+import FilialiBrt from './components/sections/FilialiBrt'
 import Contratti from './components/sections/Contratti'
 import Utenti from './components/sections/Utenti'
 import Eccezioni from './components/sections/Eccezioni'
@@ -140,6 +141,7 @@ export default function App() {
     punti:      <PuntiRitiro />,
     flotta:     <Flotta />,
     filiali:    <Filiali />,
+    filialiBrt: <FilialiBrt />,
     contratti:  <Contratti />,
     utenti:     <Utenti currentUser={user} />,
     eccezioni:  <Eccezioni />,

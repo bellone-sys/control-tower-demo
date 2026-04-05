@@ -1,0 +1,66 @@
+/* ===== KPI STRIP ===== */
+.brt-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 800px) { .brt-kpi-row { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 500px) { .brt-kpi-row { grid-template-columns: 1fr; } }
+
+.brt-kpi {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.brt-kpi-val   { font-size: 26px; font-weight: 600; color: var(--fp-charcoal); line-height: 1; }
+.brt-kpi-label { font-size: 12px; color: var(--fp-gray-mid); }
+
+/* ===== BADGE BRT ===== */
+.brt-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #DC0032;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
+}
+
+/* ===== TABELLA COMPATTA ===== */
+.brt-table td,
+.brt-table th {
+  font-size: 13px;
+}
+.brt-table .td-id {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+  white-space: nowrap;
+}
+.brt-table .td-nome {
+  font-weight: 500;
+  color: var(--fp-charcoal);
+}
+.brt-table .td-addr {
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brt-table .td-prov {
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  color: var(--fp-charcoal);
+}
+.brt-table .td-dash {
+  color: var(--fp-gray-mid);
+}

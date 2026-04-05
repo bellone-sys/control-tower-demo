@@ -33,7 +33,8 @@ export const MENU_GROUPS = [
     collapsed: true,
     collapsible: true,
     items: [
-      { id: 'filiali', label: 'Filiali', icon: 'IconBuilding', section: 'filiali' },
+      { id: 'filiali', label: 'Filiali Fermopoint', icon: 'IconBuilding', section: 'filiali' },
+      { id: 'filialiBrt', label: 'Filiali BRT', icon: 'IconBuilding', section: 'filialiBrt' },
       { id: 'contratti', label: 'Contratti', icon: 'IconDocument', section: 'contratti' },
       { id: 'utenti', label: 'Utenti', icon: 'IconUsers', section: 'utenti', adminOnly: true },
     ],
