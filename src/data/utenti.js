@@ -2,6 +2,13 @@
 // filialiIds: null = accesso a tutte le filiali (admin)
 // filialiIds: ['F001', 'F002'] = accesso solo alle filiali specificate
 
+export const AUTH_TYPES = ['password', 'sso']
+
+export const AUTH_TYPE_CFG = {
+  password: { label: 'Password', color: '#1565C0', bg: '#e3f0fb' },
+  sso:      { label: 'SSO',      color: '#6B21A8', bg: '#f3e8ff' },
+}
+
 export const RUOLI = ['admin', 'user']
 
 export const RUOLO_CFG = {
@@ -22,9 +29,9 @@ export const UTENTI_INIT = [
     id: 'U001',
     nome: 'Marco Belloni',
     email: 'admin@fermopoint.it',
-    password: 'demo1234',
+    authType: 'sso',
     ruolo: 'admin',
-    filialiIds: null,           // null = tutte le filiali
+    filialiIds: null,
     stato: 'Attivo',
     dataCreazione: '2016-01-15',
     ultimoAccesso: '2026-04-03',
@@ -33,7 +40,7 @@ export const UTENTI_INIT = [
     id: 'U002',
     nome: 'Sara Conti',
     email: 'ops@fermopoint.it',
-    password: 'demo1234',
+    authType: 'sso',
     ruolo: 'user',
     filialiIds: ['F001', 'F002', 'F003'],
     stato: 'Attivo',
@@ -44,9 +51,9 @@ export const UTENTI_INIT = [
     id: 'U003',
     nome: 'Luca Ferri',
     email: 'l.ferri@fermopoint.it',
-    password: 'demo1234',
+    authType: 'password',
     ruolo: 'user',
-    filialiIds: ['F002'],       // solo Milano Bovisa
+    filialiIds: ['F002'],
     stato: 'Attivo',
     dataCreazione: '2020-06-01',
     ultimoAccesso: '2026-04-01',
@@ -55,9 +62,9 @@ export const UTENTI_INIT = [
     id: 'U004',
     nome: 'Anna Volpe',
     email: 'a.volpe@fermopoint.it',
-    password: 'demo1234',
+    authType: 'password',
     ruolo: 'user',
-    filialiIds: ['F001'],       // solo Napoli Centro
+    filialiIds: ['F001'],
     stato: 'Attivo',
     dataCreazione: '2021-02-14',
     ultimoAccesso: '2026-03-30',
@@ -66,9 +73,9 @@ export const UTENTI_INIT = [
     id: 'U005',
     nome: 'Giorgio Brambilla',
     email: 'g.brambilla@fermopoint.it',
-    password: 'demo1234',
+    authType: 'password',
     ruolo: 'user',
-    filialiIds: ['F003'],       // solo Stezzano
+    filialiIds: ['F003'],
     stato: 'Attivo',
     dataCreazione: '2019-09-10',
     ultimoAccesso: '2026-03-28',
@@ -77,7 +84,7 @@ export const UTENTI_INIT = [
     id: 'U006',
     nome: 'Carla Ricci',
     email: 'c.ricci@fermopoint.it',
-    password: 'demo1234',
+    authType: 'password',
     ruolo: 'user',
     filialiIds: ['F002', 'F003'],
     stato: 'Inattivo',
@@ -88,7 +95,7 @@ export const UTENTI_INIT = [
     id: 'U007',
     nome: 'Davide Mancini',
     email: 'd.mancini@fermopoint.it',
-    password: 'demo1234',
+    authType: 'password',
     ruolo: 'user',
     filialiIds: ['F001', 'F002'],
     stato: 'Sospeso',

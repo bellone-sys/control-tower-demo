@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { UTENTI_INIT, RUOLI, RUOLO_CFG, STATI_UTENTE, STATO_UTENTE_CFG } from '../../data/utenti'
+import { UTENTI_INIT, RUOLI, RUOLO_CFG, STATI_UTENTE, STATO_UTENTE_CFG, AUTH_TYPES, AUTH_TYPE_CFG } from '../../data/utenti'
 import { FILIALI } from '../../data/filiali'
 import MultiSelect from '../ui/MultiSelect'
 import './Sections.css'
@@ -7,17 +7,22 @@ import './Utenti.css'
 
 const PAGE_SIZE = 15
 
-const RUOLI_OPT  = RUOLI.map(r => ({ value: r, label: RUOLO_CFG[r].label }))
-const STATI_OPT  = STATI_UTENTE.map(s => ({ value: s, label: s }))
-const FILIALI_OPT = FILIALI.map(f => ({ value: f.id, label: f.nome }))
+const RUOLI_OPT     = RUOLI.map(r => ({ value: r, label: RUOLO_CFG[r].label }))
+const STATI_OPT     = STATI_UTENTE.map(s => ({ value: s, label: s }))
+const FILIALI_OPT   = FILIALI.map(f => ({ value: f.id, label: f.nome }))
+const AUTH_TYPE_OPT = AUTH_TYPES.map(t => ({ value: t, label: AUTH_TYPE_CFG[t].label }))
 
 const EMPTY_FORM = {
-  nome: '', email: '', password: '', ruolo: 'user',
-  filialiIds: [], stato: 'Attivo',
+  nome: '', email: '', authType: 'password',
+  ruolo: 'user', filialiIds: [], stato: 'Attivo',
 }
 
 function avatar(nome) {
   return nome.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase()
+}
+
+function generateToken() {
+  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36)
 }
 
 function SortTh({ field, sk, sd, onSort, children, style }) {
@@ -65,110 +70,133 @@ function FilialeChips({ ids }) {
 }
 
 export default function Utenti({ currentUser }) {
-  const [utenti,       setUtenti]       = useState(UTENTI_INIT)
-  const [search,       setSearch]       = useState('')
-  const [filterRuoli,  setFilterRuoli]  = useState([])
-  const [filterStati,  setFilterStati]  = useState([])
-  const [filterFiliali,setFilterFiliali]= useState([])
-  const [sortKey,      setSortKey]      = useState('nome')
-  const [sortDir,      setSortDir]      = useState('asc')
-  const [page,         setPage]         = useState(1)
-  const [modal,        setModal]        = useState(null)
-  const [form,         setForm]         = useState(EMPTY_FORM)
-  const [errors,       setErrors]       = useState({})
-  const [deleteId,     setDeleteId]     = useState(null)
-  const [showPwd,      setShowPwd]      = useState(false)
+  const [utenti,          setUtenti]          = useState(UTENTI_INIT)
+  const [search,          setSearch]          = useState('')
+  const [filterRuoli,     setFilterRuoli]     = useState([])
+  const [filterStati,     setFilterStati]     = useState([])
+  const [filterFiliali,   setFilterFiliali]   = useState([])
+  const [filterAuthType,  setFilterAuthType]  = useState([])
+  const [sortKey,         setSortKey]         = useState('nome')
+  const [sortDir,         setSortDir]         = useState('asc')
+  const [page,            setPage]            = useState(1)
+  const [modal,           setModal]           = useState(null)   // { mode: 'add'|'edit', utente? }
+  const [form,            setForm]            = useState(EMPTY_FORM)
+  const [errors,          setErrors]          = useState({})
+  const [deleteId,        setDeleteId]        = useState(null)
+  const [resetModal,      setResetModal]      = useState(null)   // { utente, step: 'choose'|'portal'|'email', newPwd, confirmPwd, token }
 
   const isAdmin = currentUser?.ruolo === 'admin'
 
+  // ── Sorting ────────────────────────────────────────────────
   function handleSort(key) {
     if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
     else { setSortKey(key); setSortDir('asc') }
   }
 
+  // ── Toggle stato Attivo/Inattivo direttamente in lista ─────
+  function toggleStato(id) {
+    setUtenti(prev => prev.map(u => {
+      if (u.id !== id) return u
+      const next = u.stato === 'Attivo' ? 'Inattivo' : 'Attivo'
+      return { ...u, stato: next }
+    }))
+  }
+
+  // ── Modal add/edit ─────────────────────────────────────────
   function openAdd() {
-    setForm(EMPTY_FORM); setErrors({}); setShowPwd(false); setModal({ mode: 'add' })
+    setForm(EMPTY_FORM); setErrors({}); setModal({ mode: 'add' })
   }
 
   function openEdit(u) {
     setForm({
-      nome: u.nome, email: u.email, password: u.password,
+      nome: u.nome, email: u.email, authType: u.authType ?? 'password',
       ruolo: u.ruolo, filialiIds: u.filialiIds ?? [], stato: u.stato,
     })
-    setErrors({}); setShowPwd(false); setModal({ mode: 'edit', utente: u })
+    setErrors({}); setModal({ mode: 'edit', utente: u })
   }
 
   function validate() {
     const e = {}
     if (!form.nome.trim())  e.nome = true
     if (!form.email.trim()) e.email = true
-    if (modal?.mode === 'add' && !form.password.trim()) e.password = true
     return e
   }
 
   function handleSave() {
     const e = validate()
     if (Object.keys(e).length) { setErrors(e); return }
-
-    // filialiIds: null se admin (accesso totale), array se user
     const filialiIds = form.ruolo === 'admin' ? null : (form.filialiIds.length ? form.filialiIds : [])
-    const payload = { ...form, filialiIds }
+    const payload = { nome: form.nome, email: form.email, authType: form.authType, ruolo: form.ruolo, filialiIds, stato: form.stato }
 
     if (modal.mode === 'add') {
       const maxId = utenti.length ? Math.max(...utenti.map(u => parseInt(u.id.slice(1)))) : 0
       const newId = `U${String(maxId + 1).padStart(3, '0')}`
-      setUtenti(prev => [...prev, {
-        id: newId,
-        ...payload,
-        dataCreazione: new Date().toISOString().slice(0, 10),
-        ultimoAccesso: null,
-      }])
+      setUtenti(prev => [...prev, { id: newId, ...payload, dataCreazione: new Date().toISOString().slice(0, 10), ultimoAccesso: null }])
     } else {
-      setUtenti(prev => prev.map(u =>
-        u.id === modal.utente.id
-          ? { ...u, ...payload }
-          : u
-      ))
+      setUtenti(prev => prev.map(u => u.id === modal.utente.id ? { ...u, ...payload } : u))
     }
     setModal(null)
   }
 
   function handleDelete(id) {
-    if (id === currentUser?.id) return // non può eliminare se stesso
+    if (id === currentUser?.id) return
     setUtenti(prev => prev.filter(u => u.id !== id))
     setDeleteId(null)
   }
 
+  // ── Reset password ─────────────────────────────────────────
+  function openReset(u) {
+    setResetModal({ utente: u, step: 'choose', newPwd: '', confirmPwd: '', token: generateToken() })
+  }
+
+  function handleResetPortal() {
+    const { newPwd, confirmPwd } = resetModal
+    if (!newPwd || newPwd !== confirmPwd) return
+    setUtenti(prev => prev.map(u => u.id === resetModal.utente.id ? { ...u } : u))
+    setResetModal(null)
+  }
+
+  // ── Filtered + sorted list ──────────────────────────────────
   const filtered = useMemo(() => {
     let list = utenti
     if (search.trim()) {
       const q = search.toLowerCase()
       list = list.filter(u =>
-        u.nome.toLowerCase().includes(q)  ||
+        u.nome.toLowerCase().includes(q) ||
         u.email.toLowerCase().includes(q) ||
         u.id.toLowerCase().includes(q)
       )
     }
-    if (filterRuoli.length)   list = list.filter(u => filterRuoli.includes(u.ruolo))
-    if (filterStati.length)   list = list.filter(u => filterStati.includes(u.stato))
-    if (filterFiliali.length) list = list.filter(u =>
+    if (filterRuoli.length)    list = list.filter(u => filterRuoli.includes(u.ruolo))
+    if (filterStati.length)    list = list.filter(u => filterStati.includes(u.stato))
+    if (filterFiliali.length)  list = list.filter(u =>
       u.filialiIds === null || filterFiliali.some(fid => u.filialiIds?.includes(fid))
     )
+    if (filterAuthType.length) list = list.filter(u => filterAuthType.includes(u.authType ?? 'password'))
     return [...list].sort((a, b) => {
-      let av = a[sortKey] ?? '', bv = b[sortKey] ?? ''
+      const av = a[sortKey] ?? '', bv = b[sortKey] ?? ''
       const cmp = String(av).localeCompare(String(bv), 'it')
       return sortDir === 'asc' ? cmp : -cmp
     })
-  }, [utenti, search, filterRuoli, filterStati, filterFiliali, sortKey, sortDir])
+  }, [utenti, search, filterRuoli, filterStati, filterFiliali, filterAuthType, sortKey, sortDir])
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const setF = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
 
   // KPI
-  const admins   = utenti.filter(u => u.ruolo === 'admin').length
-  const attivi   = utenti.filter(u => u.stato === 'Attivo').length
-  const multiF   = utenti.filter(u => u.filialiIds && u.filialiIds.length > 1).length
+  const admins  = utenti.filter(u => u.ruolo === 'admin').length
+  const attivi  = utenti.filter(u => u.stato === 'Attivo').length
+  const ssoCnt  = utenti.filter(u => (u.authType ?? 'password') === 'sso').length
+
+  // ── Reset modal helpers ────────────────────────────────────
+  const resetPwdValid = resetModal &&
+    resetModal.newPwd.length >= 8 &&
+    resetModal.newPwd === resetModal.confirmPwd
+
+  const resetLink = resetModal
+    ? `${window.location.origin}/control-tower-demo/reset-password.html?token=${resetModal.token}&uid=${resetModal.utente?.id}`
+    : ''
 
   return (
     <div className="section-content">
@@ -188,8 +216,8 @@ export default function Utenti({ currentUser }) {
           <span className="utenti-kpi-label">Admin</span>
         </div>
         <div className="utenti-kpi">
-          <span className="utenti-kpi-val">{multiF}</span>
-          <span className="utenti-kpi-label">Accesso multi-filiale</span>
+          <span className="utenti-kpi-val" style={{ color: '#6B21A8' }}>{ssoCnt}</span>
+          <span className="utenti-kpi-label">Autenticati SSO</span>
         </div>
       </div>
 
@@ -217,31 +245,36 @@ export default function Utenti({ currentUser }) {
             />
             {search && <button className="search-clear" onClick={() => { setSearch(''); setPage(1) }}>×</button>}
           </div>
-          <MultiSelect placeholder="Tutti i ruoli"   options={RUOLI_OPT}   value={filterRuoli}   onChange={v => { setFilterRuoli(v);   setPage(1) }} />
-          <MultiSelect placeholder="Tutti gli stati" options={STATI_OPT}   value={filterStati}   onChange={v => { setFilterStati(v);   setPage(1) }} />
-          <MultiSelect placeholder="Tutte le filiali" options={FILIALI_OPT} value={filterFiliali} onChange={v => { setFilterFiliali(v); setPage(1) }} />
+          <MultiSelect placeholder="Tutti i ruoli"    options={RUOLI_OPT}     value={filterRuoli}    onChange={v => { setFilterRuoli(v);    setPage(1) }} />
+          <MultiSelect placeholder="Tutti gli stati"  options={STATI_OPT}     value={filterStati}    onChange={v => { setFilterStati(v);    setPage(1) }} />
+          <MultiSelect placeholder="Tipo autenticaz." options={AUTH_TYPE_OPT} value={filterAuthType} onChange={v => { setFilterAuthType(v); setPage(1) }} />
+          <MultiSelect placeholder="Tutte le filiali" options={FILIALI_OPT}   value={filterFiliali}  onChange={v => { setFilterFiliali(v);  setPage(1) }} />
         </div>
 
         <div className="table-wrap">
           <table className="data-table">
             <thead>
               <tr>
-                <SortTh field="id"    sk={sortKey} sd={sortDir} onSort={handleSort}>ID</SortTh>
-                <SortTh field="nome"  sk={sortKey} sd={sortDir} onSort={handleSort}>Utente</SortTh>
-                <SortTh field="ruolo" sk={sortKey} sd={sortDir} onSort={handleSort}>Ruolo</SortTh>
+                <SortTh field="id"           sk={sortKey} sd={sortDir} onSort={handleSort}>ID</SortTh>
+                <SortTh field="nome"         sk={sortKey} sd={sortDir} onSort={handleSort}>Utente</SortTh>
+                <SortTh field="ruolo"        sk={sortKey} sd={sortDir} onSort={handleSort}>Ruolo</SortTh>
+                <SortTh field="authType"     sk={sortKey} sd={sortDir} onSort={handleSort}>Autenticazione</SortTh>
                 <th>Accesso filiali</th>
-                <SortTh field="stato" sk={sortKey} sd={sortDir} onSort={handleSort}>Stato</SortTh>
-                <SortTh field="dataCreazione"  sk={sortKey} sd={sortDir} onSort={handleSort}>Creato il</SortTh>
-                <SortTh field="ultimoAccesso"  sk={sortKey} sd={sortDir} onSort={handleSort}>Ultimo accesso</SortTh>
-                {isAdmin && <th style={{ width: 70 }}></th>}
+                <th>Stato</th>
+                <SortTh field="dataCreazione" sk={sortKey} sd={sortDir} onSort={handleSort}>Creato il</SortTh>
+                <SortTh field="ultimoAccesso" sk={sortKey} sd={sortDir} onSort={handleSort}>Ultimo accesso</SortTh>
+                {isAdmin && <th style={{ width: 100 }}></th>}
               </tr>
             </thead>
             <tbody>
               {pageData.map(u => {
-                const ruoloCfg  = RUOLO_CFG[u.ruolo]  || {}
-                const statoCfg  = STATO_UTENTE_CFG[u.stato] || {}
-                const isDel     = deleteId === u.id
-                const isSelf    = u.id === currentUser?.id
+                const ruoloCfg   = RUOLO_CFG[u.ruolo]              || {}
+                const authCfg    = AUTH_TYPE_CFG[u.authType ?? 'password'] || {}
+                const statoCfg   = STATO_UTENTE_CFG[u.stato]       || {}
+                const isDel      = deleteId === u.id
+                const isSelf     = u.id === currentUser?.id
+                const isPwdUser  = (u.authType ?? 'password') === 'password'
+                const isActive   = u.stato === 'Attivo'
                 return (
                   <tr key={u.id} className={isDel ? 'row-deleting' : isSelf ? 'row-self' : ''}>
                     <td><code className="id-code">{u.id}</code></td>
@@ -265,12 +298,32 @@ export default function Utenti({ currentUser }) {
                       </span>
                     </td>
                     <td>
-                      <FilialeChips ids={u.filialiIds} />
-                    </td>
-                    <td>
-                      <span className="status-badge" style={{ color: statoCfg.color, background: statoCfg.bg }}>
-                        {u.stato}
+                      <span className="status-badge" style={{ color: authCfg.color, background: authCfg.bg }}>
+                        {authCfg.label}
                       </span>
+                    </td>
+                    <td><FilialeChips ids={u.filialiIds} /></td>
+                    <td>
+                      {/* Toggle attivo/inattivo inline */}
+                      <div className="stato-toggle-wrap">
+                        <button
+                          className={`stato-toggle${isActive ? ' on' : ''}`}
+                          onClick={() => isAdmin && !isSelf && u.stato !== 'Sospeso' && toggleStato(u.id)}
+                          disabled={!isAdmin || isSelf || u.stato === 'Sospeso'}
+                          title={
+                            u.stato === 'Sospeso' ? 'Sospeso — modifica dal pannello modifica'
+                            : isSelf ? 'Non puoi disattivare te stesso'
+                            : isActive ? 'Clicca per disattivare' : 'Clicca per attivare'
+                          }
+                          aria-pressed={isActive}
+                          aria-label={`Stato utente ${u.nome}`}
+                        >
+                          <span className="stato-knob" />
+                        </button>
+                        <span className="stato-label" style={{ color: statoCfg.color, fontWeight: 500 }}>
+                          {u.stato}
+                        </span>
+                      </div>
                     </td>
                     <td className="td-small">
                       {u.dataCreazione
@@ -292,6 +345,19 @@ export default function Utenti({ currentUser }) {
                           </div>
                         ) : (
                           <div className="row-actions">
+                            {/* Reset password — solo per utenti password */}
+                            {isPwdUser && (
+                              <button
+                                className="btn-icon btn-icon-key"
+                                onClick={() => openReset(u)}
+                                title="Reset password"
+                              >
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                              </button>
+                            )}
                             <button className="btn-icon" onClick={() => openEdit(u)} title="Modifica">
                               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -326,13 +392,13 @@ export default function Utenti({ currentUser }) {
         <Pagination page={page} total={totalPages} onPage={setPage} pageSize={PAGE_SIZE} total_items={filtered.length} />
       </div>
 
-      {/* ===== MODAL ===== */}
+      {/* ===== MODAL ADD/EDIT ===== */}
       {modal && (
-        <div className="modal-overlay" onClick={() => setModal(null)}>
+        <div className="modal-overlay" role="dialog" aria-modal="true" aria-label={modal.mode === 'add' ? 'Nuovo utente' : 'Modifica utente'} onClick={() => setModal(null)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>{modal.mode === 'add' ? 'Nuovo utente' : `Modifica — ${modal.utente.nome}`}</h3>
-              <button className="modal-close" onClick={() => setModal(null)}>×</button>
+              <button className="modal-close" onClick={() => setModal(null)} aria-label="Chiudi">×</button>
             </div>
             <div className="modal-body">
               <div className="form-grid">
@@ -348,33 +414,39 @@ export default function Utenti({ currentUser }) {
                 </div>
 
                 <div className="form-field">
-                  <label className="form-label">
-                    Password {modal.mode === 'edit' && <span className="form-hint">(lascia vuoto per non modificare)</span>}
-                    {modal.mode === 'add' && ' *'}
-                  </label>
-                  <div className="input-pwd-wrap">
-                    <input
-                      type={showPwd ? 'text' : 'password'}
-                      className={`form-input${errors.password ? ' error' : ''}`}
-                      value={form.password}
-                      onChange={setF('password')}
-                      placeholder="••••••••"
-                    />
-                    <button type="button" className="pwd-toggle" onClick={() => setShowPwd(s => !s)}>
-                      {showPwd ? (
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                      ) : (
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="form-field">
                   <label className="form-label">Stato</label>
                   <select className="form-select" value={form.stato} onChange={setF('stato')}>
                     {STATI_UTENTE.map(s => <option key={s}>{s}</option>)}
                   </select>
+                </div>
+
+                {/* Tipo autenticazione */}
+                <div className="form-field full">
+                  <label className="form-label">Tipo autenticazione</label>
+                  <div className="auth-type-picker">
+                    {AUTH_TYPES.map(t => {
+                      const cfg = AUTH_TYPE_CFG[t]
+                      return (
+                        <button
+                          key={t}
+                          type="button"
+                          className={`auth-type-option${form.authType === t ? ' selected' : ''}`}
+                          style={form.authType === t ? { borderColor: cfg.color, background: cfg.bg, color: cfg.color } : {}}
+                          onClick={() => setForm(f => ({ ...f, authType: t }))}
+                        >
+                          <span className="auth-type-icon">{t === 'sso' ? '🔒' : '🔑'}</span>
+                          <div>
+                            <div className="auth-type-nome" style={form.authType === t ? { color: cfg.color } : {}}>{cfg.label}</div>
+                            <div className="auth-type-desc">
+                              {t === 'sso'
+                                ? 'Accesso tramite SSO aziendale (es. Azure AD, Google)'
+                                : 'Accesso tramite username e password del portale'}
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
                 </div>
 
                 <div className="form-field full">
@@ -388,9 +460,7 @@ export default function Utenti({ currentUser }) {
                         style={form.ruolo === r ? { borderColor: RUOLO_CFG[r].color, background: RUOLO_CFG[r].bg, color: RUOLO_CFG[r].color } : {}}
                         onClick={() => setForm(f => ({ ...f, ruolo: r }))}
                       >
-                        <span className="ruolo-icon">
-                          {r === 'admin' ? '🔑' : '👤'}
-                        </span>
+                        <span className="ruolo-icon">{r === 'admin' ? '🔑' : '👤'}</span>
                         <div>
                           <div className="ruolo-nome">{RUOLO_CFG[r].label}</div>
                           <div className="ruolo-desc">
@@ -454,6 +524,116 @@ export default function Utenti({ currentUser }) {
               <button className="btn-primary"   onClick={handleSave}>
                 {modal.mode === 'add' ? 'Crea utente' : 'Salva modifiche'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== MODAL RESET PASSWORD ===== */}
+      {resetModal && (
+        <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Reset password" onClick={() => setResetModal(null)}>
+          <div className="modal-box reset-modal-box" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Reset password — {resetModal.utente.nome}</h3>
+              <button className="modal-close" onClick={() => setResetModal(null)} aria-label="Chiudi">×</button>
+            </div>
+            <div className="modal-body">
+
+              {/* Step 1: scegli metodo */}
+              {resetModal.step === 'choose' && (
+                <div className="reset-choose">
+                  <p className="reset-desc">Scegli come reimpostare la password per <strong>{resetModal.utente.email}</strong>:</p>
+                  <div className="reset-options">
+                    <button className="reset-option" onClick={() => setResetModal(r => ({ ...r, step: 'portal' }))}>
+                      <span className="reset-option-icon">🖥️</span>
+                      <div>
+                        <div className="reset-option-title">Reimposta da portale</div>
+                        <div className="reset-option-desc">Inserisci direttamente la nuova password. L'utente riceverà la password dal suo responsabile.</div>
+                      </div>
+                    </button>
+                    <button className="reset-option" onClick={() => setResetModal(r => ({ ...r, step: 'email' }))}>
+                      <span className="reset-option-icon">📧</span>
+                      <div>
+                        <div className="reset-option-title">Invia link via email</div>
+                        <div className="reset-option-desc">L'utente riceve un'email con un link sicuro per reimpostare autonomamente la password.</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 2a: reset da portale */}
+              {resetModal.step === 'portal' && (
+                <div className="reset-portal">
+                  <div className="form-grid">
+                    <div className="form-field full">
+                      <label className="form-label">Nuova password</label>
+                      <input
+                        type="password"
+                        className="form-input"
+                        placeholder="Minimo 8 caratteri"
+                        value={resetModal.newPwd}
+                        onChange={e => setResetModal(r => ({ ...r, newPwd: e.target.value }))}
+                        autoFocus
+                      />
+                    </div>
+                    <div className="form-field full">
+                      <label className="form-label">Conferma password</label>
+                      <input
+                        type="password"
+                        className={`form-input${resetModal.confirmPwd && resetModal.newPwd !== resetModal.confirmPwd ? ' error' : ''}`}
+                        placeholder="Ripeti la password"
+                        value={resetModal.confirmPwd}
+                        onChange={e => setResetModal(r => ({ ...r, confirmPwd: e.target.value }))}
+                      />
+                      {resetModal.confirmPwd && resetModal.newPwd !== resetModal.confirmPwd && (
+                        <div className="form-hint" style={{ color: '#DC0032', marginTop: 4 }}>Le password non corrispondono</div>
+                      )}
+                    </div>
+                  </div>
+                  {resetModal.newPwd.length > 0 && resetModal.newPwd.length < 8 && (
+                    <div className="form-hint" style={{ color: '#F57C00', marginBottom: 4 }}>⚠ La password deve essere di almeno 8 caratteri</div>
+                  )}
+                </div>
+              )}
+
+              {/* Step 2b: invia email */}
+              {resetModal.step === 'email' && (
+                <div className="reset-email-preview">
+                  <div className="reset-email-sent">
+                    <span className="reset-email-icon">✅</span>
+                    <div>
+                      <div className="reset-email-title">Email inviata a <strong>{resetModal.utente.email}</strong></div>
+                      <div className="reset-email-sub">Il link è valido per <strong>24 ore</strong> e può essere utilizzato una sola volta.</div>
+                    </div>
+                  </div>
+                  <div className="reset-email-box">
+                    <div className="reset-email-label">Link di reset (demo):</div>
+                    <code className="reset-email-link">{resetLink}</code>
+                    <div className="reset-email-token">Token: <code>{resetModal.token}</code></div>
+                  </div>
+                  <div className="reset-email-note">
+                    In produzione il link viene inviato automaticamente via email. Il token scade dopo 24h e viene invalidato dopo il primo utilizzo.
+                  </div>
+                </div>
+              )}
+
+            </div>
+            <div className="modal-footer">
+              {resetModal.step === 'choose' && (
+                <button className="btn-secondary" onClick={() => setResetModal(null)}>Annulla</button>
+              )}
+              {resetModal.step === 'portal' && (
+                <>
+                  <button className="btn-secondary" onClick={() => setResetModal(r => ({ ...r, step: 'choose', newPwd: '', confirmPwd: '' }))}>← Indietro</button>
+                  <button className="btn-primary" onClick={handleResetPortal} disabled={!resetPwdValid}>
+                    Salva nuova password
+                  </button>
+                </>
+              )}
+              {resetModal.step === 'email' && (
+                <button className="btn-primary" onClick={() => setResetModal(null)}>Chiudi</button>
+              )}
             </div>
           </div>
         </div>

@@ -127,22 +127,7 @@ export default function App() {
     setSection('overview')
   }
 
-  // ── Routing ────────────────────────────────────────────────────
-  if (page === 'landing') {
-    return (
-      <Landing
-        isAuthenticated={!!user}
-        onGoToDashboard={() => setPage('app')}
-        onGoToLogin={() => setPage('login')}
-      />
-    )
-  }
-
-  if (page === 'login' || !user) {
-    return <Login onLogin={handleLogin} />
-  }
-
-  // page === 'app'
+  // ── Nav handler ───────────────────────────────────────────────
   function handleNav(id) {
     setSection(id)
     setSidebarOpen(false)
@@ -162,45 +147,62 @@ export default function App() {
     docs:       <Documentazione />,
   }
 
+  // ── Routing — tutto dentro i provider per evitare errori context ──
   return (
     <ThemeProvider>
     <I18nProvider>
     <TutorialProvider>
-      <div className="app-shell">
-        {/* Backdrop mobile */}
-        <div
-          className={`sidebar-backdrop${sidebarOpen ? ' show' : ''}`}
-          onClick={() => setSidebarOpen(false)}
-        />
 
-        <Sidebar
-          active={section}
-          onNav={handleNav}
-          eccezioniCount={eccezioniAperte}
-          user={user}
-          open={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
+      {page === 'landing' && (
+        <Landing
+          isAuthenticated={!!user}
+          onGoToDashboard={() => setPage('app')}
+          onGoToLogin={() => setPage('login')}
         />
+      )}
 
-        <div className="app-main">
-          <Header
-            user={user}
-            section={section}
-            onLogout={handleLogout}
-            onMenuToggle={() => setSidebarOpen(o => !o)}
-            notifications={notifications}
-            onMarkRead={markRead}
-            onMarkAllRead={markAllRead}
-            onClearNotif={clearNotif}
+      {(page === 'login' || (page !== 'landing' && !user)) && (
+        <Login onLogin={handleLogin} />
+      )}
+
+      {page === 'app' && user && (
+        <div className="app-shell">
+          {/* Backdrop mobile */}
+          <div
+            className={`sidebar-backdrop${sidebarOpen ? ' show' : ''}`}
+            onClick={() => setSidebarOpen(false)}
           />
-          <main className="app-content">
-            {SECTIONS[section]}
-          </main>
-        </div>
 
-        {/* Global progress toast */}
-        <ProgressToast job={activeJob} />
-      </div>
+          <Sidebar
+            active={section}
+            onNav={handleNav}
+            eccezioniCount={eccezioniAperte}
+            user={user}
+            open={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+          />
+
+          <div className="app-main">
+            <Header
+              user={user}
+              section={section}
+              onLogout={handleLogout}
+              onMenuToggle={() => setSidebarOpen(o => !o)}
+              notifications={notifications}
+              onMarkRead={markRead}
+              onMarkAllRead={markAllRead}
+              onClearNotif={clearNotif}
+            />
+            <main className="app-content">
+              {SECTIONS[section]}
+            </main>
+          </div>
+
+          {/* Global progress toast */}
+          <ProgressToast job={activeJob} />
+        </div>
+      )}
+
     </TutorialProvider>
     </I18nProvider>
     </ThemeProvider>
