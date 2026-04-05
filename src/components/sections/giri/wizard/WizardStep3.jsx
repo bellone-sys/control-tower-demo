@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import L from 'leaflet'
-import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
 import { getCiPudo } from '../../../../data/spedizioni'
 import pudosRoma from '../../../../data/pudosRoma.json'
@@ -166,14 +166,15 @@ export default function WizardStep3({ data, onChange }) {
                   fillOpacity: isSel ? 0.9 : 0.6,
                   weight: isSel ? 2.5 : 1,
                 }}
-                eventHandlers={{ click: () => togglePudo(p.id) }}
-              >
-                <Tooltip direction="top" offset={[0, -8]}>
-                  <strong>{p.name}</strong><br />
-                  CI: {p.ci > 0 ? p.ci.toFixed(2) : 'N/D'}<br />
-                  {isSel ? '✓ Incluso — click per escludere' : '○ Escluso — click per includere'}
-                </Tooltip>
-              </CircleMarker>
+                eventHandlers={{
+                  click: () => togglePudo(p.id),
+                  mouseover: (e) => e.target.bindTooltip(
+                    `<b>${p.name}</b><br/>CI: ${p.ci > 0 ? p.ci.toFixed(2) : 'N/D'}<br/>${isSel ? '✓ click per escludere' : '○ click per includere'}`,
+                    { direction: 'top', offset: L.point(0, -8) }
+                  ).openTooltip(),
+                  mouseout: (e) => { e.target.closeTooltip(); e.target.unbindTooltip() },
+                }}
+              />
             )
           })}
 
@@ -183,11 +184,10 @@ export default function WizardStep3({ data, onChange }) {
               center={[filiale.lat, filiale.lng]}
               radius={14}
               pathOptions={{ color: '#DC0032', fillColor: '#DC0032', fillOpacity: 1, weight: 2 }}
-            >
-              <Tooltip permanent direction="top" offset={[0, -14]}>
-                🏢 {filiale.nome}
-              </Tooltip>
-            </CircleMarker>
+              eventHandlers={{
+                add: (e) => e.target.bindTooltip(`🏢 ${filiale.nome}`, { permanent: true, direction: 'top', offset: L.point(0, -14) }),
+              }}
+            />
           )}
         </MapContainer>
 

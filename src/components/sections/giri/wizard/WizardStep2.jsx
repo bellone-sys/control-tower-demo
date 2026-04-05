@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import L from 'leaflet'
-import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
 import { getCiPudo } from '../../../../data/spedizioni'
 import pudosRoma from '../../../../data/pudosRoma.json'
@@ -167,12 +167,14 @@ export default function WizardStep2({ data, onChange }) {
                   fillOpacity: inFilter ? 0.9 : 0.4,
                   weight: inFilter ? 2 : 1,
                 }}
-              >
-                <Tooltip>
-                  <strong>{p.name}</strong><br />
-                  CI: {ci.toFixed(2)}{!inFilter ? ' — escluso dai filtri' : ''}
-                </Tooltip>
-              </CircleMarker>
+                eventHandlers={{
+                  mouseover: (e) => e.target.bindTooltip(
+                    `<b>${p.name}</b><br/>CI: ${ci.toFixed(2)}${!inFilter ? ' — escluso dai filtri' : ''}`,
+                    { direction: 'top', offset: L.point(0, -9) }
+                  ).openTooltip(),
+                  mouseout: (e) => { e.target.closeTooltip(); e.target.unbindTooltip() },
+                }}
+              />
             )
           })}
 
@@ -188,11 +190,10 @@ export default function WizardStep2({ data, onChange }) {
               center={[filiale.lat, filiale.lng]}
               radius={14}
               pathOptions={{ color: '#DC0032', fillColor: '#DC0032', fillOpacity: 1, weight: 2 }}
-            >
-              <Tooltip permanent direction="top" offset={[0, -14]}>
-                🏢 {filiale.nome}
-              </Tooltip>
-            </CircleMarker>
+              eventHandlers={{
+                add: (e) => e.target.bindTooltip(`🏢 ${filiale.nome}`, { permanent: true, direction: 'top', offset: L.point(0, -14) }),
+              }}
+            />
           )}
         </MapContainer>
       </div>

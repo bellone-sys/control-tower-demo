@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import L from 'leaflet'
-import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
 import { FILIALI_BRT } from '../../../../data/brtFiliali'
 import { PROVINCE_PER_REGIONE } from '../../../../data/province'
@@ -329,7 +329,7 @@ export default function WizardStep1({ data, onChange }) {
             />
           ))}
 
-          {/* PUDOs with CI — labeled (singolo Tooltip per marker, react-leaflet v5) */}
+          {/* PUDOs with CI — tooltip nativo Leaflet (no react-leaflet Tooltip, v5 compat) */}
           {pudosWithCi.map(p => (
             <CircleMarker
               key={`ci-${p.id}`}
@@ -341,15 +341,14 @@ export default function WizardStep1({ data, onChange }) {
                 fillOpacity: 0.9,
                 weight: 2,
               }}
-            >
-              <Tooltip direction="top" offset={[0, -12]}>
-                <div style={{ lineHeight: 1.4 }}>
-                  <div style={{ fontWeight: 700, fontSize: 12 }}>{p.ci.toFixed(2)} CI</div>
-                  <div style={{ fontSize: 11 }}>{p.name}</div>
-                  <div style={{ fontSize: 10, opacity: 0.75 }}>{p.id} · {p.cap}</div>
-                </div>
-              </Tooltip>
-            </CircleMarker>
+              eventHandlers={{
+                mouseover: (e) => e.target.bindTooltip(
+                  `<b>${p.ci.toFixed(2)} CI</b> — ${p.name}<br/><span style="font-size:10px;opacity:.75">${p.id} · ${p.cap}</span>`,
+                  { direction: 'top', offset: L.point(0, -12) }
+                ).openTooltip(),
+                mouseout: (e) => { e.target.closeTooltip(); e.target.unbindTooltip() },
+              }}
+            />
           ))}
 
           {/* Filiale depot marker */}
@@ -358,11 +357,10 @@ export default function WizardStep1({ data, onChange }) {
               center={[selectedFiliale.lat, selectedFiliale.lng]}
               radius={14}
               pathOptions={{ color: selectedFiliale.tipo === 'brt' ? '#1565C0' : '#DC0032', fillColor: selectedFiliale.tipo === 'brt' ? '#1565C0' : '#DC0032', fillOpacity: 1, weight: 2 }}
-            >
-              <Tooltip permanent direction="top" offset={[0, -14]}>
-                🏢 {selectedFiliale.nome}
-              </Tooltip>
-            </CircleMarker>
+              eventHandlers={{
+                add: (e) => e.target.bindTooltip(`🏢 ${selectedFiliale.nome}`, { permanent: true, direction: 'top', offset: L.point(0, -14) }),
+              }}
+            />
           )}
         </MapContainer>
 
