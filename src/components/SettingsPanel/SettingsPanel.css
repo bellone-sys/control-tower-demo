@@ -438,6 +438,28 @@
   background: var(--fp-gray-mid);
 }
 
+/* Manual Link */
+.settings-manual-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: 6px;
+  color: var(--fp-charcoal);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 150ms ease;
+  margin-top: 4px;
+}
+.settings-manual-link:hover {
+  border-color: var(--fp-red);
+  color: var(--fp-red);
+  background: rgba(220, 0, 50, 0.04);
+}
+
 /* Mobile responsive */
 @media (max-width: 640px) {
   .settings-panel-modal {

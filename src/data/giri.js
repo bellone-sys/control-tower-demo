@@ -1,6 +1,9 @@
 // ===== GIRI FERMOPOINT =====
 
 import { GIRI_ROMA } from './giri/roma'
+import { GIRI_NAPOLI } from './giri/napoli'
+import { GIRI_MILANO } from './giri/milano'
+import { GIRI_STEZZANO } from './giri/stezzano'
 
 export const STATI_GIRO = ['Pianificato', 'In corso', 'Completato', 'Annullato']
 
@@ -9,9 +12,9 @@ export const STATI_GIRO = ['Pianificato', 'In corso', 'Completato', 'Annullato']
 // ────────────────────────────────────────────────────────
 export const GIRI_INIT = [
   ...GIRI_ROMA,
-  // TODO: giri Milano (v0.10.0)
-  // TODO: giri Napoli (v0.10.0)
-  // TODO: giri Stezzano (v0.10.0)
+  ...GIRI_NAPOLI,
+  ...GIRI_MILANO,
+  ...GIRI_STEZZANO,
 ]
 
 // ────────────────────────────────────────────────────────

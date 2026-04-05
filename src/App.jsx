@@ -15,6 +15,7 @@ import Eccezioni from './components/sections/Eccezioni'
 import Report from './components/sections/Report'
 import ProgressToast from './components/ui/ProgressToast'
 import { TutorialProvider } from './contexts/TutorialContext'
+import { I18nProvider } from './contexts/I18nContext'
 import { ECCEZIONI } from './data/stub'
 import './App.css'
 
@@ -155,6 +156,7 @@ export default function App() {
   }
 
   return (
+    <I18nProvider>
     <TutorialProvider>
       <div className="app-shell">
         {/* Backdrop mobile */}
@@ -192,5 +194,6 @@ export default function App() {
         <ProgressToast job={activeJob} />
       </div>
     </TutorialProvider>
+    </I18nProvider>
   )
 }

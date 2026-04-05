@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTutorial } from '../../contexts/TutorialContext'
+import { useI18n } from '../../contexts/I18nContext'
 import './SettingsPanel.css'
 
 /**
@@ -8,6 +9,7 @@ import './SettingsPanel.css'
  */
 export default function SettingsPanel({ onClose }) {
   const { settings, dismissTutorial, resetTutorial, resetAllTutorials, setTutorialsEnabled } = useTutorial()
+  const { lang, setLang } = useI18n()
   const [activeTab, setActiveTab] = useState('tutorials')
   const [confirmReset, setConfirmReset] = useState(false)
 
@@ -161,7 +163,11 @@ export default function SettingsPanel({ onClose }) {
                   <div className="settings-option-label">Lingua</div>
                   <div className="settings-option-hint">Seleziona la lingua dell'interfaccia</div>
                 </div>
-                <select className="settings-select" defaultValue={settings.preferences.language}>
+                <select
+                  className="settings-select"
+                  value={lang}
+                  onChange={e => setLang(e.target.value)}
+                >
                   <option value="it">🇮🇹 Italiano</option>
                   <option value="en">🇬🇧 English</option>
                 </select>
@@ -200,7 +206,7 @@ export default function SettingsPanel({ onClose }) {
                   </svg>
                 </div>
                 <div className="settings-about-title">Control Tower</div>
-                <div className="settings-about-version">v0.10.0</div>
+                <div className="settings-about-version">v0.11.0</div>
                 <div className="settings-about-desc">
                   Sistema di gestione logistica con raccolta DPD
                 </div>
@@ -210,17 +216,28 @@ export default function SettingsPanel({ onClose }) {
                 <div className="settings-about-info">
                   <div className="settings-about-item">
                     <span className="settings-about-label">Versione:</span>
-                    <span>0.10.0 - Phase 2 Features</span>
+                    <span>0.11.0 - Phase 3 Polish</span>
                   </div>
                   <div className="settings-about-item">
                     <span className="settings-about-label">Ultimo aggiornamento:</span>
-                    <span>2026-04-04</span>
+                    <span>2026-04-05</span>
                   </div>
                   <div className="settings-about-item">
                     <span className="settings-about-label">Status:</span>
                     <span>Production (Demo)</span>
                   </div>
                 </div>
+
+                <div className="settings-about-divider" />
+
+                <a
+                  href="/docs/manuale.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="settings-manual-link"
+                >
+                  📖 Apri Manuale Utente
+                </a>
               </div>
             </div>
           )}

@@ -217,3 +217,76 @@
   .spec-val         { font-size: 12px; }
   .spec-unit        { font-size: 9px; }
 }
+
+/* ================================================================
+   PHASE 2 COMPONENTS — Responsive additions (v0.11.0)
+   ================================================================ */
+
+/* ── SM ≤ 768px ── */
+@media (max-width: 768px) {
+
+  /* ----- Wizard Scenari: stack panels ----- */
+  .wizard-confirm-grid            { grid-template-columns: 1fr !important; }
+  .wizard-step-layout             { flex-direction: column; }
+  .wp-row2                        { grid-template-columns: 1fr; }
+
+  /* ----- Contratti tabs: scroll orizzontale ----- */
+  .contratti-tabs                 { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .contratti-tab                  { flex-shrink: 0; min-width: 140px; font-size: 12px; padding: 10px 12px; }
+
+  /* ----- Contract card summary: 1 col ----- */
+  .card-summary                   { grid-template-columns: 1fr; }
+  .summary-item                   { border-right: none; border-bottom: 1px solid var(--fp-gray-light); }
+  .summary-item:last-child        { border-bottom: none; }
+
+  /* ----- Extraction fields: 1 col ----- */
+  .extraction-fields              { grid-template-columns: 1fr; }
+
+  /* ----- Tutorial overlay: full width ----- */
+  .tutorial-overlay               { max-width: calc(100vw - 32px) !important; right: 16px !important; left: 16px !important; }
+  .tutorial-overlay-bottom-right  { bottom: 16px; }
+  .tutorial-overlay-top-right     { top: 72px; }
+
+  /* ----- Scenari toolbar: wrap ----- */
+  .scenari-toolbar                { flex-wrap: wrap; gap: 8px; }
+  .scenari-toolbar > div          { flex-wrap: wrap; }
+
+  /* ----- KPI Spedizioni: 2 col ----- */
+  .spedizioni-kpi-grid            { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ── XS ≤ 600px ── */
+@media (max-width: 600px) {
+
+  /* ----- Contratti upload zone ----- */
+  .upload-dropzone                { padding: 24px 12px; }
+  .upload-icon                    { font-size: 36px; }
+
+  /* ----- Contract card actions ----- */
+  .card-actions                   { flex-direction: column; }
+
+  /* ----- Details grid: 1 col ----- */
+  .details-grid                   { grid-template-columns: 1fr; }
+
+  /* ----- Settings modal: bottom sheet ----- */
+  .settings-panel-modal           { max-width: 100%; max-height: 100dvh; border-radius: 12px 12px 0 0; }
+  .settings-panel-overlay         { align-items: flex-end; }
+}
+
+/* ── XXS ≤ 480px ── */
+@media (max-width: 480px) {
+
+  /* ----- Contratti tabs: minimal ----- */
+  .contratti-tab                  { min-width: 110px; font-size: 11px; padding: 8px 10px; }
+  .tab-count                      { font-size: 10px; min-width: 16px; height: 16px; }
+
+  /* ----- Contract card header ----- */
+  .card-title-section             { flex-direction: column; align-items: flex-start; gap: 6px; }
+
+  /* ----- Extraction confidence badge: hide on very small ----- */
+  .confidence-badge               { display: none; }
+
+  /* ----- Scenari periodo tabs: wrap ----- */
+  .carb-range-tabs                { flex-wrap: wrap; gap: 4px; }
+  .carb-range-tab                 { flex: 1 1 auto; text-align: center; }
+}
