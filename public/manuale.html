@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manuale Utente — Fermopoint Control Tower</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #414042;
+      --red: #DC0032;
+      --bg: #f5f5f7;
+      --white: #ffffff;
+      --gray: #808285;
+      --cool-gray: #e8e8ea;
+      --sidebar-w: 240px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--charcoal);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-logo-badge {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .sidebar-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-logo-brand {
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+    .sidebar-logo-title {
+      font-size: 11px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      padding: 8px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 6px;
+      color: rgba(255,255,255,.6);
+      font-size: 13px;
+      text-decoration: none;
+      transition: background .15s, color .15s;
+    }
+    .sidebar-nav a:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+    .sidebar-nav a.active { background: var(--red); color: #fff; }
+    .sidebar-nav a .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      flex-shrink: 0;
+    }
+    .sidebar-nav a.active .dot { background: rgba(255,255,255,.7); }
+
+    .sidebar-footer {
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      font-size: 11px;
+      color: rgba(255,255,255,.3);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px;
+      max-width: 900px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--white);
+      border: 1px solid var(--cool-gray);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--charcoal);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background .15s, border-color .15s;
+      margin-bottom: 32px;
+    }
+    .back-btn:hover { background: var(--bg); border-color: #ccc; }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    .page-subtitle span {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Sections */
+    .doc-section {
+      margin-bottom: 48px;
+      scroll-margin-top: 32px;
+    }
+    .doc-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--red);
+      display: inline-block;
+    }
+    .doc-section h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin: 20px 0 8px;
+    }
+    .doc-section p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+    .doc-section ul, .doc-section ol {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+    .doc-section ul li, .doc-section ol li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+    .doc-section strong { font-weight: 600; }
+
+    /* Inline code */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--red);
+    }
+
+    /* Info box */
+    .info-box {
+      background: #e3f0fb;
+      border-left: 4px solid #1565C0;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* Warning box */
+    .warn-box {
+      background: #fff8e1;
+      border-left: 4px solid #f9a825;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* Data table */
+    .table-responsive { overflow-x: auto; margin: 16px 0; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .data-table th {
+      background: var(--charcoal);
+      color: #fff;
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--cool-gray);
+      vertical-align: top;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: #fafafa; }
+
+    /* Top bar */
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; gap: 12px; flex-wrap: wrap;
+    }
+
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--charcoal); border: none;
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 13px; color: #fff;
+      cursor: pointer; font-family: var(--font);
+      transition: background .15s;
+    }
+    .pdf-btn:hover { background: #555; }
+
+    /* Sidebar other links */
+    .sidebar-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,.08);
+      margin: 8px 12px;
+    }
+    .sidebar-other-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: 6px;
+      color: rgba(255,255,255,.4); font-size: 12px;
+      text-decoration: none; transition: background .15s, color .15s;
+    }
+    .sidebar-other-link:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.7); }
+
+    /* Footer */
+    .page-footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--cool-gray);
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    /* Print */
+    @media print {
+      body { display: block; background: #fff; }
+      .sidebar, .top-bar { display: none !important; }
+      .main { padding: 20px; max-width: 100%; }
+      .doc-section { break-inside: avoid; }
+      .data-table th { background: #414042 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .info-box, .warn-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      a { color: inherit; text-decoration: none; }
+      @page { margin: 2cm 1.5cm; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-badge">FP</div>
+    <div class="sidebar-logo-text">
+      <span class="sidebar-logo-brand">Fermopoint</span>
+      <span class="sidebar-logo-title">Control Tower</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-label">Sezioni</div>
+    <a href="#introduzione" class="active"><span class="dot"></span>1. Introduzione</a>
+    <a href="#login">        <span class="dot"></span>2. Accesso e Login</a>
+    <a href="#panoramica">   <span class="dot"></span>3. Panoramica</a>
+    <a href="#spedizioni">   <span class="dot"></span>4. Spedizioni</a>
+    <a href="#giri">         <span class="dot"></span>5. Giri e Ottimizzazione</a>
+    <a href="#pudo">         <span class="dot"></span>6. PUDO</a>
+    <a href="#flotta">       <span class="dot"></span>7. Flotta</a>
+    <a href="#filiali">      <span class="dot"></span>8. Filiali</a>
+    <a href="#contratti">    <span class="dot"></span>9. Contratti</a>
+    <a href="#utenti">       <span class="dot"></span>10. Utenti</a>
+    <a href="#eccezioni">    <span class="dot"></span>11. Eccezioni</a>
+    <a href="#report">       <span class="dot"></span>12. Report</a>
+    <a href="#impostazioni"> <span class="dot"></span>13. Impostazioni</a>
+    <a href="#note">         <span class="dot"></span>Note Tecniche</a>
+
+    <hr class="sidebar-divider"/>
+    <div class="sidebar-label">Documenti</div>
+    <a href="/control-tower-demo/glossario.html" class="sidebar-other-link">
+      <span class="dot"></span>Documentazione
+    </a>
+    <a href="/control-tower-demo/playbook.html" class="sidebar-other-link">
+      <span class="dot"></span>Playbook Operativo
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">v0.12.0 · Aprile 2026</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+  <div class="top-bar">
+    <button class="back-btn" onclick="history.back() || (window.location='/control-tower-demo/')">
+      ← Torna all'app
+    </button>
+    <button class="pdf-btn" onclick="window.print()">
+      ⬇ Scarica PDF
+    </button>
+  </div>
+
+  <h1 class="page-title">📖 Manuale Utente</h1>
+  <p class="page-subtitle">
+    Fermopoint Control Tower — Guida completa all'utilizzo della piattaforma
+    <span>v0.12.0</span>
+  </p>
+
+  <!-- 1. Introduzione -->
+  <section class="doc-section" id="introduzione">
+    <h2>1. Introduzione</h2>
+    <p>
+      <strong>Fermopoint Control Tower</strong> è la piattaforma di gestione logistica integrata per il network DPD/Fermopoint. Permette di monitorare spedizioni, ottimizzare i giri di consegna, gestire PUDO, flotta, filiali, contratti e utenti da un'unica interfaccia.
+    </p>
+    <h3>Funzionalità principali</h3>
+    <ul>
+      <li><strong>Dashboard real-time</strong> con KPI aggregati</li>
+      <li><strong>Importazione spedizioni</strong> da AS/400 o file CSV/Excel</li>
+      <li><strong>Ottimizzazione giri</strong> tramite integrazione OptimoRoute</li>
+      <li><strong>Gestione PUDO</strong> con mappa interattiva e Indice di Copertura (CI)</li>
+      <li><strong>Monitoraggio flotta</strong> con carburanti e manutenzioni</li>
+      <li><strong>Gestione contratti</strong> con estrazione AI da PDF</li>
+      <li><strong>Tutorial interattivi</strong> per onboarding guidato</li>
+    </ul>
+  </section>
+
+  <!-- 2. Accesso e Login -->
+  <section class="doc-section" id="login">
+    <h2>2. Accesso e Login</h2>
+    <h3>Credenziali Demo</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Ruolo</th><th>Email</th><th>Password</th></tr></thead>
+        <tbody>
+          <tr><td>Admin</td><td>admin@fermopoint.it</td><td>qualsiasi</td></tr>
+          <tr><td>Manager</td><td>manager@fermopoint.it</td><td>qualsiasi</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-box">
+      In ambiente demo la password non viene verificata. In produzione sarà integrata con il sistema SSO aziendale.
+    </div>
+    <h3>Sessione</h3>
+    <p>
+      La sessione viene mantenuta nel browser tramite <code>localStorage</code>. Per uscire, usare il pulsante logout (→) in alto a destra nell'header.
+    </p>
+  </section>
+
+  <!-- 3. Panoramica -->
+  <section class="doc-section" id="panoramica">
+    <h2>3. Panoramica</h2>
+    <p>La sezione <strong>Panoramica</strong> è la home page dell'applicazione. Mostra:</p>
+    <ul>
+      <li><strong>KPI Principali:</strong> spedizioni totali, PUDO attivi, giri pianificati, CI medio</li>
+      <li><strong>Grafico giri per filiale:</strong> distribuzione dei giri per sede operativa</li>
+      <li><strong>Eccezioni aperte:</strong> lista delle anomalie non risolte con priorità</li>
+      <li><strong>Attività recente:</strong> ultime azioni eseguite nel sistema</li>
+    </ul>
+    <h3>Indice di Copertura (CI)</h3>
+    <p>Il CI misura l'efficienza di un punto di ritiro PUDO:</p>
+    <ul>
+      <li><strong style="color:#2E7D32">CI ≥ 4.0</strong> (verde): ottima copertura, PUDO ad alta redditività</li>
+      <li><strong style="color:#E65100">CI 2.5–3.9</strong> (arancio): copertura media, da monitorare</li>
+      <li><strong style="color:#1565C0">CI &lt; 2.5</strong> (blu): bassa copertura, valutare interventi</li>
+    </ul>
+  </section>
+
+  <!-- 4. Spedizioni -->
+  <section class="doc-section" id="spedizioni">
+    <h2>4. Spedizioni</h2>
+    <h3>Importazione</h3>
+    <p>Accedere a <strong>Spedizioni → Importa spedizioni</strong> per caricare nuovi dati.</p>
+    <p><strong>Modalità API (AS/400):</strong></p>
+    <ol>
+      <li>Selezionare il numero di mesi di storico</li>
+      <li>Scegliere le province da includere</li>
+      <li>Confermare — il sistema simula la sincronizzazione</li>
+    </ol>
+    <p><strong>Modalità File:</strong></p>
+    <ol>
+      <li>Selezionare CSV o Excel</li>
+      <li>Trascinare il file nella zona di upload</li>
+      <li>Il sistema importa automaticamente le colonne standard</li>
+    </ol>
+    <h3>Filtri e Ricerca</h3>
+    <ul>
+      <li><strong>Barra di ricerca:</strong> cerca per ID spedizione, destinatario o nome PUDO</li>
+      <li><strong>Filtro Tipo:</strong> consegna / ritiro (multiselect)</li>
+      <li><strong>Filtro PUDO:</strong> filtra per punto di ritiro specifico</li>
+      <li><strong>Ordinamento:</strong> data, peso, volume (crescente/decrescente)</li>
+    </ul>
+    <h3>Paginazione</h3>
+    <p>15 spedizioni per pagina. Navigare con i pulsanti «‹›» o cliccando direttamente il numero di pagina.</p>
+  </section>
+
+  <!-- 5. Giri e Ottimizzazione -->
+  <section class="doc-section" id="giri">
+    <h2>5. Giri e Ottimizzazione</h2>
+    <h3>Tab Giri</h3>
+    <p>Lista completa dei giri con filtri per filiale, stato e data. Ogni giro mostra nome, filiale, autista, mezzo, numero di tappe, distanza totale e stato (Pianificato / In corso / Completato).</p>
+    <p>Espandere un giro cliccando la riga per vedere tutte le tappe in sequenza.</p>
+    <h3>Tab Template</h3>
+    <p>I template sono giri riutilizzabili, salvati come configurazioni standard. Utili per giri ricorrenti con le stesse tappe, configurazioni stagionali e base per la creazione di nuovi scenari.</p>
+    <p>Per usare un template: <strong>Usa template</strong> → viene aperto il wizard con i parametri precompilati.</p>
+    <h3>Tab Scenari — Ottimizzazione OptimoRoute</h3>
+    <p>Il <strong>Wizard di Creazione Scenario</strong> guida in 5 passi:</p>
+    <p><strong>Step 1 — Area e Filiale</strong></p>
+    <ul>
+      <li>Selezionare la filiale di partenza e le province da coprire</li>
+      <li>Impostare il periodo per il calcolo del CI (7/14/30/60 giorni)</li>
+      <li>Definire il CI minimo dei PUDO da includere e il raggio massimo dalla filiale</li>
+    </ul>
+    <p><strong>Step 2 — Selezione PUDO</strong></p>
+    <ul>
+      <li>Mappa interattiva con tutti i PUDO filtrati dai criteri dello Step 1</li>
+      <li>Selezione/deselezione manuale con checkbox</li>
+      <li>Colori: verde (CI alto), arancio (CI medio), blu (CI basso)</li>
+    </ul>
+    <p><strong>Step 3 — Pianificazione</strong></p>
+    <ul>
+      <li>Data di esecuzione, finestra oraria del turno, numero di mezzi, durata media fermata</li>
+    </ul>
+    <p><strong>Step 4 — Parametri OptimoRoute</strong></p>
+    <ul>
+      <li>Bilanciamento del carico (Off / Bilanciato / Forzato)</li>
+      <li>Criterio di bilanciamento, peso e volume massimi per mezzo</li>
+      <li>Opzioni clustering geografico e rientro deposito</li>
+    </ul>
+    <p><strong>Step 5 — Conferma</strong></p>
+    <ul>
+      <li>Riepilogo completo di tutti i parametri</li>
+      <li>Possibilità di salvare lo scenario come <strong>preferito</strong> (❤️)</li>
+      <li>Invio a OptimoRoute per l'ottimizzazione</li>
+    </ul>
+    <h3>Tab Preferiti ❤️</h3>
+    <p>Raccoglie tutti gli scenari salvati come preferiti. Per aggiungere un preferito, usare il pulsante ❤️ nell'ultimo step del wizard.</p>
+  </section>
+
+  <!-- 6. PUDO -->
+  <section class="doc-section" id="pudo">
+    <h2>6. PUDO (Punti di Ritiro)</h2>
+    <h3>Vista Lista</h3>
+    <p>Tabella con tutti i PUDO: nome, indirizzo, tipo (negozio / locker), CI calcolato sul periodo selezionato, stato (Attivo / Inattivo).</p>
+    <h3>Vista Mappa</h3>
+    <p>Mappa interattiva Leaflet con marker colorati in base al CI:</p>
+    <ul>
+      <li>🟢 Verde: CI ≥ 4</li>
+      <li>🟠 Arancio: CI 2.5–3.9</li>
+      <li>🔵 Blu: CI &lt; 2.5</li>
+    </ul>
+    <p>Cliccando un marker si aprono i dettagli del PUDO.</p>
+    <h3>Filtri</h3>
+    <ul>
+      <li><strong>Periodo CI:</strong> 7 / 14 / 30 / 60 giorni</li>
+      <li><strong>CI Minimo:</strong> slider per filtrare PUDO sotto soglia</li>
+      <li><strong>Tipo:</strong> negozio / locker</li>
+    </ul>
+  </section>
+
+  <!-- 7. Flotta -->
+  <section class="doc-section" id="flotta">
+    <h2>7. Flotta</h2>
+    <h3>Tab Veicoli</h3>
+    <p>Catalogo completo della flotta con specifiche tecniche di ogni mezzo: portata massima (kg) e volume (m³), tipo carburante, consumo medio, stato (Disponibile / In servizio / Manutenzione).</p>
+    <h3>Tab Carburanti</h3>
+    <p>Monitoraggio dei rifornimenti con KPI (spesa totale, litri, costo medio al litro, CO₂), grafico storico a barre per periodo e registro rifornimenti con data, mezzo, importo.</p>
+    <h3>Tab Manutenzioni</h3>
+    <p>Scadenziario manutenzioni programmate e straordinarie.</p>
+  </section>
+
+  <!-- 8. Filiali -->
+  <section class="doc-section" id="filiali">
+    <h2>8. Filiali</h2>
+    <p>Gestione delle sedi operative Fermopoint:</p>
+    <ul>
+      <li><strong>Lista filiali</strong> con KPI: superficie, punti ritiro, stato</li>
+      <li><strong>Dettaglio filiale:</strong> mappa posizione, contatti, responsabile</li>
+      <li><strong>Associazione PUDO:</strong> lista dei PUDO nel raggio della filiale</li>
+    </ul>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Codice</th><th>Nome</th><th>Città</th><th>Provincia</th></tr></thead>
+        <tbody>
+          <tr><td><code>F001</code></td><td>Roma Laurentina</td><td>Roma</td><td>RM</td></tr>
+          <tr><td><code>F002</code></td><td>Napoli Centro</td><td>Casandrino</td><td>NA</td></tr>
+          <tr><td><code>F003</code></td><td>Milano Bovisa</td><td>Milano</td><td>MI</td></tr>
+          <tr><td><code>F004</code></td><td>Stezzano</td><td>Stezzano</td><td>BG</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 9. Contratti -->
+  <section class="doc-section" id="contratti">
+    <h2>9. Contratti</h2>
+    <p>La sezione Contratti gestisce tutti i documenti contrattuali suddivisi per tipologia.</p>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Tab</th><th>Descrizione</th></tr></thead>
+        <tbody>
+          <tr><td>🚚 Noleggio Mezzi</td><td>Contratti di noleggio veicoli e allestimenti</td></tr>
+          <tr><td>👤 Corrieri Dipendenti/Esterni</td><td>Accordi con corrieri e cooperative</td></tr>
+          <tr><td>⚙️ Operatori Handling</td><td>Contratti operatori magazzino e handling</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Caricamento PDF con AI</h3>
+    <ol>
+      <li>Trascina il PDF nella zona upload (o clicca <strong>Seleziona file</strong>)</li>
+      <li>Il sistema estrae automaticamente: numero contratto, fornitore/contraente, date inizio e scadenza, importo annuale</li>
+      <li>Viene mostrata la <strong>confidenza</strong> dell'estrazione per ogni campo (0–100%)</li>
+      <li>I campi mancanti possono essere completati manualmente</li>
+      <li>Il contratto viene salvato nella categoria appropriata</li>
+    </ol>
+    <h3>Status Contratti</h3>
+    <ul>
+      <li>🟢 <strong>Attivo:</strong> scadenza &gt; 30 giorni</li>
+      <li>🟠 <strong>In scadenza:</strong> scadenza &lt; 30 giorni</li>
+      <li>🔴 <strong>Scaduto:</strong> data scadenza superata</li>
+    </ul>
+    <div class="warn-box">
+      I contratti sono persistiti nel browser (<code>localStorage</code>). In produzione saranno sincronizzati con il backend.
+    </div>
+  </section>
+
+  <!-- 10. Utenti -->
+  <section class="doc-section" id="utenti">
+    <h2>10. Utenti</h2>
+    <p>Gestione degli accessi al sistema:</p>
+    <ul>
+      <li>Lista utenti con ruolo e stato</li>
+      <li>Filtro per ruolo (Admin / Manager / Operatore)</li>
+      <li>Creazione e modifica utenti (solo Admin)</li>
+      <li>Reset password (solo Admin)</li>
+    </ul>
+    <div class="info-box">
+      Solo gli utenti con ruolo <strong>Admin</strong> vedono la sezione Utenti nel menu.
+    </div>
+  </section>
+
+  <!-- 11. Eccezioni -->
+  <section class="doc-section" id="eccezioni">
+    <h2>11. Eccezioni</h2>
+    <p>Monitoraggio delle anomalie operative:</p>
+    <ul>
+      <li><strong>Priorità Alta:</strong> richiede intervento immediato</li>
+      <li><strong>Priorità Media:</strong> da gestire entro la giornata</li>
+      <li><strong>Priorità Bassa:</strong> segnalazione informativa</li>
+    </ul>
+    <p>Ogni eccezione può essere visualizzata in dettaglio, assegnata a un operatore e risolta (chiusa).</p>
+    <p>Il contatore delle eccezioni aperte appare in rosso nel menu laterale.</p>
+  </section>
+
+  <!-- 12. Report -->
+  <section class="doc-section" id="report">
+    <h2>12. Report</h2>
+    <p>Dashboard reportistica con grafici aggregati:</p>
+    <ul>
+      <li><strong>Spedizioni per periodo:</strong> trend giornaliero/settimanale/mensile</li>
+      <li><strong>Performance filiali:</strong> confronto KPI tra sedi</li>
+      <li><strong>Efficienza flotta:</strong> km percorsi, consumi, CO₂</li>
+      <li><strong>CI medio PUDO:</strong> andamento dell'Indice di Copertura nel tempo</li>
+    </ul>
+  </section>
+
+  <!-- 13. Impostazioni -->
+  <section class="doc-section" id="impostazioni">
+    <h2>13. Impostazioni</h2>
+    <p>Accessibili dall'icona ⚙️ nell'header.</p>
+    <h3>Tab Tutorial</h3>
+    <ul>
+      <li>Abilita/disabilita tutti i tutorial con un toggle</li>
+      <li>Lista dei tutorial disponibili con stato (Attivo / Ignorato)</li>
+      <li>Riabilita singoli tutorial già visti</li>
+      <li>Ripristina tutti i tutorial per rivedere l'onboarding completo</li>
+    </ul>
+    <h3>Tab Interfaccia</h3>
+    <ul>
+      <li><strong>Lingua:</strong> Italiano 🇮🇹 / English 🇬🇧 / Français 🇫🇷 / Deutsch 🇩🇪</li>
+      <li><strong>Dark mode:</strong> segui sistema / chiaro / scuro</li>
+    </ul>
+    <h3>Tab Info</h3>
+    <ul>
+      <li>Versione dell'applicazione</li>
+      <li>Data ultimo aggiornamento</li>
+      <li>Status ambiente (Production Demo)</li>
+    </ul>
+  </section>
+
+  <!-- Note Tecniche -->
+  <section class="doc-section" id="note">
+    <h2>Note Tecniche</h2>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Parametro</th><th>Valore</th></tr></thead>
+        <tbody>
+          <tr><td>Versione</td><td>0.12.0</td></tr>
+          <tr><td>Framework</td><td>React 18.3 + Vite 6.4</td></tr>
+          <tr><td>Mappe</td><td>Leaflet 1.9 + OpenStreetMap</td></tr>
+          <tr><td>Storage</td><td>localStorage (browser)</td></tr>
+          <tr><td>Ottimizzazione</td><td>OptimoRoute API (mock)</td></tr>
+          <tr><td>Estrazione PDF</td><td>AI regex-based (mock)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Chiavi localStorage</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead><tr><th>Chiave</th><th>Contenuto</th></tr></thead>
+        <tbody>
+          <tr><td><code>fp_ct_user</code></td><td>Sessione utente corrente</td></tr>
+          <tr><td><code>fp_ct_user_settings</code></td><td>Preferenze tutorial e interfaccia</td></tr>
+          <tr><td><code>fp_ct_language</code></td><td>Lingua selezionata</td></tr>
+          <tr><td><code>fp_ct_theme</code></td><td>Tema selezionato (light/dark/system)</td></tr>
+          <tr><td><code>fp_ct_menu_state</code></td><td>Stato collapse gruppi sidebar</td></tr>
+          <tr><td><code>fp_ct_contracts</code></td><td>Contratti caricati</td></tr>
+          <tr><td><code>fp_ct_scenario_favorites</code></td><td>ID scenari preferiti</td></tr>
+          <tr><td><code>fp_ct_history</code></td><td>Cronologia modifiche entità</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    Fermopoint Control Tower — Manuale Utente — v0.12.0 — Aggiornato: Aprile 2026 — Documento interno
+  </footer>
+</main>
+
+<script>
+  // IntersectionObserver per highlight sezione attiva nella sidebar
+  const sections = document.querySelectorAll('.doc-section[id]')
+  const navLinks  = document.querySelectorAll('.sidebar-nav a[href^="#"]')
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'))
+        const link = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`)
+        if (link) link.classList.add('active')
+      }
+    })
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 })
+
+  sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>
