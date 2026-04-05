@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentazione Funzionale — Fermopoint Control Tower</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #414042;
+      --red: #DC0032;
+      --bg: #f5f5f7;
+      --white: #ffffff;
+      --gray: #808285;
+      --cool-gray: #e8e8ea;
+      --sidebar-w: 260px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--charcoal);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-logo-badge {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .sidebar-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-logo-brand {
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+    .sidebar-logo-title {
+      font-size: 11px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      padding: 8px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 6px;
+      color: rgba(255,255,255,.6);
+      font-size: 13px;
+      text-decoration: none;
+      transition: background .15s, color .15s;
+    }
+    .sidebar-nav a:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+    .sidebar-nav a.active { background: var(--red); color: #fff; }
+    .sidebar-nav a .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      flex-shrink: 0;
+    }
+    .sidebar-nav a.active .dot { background: rgba(255,255,255,.7); }
+
+    .sidebar-footer {
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      font-size: 11px;
+      color: rgba(255,255,255,.3);
+    }
+
+    /* Sidebar divider and other links */
+    .sidebar-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,.08);
+      margin: 8px 12px;
+    }
+    .sidebar-other-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: 6px;
+      color: rgba(255,255,255,.4); font-size: 12px;
+      text-decoration: none; transition: background .15s, color .15s;
+    }
+    .sidebar-other-link:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.7); }
+    .sidebar-other-link.current-doc {
+      background: rgba(220,0,50,.25);
+      color: rgba(255,255,255,.85);
+      font-weight: 500;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px;
+      max-width: 920px;
+    }
+
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; gap: 12px; flex-wrap: wrap;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--white);
+      border: 1px solid var(--cool-gray);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--charcoal);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background .15s, border-color .15s;
+    }
+    .back-btn:hover { background: var(--bg); border-color: #ccc; }
+
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--charcoal); border: none;
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 13px; color: #fff;
+      cursor: pointer; font-family: var(--font);
+      transition: background .15s;
+    }
+    .pdf-btn:hover { background: #555; }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    .page-subtitle span {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Sections */
+    .doc-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 32px;
+    }
+    .doc-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--red);
+      display: inline-block;
+    }
+    .doc-section h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin: 20px 0 8px;
+    }
+    .doc-section p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+    .doc-section ul, .doc-section ol {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+    .doc-section ul li, .doc-section ol li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+    .doc-section strong { font-weight: 600; }
+
+    /* Inline code */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--red);
+    }
+
+    /* Formula / detail box */
+    .formula-box {
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+    .formula-box table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .formula-box th {
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray);
+      padding: 6px 12px 6px 0;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .formula-box td {
+      font-size: 13px;
+      color: var(--charcoal);
+      padding: 6px 12px 6px 0;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+    .formula-box tr:last-child td { border-bottom: none; }
+
+    /* Info box */
+    .info-box {
+      background: #e3f0fb;
+      border-left: 4px solid #1565C0;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* Warning box */
+    .warn-box {
+      background: #fff8e1;
+      border-left: 4px solid #F9A825;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* Tables */
+    .table-responsive { overflow-x: auto; margin: 16px 0; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .data-table th {
+      background: var(--charcoal);
+      color: #fff;
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--cool-gray);
+      vertical-align: top;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: #fafafa; }
+
+    /* Badge states */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .badge-green  { background: #e8f5e9; color: #2E7D32; }
+    .badge-orange { background: #fff3e0; color: #E65100; }
+    .badge-blue   { background: #e3f0fb; color: #1565C0; }
+    .badge-red    { background: #fde8ec; color: #DC0032; }
+    .badge-gray   { background: #f0f0f0; color: #555; }
+
+    /* Step list */
+    .step-list {
+      counter-reset: step-counter;
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+    }
+    .step-list li {
+      counter-increment: step-counter;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .step-list li::before {
+      content: counter(step-counter);
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* CI threshold indicators */
+    .ci-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--cool-gray);
+      font-size: 14px;
+    }
+    .ci-row:last-child { border-bottom: none; }
+    .ci-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Flow diagram (simple text-based) */
+    .flow-box {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 16px 0;
+    }
+    .flow-step {
+      background: var(--white);
+      border: 1px solid var(--cool-gray);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--charcoal);
+      white-space: nowrap;
+    }
+    .flow-arrow {
+      padding: 0 8px;
+      color: var(--gray);
+      font-size: 16px;
+      font-weight: 300;
+    }
+
+    /* Footer */
+    .page-footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--cool-gray);
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    /* Print */
+    @media print {
+      body { display: block; background: #fff; }
+      .sidebar, .top-bar { display: none !important; }
+      .main { padding: 20px; max-width: 100%; }
+      .doc-section { break-inside: avoid; }
+      .data-table th { background: #414042 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .info-box, .warn-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      a { color: inherit; text-decoration: none; }
+      @page { margin: 2cm 1.5cm; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-badge">FP</div>
+    <div class="sidebar-logo-text">
+      <span class="sidebar-logo-brand">Fermopoint</span>
+      <span class="sidebar-logo-title">Control Tower</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-label">Sezioni</div>
+    <a href="#introduzione" class="active"><span class="dot"></span>Introduzione</a>
+    <a href="#modello"><span class="dot"></span>Modello di Business</a>
+    <a href="#entita"><span class="dot"></span>Entità Principali</a>
+    <a href="#pudo"><span class="dot"></span>PUDO</a>
+    <a href="#spedizioni"><span class="dot"></span>Spedizioni</a>
+    <a href="#giri"><span class="dot"></span>Giri</a>
+    <a href="#scenari"><span class="dot"></span>Scenari di Ottimizzazione</a>
+    <a href="#ci"><span class="dot"></span>Indice di Copertura (CI)</a>
+    <a href="#contratti"><span class="dot"></span>Contratti</a>
+    <a href="#eccezioni"><span class="dot"></span>Eccezioni</a>
+    <a href="#cronologia"><span class="dot"></span>Cronologia Modifiche</a>
+    <a href="#notifiche"><span class="dot"></span>Notifiche</a>
+
+    <hr class="sidebar-divider"/>
+    <div class="sidebar-label">Documenti</div>
+    <a href="/control-tower-demo/manuale.html" class="sidebar-other-link">
+      <span class="dot"></span>Manuale Utente
+    </a>
+    <a href="/control-tower-demo/requisiti.html" class="sidebar-other-link">
+      <span class="dot"></span>Requisiti
+    </a>
+    <a href="/control-tower-demo/funzionale.html" class="sidebar-other-link current-doc">
+      <span class="dot"></span>Doc. Funzionale
+    </a>
+    <a href="/control-tower-demo/tecnica.html" class="sidebar-other-link">
+      <span class="dot"></span>Doc. Tecnica
+    </a>
+    <a href="/control-tower-demo/api.html" class="sidebar-other-link">
+      <span class="dot"></span>API Reference
+    </a>
+    <a href="/control-tower-demo/playbook.html" class="sidebar-other-link">
+      <span class="dot"></span>Playbook Operativo
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">v0.12.0 · Aprile 2026</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+  <div class="top-bar">
+    <button class="back-btn" onclick="history.back() || (window.location='/control-tower-demo/')">
+      &#8592; Torna all'app
+    </button>
+    <button class="pdf-btn" onclick="window.print()">
+      &#11015; Scarica PDF
+    </button>
+  </div>
+
+  <h1 class="page-title">Documentazione Funzionale</h1>
+  <p class="page-subtitle">
+    Fermopoint Control Tower — Specifiche di business
+    <span>v0.12.0</span>
+  </p>
+
+  <!-- ── 1. INTRODUZIONE ── -->
+  <section class="doc-section" id="introduzione">
+    <h2>Introduzione</h2>
+    <p>
+      Questo documento descrive le funzionalità e le regole di business del sistema
+      <strong>Fermopoint Control Tower</strong>. Ha lo scopo di fornire una visione
+      completa e non tecnica del sistema, utile alla comprensione del dominio applicativo
+      e delle logiche operative.
+    </p>
+    <p>
+      Il documento è rivolto a <strong>Product Manager</strong>, <strong>Business Analyst</strong>
+      e <strong>stakeholder business</strong> che necessitano di comprendere come funziona
+      la piattaforma, quali entità gestisce, quali processi supporta e come si traducono
+      le esigenze operative in funzionalità applicative.
+    </p>
+    <div class="info-box">
+      Questo documento non tratta aspetti implementativi o architetturali. Per dettagli
+      tecnici si rimanda alla <a href="/control-tower-demo/tecnica.html">Documentazione Tecnica</a>
+      e all'<a href="/control-tower-demo/api.html">API Reference</a>. Per la guida operativa
+      consultare il <a href="/control-tower-demo/manuale.html">Manuale Utente</a>.
+    </div>
+    <p>
+      I dati presenti nella versione demo sono fittizi e generati a scopo illustrativo.
+      Il documento viene aggiornato a ogni rilascio significativo della piattaforma.
+    </p>
+  </section>
+
+  <!-- ── 2. MODELLO DI BUSINESS ── -->
+  <section class="doc-section" id="modello">
+    <h2>Modello di Business</h2>
+    <p>
+      Fermopoint è una rete di <strong>punti di ritiro e consegna (PUDO)</strong> integrata
+      nel network logistico <strong>DPD Italia</strong>. Il modello di business si basa
+      sull'alternativa alla consegna domiciliare: il destinatario ritira il pacco presso
+      un punto fisico convenzionato (negozio o locker), con flessibilità di orario.
+    </p>
+
+    <h3>Ruolo dei PUDO</h3>
+    <p>
+      I punti PUDO fungono da nodi intermedi nella catena di distribuzione dell'ultimo
+      miglio. Ogni PUDO riceve i colli dalla filiale DPD di competenza e li conserva
+      finché il destinatario non effettua il ritiro. Contestualmente, i PUDO raccolgono
+      le spedizioni in uscita (ritiri) per conto dei mittenti.
+    </p>
+
+    <h3>Flusso della spedizione</h3>
+    <p>
+      Il percorso standard di una spedizione di <strong>consegna</strong> si articola come segue:
+    </p>
+    <div class="flow-box">
+      <span class="flow-step">Mittente</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">Hub DPD</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">Filiale</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">Giro (autista)</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">PUDO</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">Destinatario</span>
+    </div>
+    <p>
+      Per le spedizioni di <strong>ritiro</strong> il flusso è inverso: il mittente
+      deposita il collo al PUDO, l'autista lo raccoglie durante il giro e lo consegna
+      alla filiale per poi essere avviato verso l'hub DPD.
+    </p>
+
+    <h3>Ruolo del Control Tower</h3>
+    <p>
+      Il Control Tower è lo strumento operativo che consente al team Fermopoint di:
+    </p>
+    <ul>
+      <li>Monitorare lo stato della rete PUDO in tempo reale</li>
+      <li>Pianificare e ottimizzare i giri di consegna/ritiro</li>
+      <li>Analizzare le performance operative attraverso l'Indice di Copertura (CI)</li>
+      <li>Gestire i contratti con i PUDO e le filiali</li>
+      <li>Tracciare eccezioni e anomalie operative</li>
+    </ul>
+  </section>
+
+  <!-- ── 3. ENTITÀ PRINCIPALI ── -->
+  <section class="doc-section" id="entita">
+    <h2>Entità Principali</h2>
+    <p>
+      Il sistema gestisce le seguenti entità fondamentali. Ciascuna ha un ciclo di vita
+      proprio e si relaziona con le altre secondo le regole descritte nelle sezioni successive.
+    </p>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Entità</th>
+            <th>Descrizione</th>
+            <th>Attributi chiave</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>PUDO</strong></td>
+            <td>Punto fisico di pickup/delivery (negozio o locker)</td>
+            <td><code>id</code>, <code>tipo</code>, <code>orari</code>, <code>volumeDisponibile</code>, <code>stato</code></td>
+          </tr>
+          <tr>
+            <td><strong>Spedizione</strong></td>
+            <td>Singolo collo in transito associato a un PUDO</td>
+            <td><code>id</code>, <code>tipo</code>, <code>pudoId</code>, <code>peso</code>, <code>priorita</code>, <code>data</code></td>
+          </tr>
+          <tr>
+            <td><strong>Giro</strong></td>
+            <td>Percorso ordinato di tappe effettuato da un autista</td>
+            <td><code>id</code>, <code>filialeId</code>, <code>autista</code>, <code>tappe</code>, <code>stato</code>, <code>data</code></td>
+          </tr>
+          <tr>
+            <td><strong>Scenario</strong></td>
+            <td>Insieme di giri pianificati per una filiale in un periodo</td>
+            <td><code>id</code>, <code>filialeId</code>, <code>periodo</code>, <code>giri</code>, <code>ci</code></td>
+          </tr>
+          <tr>
+            <td><strong>Template</strong></td>
+            <td>Giro salvato come modello riutilizzabile (senza data)</td>
+            <td><code>id</code>, <code>nome</code>, <code>tappe</code>, <code>autistaSuggerito</code></td>
+          </tr>
+          <tr>
+            <td><strong>Filiale</strong></td>
+            <td>Centro operativo DPD/Fermopoint, punto di partenza dei giri</td>
+            <td><code>id</code>, <code>nome</code>, <code>citta</code>, <code>provincia</code>, <code>stato</code></td>
+          </tr>
+          <tr>
+            <td><strong>Contratto</strong></td>
+            <td>Accordo formale con un PUDO o una filiale, gestito via PDF + AI</td>
+            <td><code>id</code>, <code>tipo</code>, <code>entitaId</code>, <code>dataInizio</code>, <code>dataScadenza</code>, <code>stato</code></td>
+          </tr>
+          <tr>
+            <td><strong>Eccezione</strong></td>
+            <td>Anomalia operativa rilevata nel sistema o segnalata manualmente</td>
+            <td><code>id</code>, <code>tipo</code>, <code>priorita</code>, <code>stato</code>, <code>entitaRif</code>, <code>assegnatario</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 4. PUDO ── -->
+  <section class="doc-section" id="pudo">
+    <h2>PUDO</h2>
+    <p>
+      <strong>Pickup and Delivery Point.</strong> Un PUDO è un punto fisico convenzionato
+      dove i colli vengono consegnati ai destinatari o raccolti dai mittenti. Rappresenta
+      il nodo terminale della rete distributiva Fermopoint/DPD.
+    </p>
+
+    <h3>Tipi di PUDO</h3>
+    <ul>
+      <li>
+        <strong>Negozio</strong> — Punto presidiato da personale (es. tabaccheria, farmacia,
+        edicola). Opera secondo orari di apertura definiti, variabili per giorno della
+        settimana. Offre interazione diretta con il cliente finale.
+      </li>
+      <li>
+        <strong>Locker</strong> — Punto automatico con armadietti self-service, attivo
+        24 ore su 24, 7 giorni su 7. Non richiede personale. Accessibile tramite codice
+        o app mobile.
+      </li>
+    </ul>
+
+    <h3>Codice identificativo</h3>
+    <p>
+      Ogni PUDO è identificato da un codice univoco nel formato <code>ITxxxxx</code>:
+      prefisso ISO paese (<code>IT</code>) seguito da 5 cifre numeriche (es. <code>IT10006</code>,
+      <code>IT20143</code>). Il codice è assegnato in fase di onboarding e non cambia
+      per tutta la durata del contratto.
+    </p>
+
+    <h3>Orari di apertura</h3>
+    <p>
+      Gli orari di apertura sono definiti per ciascun giorno della settimana con una o
+      due fasce orarie (apertura mattutina e pomeridiana). Per i locker gli orari non
+      si applicano. Il sistema utilizza gli orari per calcolare le finestre temporali
+      di consegna durante l'ottimizzazione dei giri.
+    </p>
+
+    <h3>Volume disponibile</h3>
+    <p>
+      Ogni PUDO ha una capacità di stoccaggio espressa in <strong>dm³ (litri)</strong>.
+      Il volume disponibile è la differenza tra la capacità totale e il volume delle
+      spedizioni attualmente depositate. Il sistema monitora il volume per evitare
+      sovraccarichi durante la pianificazione.
+    </p>
+
+    <h3>Stati del PUDO</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr><th>Stato</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-green">Attivo</span></td>
+            <td>Il PUDO opera normalmente ed è incluso nella pianificazione dei giri.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-orange">Sospeso</span></td>
+            <td>Il PUDO è temporaneamente inattivo (es. per lavori, ferie). Non viene assegnato a nuovi giri.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gray">Chiuso</span></td>
+            <td>Il PUDO ha cessato l'attività. Il contratto è terminato.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 5. SPEDIZIONI ── -->
+  <section class="doc-section" id="spedizioni">
+    <h2>Spedizioni</h2>
+    <p>
+      Una spedizione rappresenta un <strong>singolo collo</strong> in transito associato
+      a un PUDO specifico. Le spedizioni sono l'unità operativa di base del sistema: da
+      esse derivano il calcolo del CI, la pianificazione dei giri e la valutazione del
+      carico di lavoro.
+    </p>
+
+    <h3>Tipi</h3>
+    <ul>
+      <li><strong>Consegna</strong> — Il collo arriva dalla filiale al PUDO per essere ritirato dal destinatario finale.</li>
+      <li><strong>Ritiro</strong> — Il collo viene raccolto dal PUDO dall'autista e avviato verso la filiale per la spedizione.</li>
+    </ul>
+
+    <h3>Campi principali</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr><th>Campo</th><th>Tipo</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>id</code></td><td>Stringa</td><td>Identificativo univoco (es. <code>FP240001</code>)</td></tr>
+          <tr><td><code>tipo</code></td><td>Enum</td><td><code>consegna</code> | <code>ritiro</code></td></tr>
+          <tr><td><code>pudoId</code></td><td>Stringa</td><td>Codice PUDO di destinazione o origine (es. <code>IT10006</code>)</td></tr>
+          <tr><td><code>destinatario</code></td><td>Stringa</td><td>Nome del destinatario o del mittente</td></tr>
+          <tr><td><code>peso</code></td><td>Numero</td><td>Peso in kg (es. <code>1.5</code>)</td></tr>
+          <tr><td><code>dimensioni</code></td><td>Oggetto</td><td>Larghezza × Altezza × Profondità in cm</td></tr>
+          <tr><td><code>volume</code></td><td>Numero</td><td>Volume in cm³ calcolato come L × H × P (diviso 1000 per ottenere litri)</td></tr>
+          <tr><td><code>priorita</code></td><td>Enum</td><td><code>normal</code> | <code>high</code> — le spedizioni high sono evidenziate nell'UI</td></tr>
+          <tr><td><code>stato</code></td><td>Enum</td><td><code>in_transito</code> | <code>al_pudo</code> | <code>ritirata</code> | <code>anomalia</code></td></tr>
+          <tr><td><code>data</code></td><td>Data</td><td>Data di riferimento della spedizione (formato ISO: <code>YYYY-MM-DD</code>)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Priorità</h3>
+    <p>
+      Le spedizioni con <code>priorita: "high"</code> vengono evidenziate con un indicatore
+      visivo rosso nell'interfaccia. Il sistema le considera prioritarie durante la
+      composizione dei giri, assicurandone la gestione nella stessa giornata.
+    </p>
+
+    <h3>Flusso di importazione</h3>
+    <p>
+      Le spedizioni entrano nel sistema attraverso due canali:
+    </p>
+    <ul>
+      <li>
+        <strong>Sincronizzazione AS/400</strong> — Il sistema si connette al gestionale
+        legacy DPD tramite API e scarica le spedizioni per il periodo e le province
+        selezionate (raggruppate per regione). Supporta finestre storiche di 1, 3, 6
+        o 12 mesi.
+      </li>
+      <li>
+        <strong>Upload file</strong> — L'operatore carica un file CSV o XLSX compilato
+        secondo il template ufficiale scaricabile dall'interfaccia. I campi richiesti
+        sono identici a quelli esposti nel formato API.
+      </li>
+    </ul>
+    <div class="info-box">
+      Entrambi i canali di importazione eseguono il processo in <strong>background</strong>.
+      Una barra di avanzamento mostra il progresso in tempo reale; al completamento viene
+      generata una notifica nel pannello campanella.
+    </div>
+  </section>
+
+  <!-- ── 6. GIRI ── -->
+  <section class="doc-section" id="giri">
+    <h2>Giri</h2>
+    <p>
+      Un giro è un <strong>percorso ottimizzato</strong> effettuato da un autista con un
+      mezzo specifico, che parte dal deposito della filiale, visita una sequenza ordinata
+      di PUDO (tappe) e torna al punto di partenza.
+    </p>
+
+    <h3>Composizione</h3>
+    <p>
+      Ogni giro include:
+    </p>
+    <ul>
+      <li>Una <strong>filiale</strong> di appartenenza (punto di partenza e arrivo)</li>
+      <li>Un <strong>autista</strong> assegnato con veicolo</li>
+      <li>Una <strong>sequenza ordinata di tappe</strong> (PUDO) con orari di passaggio pianificati</li>
+      <li>Una <strong>data</strong> di esecuzione pianificata</li>
+      <li>Il <strong>carico totale</strong> stimato in volume (dm³) e numero di colli</li>
+    </ul>
+    <p>
+      L'ordine delle tappe è calcolato dall'ottimizzatore OptimoRoute tenendo conto
+      delle finestre orarie dei PUDO, della distanza e delle capacità del mezzo.
+    </p>
+
+    <h3>Stati del giro</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr><th>Stato</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-blue">Pianificato</span></td>
+            <td>Il giro è programmato ma non ancora avviato. Modificabile dall'operatore.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-orange">In corso</span></td>
+            <td>L'autista ha avviato il giro. Il tracciamento GPS è attivo.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-green">Completato</span></td>
+            <td>Il giro è terminato con successo. Tutte le tappe sono state servite.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">Annullato</span></td>
+            <td>Il giro è stato cancellato prima o durante l'esecuzione.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Relazione con filiale e autista</h3>
+    <p>
+      Ogni giro appartiene a <strong>una sola filiale</strong>. L'autista è assegnato
+      al giro al momento della pianificazione e può essere modificato finché il giro
+      è nello stato <em>Pianificato</em>. Un autista può essere assegnato a un solo
+      giro attivo per giornata.
+    </p>
+
+    <div class="warn-box">
+      I giri nello stato <strong>Completato</strong> o <strong>Annullato</strong> sono
+      immutabili. Qualsiasi modifica successiva genera automaticamente una voce nella
+      <a href="#cronologia">Cronologia Modifiche</a>.
+    </div>
+  </section>
+
+  <!-- ── 7. SCENARI ── -->
+  <section class="doc-section" id="scenari">
+    <h2>Scenari di Ottimizzazione</h2>
+    <p>
+      Uno scenario rappresenta l'<strong>insieme di tutti i giri pianificati per una
+      filiale</strong> in un determinato periodo operativo. Costituisce la "fotografia"
+      completa della pianificazione logistica di una filiale.
+    </p>
+
+    <h3>Wizard di creazione a 5 passi</h3>
+    <p>
+      La creazione di un nuovo scenario avviene attraverso un wizard guidato in 5 step:
+    </p>
+    <ol class="step-list">
+      <li>
+        <div>
+          <strong>Filiale e periodo</strong> — Selezione della filiale di riferimento e
+          dell'intervallo di date per il quale si vuole ottimizzare la pianificazione.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Selezione PUDO</strong> — Scelta dei PUDO da includere nello scenario.
+          Il sistema suggerisce automaticamente i PUDO con CI più alto (vedi
+          <a href="#ci">Indice di Copertura</a>) per massimizzare l'efficienza operativa.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Parametri OptimoRoute</strong> — Configurazione dei parametri per
+          l'ottimizzatore: numero massimo di giri, capacità veicoli, finestre orarie,
+          vincoli di priorità per le spedizioni urgenti.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Riepilogo e conferma</strong> — Visualizzazione del riepilogo con
+          stima del numero di giri, PUDO totali e CI atteso dello scenario prima
+          dell'avvio dell'ottimizzazione.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Output e revisione</strong> — Visualizzazione dei giri ottimizzati
+          generati da OptimoRoute, con possibilità di modifiche manuali prima della
+          conferma definitiva.
+        </div>
+      </li>
+    </ol>
+
+    <h3>Parametri OptimoRoute</h3>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Parametro</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>maxGiri</code></td><td>Numero massimo di giri da generare per la filiale</td></tr>
+          <tr><td><code>capacitaVeicolo</code></td><td>Capacità massima in dm³ per ciascun mezzo</td></tr>
+          <tr><td><code>finestreOrarie</code></td><td>Rispetto delle finestre di apertura dei PUDO negozio</td></tr>
+          <tr><td><code>prioritaHigh</code></td><td>Garanzia di inclusione delle spedizioni ad alta priorità</td></tr>
+          <tr><td><code>puntoPartenza</code></td><td>Coordinate geografiche della filiale (lat/lng)</td></tr>
+          <tr><td><code>bilanciamentoCarico</code></td><td>Distribuzione equilibrata del carico tra i giri</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>CI come criterio di selezione PUDO</h3>
+    <p>
+      In fase di selezione PUDO (step 2), il sistema ordina i punti per CI decrescente
+      e pre-seleziona quelli con valore superiore alla soglia configurata. L'operatore
+      può modificare manualmente la selezione prima di procedere.
+    </p>
+
+    <h3>Output dello scenario</h3>
+    <p>
+      Al termine dell'ottimizzazione lo scenario restituisce:
+    </p>
+    <ul>
+      <li>Lista dei giri ottimizzati con tappe ordinate e orari stimati</li>
+      <li>CI calcolato per ciascun giro e per l'intero scenario</li>
+      <li>Mappa interattiva con visualizzazione dei percorsi</li>
+      <li>Riepilogo di copertura (PUDO serviti / PUDO totali filiale)</li>
+    </ul>
+  </section>
+
+  <!-- ── 8. CI ── -->
+  <section class="doc-section" id="ci">
+    <h2>Indice di Copertura (CI)</h2>
+    <p>
+      Il <strong>Consolidation Index (CI)</strong> è l'indicatore chiave di performance
+      operativa del sistema. Misura l'intensità media giornaliera delle spedizioni gestite,
+      ed è calcolabile a tre livelli gerarchici: PUDO, Giro, Scenario.
+    </p>
+
+    <h3>Formula di calcolo</h3>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Livello</th><th>Formula</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>CI di un PUDO</strong></td>
+            <td>Numero totale di spedizioni nel periodo &divide; numero di giorni del periodo</td>
+          </tr>
+          <tr>
+            <td><strong>CI di un Giro</strong></td>
+            <td>Media aritmetica del CI di tutti i PUDO che compongono il giro</td>
+          </tr>
+          <tr>
+            <td><strong>CI di uno Scenario</strong></td>
+            <td>Media aritmetica del CI di tutti i PUDO unici dei giri dello scenario</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Soglie di classificazione</h3>
+    <div style="margin: 16px 0;">
+      <div class="ci-row">
+        <div class="ci-dot" style="background:#2E7D32;"></div>
+        <div><strong style="color:#2E7D32">CI &ge; 4.0 — Alta intensit&agrave;</strong><br>
+          <span style="font-size:13px;color:var(--gray)">PUDO ad alta frequentazione, prioritario nella pianificazione. Indicatore verde nell'interfaccia.</span>
+        </div>
+      </div>
+      <div class="ci-row">
+        <div class="ci-dot" style="background:#E65100;"></div>
+        <div><strong style="color:#E65100">CI 2.5 &ndash; 3.9 — Media intensit&agrave;</strong><br>
+          <span style="font-size:13px;color:var(--gray)">PUDO con volume operativo nella norma. Indicatore arancione nell'interfaccia.</span>
+        </div>
+      </div>
+      <div class="ci-row">
+        <div class="ci-dot" style="background:#1565C0;"></div>
+        <div><strong style="color:#1565C0">CI &lt; 2.5 — Bassa intensit&agrave;</strong><br>
+          <span style="font-size:13px;color:var(--gray)">PUDO con volumi ridotti, potenzialmente da rivalutare nel network. Indicatore blu nell'interfaccia.</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Dinamicità per periodo</h3>
+    <p>
+      Il CI è un indicatore <strong>dinamico</strong>: il suo valore varia al variare
+      della finestra temporale di analisi selezionata dall'utente (7, 14 o 30 giorni).
+    </p>
+    <p>
+      Periodi più brevi tendono a produrre valori leggermente più elevati per effetto
+      della volatilità a breve termine (un fattore moltiplicativo correttivo viene
+      applicato automaticamente per normalizzare i valori). Confrontare CI calcolati
+      su periodi diversi può essere fuorviante: assicurarsi sempre di usare la stessa
+      finestra temporale per valutazioni comparative.
+    </p>
+    <div class="info-box">
+      Il CI non misura la qualit&agrave; del servizio n&eacute; la soddisfazione del cliente finale.
+      &Egrave; uno strumento di pianificazione operativa per identificare i PUDO pi&ugrave; rilevanti
+      e ottimizzare la distribuzione dei giri.
+    </div>
+  </section>
+
+  <!-- ── 9. CONTRATTI ── -->
+  <section class="doc-section" id="contratti">
+    <h2>Contratti</h2>
+    <p>
+      Il modulo Contratti gestisce gli accordi formali tra Fermopoint e i soggetti
+      convenzionati (PUDO, filiali, partner). Ogni contratto ha un ciclo di vita
+      tracciato dal sistema e viene estratto automaticamente da PDF tramite intelligenza
+      artificiale.
+    </p>
+
+    <h3>Categorie di contratto</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr><th>Categoria</th><th>Descrizione</th><th>Entit&agrave; collegata</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Contratto PUDO</strong></td>
+            <td>Accordo con il titolare del punto pickup/delivery per l'adesione alla rete Fermopoint</td>
+            <td>PUDO</td>
+          </tr>
+          <tr>
+            <td><strong>Contratto Filiale</strong></td>
+            <td>Accordo operativo con la filiale DPD per la gestione dei giri e dei flussi logistici</td>
+            <td>Filiale</td>
+          </tr>
+          <tr>
+            <td><strong>Contratto Partner</strong></td>
+            <td>Accordi con fornitori di servizi ausiliari (es. software, manutenzione locker)</td>
+            <td>Partner esterno</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Processo di upload e estrazione AI</h3>
+    <ol class="step-list">
+      <li>
+        <div>L'operatore carica il PDF del contratto firmato tramite il modulo di upload.</div>
+      </li>
+      <li>
+        <div>Il sistema invia il documento al motore di estrazione AI, che analizza il testo
+        e identifica i campi strutturati (parti, date, importi, clausole chiave).</div>
+      </li>
+      <li>
+        <div>I dati estratti vengono presentati all'operatore per revisione e correzione
+        manuale prima della conferma.</div>
+      </li>
+      <li>
+        <div>Dopo la conferma il contratto viene archiviato nel sistema e il monitoraggio
+        della scadenza viene attivato automaticamente.</div>
+      </li>
+    </ol>
+
+    <h3>Campi estratti dall'AI</h3>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Campo</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>parti</code></td><td>Nominativi e dati delle parti contraenti</td></tr>
+          <tr><td><code>dataInizio</code></td><td>Data di decorrenza del contratto</td></tr>
+          <tr><td><code>dataScadenza</code></td><td>Data di termine o rinnovo</td></tr>
+          <tr><td><code>importo</code></td><td>Valore economico del contratto (se presente)</td></tr>
+          <tr><td><code>tipoContratto</code></td><td>Categoria automaticamente classificata dall'AI</td></tr>
+          <tr><td><code>clausoleChiave</code></td><td>Estratto delle clausole principali in linguaggio naturale</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Stati del contratto</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr><th>Stato</th><th>Descrizione</th><th>Trigger</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-green">Attivo</span></td>
+            <td>Contratto in vigore entro la data di scadenza</td>
+            <td>Confermato dopo upload e revisione</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-orange">In scadenza</span></td>
+            <td>Contratto che scade entro i prossimi 30 giorni</td>
+            <td>Automatico: 30 giorni prima della scadenza</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">Scaduto</span></td>
+            <td>Contratto oltre la data di scadenza senza rinnovo</td>
+            <td>Automatico: giorno successivo alla scadenza</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 10. ECCEZIONI ── -->
+  <section class="doc-section" id="eccezioni">
+    <h2>Eccezioni</h2>
+    <p>
+      Il modulo Eccezioni gestisce le <strong>anomalie operative</strong> rilevate
+      automaticamente dal sistema o segnalate manualmente dagli operatori. Ogni eccezione
+      ha un ciclo di vita tracciato dalla segnalazione alla risoluzione.
+    </p>
+
+    <h3>Tipi di anomalie</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr><th>Tipo</th><th>Descrizione</th><th>Entit&agrave; coinvolta</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>PUDO Irraggiungibile</strong></td>
+            <td>Il PUDO non ha risposto durante un giro o risulta chiuso in orario previsto</td>
+            <td>PUDO, Giro</td>
+          </tr>
+          <tr>
+            <td><strong>Capacità Superata</strong></td>
+            <td>Il volume delle spedizioni supera la capacità dichiarata del PUDO</td>
+            <td>PUDO, Spedizione</td>
+          </tr>
+          <tr>
+            <td><strong>Giro Non Completato</strong></td>
+            <td>Un giro è stato interrotto prima di servire tutte le tappe pianificate</td>
+            <td>Giro</td>
+          </tr>
+          <tr>
+            <td><strong>Contratto in Scadenza</strong></td>
+            <td>Un contratto si avvicina alla data di scadenza senza segnali di rinnovo</td>
+            <td>Contratto</td>
+          </tr>
+          <tr>
+            <td><strong>Anomalia Spedizione</strong></td>
+            <td>Una spedizione risulta bloccata, danneggiata o con dati inconsistenti</td>
+            <td>Spedizione</td>
+          </tr>
+          <tr>
+            <td><strong>Segnalazione Manuale</strong></td>
+            <td>Eccezione inserita direttamente da un operatore per situazioni non previste</td>
+            <td>Qualsiasi</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Priorità</h3>
+    <ul>
+      <li><span class="badge badge-red">Critica</span> — Richiede intervento immediato (entro 2 ore)</li>
+      <li><span class="badge badge-orange">Alta</span> — Da gestire nella stessa giornata</li>
+      <li><span class="badge badge-blue">Media</span> — Da gestire entro 48 ore</li>
+      <li><span class="badge badge-gray">Bassa</span> — Informativa, nessuna urgenza operativa</li>
+    </ul>
+
+    <h3>Ciclo di vita</h3>
+    <div class="flow-box">
+      <span class="flow-step">Aperta</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">Assegnata</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">In lavorazione</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">Risolta</span>
+    </div>
+    <div class="table-responsive" style="margin-top:12px;">
+      <table class="data-table">
+        <thead>
+          <tr><th>Stato</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-red">Aperta</span></td>
+            <td>Eccezione rilevata o segnalata, non ancora presa in carico da nessun operatore.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-orange">Assegnata</span></td>
+            <td>L'eccezione è stata assegnata a un operatore responsabile della risoluzione.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-blue">In lavorazione</span></td>
+            <td>L'operatore ha preso in carico e sta attivamente lavorando alla risoluzione.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-green">Risolta</span></td>
+            <td>L'eccezione è stata risolta. Viene registrata la nota di chiusura e la data.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 11. CRONOLOGIA MODIFICHE ── -->
+  <section class="doc-section" id="cronologia">
+    <h2>Cronologia Modifiche</h2>
+    <p>
+      Il sistema mantiene un <strong>audit log automatico</strong> per le entità principali.
+      Ogni modifica significativa viene registrata con le informazioni necessarie per
+      garantire tracciabilità completa e accountability operativa.
+    </p>
+
+    <h3>Entità tracciate</h3>
+    <ul>
+      <li><strong>Giri</strong> — creazione, modifica tappe, cambio autista, cambio stato, annullamento</li>
+      <li><strong>PUDO</strong> — modifica orari, cambio stato, aggiornamento volume, modifica contratto associato</li>
+      <li><strong>Filiali</strong> — modifica dati anagrafici, cambio stato, assegnazione nuovi giri</li>
+      <li><strong>Contratti</strong> — upload, revisione dati AI, cambio stato, rinnovo</li>
+      <li><strong>Scenari</strong> — creazione, modifica configurazione, approvazione, archiviazione</li>
+    </ul>
+
+    <h3>Campi registrati per ogni voce</h3>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Campo</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>timestamp</code></td><td>Data e ora esatta della modifica (UTC)</td></tr>
+          <tr><td><code>utente</code></td><td>Identificativo dell'operatore che ha effettuato la modifica</td></tr>
+          <tr><td><code>azione</code></td><td>Tipo di operazione (creazione, aggiornamento, eliminazione, cambio stato)</td></tr>
+          <tr><td><code>entita</code></td><td>Tipo di entità modificata e suo ID</td></tr>
+          <tr><td><code>campiModificati</code></td><td>Lista dei campi modificati con valore precedente e nuovo</td></tr>
+          <tr><td><code>nota</code></td><td>Nota opzionale inserita dall'operatore al momento della modifica</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Accesso alla cronologia</h3>
+    <p>
+      La cronologia è accessibile dal <strong>tab "Cronologia"</strong> presente nel
+      pannello di dettaglio di ogni entità (giro, PUDO, filiale, contratto). Le voci
+      sono ordinate in ordine cronologico inverso (dalla più recente). Non è possibile
+      modificare o eliminare le voci del log.
+    </p>
+    <div class="info-box">
+      L'audit log &egrave; disponibile in sola lettura. In futuro sar&agrave; possibile esportare la
+      cronologia in formato CSV per analisi esterne o audit di conformit&agrave;.
+    </div>
+  </section>
+
+  <!-- ── 12. NOTIFICHE ── -->
+  <section class="doc-section" id="notifiche">
+    <h2>Notifiche</h2>
+    <p>
+      Il Control Tower include un <strong>sistema di notifiche in-app</strong> accessibile
+      tramite l'icona campanella nella barra superiore dell'interfaccia. Il badge rosso
+      indica il numero di notifiche non lette.
+    </p>
+
+    <h3>Tipi di notifica</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr><th>Tipo</th><th>Icona</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-green">Successo</span></td>
+            <td>&#10003;</td>
+            <td>Operazione completata correttamente (es. importazione spedizioni riuscita, giro creato)</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-orange">Avviso</span></td>
+            <td>&#9888;</td>
+            <td>Situazione da monitorare che non richiede intervento immediato (es. PUDO prossimo al limite di capacit&agrave;)</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-blue">Info</span></td>
+            <td>&#8505;</td>
+            <td>Aggiornamento informativo senza azione richiesta (es. sincronizzazione AS/400 avviata)</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">Errore</span></td>
+            <td>&#10005;</td>
+            <td>Operazione fallita che richiede attenzione (es. upload file non valido, timeout connessione AS/400)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Trigger automatici</h3>
+    <ul>
+      <li>Completamento importazione spedizioni (via API o file upload)</li>
+      <li>Completamento ottimizzazione scenario OptimoRoute</li>
+      <li>Contratto entrato in stato "In scadenza" (30 giorni alla scadenza)</li>
+      <li>Nuova eccezione critica rilevata automaticamente</li>
+      <li>Giro completato o annullato dall'autista</li>
+      <li>Errore di sincronizzazione con sistemi esterni</li>
+    </ul>
+
+    <h3>Gestione lettura ed eliminazione</h3>
+    <p>
+      Ogni notifica può essere:
+    </p>
+    <ul>
+      <li><strong>Letta singolarmente</strong> — cliccando sulla notifica nel pannello campanella</li>
+      <li><strong>Marcata come letta</strong> — tramite il pulsante "Segna tutte come lette"</li>
+      <li><strong>Eliminata</strong> — tramite il pulsante &times; su singola notifica</li>
+    </ul>
+    <p>
+      Le notifiche non lette vengono conteggiate nel badge rosso sull'icona campanella.
+      Le notifiche di tipo <em>Errore</em> rimangono visibili finché non vengono esplicitamente
+      eliminate, indipendentemente dallo stato di lettura.
+    </p>
+  </section>
+
+  <footer class="page-footer">
+    Fermopoint Control Tower &mdash; Documentazione Funzionale &mdash; v0.12.0 &mdash; Aprile 2026
+  </footer>
+</main>
+
+<script>
+  // IntersectionObserver per highlight sezione attiva nella sidebar
+  const sections = document.querySelectorAll('.doc-section[id]');
+  const navLinks  = document.querySelectorAll('.sidebar-nav a[href^="#"]');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const link = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -65% 0px', threshold: 0 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

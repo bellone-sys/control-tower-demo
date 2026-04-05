@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentazione Tecnica — Fermopoint Control Tower</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #414042;
+      --red: #DC0032;
+      --bg: #f5f5f7;
+      --white: #ffffff;
+      --gray: #808285;
+      --cool-gray: #e8e8ea;
+      --sidebar-w: 260px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--charcoal);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SKIP LINK (accessibilità) ── */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--red);
+      color: #fff;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 0 0 6px 0;
+      text-decoration: none;
+      z-index: 1000;
+      transition: top .15s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-logo-badge {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .sidebar-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-logo-brand {
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+    .sidebar-logo-title {
+      font-size: 11px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      padding: 8px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 6px;
+      color: rgba(255,255,255,.6);
+      font-size: 13px;
+      text-decoration: none;
+      transition: background .15s, color .15s;
+    }
+    .sidebar-nav a:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+    .sidebar-nav a.active { background: var(--red); color: #fff; }
+    .sidebar-nav a .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      flex-shrink: 0;
+    }
+    .sidebar-nav a.active .dot { background: rgba(255,255,255,.7); }
+
+    .sidebar-footer {
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      font-size: 11px;
+      color: rgba(255,255,255,.3);
+    }
+
+    /* Sidebar other links */
+    .sidebar-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,.08);
+      margin: 8px 12px;
+    }
+    .sidebar-other-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: 6px;
+      color: rgba(255,255,255,.4); font-size: 12px;
+      text-decoration: none; transition: background .15s, color .15s;
+    }
+    .sidebar-other-link:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.7); }
+    .sidebar-other-link.current {
+      background: rgba(255,255,255,.7);
+      color: var(--charcoal);
+      font-weight: 600;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px;
+      max-width: 920px;
+    }
+
+    /* Top bar */
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; gap: 12px; flex-wrap: wrap;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--white);
+      border: 1px solid var(--cool-gray);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--charcoal);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background .15s, border-color .15s;
+    }
+    .back-btn:hover { background: var(--bg); border-color: #ccc; }
+    .back-btn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--charcoal); border: none;
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 13px; color: #fff;
+      cursor: pointer; font-family: var(--font);
+      transition: background .15s;
+    }
+    .pdf-btn:hover { background: #555; }
+    .pdf-btn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    .page-subtitle span {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Sections */
+    .doc-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 32px;
+    }
+    .doc-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--red);
+      display: inline-block;
+    }
+    .doc-section p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+    .doc-section ul {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+    .doc-section ul li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+    .doc-section strong { font-weight: 600; }
+
+    /* Inline code */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--red);
+    }
+
+    /* Code blocks */
+    pre {
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin: 16px 0;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #333;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* Formula/info boxes */
+    .formula-box {
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+    .formula-box table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .formula-box th {
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray);
+      padding: 6px 12px 6px 0;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .formula-box td {
+      font-size: 13px;
+      color: var(--charcoal);
+      padding: 6px 12px 6px 0;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+    .formula-box tr:last-child td { border-bottom: none; }
+
+    /* Info box */
+    .info-box {
+      background: #e3f0fb;
+      border-left: 4px solid #1565C0;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* Warning box */
+    .warn-box {
+      background: #fff8e1;
+      border-left: 4px solid #F9A825;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* Data tables */
+    .table-responsive { overflow-x: auto; margin: 16px 0; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .data-table th {
+      background: var(--charcoal);
+      color: #fff;
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--cool-gray);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: #fafafa; }
+
+    /* Token grid (CSS tokens table) */
+    .token-swatch {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,0,0,.15);
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    /* Sub-heading h3 */
+    .doc-section h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin: 24px 0 8px;
+    }
+
+    /* Footer */
+    .page-footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--cool-gray);
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    /* Print */
+    @media print {
+      body { display: block; background: #fff; }
+      .sidebar, .top-bar, .skip-link { display: none !important; }
+      .main { padding: 20px; max-width: 100%; }
+      .doc-section { break-inside: avoid; }
+      .data-table th { background: #414042 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .info-box, .warn-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      pre { white-space: pre-wrap; }
+      a { color: inherit; text-decoration: none; }
+      @page { margin: 2cm 1.5cm; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar" aria-label="Navigazione documentazione">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-badge" aria-hidden="true">FP</div>
+    <div class="sidebar-logo-text">
+      <span class="sidebar-logo-brand">Fermopoint</span>
+      <span class="sidebar-logo-title">Control Tower</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav" aria-label="Sezioni documento" role="navigation">
+    <div class="sidebar-label">Sezioni</div>
+    <a href="#stack"           class="active"><span class="dot" aria-hidden="true"></span>Stack Tecnologico</a>
+    <a href="#architettura">   <span class="dot" aria-hidden="true"></span>Architettura</a>
+    <a href="#context">        <span class="dot" aria-hidden="true"></span>Context API</a>
+    <a href="#tema">           <span class="dot" aria-hidden="true"></span>Gestione del Tema</a>
+    <a href="#i18n">           <span class="dot" aria-hidden="true"></span>Internazionalizzazione</a>
+    <a href="#services">       <span class="dot" aria-hidden="true"></span>Service Layer</a>
+    <a href="#modelli">        <span class="dot" aria-hidden="true"></span>Modelli Dati</a>
+    <a href="#storage">        <span class="dot" aria-hidden="true"></span>Persistenza localStorage</a>
+    <a href="#csv">            <span class="dot" aria-hidden="true"></span>Importazione CSV</a>
+    <a href="#accessibilita">  <span class="dot" aria-hidden="true"></span>Accessibilità WCAG 2.1</a>
+    <a href="#build">          <span class="dot" aria-hidden="true"></span>Build e Deploy</a>
+
+    <hr class="sidebar-divider" aria-hidden="true"/>
+    <div class="sidebar-label">Documenti</div>
+    <a href="/control-tower-demo/manuale.html"      class="sidebar-other-link"><span class="dot" aria-hidden="true"></span>Manuale Utente</a>
+    <a href="/control-tower-demo/requisiti.html"    class="sidebar-other-link"><span class="dot" aria-hidden="true"></span>Requisiti</a>
+    <a href="/control-tower-demo/funzionale.html"   class="sidebar-other-link"><span class="dot" aria-hidden="true"></span>Doc. Funzionale</a>
+    <a href="/control-tower-demo/tecnica.html"      class="sidebar-other-link current" aria-current="page"><span class="dot" aria-hidden="true"></span>Doc. Tecnica</a>
+    <a href="/control-tower-demo/api.html"          class="sidebar-other-link"><span class="dot" aria-hidden="true"></span>API Reference</a>
+    <a href="/control-tower-demo/playbook.html"     class="sidebar-other-link"><span class="dot" aria-hidden="true"></span>Playbook Operativo</a>
+  </nav>
+
+  <div class="sidebar-footer">v0.12.0 · Aprile 2026</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main" id="main-content">
+  <div class="top-bar">
+    <button class="back-btn" onclick="history.length > 1 ? history.back() : (window.location='/control-tower-demo/')">
+      ← Torna all'app
+    </button>
+    <button class="pdf-btn" onclick="window.print()" aria-label="Scarica documento in formato PDF">
+      ⬇ Scarica PDF
+    </button>
+  </div>
+
+  <h1 class="page-title">Documentazione Tecnica</h1>
+  <p class="page-subtitle">
+    Fermopoint Control Tower — Architettura &amp; Implementazione
+    <span>v0.12.0</span>
+  </p>
+
+  <!-- ── 1. STACK TECNOLOGICO ── -->
+  <section class="doc-section" id="stack">
+    <h2>Stack Tecnologico</h2>
+    <p>
+      Il frontend del Control Tower è una Single Page Application costruita interamente
+      con tecnologie web standard. Non sono presenti backend proprietari: tutta la logica
+      risiede nel browser e i dati persistono in <code>localStorage</code>.
+    </p>
+    <div class="table-responsive">
+      <table class="data-table" aria-label="Stack tecnologico">
+        <thead>
+          <tr>
+            <th>Libreria / Strumento</th>
+            <th>Versione</th>
+            <th>Ruolo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>React</strong></td>
+            <td><code>18.3</code></td>
+            <td>UI framework — rendering dichiarativo, gestione stato con hook e Context API</td>
+          </tr>
+          <tr>
+            <td><strong>Vite</strong></td>
+            <td><code>6.4</code></td>
+            <td>Build tool e dev server — HMR, tree-shaking, bundling ottimizzato per produzione</td>
+          </tr>
+          <tr>
+            <td><strong>Leaflet</strong></td>
+            <td><code>1.9</code></td>
+            <td>Libreria mappe interattive — rendering tile OpenStreetMap, marker, polyline</td>
+          </tr>
+          <tr>
+            <td><strong>React-Leaflet</strong></td>
+            <td><code>4.x</code></td>
+            <td>Wrapper React per Leaflet — componenti dichiarativi <code>MapContainer</code>, <code>Marker</code>, <code>Polyline</code></td>
+          </tr>
+          <tr>
+            <td><strong>CSS Custom Properties</strong></td>
+            <td>—</td>
+            <td>Sistema di token semantici per temi light/dark; nessun CSS-in-JS né preprocessore</td>
+          </tr>
+          <tr>
+            <td><strong>localStorage</strong></td>
+            <td>Web API</td>
+            <td>Persistenza client-side per preferenze utente, lingua, tema, storico eventi e contratti</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-box">
+      Nessuna dipendenza da framework di routing esterni: la navigazione tra le viste avviene
+      tramite stato React (variabile <code>activeView</code> nel contesto applicativo principale).
+    </div>
+  </section>
+
+  <!-- ── 2. ARCHITETTURA APPLICATIVA ── -->
+  <section class="doc-section" id="architettura">
+    <h2>Architettura Applicativa</h2>
+    <p>
+      Il Control Tower è una <strong>SPA React</strong> pura, senza server-side rendering.
+      L'intera applicazione viene servita da un unico file <code>index.html</code> generato
+      da Vite. La struttura delle cartelle segue una separazione per responsabilità:
+    </p>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Cartella</th><th>Contenuto</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>src/components/</code></td><td>Componenti React riutilizzabili (Card, Modal, Map, TabPanel, ecc.)</td></tr>
+          <tr><td><code>src/contexts/</code></td><td>Provider React Context: ThemeContext, I18nContext, TutorialContext</td></tr>
+          <tr><td><code>src/services/</code></td><td>Service layer puro (nessun React): historyService, storageService</td></tr>
+          <tr><td><code>src/data/</code></td><td>Stub data statici per demo: PUDO, filiali, giri, spedizioni, drivers</td></tr>
+          <tr><td><code>src/pages/</code></td><td>Viste principali dell'app (Overview, Giri, Spedizioni, Scenari, PUDO, ecc.)</td></tr>
+          <tr><td><code>public/docs/</code></td><td>Documentazione HTML statica (glossario, manuale, tecnica, ecc.)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Pattern architetturali</h3>
+    <ul>
+      <li><strong>Context API</strong> — stato globale (tema, lingua, tutorial) condiviso via React Context senza Redux o altre librerie di stato.</li>
+      <li><strong>Service layer</strong> — funzioni pure che incapsulano la logica di accesso a <code>localStorage</code> e la normalizzazione dei dati, separando le responsabilità dal layer UI.</li>
+      <li><strong>Stub data</strong> — tutti i dati operativi (PUDO, giri, spedizioni) sono definiti in file <code>.js</code> statici in <code>src/data/</code>. Sostituibili con chiamate API reali senza modificare i componenti.</li>
+      <li><strong>Componenti controllati</strong> — form e filtri utilizzano pattern controlled component per mantenere lo stato in React.</li>
+    </ul>
+    <div class="warn-box">
+      La demo non include autenticazione reale. Il modulo di login è puramente client-side
+      e non deve essere utilizzato in ambienti di produzione senza integrare un Identity Provider.
+    </div>
+  </section>
+
+  <!-- ── 3. CONTEXT API ── -->
+  <section class="doc-section" id="context">
+    <h2>Context API</h2>
+    <p>
+      L'applicazione utilizza tre context React globali, ciascuno con il proprio Provider
+      e hook personalizzato. Tutti i Provider sono annidati nel componente radice <code>App.jsx</code>.
+    </p>
+    <div class="table-responsive">
+      <table class="data-table" aria-label="Context API React">
+        <thead>
+          <tr>
+            <th>Context</th>
+            <th>Stato gestito</th>
+            <th>Hook esposto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ThemeContext</strong></td>
+            <td>Preferenza tema: <code>light</code> | <code>dark</code> | <code>system</code>; tema effettivo risolto (<code>light</code> / <code>dark</code>)</td>
+            <td><code>useTheme()</code> → <code>{ theme, preference, setPreference }</code></td>
+          </tr>
+          <tr>
+            <td><strong>I18nContext</strong></td>
+            <td>Lingua corrente (<code>it</code> | <code>en</code> | <code>fr</code> | <code>de</code>); dizionari di traduzione; funzione di traduzione</td>
+            <td><code>useI18n()</code> → <code>{ lang, setLang, t }</code></td>
+          </tr>
+          <tr>
+            <td><strong>TutorialContext</strong></td>
+            <td>Step tutorial corrente, stato completamento per sezione, flag tutorial attivo</td>
+            <td><code>useTutorial()</code> → <code>{ step, isActive, nextStep, resetTutorial }</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      I context sono indipendenti tra loro: non esiste dipendenza diretta fra
+      <code>ThemeContext</code> e <code>I18nContext</code>. L'ordine di annidamento
+      nel Provider tree non ha rilevanza funzionale.
+    </p>
+  </section>
+
+  <!-- ── 4. GESTIONE DEL TEMA ── -->
+  <section class="doc-section" id="tema">
+    <h2>Gestione del Tema</h2>
+    <p>
+      Il sistema di theming è basato interamente su <strong>CSS Custom Properties</strong>
+      applicate all'elemento <code>document.documentElement</code> tramite l'attributo
+      <code>data-theme</code>. Non viene generato CSS dinamico a runtime.
+    </p>
+    <h3>Flusso di inizializzazione (ThemeProvider)</h3>
+    <ol style="padding-left:20px; margin-bottom:12px;">
+      <li style="font-size:14px; line-height:1.7; margin-bottom:4px;">Lettura preferenza da <code>localStorage</code> (chiave <code>fp_ct_theme</code>); default: <code>system</code>.</li>
+      <li style="font-size:14px; line-height:1.7; margin-bottom:4px;">Se preferenza = <code>system</code>, risolve il tema effettivo tramite <code>window.matchMedia('(prefers-color-scheme: dark)')</code>.</li>
+      <li style="font-size:14px; line-height:1.7; margin-bottom:4px;">Imposta <code>document.documentElement.setAttribute('data-theme', resolvedTheme)</code>.</li>
+      <li style="font-size:14px; line-height:1.7; margin-bottom:4px;">Aggiunge listener <code>MediaQueryList.addEventListener('change', ...)</code> per aggiornare automaticamente il tema quando l'utente cambia le preferenze OS.</li>
+    </ol>
+    <h3>Token CSS semantici</h3>
+    <div class="table-responsive">
+      <table class="data-table" aria-label="Token CSS tema">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Valore Light</th>
+            <th>Valore Dark</th>
+            <th>Utilizzo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--color-bg</code></td>
+            <td><span class="token-swatch" style="background:#f5f5f7;"></span><code>#f5f5f7</code></td>
+            <td><span class="token-swatch" style="background:#1a1a1e;"></span><code>#1a1a1e</code></td>
+            <td>Sfondo pagina globale</td>
+          </tr>
+          <tr>
+            <td><code>--color-surface</code></td>
+            <td><span class="token-swatch" style="background:#ffffff;"></span><code>#ffffff</code></td>
+            <td><span class="token-swatch" style="background:#26262c;"></span><code>#26262c</code></td>
+            <td>Card, modal, pannelli principali</td>
+          </tr>
+          <tr>
+            <td><code>--color-surface-2</code></td>
+            <td><span class="token-swatch" style="background:#f0f0f2;"></span><code>#f0f0f2</code></td>
+            <td><span class="token-swatch" style="background:#313138;"></span><code>#313138</code></td>
+            <td>Elementi annidati, sidebar interna</td>
+          </tr>
+          <tr>
+            <td><code>--color-border</code></td>
+            <td><span class="token-swatch" style="background:#e8e8ea;"></span><code>#e8e8ea</code></td>
+            <td><span class="token-swatch" style="background:#3a3a42;"></span><code>#3a3a42</code></td>
+            <td>Bordi, separatori</td>
+          </tr>
+          <tr>
+            <td><code>--color-text</code></td>
+            <td><span class="token-swatch" style="background:#414042;"></span><code>#414042</code></td>
+            <td><span class="token-swatch" style="background:#e8e8ea;"></span><code>#e8e8ea</code></td>
+            <td>Testo principale</td>
+          </tr>
+          <tr>
+            <td><code>--color-text-dim</code></td>
+            <td><span class="token-swatch" style="background:#808285;"></span><code>#808285</code></td>
+            <td><span class="token-swatch" style="background:#8a8a90;"></span><code>#8a8a90</code></td>
+            <td>Testo secondario, label, metadati</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <pre><code>/* Esempio dichiarazione token in CSS */
+:root[data-theme="light"] {
+  --color-bg:         #f5f5f7;
+  --color-surface:    #ffffff;
+  --color-surface-2:  #f0f0f2;
+  --color-border:     #e8e8ea;
+  --color-text:       #414042;
+  --color-text-dim:   #808285;
+}
+
+:root[data-theme="dark"] {
+  --color-bg:         #1a1a1e;
+  --color-surface:    #26262c;
+  --color-surface-2:  #313138;
+  --color-border:     #3a3a42;
+  --color-text:       #e8e8ea;
+  --color-text-dim:   #8a8a90;
+}</code></pre>
+  </section>
+
+  <!-- ── 5. INTERNAZIONALIZZAZIONE ── -->
+  <section class="doc-section" id="i18n">
+    <h2>Internazionalizzazione</h2>
+    <p>
+      Il sistema i18n è implementato senza librerie esterne. I dizionari sono oggetti
+      JavaScript annidati e le chiavi usano <strong>dot notation</strong>.
+    </p>
+    <h3>Struttura dei dizionari</h3>
+    <pre><code>// src/i18n/it.js (estratto)
+export default {
+  nav: {
+    overview:    "Panoramica",
+    giri:        "Giri",
+    spedizioni:  "Spedizioni",
+    scenari:     "Scenari",
+    pudo:        "PUDO",
+    filiali:     "Filiali",
+  },
+  header: {
+    settings:    "Impostazioni",
+    notifications: "Notifiche",
+    logout:      "Esci",
+  },
+  common: {
+    save:        "Salva",
+    cancel:      "Annulla",
+    confirm:     "Conferma",
+    loading:     "Caricamento...",
+    noData:      "Nessun dato disponibile",
+  }
+}</code></pre>
+    <h3>Hook useI18n()</h3>
+    <pre><code>// Utilizzo nei componenti
+import { useI18n } from '../contexts/I18nContext'
+
+function MyComponent() {
+  const { t, lang, setLang } = useI18n()
+
+  return (
+    &lt;button onClick={() => setLang('en')}&gt;
+      {t('header.settings')}  {/* → "Impostazioni" (se lang = 'it') */}
+    &lt;/button&gt;
+  )
+}</code></pre>
+    <h3>Comportamento della funzione t(key)</h3>
+    <ul>
+      <li>Naviga l'oggetto dizionario con i segmenti separati da <code>.</code>.</li>
+      <li>Se la traduzione è assente nel dizionario corrente, tenta il fallback sul dizionario italiano.</li>
+      <li>Se la chiave non esiste in nessun dizionario, restituisce la chiave stessa (es. <code>"nav.overview"</code>), evitando crash silenziosi.</li>
+    </ul>
+    <h3>Persistenza e rilevamento automatico</h3>
+    <ul>
+      <li>La lingua corrente è salvata in <code>localStorage</code> sotto la chiave <code>fp_ct_language</code>.</li>
+      <li>Al primo avvio (chiave assente), viene letta <code>navigator.language</code>: il prefisso a 2 caratteri viene confrontato con le lingue supportate (<code>it</code>, <code>en</code>, <code>fr</code>, <code>de</code>). Se non corrisponde, default: <code>it</code>.</li>
+    </ul>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Lingua</th><th>Codice</th><th>File dizionario</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Italiano</td><td><code>it</code></td><td><code>src/i18n/it.js</code></td></tr>
+          <tr><td>Inglese</td><td><code>en</code></td><td><code>src/i18n/en.js</code></td></tr>
+          <tr><td>Francese</td><td><code>fr</code></td><td><code>src/i18n/fr.js</code></td></tr>
+          <tr><td>Tedesco</td><td><code>de</code></td><td><code>src/i18n/de.js</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 6. SERVICE LAYER ── -->
+  <section class="doc-section" id="services">
+    <h2>Service Layer</h2>
+    <p>
+      Il service layer è composto da moduli JavaScript puri (nessun hook React)
+      che incapsulano la logica di accesso ai dati persistenti. Il modulo principale
+      è <code>src/services/historyService.js</code>.
+    </p>
+    <h3>historyService.js</h3>
+    <ul>
+      <li><strong>STORAGE_KEY</strong>: <code>fp_ct_history</code></li>
+      <li><strong>MAX_EVENTS</strong>: <code>2000</code> — al superamento, gli eventi più vecchi vengono rimossi (FIFO).</li>
+    </ul>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Funzione</th><th>Firma</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>recordEvent()</code></td>
+            <td><code>(eventData) → event</code></td>
+            <td>Persiste un nuovo evento di modifica nello storico. Aggiunge <code>id</code> e <code>timestamp</code> automaticamente.</td>
+          </tr>
+          <tr>
+            <td><code>getEntityHistory()</code></td>
+            <td><code>(entityType, entityId) → event[]</code></td>
+            <td>Restituisce tutti gli eventi relativi a una singola entità (es. tutti i cambiamenti di un PUDO specifico).</td>
+          </tr>
+          <tr>
+            <td><code>getTypeHistory()</code></td>
+            <td><code>(entityType) → event[]</code></td>
+            <td>Restituisce tutti gli eventi per un tipo di entità (es. tutti i cambiamenti di tutti i PUDO).</td>
+          </tr>
+          <tr>
+            <td><code>getGlobalHistory()</code></td>
+            <td><code>(limit?) → event[]</code></td>
+            <td>Restituisce l'intero storico ordinato per timestamp decrescente. Supporta limite opzionale.</td>
+          </tr>
+          <tr>
+            <td><code>seedDemoHistory()</code></td>
+            <td><code>() → void</code></td>
+            <td>Popola lo storico con eventi fittizi per la demo, se lo storico è vuoto.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Struttura evento</h3>
+    <pre><code>{
+  id:         "evt_1712345678_abc",   // generato: "evt_" + Date.now() + "_" + random
+  entityType: "pudo",                  // "pudo" | "giro" | "filiale" | "spedizione"
+  entityId:   "IT10006",
+  action:     "update",               // "create" | "update" | "delete"
+  field:      "stato",                // campo modificato (solo per action: "update")
+  oldValue:   "attivo",
+  newValue:   "sospeso",
+  label:      "Stato PUDO IT10006 modificato",
+  userId:     "user_001",
+  userName:   "Mario Rossi",
+  timestamp:  "2026-04-05T09:30:00.000Z"
+}</code></pre>
+  </section>
+
+  <!-- ── 7. MODELLI DATI ── -->
+  <section class="doc-section" id="modelli">
+    <h2>Modelli Dati</h2>
+    <p>
+      Le entità principali sono definite come oggetti JavaScript piani.
+      Di seguito gli schema JSON di riferimento.
+    </p>
+    <h3>PUDO</h3>
+    <pre><code>{
+  "id":      "IT10006",
+  "name":    "Tabaccheria Centrale",
+  "tipo":    "negozio",             // "negozio" | "locker"
+  "cap":     "80141",
+  "civico":  "Via Roma 14",
+  "lat":     40.8518,
+  "lng":     14.2681,
+  "filialeId": "F001",
+  "stato":   "attivo",              // "attivo" | "sospeso" | "chiuso"
+  "hours": {
+    "lun": [{ "o": "09:00", "c": "13:00" }, { "o": "16:00", "c": "20:00" }],
+    "mar": [{ "o": "09:00", "c": "20:00" }],
+    "mer": [{ "o": "09:00", "c": "20:00" }],
+    "gio": [{ "o": "09:00", "c": "20:00" }],
+    "ven": [{ "o": "09:00", "c": "20:00" }],
+    "sab": [{ "o": "09:00", "c": "13:00" }],
+    "dom": []
+  }
+}</code></pre>
+    <h3>Giro</h3>
+    <pre><code>{
+  "id":          "G001",
+  "filialeId":   "F001",
+  "nome":        "Giro Napoli Nord",
+  "autista":     "driver_02",
+  "mezzoId":     "mezzo_03",
+  "stato":       "pianificato",     // "pianificato" | "in_corso" | "completato" | "annullato"
+  "distanzaKm":  42.3,
+  "durataMin":   185,
+  "data":        "2026-04-07",
+  "tappe": [
+    {
+      "pudoId":      "IT10006",
+      "ordine":      1,
+      "oraArrivo":   "08:45",
+      "oraPartenza": "08:55",
+      "lat":         40.8518,
+      "lng":         14.2681
+    }
+  ]
+}</code></pre>
+    <h3>Filiale</h3>
+    <pre><code>{
+  "id":           "F001",
+  "nome":         "Napoli Centro",
+  "indirizzo":    "Via Napoli 1, Casandrino (NA)",
+  "lat":          40.9201,
+  "lng":          14.2069,
+  "responsabile": "Luca Esposito",
+  "telefono":     "+39 081 123 4567",
+  "stato":        "attiva"          // "attiva" | "inattiva"
+}</code></pre>
+  </section>
+
+  <!-- ── 8. PERSISTENZA LOCALSTORAGE ── -->
+  <section class="doc-section" id="storage">
+    <h2>Persistenza localStorage</h2>
+    <p>
+      Tutte le chiavi usano il prefisso <code>fp_ct_</code> (Fermopoint Control Tower)
+      per evitare conflitti con altre applicazioni sulla stessa origine.
+    </p>
+    <div class="table-responsive">
+      <table class="data-table" aria-label="Chiavi localStorage">
+        <thead>
+          <tr>
+            <th>Chiave</th>
+            <th>Tipo dato</th>
+            <th>Struttura / Valori possibili</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>fp_ct_user</code></td>
+            <td>JSON Object</td>
+            <td><code>{ id, name, email, role, avatar }</code> — profilo utente autenticato</td>
+          </tr>
+          <tr>
+            <td><code>fp_ct_user_settings</code></td>
+            <td>JSON Object</td>
+            <td><code>{ notifications: boolean, compactMode: boolean, defaultFiliale: string }</code></td>
+          </tr>
+          <tr>
+            <td><code>fp_ct_language</code></td>
+            <td>String</td>
+            <td><code>"it"</code> | <code>"en"</code> | <code>"fr"</code> | <code>"de"</code></td>
+          </tr>
+          <tr>
+            <td><code>fp_ct_theme</code></td>
+            <td>String</td>
+            <td><code>"light"</code> | <code>"dark"</code> | <code>"system"</code></td>
+          </tr>
+          <tr>
+            <td><code>fp_ct_menu_state</code></td>
+            <td>JSON Object</td>
+            <td><code>{ collapsed: boolean, activeSection: string }</code> — stato sidebar navigazione</td>
+          </tr>
+          <tr>
+            <td><code>fp_ct_contracts</code></td>
+            <td>JSON Array</td>
+            <td>Array di contratti PUDO modificati dall'utente: <code>[{ pudoId, tier, scadenza, note }]</code></td>
+          </tr>
+          <tr>
+            <td><code>fp_ct_scenario_favorites</code></td>
+            <td>JSON Array</td>
+            <td>Array di ID scenario salvati come preferiti: <code>["F001", "F002"]</code></td>
+          </tr>
+          <tr>
+            <td><code>fp_ct_history</code></td>
+            <td>JSON Array</td>
+            <td>Array di eventi (max 2000) — struttura evento in sezione <a href="#services">Service Layer</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-box">
+      Tutti i valori sono serializzati con <code>JSON.stringify()</code> e deserializzati
+      con <code>JSON.parse()</code>. In caso di JSON malformato (es. corruzione manuale),
+      il service layer gestisce l'eccezione e ripristina il valore di default.
+    </div>
+  </section>
+
+  <!-- ── 9. IMPORTAZIONE CSV ── -->
+  <section class="doc-section" id="csv">
+    <h2>Importazione CSV</h2>
+    <p>
+      Il modulo di importazione spedizioni accetta file CSV con separatore virgola
+      (<code>,</code>) e codifica <strong>UTF-8</strong>. La prima riga deve contenere
+      gli header esatti indicati di seguito.
+    </p>
+    <div class="table-responsive">
+      <table class="data-table" aria-label="Campi CSV spedizioni">
+        <thead>
+          <tr>
+            <th>Campo CSV</th>
+            <th>Tipo</th>
+            <th>Obbligatorio</th>
+            <th>Descrizione</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>id</code></td>
+            <td>stringa</td>
+            <td>Sì</td>
+            <td>Identificativo univoco della spedizione (es. <code>FP240001</code>)</td>
+          </tr>
+          <tr>
+            <td><code>tipo</code></td>
+            <td>enum</td>
+            <td>Sì</td>
+            <td><code>consegna</code> | <code>ritiro</code></td>
+          </tr>
+          <tr>
+            <td><code>destinatario</code></td>
+            <td>stringa</td>
+            <td>Sì</td>
+            <td>Nome del destinatario (consegna) o mittente (ritiro)</td>
+          </tr>
+          <tr>
+            <td><code>pudoId</code></td>
+            <td>stringa</td>
+            <td>Sì</td>
+            <td>Codice PUDO di destinazione/origine (es. <code>IT10006</code>)</td>
+          </tr>
+          <tr>
+            <td><code>pudoNome</code></td>
+            <td>stringa</td>
+            <td>No</td>
+            <td>Nome commerciale del PUDO — usato come fallback se pudoId non risolve</td>
+          </tr>
+          <tr>
+            <td><code>peso_kg</code></td>
+            <td>numero</td>
+            <td>Sì</td>
+            <td>Peso in kilogrammi con decimale (es. <code>1.5</code>)</td>
+          </tr>
+          <tr>
+            <td><code>dim_l_cm</code></td>
+            <td>numero</td>
+            <td>No</td>
+            <td>Larghezza in centimetri (intero)</td>
+          </tr>
+          <tr>
+            <td><code>dim_h_cm</code></td>
+            <td>numero</td>
+            <td>No</td>
+            <td>Altezza in centimetri (intero)</td>
+          </tr>
+          <tr>
+            <td><code>dim_p_cm</code></td>
+            <td>numero</td>
+            <td>No</td>
+            <td>Profondità in centimetri (intero)</td>
+          </tr>
+          <tr>
+            <td><code>priorita</code></td>
+            <td>enum</td>
+            <td>No</td>
+            <td><code>normal</code> | <code>high</code> — default: <code>normal</code></td>
+          </tr>
+          <tr>
+            <td><code>data</code></td>
+            <td>data</td>
+            <td>Sì</td>
+            <td>Data spedizione in formato ISO: <code>YYYY-MM-DD</code> (es. <code>2026-04-05</code>)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <pre><code># Esempio riga CSV valida
+id,tipo,destinatario,pudoId,pudoNome,peso_kg,dim_l_cm,dim_h_cm,dim_p_cm,priorita,data
+FP260001,consegna,Mario Rossi,IT10006,Tabaccheria Centrale,2.3,30,20,15,normal,2026-04-05
+FP260002,ritiro,Giulia Bianchi,IT10012,Bar Sport,0.8,,,,,2026-04-05</code></pre>
+  </section>
+
+  <!-- ── 10. ACCESSIBILITÀ ── -->
+  <section class="doc-section" id="accessibilita">
+    <h2>Accessibilità WCAG 2.1 AA</h2>
+    <p>
+      Il Control Tower implementa le linee guida <strong>WCAG 2.1 a livello AA</strong>.
+      Di seguito le implementazioni specifiche adottate.
+    </p>
+    <h3>ARIA roles e attributi</h3>
+    <div class="table-responsive">
+      <table class="data-table" aria-label="Implementazioni ARIA">
+        <thead>
+          <tr>
+            <th>Contesto</th>
+            <th>Implementazione ARIA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Navigazione a tab (viste)</td>
+            <td><code>role="tablist"</code> sul contenitore, <code>role="tab"</code> su ogni elemento, <code>role="tabpanel"</code> sul contenuto, <code>aria-selected="true/false"</code></td>
+          </tr>
+          <tr>
+            <td>Dialog / Modal</td>
+            <td><code>role="dialog"</code>, <code>aria-modal="true"</code>, <code>aria-label</code> o <code>aria-labelledby</code> con titolo dialog, focus trap attivo</td>
+          </tr>
+          <tr>
+            <td>Notifiche live</td>
+            <td><code>aria-live="polite"</code> per toast informativi, <code>aria-live="assertive"</code> per errori bloccanti</td>
+          </tr>
+          <tr>
+            <td>Icone decorative</td>
+            <td><code>aria-hidden="true"</code> su tutti gli elementi SVG e icone ornamentali</td>
+          </tr>
+          <tr>
+            <td>Pulsanti icon-only</td>
+            <td><code>aria-label</code> descrittivo (es. <code>aria-label="Chiudi dialog"</code>)</td>
+          </tr>
+          <tr>
+            <td>Navigazione sidebar</td>
+            <td><code>aria-current="page"</code> sul link corrispondente alla pagina attiva</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Altre implementazioni</h3>
+    <ul>
+      <li><strong>Skip link</strong> — link nascosto visibile a focus (<code>:focus</code>) che permette di saltare direttamente al contenuto principale, evitando la ripetizione della navigazione con screen reader.</li>
+      <li><strong>focus-visible</strong> — gli stili di focus sono applicati tramite la pseudo-classe CSS <code>:focus-visible</code> per evitare outline non necessari con il mouse, garantendoli con tastiera e screen reader.</li>
+      <li><strong>Contrasto colori</strong> — il rosso brand <code>#DC0032</code> su sfondo bianco <code>#ffffff</code> raggiunge un rapporto di contrasto di <strong>5.5:1</strong>, superiore al minimo WCAG AA di 4.5:1 per testo normale.</li>
+      <li><strong>Navigazione da tastiera</strong> — tutti gli elementi interattivi sono raggiungibili via <kbd>Tab</kbd>; le dialog supportano <kbd>Escape</kbd> per la chiusura; i tab panel supportano le frecce direzionali.</li>
+    </ul>
+    <div class="info-box">
+      La conformità WCAG 2.1 AA è verificata manualmente con NVDA (Windows) e VoiceOver (macOS)
+      e automaticamente tramite axe-core in fase di sviluppo.
+    </div>
+  </section>
+
+  <!-- ── 11. BUILD E DEPLOY ── -->
+  <section class="doc-section" id="build">
+    <h2>Build e Deploy</h2>
+    <h3>Comandi principali</h3>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Comando</th><th>Risultato</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>npm run dev</code></td>
+            <td>Avvia il dev server Vite su <code>http://localhost:5173/control-tower-demo/</code> con HMR attivo</td>
+          </tr>
+          <tr>
+            <td><code>npm run build</code></td>
+            <td>Genera la build di produzione nella cartella <code>dist/</code> (minificazione JS/CSS, tree-shaking, asset hashing)</td>
+          </tr>
+          <tr>
+            <td><code>npm run preview</code></td>
+            <td>Serve localmente la cartella <code>dist/</code> per test pre-deploy</td>
+          </tr>
+          <tr>
+            <td><code>npm run lint</code></td>
+            <td>Esegue ESLint sul codice sorgente</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Configurazione Vite</h3>
+    <p>
+      Il <code>base path</code> è impostato a <code>/control-tower-demo/</code> in
+      <code>vite.config.js</code> per garantire il corretto funzionamento su GitHub Pages:
+    </p>
+    <pre><code>// vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/control-tower-demo/',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+  }
+})</code></pre>
+    <h3>Deploy su GitHub Pages</h3>
+    <ul>
+      <li><strong>Metodo 1 — Branch gh-pages</strong>: eseguire <code>npm run build</code> e caricare il contenuto di <code>dist/</code> sul branch <code>gh-pages</code>. GitHub Pages servirà automaticamente da quel branch.</li>
+      <li><strong>Metodo 2 — GitHub Actions</strong>: il workflow <code>.github/workflows/deploy.yml</code> esegue automaticamente build e deploy ad ogni push su <code>main</code>.</li>
+    </ul>
+    <pre><code># .github/workflows/deploy.yml (estratto)
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - run: npm run build
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist</code></pre>
+    <div class="warn-box">
+      Poiché l'app usa React Router in modalità hash o gestione dello stato interno (senza
+      server-side routing), non è necessario configurare rewrite rules sul server.
+      L'unico file richiesto è <code>index.html</code> come entry point.
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    Fermopoint Control Tower — Documentazione Tecnica — v0.12.0 — Aprile 2026
+  </footer>
+</main>
+
+<script>
+  // IntersectionObserver per highlight TOC attivo nella sidebar
+  const sections = document.querySelectorAll('.doc-section[id]')
+  const navLinks  = document.querySelectorAll('.sidebar-nav a[href^="#"]')
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'))
+        const link = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`)
+        if (link) link.classList.add('active')
+      }
+    })
+  }, { rootMargin: '-20% 0px -65% 0px', threshold: 0 })
+
+  sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>

@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference — Fermopoint Control Tower</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #414042;
+      --red: #DC0032;
+      --bg: #f5f5f7;
+      --white: #ffffff;
+      --gray: #808285;
+      --cool-gray: #e8e8ea;
+      --sidebar-w: 240px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--charcoal);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-logo-badge {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .sidebar-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-logo-brand {
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+    .sidebar-logo-title {
+      font-size: 11px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      padding: 8px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 6px;
+      color: rgba(255,255,255,.6);
+      font-size: 13px;
+      text-decoration: none;
+      transition: background .15s, color .15s;
+    }
+    .sidebar-nav a:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+    .sidebar-nav a.active { background: var(--red); color: #fff; }
+    .sidebar-nav a .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      flex-shrink: 0;
+    }
+    .sidebar-nav a.active .dot { background: rgba(255,255,255,.7); }
+
+    .sidebar-footer {
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      font-size: 11px;
+      color: rgba(255,255,255,.3);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px;
+      max-width: 900px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--white);
+      border: 1px solid var(--cool-gray);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--charcoal);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background .15s, border-color .15s;
+      margin-bottom: 32px;
+    }
+    .back-btn:hover { background: var(--bg); border-color: #ccc; }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    .page-subtitle span {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Sections */
+    .doc-section {
+      margin-bottom: 48px;
+      scroll-margin-top: 32px;
+    }
+    .doc-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--red);
+      display: inline-block;
+    }
+    .doc-section p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+    .doc-section ul {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+    .doc-section ul li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+    .doc-section strong { font-weight: 600; }
+
+    /* Inline code */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--red);
+    }
+
+    /* Info box */
+    .info-box {
+      background: #e3f0fb;
+      border-left: 4px solid #1565C0;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* Warning box */
+    .warn-box {
+      background: #fff8e1;
+      border-left: 4px solid #f57f17;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* Table */
+    .table-responsive { overflow-x: auto; margin: 16px 0; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .data-table th {
+      background: var(--charcoal);
+      color: #fff;
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--cool-gray);
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: #fafafa; }
+
+    /* Top bar */
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; gap: 12px; flex-wrap: wrap;
+    }
+
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--charcoal); border: none;
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 13px; color: #fff;
+      cursor: pointer; font-family: var(--font);
+      transition: background .15s;
+    }
+    .pdf-btn:hover { background: #555; }
+
+    /* Sidebar other links */
+    .sidebar-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,.08);
+      margin: 8px 12px;
+    }
+    .sidebar-other-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: 6px;
+      color: rgba(255,255,255,.4); font-size: 12px;
+      text-decoration: none; transition: background .15s, color .15s;
+    }
+    .sidebar-other-link:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.7); }
+    .sidebar-other-link.current {
+      background: var(--red);
+      color: #fff;
+    }
+    .sidebar-other-link.current .dot { background: rgba(255,255,255,.7); }
+
+    /* Footer */
+    .page-footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--cool-gray);
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    /* ── ENDPOINT STYLES ── */
+    .endpoint { background: var(--white); border: 1px solid var(--cool-gray); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+    .endpoint-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--cool-gray); background: #fafafa; }
+    .method { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 4px; font-family: 'Courier New', monospace; min-width: 60px; text-align: center; }
+    .method-get { background: #e8f5e9; color: #2e7d32; }
+    .method-post { background: #e3f0fb; color: #1565c0; }
+    .method-put { background: #fff8e1; color: #f57f17; }
+    .method-delete { background: #ffebee; color: #c62828; }
+    .endpoint-path { font-family: 'Courier New', monospace; font-size: 14px; font-weight: 600; color: var(--charcoal); }
+    .endpoint-desc { font-size: 13px; color: var(--gray); margin-left: auto; }
+    .endpoint-body { padding: 16px 18px; }
+    .endpoint-body p { font-size: 13px; line-height: 1.6; margin-bottom: 10px; }
+    pre.code-block { background: #f8f8f8; border: 1px solid var(--cool-gray); border-radius: 6px; padding: 14px 16px; font-size: 12px; font-family: 'Courier New', monospace; overflow-x: auto; margin: 10px 0; line-height: 1.6; color: #333; }
+
+    /* Params mini-table inside endpoint-body */
+    .params-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
+    .params-table th { background: #f0f0f0; color: var(--charcoal); text-align: left; padding: 7px 12px; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+    .params-table td { padding: 7px 12px; border-bottom: 1px solid var(--cool-gray); vertical-align: middle; }
+    .params-table tr:last-child td { border-bottom: none; }
+    .param-name { font-family: 'Courier New', monospace; color: var(--red); }
+    .param-type { color: var(--gray); font-style: italic; }
+    .param-req { display: inline-block; background: #ffebee; color: #c62828; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; }
+    .param-opt { display: inline-block; background: #f0f0f0; color: var(--gray); font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 3px; }
+
+    .section-subtitle { font-size: 15px; font-weight: 600; color: var(--charcoal); margin: 24px 0 12px; }
+
+    /* HTTP status badges */
+    .status-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-family: 'Courier New', monospace; }
+    .status-2xx { background: #e8f5e9; color: #2e7d32; }
+    .status-4xx { background: #ffebee; color: #c62828; }
+    .status-5xx { background: #f3e5f5; color: #6a1b9a; }
+
+    /* Print */
+    @media print {
+      body { display: block; background: #fff; }
+      .sidebar, .top-bar { display: none !important; }
+      .main { padding: 20px; max-width: 100%; }
+      .doc-section { break-inside: avoid; }
+      .data-table th { background: #414042 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .info-box, .warn-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      a { color: inherit; text-decoration: none; }
+      @page { margin: 2cm 1.5cm; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-badge">FP</div>
+    <div class="sidebar-logo-text">
+      <span class="sidebar-logo-brand">Fermopoint</span>
+      <span class="sidebar-logo-title">Control Tower</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-label">API Reference</div>
+    <a href="#intro"><span class="dot"></span>Introduzione</a>
+    <a href="#auth"><span class="dot"></span>Autenticazione</a>
+    <a href="#spedizioni"><span class="dot"></span>Spedizioni</a>
+    <a href="#pudo"><span class="dot"></span>PUDO</a>
+    <a href="#giri"><span class="dot"></span>Giri</a>
+    <a href="#scenari"><span class="dot"></span>Scenari</a>
+    <a href="#filiali"><span class="dot"></span>Filiali</a>
+    <a href="#contratti"><span class="dot"></span>Contratti</a>
+    <a href="#utenti"><span class="dot"></span>Utenti</a>
+    <a href="#history"><span class="dot"></span>Cronologia</a>
+    <a href="#errori"><span class="dot"></span>Codici di Errore</a>
+
+    <hr class="sidebar-divider"/>
+    <div class="sidebar-label">Documenti</div>
+    <a href="/control-tower-demo/manuale.html" class="sidebar-other-link">
+      <span class="dot"></span>Manuale Utente
+    </a>
+    <a href="/control-tower-demo/requisiti.html" class="sidebar-other-link">
+      <span class="dot"></span>Requisiti
+    </a>
+    <a href="/control-tower-demo/funzionale.html" class="sidebar-other-link">
+      <span class="dot"></span>Doc. Funzionale
+    </a>
+    <a href="/control-tower-demo/tecnica.html" class="sidebar-other-link">
+      <span class="dot"></span>Doc. Tecnica
+    </a>
+    <a href="/control-tower-demo/api.html" class="sidebar-other-link current">
+      <span class="dot"></span>API Reference
+    </a>
+    <a href="/control-tower-demo/playbook.html" class="sidebar-other-link">
+      <span class="dot"></span>Playbook Operativo
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">v1.0 · Aprile 2026</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+  <div class="top-bar">
+    <button class="back-btn" onclick="history.back() || (window.location='/control-tower-demo/')">
+      ← Torna all'app
+    </button>
+    <button class="pdf-btn" onclick="window.print()">
+      ⬇ Scarica PDF
+    </button>
+  </div>
+
+  <h1 class="page-title">API Reference</h1>
+  <p class="page-subtitle">
+    Fermopoint Control Tower — REST API per sviluppatori
+    <span>v1.0</span>
+  </p>
+
+  <!-- ── INTRODUZIONE ── -->
+  <section class="doc-section" id="intro">
+    <h2>Introduzione</h2>
+    <p>
+      Il sistema Fermopoint Control Tower espone una REST API che permette di integrare
+      e automatizzare tutte le operazioni disponibili nell'interfaccia web. Tutte le
+      risorse sono accessibili tramite chiamate HTTP standard con formato JSON.
+    </p>
+
+    <p class="section-subtitle">Base URL</p>
+    <pre class="code-block">Produzione:  https://api.fermopoint.it/v1
+Demo/Mock:   localStorage (simulazione lato client)</pre>
+
+    <div class="info-box">
+      In ambiente demo tutte le chiamate API sono simulate lato client tramite mock in
+      localStorage. I dati restituiti sono fittizi a scopo illustrativo. In produzione
+      le stesse chiamate verranno instradate verso il backend reale.
+    </div>
+
+    <p class="section-subtitle">Formato risposta</p>
+    <p>Tutte le risposte sono in formato <strong>JSON</strong> con header <code>Content-Type: application/json</code>.
+    Le risposte di successo seguono la struttura:</p>
+    <pre class="code-block">{
+  "data": { ... },       // payload principale
+  "meta": {              // metadati opzionali (es. paginazione)
+    "total": 142,
+    "page": 1,
+    "limit": 20,
+    "pages": 8
+  }
+}</pre>
+
+    <p class="section-subtitle">Versionamento</p>
+    <p>
+      La versione dell'API è inclusa nel path base (<code>/v1</code>). Le versioni precedenti
+      restano attive per almeno 12 mesi dopo il rilascio di una nuova major version.
+      Le breaking change vengono sempre accompagnate da un incremento della versione major.
+    </p>
+
+    <p class="section-subtitle">Paginazione</p>
+    <p>
+      Gli endpoint che restituiscono liste supportano i query params <code>page</code>
+      (default: 1) e <code>limit</code> (default: 20, max: 100). La risposta include
+      sempre i campi <code>total</code>, <code>page</code>, <code>limit</code> e <code>pages</code>.
+    </p>
+
+    <p class="section-subtitle">Rate Limiting</p>
+    <p>
+      In produzione sono previsti limiti di 300 richieste/minuto per token autenticato.
+      In caso di superamento viene restituito HTTP 429 con header <code>Retry-After</code>.
+    </p>
+  </section>
+
+  <!-- ── AUTENTICAZIONE ── -->
+  <section class="doc-section" id="auth">
+    <h2>Autenticazione</h2>
+    <p>
+      L'API utilizza <strong>Bearer Token JWT</strong>. Il token va incluso in tutte le
+      richieste autenticate nell'header HTTP:
+    </p>
+    <pre class="code-block">Authorization: Bearer &lt;token&gt;</pre>
+    <p>
+      Il token ha una durata di <strong>8 ore</strong>. Alla scadenza è necessario
+      eseguire nuovamente il login. Il campo <code>expiresIn</code> nella risposta del
+      login indica la durata in secondi.
+    </p>
+
+    <p class="section-subtitle">Endpoint</p>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/auth/login</span>
+        <span class="endpoint-desc">Ottiene un token JWT</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Autentica un utente e restituisce il token di accesso.</p>
+        <p><strong>Request body:</strong></p>
+        <pre class="code-block">{
+  "email": "operatore@fermopoint.it",
+  "password": "secret"
+}</pre>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "id": "u_001",
+      "email": "operatore@fermopoint.it",
+      "ruolo": "operatore"
+    },
+    "expiresIn": 28800
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/auth/logout</span>
+        <span class="endpoint-desc">Invalida il token corrente</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Revoca il token JWT corrente lato server. Richiede header <code>Authorization</code>.</p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "message": "Logout effettuato con successo." }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/auth/me</span>
+        <span class="endpoint-desc">Dati dell'utente autenticato</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Restituisce il profilo dell'utente associato al token corrente.</p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "id": "u_001",
+    "email": "operatore@fermopoint.it",
+    "nome": "Mario Rossi",
+    "ruolo": "operatore",
+    "filialeId": "F001",
+    "createdAt": "2025-01-15T08:00:00Z"
+  }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SPEDIZIONI ── -->
+  <section class="doc-section" id="spedizioni">
+    <h2>Spedizioni</h2>
+    <p>
+      Gestisce il ciclo di vita delle spedizioni: importazione, ricerca e consultazione
+      dei colli in transito presso i punti PUDO.
+    </p>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/spedizioni</span>
+        <span class="endpoint-desc">Lista spedizioni con filtri</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Query params:</strong></p>
+        <table class="params-table">
+          <thead><tr><th>Param</th><th>Tipo</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td class="param-name">page</td><td class="param-type">integer</td><td><span class="param-opt">opzionale</span> default 1</td></tr>
+            <tr><td class="param-name">limit</td><td class="param-type">integer</td><td><span class="param-opt">opzionale</span> default 20, max 100</td></tr>
+            <tr><td class="param-name">tipo</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> <code>consegna</code> | <code>ritiro</code></td></tr>
+            <tr><td class="param-name">pudoId</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> codice PUDO es. IT10006</td></tr>
+            <tr><td class="param-name">search</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> ricerca full-text su id/destinatario</td></tr>
+            <tr><td class="param-name">sort</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> campo di ordinamento es. <code>data</code></td></tr>
+            <tr><td class="param-name">order</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> <code>asc</code> | <code>desc</code></td></tr>
+          </tbody>
+        </table>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "FP240001",
+      "tipo": "consegna",
+      "pudoId": "IT10006",
+      "pudoNome": "Tabaccheria Centrale",
+      "destinatario": "Luca Bianchi",
+      "peso": 1.2,
+      "priorita": "normal",
+      "data": "2026-03-15"
+    }
+  ],
+  "meta": { "total": 142, "page": 1, "limit": 20, "pages": 8 }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/spedizioni/{id}</span>
+        <span class="endpoint-desc">Dettaglio singola spedizione</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Restituisce tutti i campi della spedizione incluse dimensioni e volume.</p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "id": "FP240001",
+    "tipo": "consegna",
+    "pudoId": "IT10006",
+    "pudoNome": "Tabaccheria Centrale",
+    "destinatario": "Luca Bianchi",
+    "peso": 1.2,
+    "dimensioni": { "l": 30, "h": 20, "p": 15 },
+    "volume": 9000,
+    "priorita": "normal",
+    "data": "2026-03-15",
+    "createdAt": "2026-03-10T09:22:00Z"
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/spedizioni/import/sync</span>
+        <span class="endpoint-desc">Importa da AS/400</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Avvia la sincronizzazione dal sistema AS/400. L'operazione viene eseguita in background.
+        Genera una notifica al termine.</p>
+        <p><strong>Request body:</strong></p>
+        <pre class="code-block">{
+  "mesi": 3,
+  "province": ["NA", "SA", "CE"]
+}</pre>
+        <p><strong>Response 202 Accepted:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "jobId": "job_20260405_001",
+    "stato": "in_coda",
+    "messaggio": "Importazione avviata in background."
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/spedizioni/import/file</span>
+        <span class="endpoint-desc">Upload CSV/XLSX</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Carica un file CSV o XLSX secondo il template ufficiale. Richiede
+        <code>Content-Type: multipart/form-data</code>.</p>
+        <p><strong>Form fields:</strong></p>
+        <table class="params-table">
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td class="param-name">file</td><td class="param-type">file</td><td><span class="param-req">richiesto</span> .csv o .xlsx, max 10 MB</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Response 202 Accepted:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "jobId": "job_20260405_002",
+    "stato": "in_coda",
+    "righeRilevate": 487,
+    "messaggio": "File ricevuto. Elaborazione avviata in background."
+  }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PUDO ── -->
+  <section class="doc-section" id="pudo">
+    <h2>PUDO</h2>
+    <p>
+      Risorse per la gestione dei punti Pickup and Delivery. Ogni PUDO ha un codice
+      univoco nel formato <code>ITxxxxx</code> e appartiene a una filiale di competenza.
+    </p>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/pudo</span>
+        <span class="endpoint-desc">Lista PUDO con filtri</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Query params:</strong></p>
+        <table class="params-table">
+          <thead><tr><th>Param</th><th>Tipo</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td class="param-name">tipo</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> <code>negozio</code> | <code>locker</code></td></tr>
+            <tr><td class="param-name">ciMin</td><td class="param-type">number</td><td><span class="param-opt">opzionale</span> CI minimo (es. 2.5)</td></tr>
+            <tr><td class="param-name">ciPeriodo</td><td class="param-type">integer</td><td><span class="param-opt">opzionale</span> giorni per calcolo CI: 7, 14, 30</td></tr>
+            <tr><td class="param-name">lat</td><td class="param-type">number</td><td><span class="param-opt">opzionale</span> latitudine centro di ricerca</td></tr>
+            <tr><td class="param-name">lng</td><td class="param-type">number</td><td><span class="param-opt">opzionale</span> longitudine centro di ricerca</td></tr>
+            <tr><td class="param-name">raggio</td><td class="param-type">number</td><td><span class="param-opt">opzionale</span> raggio in km (richiede lat+lng)</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "IT10006",
+      "nome": "Tabaccheria Centrale",
+      "tipo": "negozio",
+      "indirizzo": "Via Roma 12, Napoli",
+      "lat": 40.8518,
+      "lng": 14.2681,
+      "filialeId": "F001",
+      "ci": 4.2,
+      "stato": "attivo"
+    }
+  ],
+  "meta": { "total": 38, "page": 1, "limit": 20, "pages": 2 }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/pudo/{id}</span>
+        <span class="endpoint-desc">Dettaglio PUDO con orari</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "id": "IT10006",
+    "nome": "Tabaccheria Centrale",
+    "tipo": "negozio",
+    "indirizzo": "Via Roma 12, Napoli",
+    "cap": "80100",
+    "citta": "Napoli",
+    "provincia": "NA",
+    "lat": 40.8518,
+    "lng": 14.2681,
+    "filialeId": "F001",
+    "ci": 4.2,
+    "stato": "attivo",
+    "orari": {
+      "lun": "08:00-13:00,15:00-19:30",
+      "mar": "08:00-13:00,15:00-19:30",
+      "mer": "08:00-13:00",
+      "gio": "08:00-13:00,15:00-19:30",
+      "ven": "08:00-13:00,15:00-19:30",
+      "sab": "08:00-13:00",
+      "dom": "chiuso"
+    },
+    "note": "Ingresso da Via Garibaldi in caso di ZTL."
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/pudo/{id}/history</span>
+        <span class="endpoint-desc">Cronologia modifiche PUDO</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Restituisce la lista di tutte le modifiche apportate al PUDO in ordine cronologico inverso.</p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "h_001",
+      "entityType": "pudo",
+      "entityId": "IT10006",
+      "campo": "stato",
+      "vecchioValore": "sospeso",
+      "nuovoValore": "attivo",
+      "utente": "Mario Rossi",
+      "timestamp": "2026-03-20T10:15:00Z",
+      "note": "Riattivato dopo lavori."
+    }
+  ]
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-put">PUT</span>
+        <span class="endpoint-path">/pudo/{id}</span>
+        <span class="endpoint-desc">Aggiorna stato o informazioni PUDO</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Aggiorna i campi modificabili del PUDO. I campi non inclusi nel body non vengono modificati.</p>
+        <p><strong>Request body (esempio):</strong></p>
+        <pre class="code-block">{
+  "stato": "sospeso",
+  "note": "Chiusura temporanea per lavori fino al 30/04/2026.",
+  "orari": {
+    "lun": "09:00-13:00",
+    "mar": "09:00-13:00"
+  }
+}</pre>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "id": "IT10006", "stato": "sospeso", "updatedAt": "2026-04-05T14:30:00Z" }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GIRI ── -->
+  <section class="doc-section" id="giri">
+    <h2>Giri</h2>
+    <p>
+      Un giro è un percorso ottimizzato che parte e torna al deposito di una filiale,
+      servendo una sequenza ordinata di PUDO. I giri sono generati dall'ottimizzatore
+      OptimoRoute o creati manualmente.
+    </p>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/giri</span>
+        <span class="endpoint-desc">Lista giri con filtri</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Query params:</strong></p>
+        <table class="params-table">
+          <thead><tr><th>Param</th><th>Tipo</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td class="param-name">filialeId</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> es. F001</td></tr>
+            <tr><td class="param-name">stato</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> <code>pianificato</code> | <code>in_corso</code> | <code>completato</code> | <code>annullato</code></td></tr>
+            <tr><td class="param-name">dataFrom</td><td class="param-type">date</td><td><span class="param-opt">opzionale</span> ISO 8601 es. 2026-04-01</td></tr>
+            <tr><td class="param-name">dataTo</td><td class="param-type">date</td><td><span class="param-opt">opzionale</span> ISO 8601 es. 2026-04-30</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "g_001",
+      "nome": "Giro Napoli Est",
+      "filialeId": "F001",
+      "stato": "pianificato",
+      "driver": "Antonio Esposito",
+      "mezzo": "Fiat Ducato — EP123AB",
+      "numeroPudo": 8,
+      "ci": 3.7,
+      "data": "2026-04-08"
+    }
+  ],
+  "meta": { "total": 12, "page": 1, "limit": 20, "pages": 1 }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/giri/{id}</span>
+        <span class="endpoint-desc">Dettaglio giro con tappe</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "id": "g_001",
+    "nome": "Giro Napoli Est",
+    "filialeId": "F001",
+    "stato": "pianificato",
+    "driver": "Antonio Esposito",
+    "mezzo": "Fiat Ducato — EP123AB",
+    "ci": 3.7,
+    "data": "2026-04-08",
+    "tappe": [
+      { "ordine": 1, "pudoId": "IT10006", "pudoNome": "Tabaccheria Centrale", "oraArrivo": "08:30" },
+      { "ordine": 2, "pudoId": "IT10012", "pudoNome": "Locker Piazza Garibaldi", "oraArrivo": "09:00" }
+    ],
+    "note": "Attenzione ZTL dalle 10:00.",
+    "createdAt": "2026-04-01T10:00:00Z"
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/giri/{id}/history</span>
+        <span class="endpoint-desc">Cronologia modifiche giro</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "h_010",
+      "entityType": "giro",
+      "entityId": "g_001",
+      "campo": "stato",
+      "vecchioValore": "pianificato",
+      "nuovoValore": "in_corso",
+      "utente": "Mario Rossi",
+      "timestamp": "2026-04-08T08:05:00Z"
+    }
+  ]
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/giri</span>
+        <span class="endpoint-desc">Crea nuovo giro</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Request body:</strong></p>
+        <pre class="code-block">{
+  "nome": "Giro Napoli Nord",
+  "filialeId": "F001",
+  "driver": "Luigi Ferrara",
+  "mezzo": "Iveco Daily — NA456CD",
+  "data": "2026-04-10",
+  "tappe": [
+    { "pudoId": "IT10020", "oraArrivo": "08:45" },
+    { "pudoId": "IT10034", "oraArrivo": "09:20" }
+  ],
+  "note": ""
+}</pre>
+        <p><strong>Response 201 Created:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "id": "g_015",
+    "nome": "Giro Napoli Nord",
+    "stato": "pianificato",
+    "createdAt": "2026-04-05T11:00:00Z"
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-put">PUT</span>
+        <span class="endpoint-path">/giri/{id}</span>
+        <span class="endpoint-desc">Aggiorna stato o dati giro</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Request body (esempio aggiornamento stato):</strong></p>
+        <pre class="code-block">{
+  "stato": "completato",
+  "note": "Giro completato alle 14:30, tutte le fermate servite."
+}</pre>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "id": "g_001", "stato": "completato", "updatedAt": "2026-04-08T14:32:00Z" }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-delete">DELETE</span>
+        <span class="endpoint-path">/giri/{id}</span>
+        <span class="endpoint-desc">Elimina un giro</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Elimina il giro specificato. Non è possibile eliminare giri in stato <code>in_corso</code>.</p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "message": "Giro g_001 eliminato con successo." }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SCENARI ── -->
+  <section class="doc-section" id="scenari">
+    <h2>Scenari</h2>
+    <p>
+      Uno scenario raggruppa tutti i giri pianificati per una filiale e rappresenta la
+      fotografia operativa in un determinato periodo. La creazione di uno scenario
+      attiva l'ottimizzatore OptimoRoute.
+    </p>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/scenari</span>
+        <span class="endpoint-desc">Lista scenari</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "sc_001",
+      "nome": "Scenario Aprile — Napoli",
+      "filialeId": "F001",
+      "filiale": "Napoli Centro",
+      "numGiri": 4,
+      "numPudo": 32,
+      "ci": 3.9,
+      "preferito": false,
+      "stato": "completato",
+      "createdAt": "2026-04-01T09:00:00Z"
+    }
+  ],
+  "meta": { "total": 6, "page": 1, "limit": 20, "pages": 1 }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/scenari</span>
+        <span class="endpoint-desc">Crea scenario e lancia ottimizzazione</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Crea un nuovo scenario e avvia l'ottimizzazione tramite OptimoRoute.
+        Il processo è asincrono: la risposta include un <code>jobId</code> per tracciare l'avanzamento.</p>
+        <p><strong>Request body:</strong></p>
+        <pre class="code-block">{
+  "nome": "Scenario Maggio — Napoli",
+  "filialeId": "F001",
+  "dataInizio": "2026-05-01",
+  "dataFine": "2026-05-31",
+  "optimoRoute": {
+    "maxGiri": 5,
+    "maxDurataMinuti": 480,
+    "startTime": "07:30",
+    "avoidTolls": true,
+    "serviceTimeMinutes": 10
+  },
+  "pudoIds": ["IT10006", "IT10012", "IT10020"]
+}</pre>
+        <p><strong>Response 202 Accepted:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "scenarioId": "sc_007",
+    "jobId": "job_20260405_003",
+    "stato": "ottimizzazione_in_corso",
+    "messaggio": "OptimoRoute avviato. I giri saranno disponibili a breve."
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/scenari/{id}</span>
+        <span class="endpoint-desc">Dettaglio scenario con giri generati</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "id": "sc_001",
+    "nome": "Scenario Aprile — Napoli",
+    "filialeId": "F001",
+    "ci": 3.9,
+    "preferito": false,
+    "stato": "completato",
+    "giri": [
+      { "id": "g_001", "nome": "Giro Napoli Est", "numeroPudo": 8, "ci": 4.2 },
+      { "id": "g_002", "nome": "Giro Napoli Nord", "numeroPudo": 9, "ci": 3.7 }
+    ],
+    "createdAt": "2026-04-01T09:00:00Z"
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/scenari/{id}/favorite</span>
+        <span class="endpoint-desc">Salva scenario come preferito</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Contrassegna lo scenario come preferito. Ogni filiale può avere un solo scenario preferito attivo.</p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "id": "sc_001", "preferito": true }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-delete">DELETE</span>
+        <span class="endpoint-path">/scenari/{id}/favorite</span>
+        <span class="endpoint-desc">Rimuove scenario dai preferiti</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "id": "sc_001", "preferito": false }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FILIALI ── -->
+  <section class="doc-section" id="filiali">
+    <h2>Filiali</h2>
+    <p>
+      Le filiali sono i centri operativi di Fermopoint, punto di partenza e arrivo di
+      tutti i giri. Ogni filiale gestisce un bacino di PUDO su base territoriale.
+    </p>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/filiali</span>
+        <span class="endpoint-desc">Lista filiali</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    { "id": "F001", "nome": "Napoli Centro", "citta": "Casandrino", "provincia": "NA", "stato": "attiva" },
+    { "id": "F002", "nome": "Milano Bovisa",  "citta": "Milano",     "provincia": "MI", "stato": "attiva" },
+    { "id": "F003", "nome": "Stezzano",       "citta": "Stezzano",   "provincia": "BG", "stato": "attiva" }
+  ],
+  "meta": { "total": 3, "page": 1, "limit": 20, "pages": 1 }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/filiali/{id}</span>
+        <span class="endpoint-desc">Dettaglio filiale</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "id": "F001",
+    "nome": "Napoli Centro",
+    "indirizzo": "Via Industriale 4, Casandrino (NA)",
+    "lat": 40.9218,
+    "lng": 14.2104,
+    "provincia": "NA",
+    "stato": "attiva",
+    "responsabile": "Carlo Miele",
+    "telefono": "+39 081 000 1234",
+    "numPudo": 38,
+    "numGiri": 4
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/filiali/{id}/history</span>
+        <span class="endpoint-desc">Cronologia modifiche filiale</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "h_020",
+      "entityType": "filiale",
+      "entityId": "F001",
+      "campo": "responsabile",
+      "vecchioValore": "Giovanni Aiello",
+      "nuovoValore": "Carlo Miele",
+      "utente": "Admin",
+      "timestamp": "2026-01-10T09:00:00Z"
+    }
+  ]
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-put">PUT</span>
+        <span class="endpoint-path">/filiali/{id}</span>
+        <span class="endpoint-desc">Aggiorna filiale</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Request body (esempio):</strong></p>
+        <pre class="code-block">{
+  "responsabile": "Paola Esposito",
+  "telefono": "+39 081 000 5678",
+  "stato": "attiva"
+}</pre>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "id": "F001", "responsabile": "Paola Esposito", "updatedAt": "2026-04-05T10:00:00Z" }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTRATTI ── -->
+  <section class="doc-section" id="contratti">
+    <h2>Contratti</h2>
+    <p>
+      Gestione dei contratti con i punti PUDO. Supporta la creazione manuale e
+      l'estrazione automatica dei dati da documenti PDF tramite AI.
+    </p>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/contratti</span>
+        <span class="endpoint-desc">Lista contratti con filtri</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Query params:</strong></p>
+        <table class="params-table">
+          <thead><tr><th>Param</th><th>Tipo</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td class="param-name">categoria</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> es. <code>standard</code> | <code>premium</code></td></tr>
+            <tr><td class="param-name">stato</td><td class="param-type">string</td><td><span class="param-opt">opzionale</span> <code>attivo</code> | <code>scaduto</code> | <code>in_rinnovo</code></td></tr>
+          </tbody>
+        </table>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "cnt_001",
+      "pudoId": "IT10006",
+      "pudoNome": "Tabaccheria Centrale",
+      "categoria": "standard",
+      "stato": "attivo",
+      "dataInizio": "2025-01-01",
+      "dataFine": "2026-12-31",
+      "canoneAnnuo": 1200.00
+    }
+  ],
+  "meta": { "total": 38, "page": 1, "limit": 20, "pages": 2 }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/contratti</span>
+        <span class="endpoint-desc">Crea nuovo contratto</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Request body:</strong></p>
+        <pre class="code-block">{
+  "pudoId": "IT10050",
+  "categoria": "premium",
+  "dataInizio": "2026-05-01",
+  "dataFine": "2027-04-30",
+  "canoneAnnuo": 2400.00,
+  "note": "Contratto rinnovato con condizioni migliorative."
+}</pre>
+        <p><strong>Response 201 Created:</strong></p>
+        <pre class="code-block">{
+  "data": { "id": "cnt_039", "stato": "attivo", "createdAt": "2026-04-05T12:00:00Z" }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/contratti/extract</span>
+        <span class="endpoint-desc">Estrae dati da PDF contratto</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Carica un PDF di contratto e usa AI per estrarre automaticamente i campi principali.
+        Richiede <code>Content-Type: multipart/form-data</code>.</p>
+        <p><strong>Form fields:</strong></p>
+        <table class="params-table">
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td class="param-name">file</td><td class="param-type">file</td><td><span class="param-req">richiesto</span> .pdf, max 20 MB</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "campi": {
+      "pudoNome": "Tabaccheria Lo Russo",
+      "indirizzo": "Via Manzoni 88, Napoli",
+      "categoria": "standard",
+      "dataInizio": "2026-06-01",
+      "dataFine": "2027-05-31",
+      "canoneAnnuo": 1500.00
+    },
+    "confidenza": {
+      "pudoNome": 0.98,
+      "indirizzo": 0.94,
+      "categoria": 0.87,
+      "dataInizio": 0.99,
+      "dataFine": 0.99,
+      "canoneAnnuo": 0.91
+    }
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-put">PUT</span>
+        <span class="endpoint-path">/contratti/{id}</span>
+        <span class="endpoint-desc">Aggiorna contratto</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Request body (esempio):</strong></p>
+        <pre class="code-block">{
+  "stato": "in_rinnovo",
+  "note": "In attesa di firma nuova annualità."
+}</pre>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "id": "cnt_001", "stato": "in_rinnovo", "updatedAt": "2026-04-05T13:00:00Z" }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-delete">DELETE</span>
+        <span class="endpoint-path">/contratti/{id}</span>
+        <span class="endpoint-desc">Elimina contratto</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Elimina il contratto. Non è possibile eliminare contratti in stato <code>attivo</code>.</p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "message": "Contratto cnt_001 eliminato con successo." }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── UTENTI ── -->
+  <section class="doc-section" id="utenti">
+    <h2>Utenti</h2>
+    <p>
+      Gestione degli utenti del sistema. La maggior parte degli endpoint richiede il
+      ruolo <strong>Admin</strong>. I ruoli disponibili sono:
+      <code>admin</code>, <code>operatore</code>, <code>viewer</code>.
+    </p>
+
+    <div class="info-box">
+      Gli endpoint di questa sezione sono accessibili solo agli utenti con ruolo
+      <strong>admin</strong>. Richieste da ruoli inferiori restituiscono HTTP 403.
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/utenti</span>
+        <span class="endpoint-desc">Lista utenti — solo Admin</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "u_001",
+      "nome": "Mario Rossi",
+      "email": "mario.rossi@fermopoint.it",
+      "ruolo": "operatore",
+      "filialeId": "F001",
+      "attivo": true,
+      "createdAt": "2025-01-15T08:00:00Z"
+    }
+  ],
+  "meta": { "total": 8, "page": 1, "limit": 20, "pages": 1 }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/utenti</span>
+        <span class="endpoint-desc">Crea utente</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Crea un nuovo utente. La password provvisoria viene inviata via email.</p>
+        <p><strong>Request body:</strong></p>
+        <pre class="code-block">{
+  "nome": "Giulia Ferraro",
+  "email": "giulia.ferraro@fermopoint.it",
+  "ruolo": "operatore",
+  "filialeId": "F002"
+}</pre>
+        <p><strong>Response 201 Created:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "id": "u_009",
+    "email": "giulia.ferraro@fermopoint.it",
+    "createdAt": "2026-04-05T14:00:00Z",
+    "messaggio": "Email di benvenuto inviata con password provvisoria."
+  }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-put">PUT</span>
+        <span class="endpoint-path">/utenti/{id}</span>
+        <span class="endpoint-desc">Aggiorna dati utente</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Request body (esempio):</strong></p>
+        <pre class="code-block">{
+  "ruolo": "viewer",
+  "attivo": false
+}</pre>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": { "id": "u_009", "ruolo": "viewer", "attivo": false, "updatedAt": "2026-04-05T14:10:00Z" }
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/utenti/{id}/reset-password</span>
+        <span class="endpoint-desc">Reset password utente</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Genera una nuova password provvisoria e la invia via email all'utente. Non richiede body.</p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": {
+    "id": "u_009",
+    "messaggio": "Email di reset password inviata a giulia.ferraro@fermopoint.it"
+  }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CRONOLOGIA ── -->
+  <section class="doc-section" id="history">
+    <h2>Cronologia</h2>
+    <p>
+      Il sistema registra tutte le modifiche alle entità principali (PUDO, Giri,
+      Scenari, Filiali, Contratti). La cronologia è accessibile sia per singola
+      entità (via endpoint dedicati) sia in modo globale.
+    </p>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/history</span>
+        <span class="endpoint-desc">Cronologia per entità specifica</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Query params:</strong></p>
+        <table class="params-table">
+          <thead><tr><th>Param</th><th>Tipo</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td class="param-name">entityType</td><td class="param-type">string</td><td><span class="param-req">richiesto</span> <code>pudo</code> | <code>giro</code> | <code>scenario</code> | <code>filiale</code> | <code>contratto</code></td></tr>
+            <tr><td class="param-name">entityId</td><td class="param-type">string</td><td><span class="param-req">richiesto</span> ID entità es. IT10006</td></tr>
+            <tr><td class="param-name">limit</td><td class="param-type">integer</td><td><span class="param-opt">opzionale</span> default 50</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Esempio:</strong> <code>GET /history?entityType=pudo&amp;entityId=IT10006&amp;limit=10</code></p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "h_001",
+      "entityType": "pudo",
+      "entityId": "IT10006",
+      "campo": "stato",
+      "vecchioValore": "sospeso",
+      "nuovoValore": "attivo",
+      "utente": "Mario Rossi",
+      "timestamp": "2026-03-20T10:15:00Z",
+      "note": "Riattivato dopo lavori."
+    }
+  ]
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/history/global</span>
+        <span class="endpoint-desc">Cronologia globale di sistema</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Restituisce le ultime modifiche su tutte le entità, in ordine cronologico inverso.
+        Utile per il feed di attività recenti nella dashboard.</p>
+        <p><strong>Query params:</strong> <code>limit</code> (default 100), <code>page</code></p>
+        <p><strong>Response 200:</strong></p>
+        <pre class="code-block">{
+  "data": [
+    {
+      "id": "h_099",
+      "entityType": "giro",
+      "entityId": "g_001",
+      "campo": "stato",
+      "vecchioValore": "pianificato",
+      "nuovoValore": "completato",
+      "utente": "Antonio Esposito",
+      "timestamp": "2026-04-05T15:00:00Z"
+    }
+  ],
+  "meta": { "total": 840, "page": 1, "limit": 100, "pages": 9 }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CODICI DI ERRORE ── -->
+  <section class="doc-section" id="errori">
+    <h2>Codici di Errore</h2>
+    <p>
+      L'API usa codici di stato HTTP standard. In caso di errore il body della risposta
+      include sempre un oggetto <code>error</code> con codice, messaggio leggibile e
+      dettagli aggiuntivi opzionali.
+    </p>
+
+    <p class="section-subtitle">Schema errore</p>
+    <pre class="code-block">{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Il campo 'email' non è valido.",
+    "details": {
+      "field": "email",
+      "value": "not-an-email"
+    }
+  }
+}</pre>
+
+    <p class="section-subtitle">Codici HTTP</p>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Codice</th>
+            <th>Status</th>
+            <th>Descrizione</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="status-badge status-2xx">200</span></td>
+            <td><strong>OK</strong></td>
+            <td>Richiesta completata con successo.</td>
+          </tr>
+          <tr>
+            <td><span class="status-badge status-2xx">201</span></td>
+            <td><strong>Created</strong></td>
+            <td>Risorsa creata con successo. Il body contiene la nuova risorsa.</td>
+          </tr>
+          <tr>
+            <td><span class="status-badge status-2xx">202</span></td>
+            <td><strong>Accepted</strong></td>
+            <td>Richiesta accettata, elaborazione asincrona avviata. Vedi <code>jobId</code>.</td>
+          </tr>
+          <tr>
+            <td><span class="status-badge status-4xx">400</span></td>
+            <td><strong>Bad Request</strong></td>
+            <td>Il body della richiesta contiene errori di sintassi o campi non validi.</td>
+          </tr>
+          <tr>
+            <td><span class="status-badge status-4xx">401</span></td>
+            <td><strong>Unauthorized</strong></td>
+            <td>Token assente, scaduto o non valido. Eseguire nuovamente il login.</td>
+          </tr>
+          <tr>
+            <td><span class="status-badge status-4xx">403</span></td>
+            <td><strong>Forbidden</strong></td>
+            <td>L'utente autenticato non ha i permessi per questa operazione.</td>
+          </tr>
+          <tr>
+            <td><span class="status-badge status-4xx">404</span></td>
+            <td><strong>Not Found</strong></td>
+            <td>La risorsa richiesta non esiste o non è accessibile dall'utente.</td>
+          </tr>
+          <tr>
+            <td><span class="status-badge status-4xx">422</span></td>
+            <td><strong>Unprocessable Entity</strong></td>
+            <td>Sintassi corretta ma la logica di business non consente l'operazione.</td>
+          </tr>
+          <tr>
+            <td><span class="status-badge status-4xx">429</span></td>
+            <td><strong>Too Many Requests</strong></td>
+            <td>Rate limit superato. Attendere il tempo indicato in <code>Retry-After</code>.</td>
+          </tr>
+          <tr>
+            <td><span class="status-badge status-5xx">500</span></td>
+            <td><strong>Internal Server Error</strong></td>
+            <td>Errore imprevisto lato server. Contattare il supporto con il <code>requestId</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="warn-box">
+      In ambiente demo gli errori HTTP 4xx e 5xx sono simulati lato client e non
+      riflettono necessariamente i comportamenti del backend di produzione.
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    Fermopoint Control Tower — API Reference — v1.0 — Aprile 2026
+  </footer>
+</main>
+
+<script>
+  // IntersectionObserver per highlight sezione attiva nella sidebar
+  const sections = document.querySelectorAll('.doc-section[id]')
+  const navLinks  = document.querySelectorAll('.sidebar-nav a')
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'))
+        const link = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`)
+        if (link) link.classList.add('active')
+      }
+    })
+  }, { rootMargin: '-20% 0px -65% 0px', threshold: 0 })
+
+  sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>
