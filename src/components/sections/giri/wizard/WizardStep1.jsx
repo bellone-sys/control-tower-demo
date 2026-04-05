@@ -147,10 +147,6 @@ export default function WizardStep1({ data, onChange }) {
     ? [selectedFiliale.lat, selectedFiliale.lng]
     : [41.9028, 12.4964]
 
-  const mapBounds = selectedFiliale
-    ? [[selectedFiliale.lat - 0.3, selectedFiliale.lng - 0.3], [selectedFiliale.lat + 0.3, selectedFiliale.lng + 0.3]]
-    : [[41.5, 12.0], [42.2, 13.2]]
-
   return (
     <div className="wizard-step-layout">
       <TutorialOverlay
@@ -313,8 +309,8 @@ export default function WizardStep1({ data, onChange }) {
       <div className="wizard-map-panel">
         <MapContainer
           key={`step1-${data.filialeId}`}
-          bounds={mapBounds}
-          boundsOptions={{ padding: [30, 30] }}
+          center={mapCenter}
+          zoom={11}
           style={{ width: '100%', height: '100%' }}
           scrollWheelZoom={true}
         >
@@ -333,7 +329,7 @@ export default function WizardStep1({ data, onChange }) {
             />
           ))}
 
-          {/* PUDOs with CI — labeled */}
+          {/* PUDOs with CI — labeled (singolo Tooltip per marker, react-leaflet v5) */}
           {pudosWithCi.map(p => (
             <CircleMarker
               key={`ci-${p.id}`}
@@ -346,12 +342,12 @@ export default function WizardStep1({ data, onChange }) {
                 weight: 2,
               }}
             >
-              <Tooltip permanent direction="top" offset={[0, -10]} className="ci-tooltip">
-                <span style={{ fontWeight: 700, fontSize: 10 }}>{p.ci.toFixed(1)}</span>
-              </Tooltip>
-              <Tooltip direction="bottom" offset={[0, 8]}>
-                <strong>{p.name}</strong><br />
-                CI: {p.ci.toFixed(2)} · {p.cap}
+              <Tooltip direction="top" offset={[0, -12]}>
+                <div style={{ lineHeight: 1.4 }}>
+                  <div style={{ fontWeight: 700, fontSize: 12 }}>{p.ci.toFixed(2)} CI</div>
+                  <div style={{ fontSize: 11 }}>{p.name}</div>
+                  <div style={{ fontSize: 10, opacity: 0.75 }}>{p.id} · {p.cap}</div>
+                </div>
               </Tooltip>
             </CircleMarker>
           ))}
