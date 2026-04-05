@@ -142,13 +142,16 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
 
       {/* Link documentazione e playbook */}
       <div className="sidebar-docs-section">
-        <button
-          className={`nav-item sidebar-docs-link${active === 'docs' ? ' active' : ''}`}
-          onClick={() => onNav('docs')}
+        <a
+          href="/control-tower-demo/docs/manuale.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-item sidebar-docs-link"
         >
           <IconBook />
           <span>Manuale Utente</span>
-        </button>
+          <span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
+        </a>
         <a
           href="/control-tower-demo/glossario.html"
           target="_blank"
