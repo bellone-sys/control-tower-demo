@@ -119,3 +119,101 @@
   line-height: 1.5;
 }
 .admin-notice svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ===== STATO TOGGLE ===== */
+.stato-toggle-wrap {
+  display: flex; align-items: center; gap: 8px;
+}
+.stato-toggle {
+  position: relative;
+  width: 34px; height: 18px;
+  border-radius: 9px;
+  background: var(--fp-cool-gray);
+  border: none; cursor: pointer;
+  transition: background var(--transition);
+  flex-shrink: 0;
+  padding: 0;
+}
+.stato-toggle.on { background: #2E7D32; }
+.stato-toggle:disabled { cursor: not-allowed; opacity: 0.45; }
+.stato-knob {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform var(--transition);
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.stato-toggle.on .stato-knob { transform: translateX(16px); }
+.stato-label { font-size: 12px; }
+
+/* ===== RESET PASSWORD BUTTON ===== */
+.btn-icon-key { color: #1565C0; }
+.btn-icon-key:hover { background: #e3f0fb; }
+
+/* ===== AUTH TYPE PICKER ===== */
+.auth-type-picker { display: flex; gap: 10px; flex-wrap: wrap; }
+.auth-type-option {
+  flex: 1; min-width: 180px;
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px;
+  border: 2px solid var(--fp-cool-gray);
+  border-radius: var(--radius-lg);
+  background: #fff; cursor: pointer;
+  text-align: left; transition: all var(--transition);
+}
+.auth-type-option:hover { border-color: var(--fp-charcoal); }
+.auth-type-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.auth-type-nome { font-size: 13px; font-weight: 600; color: var(--fp-charcoal); margin-bottom: 3px; }
+.auth-type-desc { font-size: 11px; color: var(--fp-gray-mid); line-height: 1.4; }
+
+/* ===== RESET MODAL ===== */
+.reset-modal-box { max-width: 520px; }
+
+.reset-desc { font-size: 13px; color: var(--fp-gray-mid); margin-bottom: 16px; }
+
+.reset-options { display: flex; flex-direction: column; gap: 12px; }
+.reset-option {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 18px;
+  border: 2px solid var(--fp-cool-gray);
+  border-radius: var(--radius-lg);
+  background: #fff; cursor: pointer; text-align: left;
+  transition: all var(--transition); width: 100%;
+}
+.reset-option:hover { border-color: var(--fp-charcoal); background: var(--fp-gray-light-bg); }
+.reset-option-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+.reset-option-title { font-size: 14px; font-weight: 600; color: var(--fp-charcoal); margin-bottom: 4px; }
+.reset-option-desc  { font-size: 12px; color: var(--fp-gray-mid); line-height: 1.5; }
+
+.reset-email-sent {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px;
+  background: #e8f5e9; border-radius: var(--radius);
+  margin-bottom: 16px;
+}
+.reset-email-icon { font-size: 22px; flex-shrink: 0; }
+.reset-email-title { font-size: 14px; font-weight: 500; color: var(--fp-charcoal); }
+.reset-email-sub { font-size: 12px; color: var(--fp-gray-mid); margin-top: 2px; }
+
+.reset-email-box {
+  background: var(--fp-gray-light-bg);
+  border: 1px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.reset-email-label { font-size: 11px; font-weight: 600; color: var(--fp-gray-mid); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.reset-email-link {
+  display: block; font-size: 11px; color: var(--fp-red);
+  word-break: break-all; line-height: 1.5; margin-bottom: 8px;
+}
+.reset-email-token { font-size: 12px; color: var(--fp-gray-mid); }
+
+.reset-email-note {
+  font-size: 12px; color: var(--fp-gray-mid); line-height: 1.6;
+  padding: 10px 14px;
+  background: #fff8e1; border-left: 3px solid #f9a825;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
