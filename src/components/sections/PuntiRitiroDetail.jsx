@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import EntityHistory from '../ui/EntityHistory'
 import './PuntiRitiroDetail.css'
 
 const DAYS = ['lun','mar','mer','gio','ven','sab','dom']
@@ -34,6 +35,7 @@ function getPudoVolumeLibero(pudo) {
 export default function PuntiRitiroDetail({ pudo, onBack }) {
   const mapRef = useRef(null)
   const mapInstance = useRef(null)
+  const [activeTab, setActiveTab] = useState('details')
 
   const todayIdx = [0,1,2,3,4,5,6][(new Date().getDay() + 6) % 7] // Mon=0
   const todayKey = DAYS[todayIdx]
@@ -100,8 +102,8 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
     <div className="section-content">
       {/* Back button + title */}
       <div className="detail-header">
-        <button className="btn-back" onClick={onBack}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <button className="btn-back" onClick={onBack} aria-label="Torna all'elenco PUDO">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
           Torna all'elenco
@@ -109,9 +111,29 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
         <h2 className="detail-title">
           Dettagli <span className="text-red">PUDO</span>
         </h2>
+        {/* Sub-tabs */}
+        <div className="detail-subtabs" role="tablist" aria-label="Sezioni dettaglio PUDO" style={{ marginLeft: 'auto', display: 'flex', gap: 0 }}>
+          {[{ id: 'details', label: 'Dettagli' }, { id: 'history', label: '🕐 Cronologia' }].map(tab => (
+            <button
+              key={tab.id}
+              role="tab"
+              aria-selected={activeTab === tab.id}
+              className={`giro-detail-tab${activeTab === tab.id ? ' active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="detail-grid">
+      {activeTab === 'history' && (
+        <div style={{ background: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', padding: '16px 24px' }}>
+          <EntityHistory entityType="pudo" entityId={pudo.id} />
+        </div>
+      )}
+
+      <div className="detail-grid" hidden={activeTab !== 'details'}>
 
         {/* Map — smaller */}
         <div className="detail-map-wrap">

@@ -13,9 +13,12 @@ import Contratti from './components/sections/Contratti'
 import Utenti from './components/sections/Utenti'
 import Eccezioni from './components/sections/Eccezioni'
 import Report from './components/sections/Report'
+import Documentazione from './components/sections/Documentazione'
 import ProgressToast from './components/ui/ProgressToast'
+import { seedDemoHistory } from './services/historyService'
 import { TutorialProvider } from './contexts/TutorialContext'
 import { I18nProvider } from './contexts/I18nContext'
+import { ThemeProvider } from './contexts/ThemeContext'
 import { ECCEZIONI } from './data/stub'
 import './App.css'
 
@@ -49,6 +52,9 @@ export default function App() {
       localStorage.removeItem(SESSION_KEY)
     }
   }, [user])
+
+  // Seed demo history events on first load
+  useEffect(() => { seedDemoHistory() }, [])
 
   const eccezioniAperte = ECCEZIONI.filter(e => e.stato === 'Aperta').length
 
@@ -153,9 +159,11 @@ export default function App() {
     utenti:     <Utenti currentUser={user} />,
     eccezioni:  <Eccezioni />,
     report:     <Report />,
+    docs:       <Documentazione />,
   }
 
   return (
+    <ThemeProvider>
     <I18nProvider>
     <TutorialProvider>
       <div className="app-shell">
@@ -195,5 +203,6 @@ export default function App() {
       </div>
     </TutorialProvider>
     </I18nProvider>
+    </ThemeProvider>
   )
 }

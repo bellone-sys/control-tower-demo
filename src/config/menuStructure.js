@@ -49,6 +49,16 @@ export const MENU_GROUPS = [
       { id: 'report', label: 'Report', icon: 'IconChart', section: 'report' },
     ],
   },
+  {
+    id: 'risorse',
+    label: 'Risorse',
+    icon: 'IconDocument',
+    collapsed: true,
+    collapsible: true,
+    items: [
+      { id: 'docs', label: 'Documentazione', icon: 'IconDocument', section: 'docs' },
+    ],
+  },
 ]
 
 /**

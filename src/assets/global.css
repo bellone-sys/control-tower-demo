@@ -1,9 +1,11 @@
 /* ===== FERMOPOINT BRAND VARIABLES ===== */
 :root {
-  /* Colors */
+  /* Brand */
   --fp-red: #DC0032;
   --fp-red-dark: #A90034;
   --fp-red-hover: #c0002b;
+
+  /* Light theme (default) */
   --fp-charcoal: #414042;
   --fp-white: #FFFFFF;
   --fp-gray-mid: #808285;
@@ -12,12 +14,27 @@
   --fp-warm-gray: #E4E1DE;
   --fp-cool-gray: #E6E7E8;
   --fp-bg: #F5F5F6;
+  --fp-gray-light-bg: #f8f8f9;
+  --fp-border: #E6E7E8;
+
+  /* Semantic tokens (mapped to light theme) */
+  --color-bg:          #F5F5F6;
+  --color-surface:     #FFFFFF;
+  --color-surface-2:   #f8f8f9;
+  --color-surface-3:   #F0F0F1;
+  --color-border:      #E6E7E8;
+  --color-border-mid:  #d0d0d1;
+  --color-text:        #414042;
+  --color-text-dim:    #808285;
+  --color-text-faint:  #A4A3A4;
+  --color-shadow:      rgba(65,64,66,.10);
+  --color-shadow-md:   rgba(65,64,66,.14);
 
   /* Status colors */
   --fp-success: #2E7D32;
   --fp-warning: #F57C00;
-  --fp-danger: #DC0032;
-  --fp-info: #1565C0;
+  --fp-danger:  #DC0032;
+  --fp-info:    #1565C0;
 
   /* Typography */
   --fp-font: 'Inter', 'Calibri Light', 'Calibri', 'Trebuchet MS', sans-serif;
@@ -25,9 +42,61 @@
   /* Spacing */
   --radius: 6px;
   --radius-lg: 10px;
-  --shadow: 0 1px 3px rgba(65,64,66,.10), 0 1px 2px rgba(65,64,66,.06);
-  --shadow-md: 0 4px 12px rgba(65,64,66,.12);
+  --shadow: 0 1px 3px var(--color-shadow), 0 1px 2px var(--color-shadow);
+  --shadow-md: 0 4px 12px var(--color-shadow-md);
   --transition: 150ms ease;
+}
+
+/* ===== DARK THEME ===== */
+[data-theme="dark"] {
+  --fp-charcoal: #c1c2c5;
+  --fp-white: #25262b;
+  --fp-gray-mid: #909296;
+  --fp-gray-light: #5c5f66;
+  --fp-cool-gray: #373a40;
+  --fp-warm-gray: #2c2e33;
+  --fp-bg: #1a1b1e;
+  --fp-gray-light-bg: #25262b;
+  --fp-border: #373a40;
+
+  --color-bg:          #1a1b1e;
+  --color-surface:     #25262b;
+  --color-surface-2:   #2c2e33;
+  --color-surface-3:   #373a40;
+  --color-border:      #373a40;
+  --color-border-mid:  #4a4d55;
+  --color-text:        #c1c2c5;
+  --color-text-dim:    #909296;
+  --color-text-faint:  #5c5f66;
+  --color-shadow:      rgba(0,0,0,.30);
+  --color-shadow-md:   rgba(0,0,0,.45);
+}
+
+/* System preference fallback (when no manual override) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fp-charcoal: #c1c2c5;
+    --fp-white: #25262b;
+    --fp-gray-mid: #909296;
+    --fp-gray-light: #5c5f66;
+    --fp-cool-gray: #373a40;
+    --fp-warm-gray: #2c2e33;
+    --fp-bg: #1a1b1e;
+    --fp-gray-light-bg: #25262b;
+    --fp-border: #373a40;
+
+    --color-bg:          #1a1b1e;
+    --color-surface:     #25262b;
+    --color-surface-2:   #2c2e33;
+    --color-surface-3:   #373a40;
+    --color-border:      #373a40;
+    --color-border-mid:  #4a4d55;
+    --color-text:        #c1c2c5;
+    --color-text-dim:    #909296;
+    --color-text-faint:  #5c5f66;
+    --color-shadow:      rgba(0,0,0,.30);
+    --color-shadow-md:   rgba(0,0,0,.45);
+  }
 }
 
 /* ===== RESET ===== */
