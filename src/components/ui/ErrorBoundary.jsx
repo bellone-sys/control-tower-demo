@@ -1,9 +1,18 @@
 import { Component } from 'react'
 
+/**
+ * ErrorBoundary — cattura errori di rendering in un sottoalbero React.
+ * Previene che un errore in un componente figlio propaghi all'intera app.
+ *
+ * Props:
+ *   - children: contenuto da proteggere
+ *   - fallback: nodo React alternativo da mostrare in caso di errore (opzionale)
+ *   - onError: callback(error, info) opzionale
+ */
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
-    this.state = { hasError: false, error: null, componentStack: null }
+    this.state = { hasError: false, error: null }
   }
 
   static getDerivedStateFromError(error) {
@@ -11,14 +20,7 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    const stack = info?.componentStack ?? '(nessuno)'
-    console.group('%c[ErrorBoundary] CRASH WIZARD', 'color:red;font-weight:bold;font-size:14px')
-    console.error('Errore:', error)
-    console.error('Messaggio:', error?.message)
-    console.error('Stack JS:\n', error?.stack)
-    console.error('Component stack React:\n', stack)
-    console.groupEnd()
-    this.setState({ componentStack: stack })
+    console.error('[ErrorBoundary]', error, info)
     this.props.onError?.(error, info)
   }
 
@@ -26,59 +28,30 @@ export default class ErrorBoundary extends Component {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback
 
-      const { error, componentStack } = this.state
       return (
         <div style={{
-          position: 'fixed', inset: 0, zIndex: 9999,
-          background: 'rgba(65,64,66,0.92)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: 24,
+          padding: 32, textAlign: 'center',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          gap: 8,
         }}>
-          <div style={{
-            background: '#fff', borderRadius: 10, padding: 28,
-            width: '100%', maxWidth: 780, maxHeight: '90vh',
-            overflow: 'auto', boxShadow: '0 8px 40px rgba(0,0,0,0.4)',
-            fontFamily: 'monospace',
-          }}>
-            <div style={{ fontSize: 18, fontWeight: 700, color: '#DC0032', marginBottom: 4 }}>
-              ⚠ Crash Wizard — Debug Log
-            </div>
-            <div style={{ fontSize: 12, color: '#808285', marginBottom: 16 }}>
-              Fai uno screenshot di questa pagina e inviala per il debug.
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#414042', marginBottom: 4 }}>Messaggio</div>
-              <pre style={{ background: '#fff0f3', padding: '8px 12px', borderRadius: 6, fontSize: 12, color: '#c0392b', whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0 }}>
-                {error?.message ?? '(nessun messaggio)'}
-              </pre>
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#414042', marginBottom: 4 }}>Stack JavaScript</div>
-              <pre style={{ background: '#f5f5f5', padding: '8px 12px', borderRadius: 6, fontSize: 10, color: '#414042', whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0, maxHeight: 200, overflow: 'auto' }}>
-                {error?.stack ?? '(nessuno)'}
-              </pre>
-            </div>
-
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#414042', marginBottom: 4 }}>Component Stack React</div>
-              <pre style={{ background: '#f5f5f5', padding: '8px 12px', borderRadius: 6, fontSize: 10, color: '#414042', whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0, maxHeight: 200, overflow: 'auto' }}>
-                {componentStack ?? '(nessuno)'}
-              </pre>
-            </div>
-
-            <button
-              style={{
-                padding: '9px 24px', background: '#DC0032', color: '#fff',
-                border: 'none', borderRadius: 6, cursor: 'pointer',
-                fontWeight: 700, fontSize: 13, fontFamily: 'sans-serif',
-              }}
-              onClick={() => this.setState({ hasError: false, error: null, componentStack: null })}
-            >
-              Chiudi e riprova
-            </button>
+          <div style={{ fontSize: 32 }}>⚠️</div>
+          <div style={{ fontWeight: 600, fontSize: 15, color: '#414042' }}>
+            Errore nel rendering
           </div>
+          <div style={{ fontSize: 13, color: '#808285', maxWidth: 400 }}>
+            {this.state.error?.message ?? 'Si è verificato un errore imprevisto.'}
+          </div>
+          <button
+            style={{
+              marginTop: 8, padding: '8px 20px',
+              background: '#DC0032', color: '#fff',
+              border: 'none', borderRadius: 6,
+              cursor: 'pointer', fontWeight: 600, fontSize: 13,
+            }}
+            onClick={() => this.setState({ hasError: false, error: null })}
+          >
+            Riprova
+          </button>
         </div>
       )
     }
