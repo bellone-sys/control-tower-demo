@@ -438,7 +438,15 @@
   background: var(--fp-gray-mid);
 }
 
-/* Manual Link */
+/* Copyright */
+.settings-about-copyright {
+  font-size: 11px;
+  color: var(--fp-gray-mid);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Manual Link (legacy — kept for safety) */
 .settings-manual-link {
   display: inline-flex;
   align-items: center;

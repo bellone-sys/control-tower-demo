@@ -1,0 +1,2002 @@
+[
+  {
+    "id": "B001",
+    "nome": "PESCARA",
+    "indirizzo": "Via Aterno, 66",
+    "cap": "66020",
+    "citta": "S.Giovanni Teatino",
+    "provincia": "CH",
+    "regione": "Abruzzo",
+    "telefono": "085440511"
+  },
+  {
+    "id": "B002",
+    "nome": "TERMOLI",
+    "indirizzo": "Via Pertini",
+    "cap": "66050",
+    "citta": "San Salvo",
+    "provincia": "CH",
+    "regione": "Abruzzo",
+    "telefono": "0873545703"
+  },
+  {
+    "id": "B003",
+    "nome": "L'AQUILA",
+    "indirizzo": "Via Marisa Bellisario Z.I.",
+    "cap": "67100",
+    "citta": "Monticchio",
+    "provincia": "AQ",
+    "regione": "Abruzzo",
+    "telefono": "0862441621"
+  },
+  {
+    "id": "B004",
+    "nome": "PESCARA OVEST",
+    "indirizzo": "Via Abruzzo 19/D",
+    "cap": "65012",
+    "citta": "Cepagatti",
+    "provincia": "PE",
+    "regione": "Abruzzo",
+    "telefono": "0859769411"
+  },
+  {
+    "id": "B005",
+    "nome": "TERAMO",
+    "indirizzo": "Via del Lavoro",
+    "cap": "64023",
+    "citta": "Mosciano Sant'Angelo",
+    "provincia": "TE",
+    "regione": "Abruzzo",
+    "telefono": "0858062350"
+  },
+  {
+    "id": "B006",
+    "nome": "PORTO D'ASCOLI",
+    "indirizzo": "Via Isola, 24",
+    "cap": "64010",
+    "citta": "Colonnella",
+    "provincia": "TE",
+    "regione": "Abruzzo",
+    "telefono": "073565461"
+  },
+  {
+    "id": "B007",
+    "nome": "MATERA",
+    "indirizzo": "Contrada Iesce - Z.I.",
+    "cap": "75100",
+    "citta": "Matera",
+    "provincia": "MT",
+    "regione": "Basilicata",
+    "telefono": "0835339127"
+  },
+  {
+    "id": "B008",
+    "nome": "POTENZA",
+    "indirizzo": "Contrada S. Loya di Tito Scalo",
+    "cap": "85050",
+    "citta": "Potenza",
+    "provincia": "PZ",
+    "regione": "Basilicata",
+    "telefono": "0971485674"
+  },
+  {
+    "id": "B009",
+    "nome": "CATANZARO",
+    "indirizzo": "Strada provinciale 168/1 Km 14 +872 - Località Serramonda",
+    "cap": "88044",
+    "citta": "Marcellinara",
+    "provincia": "CZ",
+    "regione": "Calabria",
+    "telefono": "0961902611"
+  },
+  {
+    "id": "B010",
+    "nome": "COSENZA",
+    "indirizzo": "Via Pietro Mazzuca n. 31",
+    "cap": "87036",
+    "citta": "Rende",
+    "provincia": "CS",
+    "regione": "Calabria",
+    "telefono": "0984839602"
+  },
+  {
+    "id": "B011",
+    "nome": "CASTROVILLARI",
+    "indirizzo": "Zona Industriale Loc. Cammarata",
+    "cap": "87012",
+    "citta": "Castrovillari",
+    "provincia": "CS",
+    "regione": "Calabria",
+    "telefono": "098138293"
+  },
+  {
+    "id": "B012",
+    "nome": "CROTONE",
+    "indirizzo": "Via Carlo Matteucci Snc - Zona Industriale",
+    "cap": "88900",
+    "citta": "Crotone",
+    "provincia": "KR",
+    "regione": "Calabria",
+    "telefono": null
+  },
+  {
+    "id": "B013",
+    "nome": "REGGIO CALABRIA",
+    "indirizzo": "Contrada delle Ginestre Z.I. Campo Calabro",
+    "cap": "89018",
+    "citta": "Villa San Giovanni",
+    "provincia": "RC",
+    "regione": "Calabria",
+    "telefono": "0965372333"
+  },
+  {
+    "id": "B014",
+    "nome": "VIBO VALENTIA",
+    "indirizzo": "Zona Industriale Località Aeroporto",
+    "cap": "89900",
+    "citta": "Vibo Valentia",
+    "provincia": "VV",
+    "regione": "Calabria",
+    "telefono": "0963265556"
+  },
+  {
+    "id": "B015",
+    "nome": "AVELLINO",
+    "indirizzo": "Zona Industriale, Asi",
+    "cap": "83100",
+    "citta": "Santorelli",
+    "provincia": "AV",
+    "regione": "Campania",
+    "telefono": "0825627272"
+  },
+  {
+    "id": "B016",
+    "nome": "NAPOLI NORD",
+    "indirizzo": "Via Giovanni Agnelli",
+    "cap": "81025",
+    "citta": "Marcianise",
+    "provincia": "CE",
+    "regione": "Campania",
+    "telefono": "0823512611"
+  },
+  {
+    "id": "B017",
+    "nome": "NAPOLI MARCIANISE",
+    "indirizzo": "Via Giovanni Agnelli, 2",
+    "cap": "81025",
+    "citta": "Marcianise",
+    "provincia": "CE",
+    "regione": "Campania",
+    "telefono": "0823512711"
+  },
+  {
+    "id": "B018",
+    "nome": "NAPOLI NOLA",
+    "indirizzo": "Interporto di Campano BL D1- n°113",
+    "cap": "80035",
+    "citta": "Nola",
+    "provincia": "NA",
+    "regione": "Campania",
+    "telefono": "0815109353"
+  },
+  {
+    "id": "B019",
+    "nome": "NAPOLI CENTRO",
+    "indirizzo": "Via Borsellino, 158",
+    "cap": "80025",
+    "citta": "Casandrino",
+    "provincia": "NA",
+    "regione": "Campania",
+    "telefono": "0815054423"
+  },
+  {
+    "id": "B020",
+    "nome": "CASTELLAMMARE DI STABIA",
+    "indirizzo": "Via Napoli, 350",
+    "cap": "80053",
+    "citta": "Castellammare di Stabia",
+    "provincia": "NA",
+    "regione": "Campania",
+    "telefono": "0818018692"
+  },
+  {
+    "id": "B021",
+    "nome": "NAPOLI CASANDRINO",
+    "indirizzo": "Via Borsellino, 160",
+    "cap": "80025",
+    "citta": "Casandrino",
+    "provincia": "NA",
+    "regione": "Campania",
+    "telefono": "0813982411"
+  },
+  {
+    "id": "B022",
+    "nome": "NAPOLI OVEST",
+    "indirizzo": "Via Borsellino, 158",
+    "cap": "80025",
+    "citta": "Casandrino",
+    "provincia": "NA",
+    "regione": "Campania",
+    "telefono": "0813982411"
+  },
+  {
+    "id": "B023",
+    "nome": "NAPOLI CASANDRINO - SERVIZI LOGISTICI",
+    "indirizzo": "Via Borsellino, 158",
+    "cap": "80025",
+    "citta": "Casandrino",
+    "provincia": "NA",
+    "regione": "Campania",
+    "telefono": null
+  },
+  {
+    "id": "B024",
+    "nome": "SALERNO",
+    "indirizzo": "Via Vincenzo Bellini, 29/C",
+    "cap": "84090",
+    "citta": "Montecorvino Pugliano",
+    "provincia": "SA",
+    "regione": "Campania",
+    "telefono": "0828355350"
+  },
+  {
+    "id": "B025",
+    "nome": "ATENA LUCANA",
+    "indirizzo": "Strada Vicinale Fiego",
+    "cap": "84030",
+    "citta": "Atena Lucana",
+    "provincia": "SA",
+    "regione": "Campania",
+    "telefono": "0975511416"
+  },
+  {
+    "id": "B026",
+    "nome": "BOLOGNA ROVERI 2",
+    "indirizzo": "Via del Conciatore, 3/5",
+    "cap": "40138",
+    "citta": "Bologna",
+    "provincia": "BO",
+    "regione": "Emilia-Romagna",
+    "telefono": "0516032111"
+  },
+  {
+    "id": "B027",
+    "nome": "BOLOGNA INTERPORTO",
+    "indirizzo": "Interporto di Bologna Blocco 1.2",
+    "cap": "40010",
+    "citta": "Bentivoglio",
+    "provincia": "BO",
+    "regione": "Emilia-Romagna",
+    "telefono": "0516657011"
+  },
+  {
+    "id": "B028",
+    "nome": "IMOLA",
+    "indirizzo": "Via Serraglio, 15",
+    "cap": "40026",
+    "citta": "Imola",
+    "provincia": "BO",
+    "regione": "Emilia-Romagna",
+    "telefono": "0542643275"
+  },
+  {
+    "id": "B029",
+    "nome": "CRESPELLANO",
+    "indirizzo": "Via Chiesaccia",
+    "cap": "40053",
+    "citta": "Valsamoggia",
+    "provincia": "BO",
+    "regione": "Emilia-Romagna",
+    "telefono": "051739328"
+  },
+  {
+    "id": "B030",
+    "nome": "BOLOGNA ROVERI - SERVIZI LOGISTICI",
+    "indirizzo": "Via Cerodolo, 7",
+    "cap": "40138",
+    "citta": "Bologna",
+    "provincia": "BO",
+    "regione": "Emilia-Romagna",
+    "telefono": null
+  },
+  {
+    "id": "B031",
+    "nome": "CRESPELLANO - SERVIZI LOGISTICI",
+    "indirizzo": "Via Chiesaccia",
+    "cap": "40053",
+    "citta": "Valsamoggia",
+    "provincia": "BO",
+    "regione": "Emilia-Romagna",
+    "telefono": null
+  },
+  {
+    "id": "B032",
+    "nome": "BOLOGNA ROVERI",
+    "indirizzo": "Via Cerodolo, 7",
+    "cap": "40138",
+    "citta": "Bologna",
+    "provincia": "BO",
+    "regione": "Emilia-Romagna",
+    "telefono": "0516032111"
+  },
+  {
+    "id": "B033",
+    "nome": "FERRARA",
+    "indirizzo": "Via Giovan Battista Crema, 11",
+    "cap": "44100",
+    "citta": "Ferrara",
+    "provincia": "FE",
+    "regione": "Emilia-Romagna",
+    "telefono": "0532773628"
+  },
+  {
+    "id": "B034",
+    "nome": "FORLI'",
+    "indirizzo": "Via Martoni, 11 int. 1",
+    "cap": "47100",
+    "citta": "Forlì",
+    "provincia": "FC",
+    "regione": "Emilia-Romagna",
+    "telefono": "0543722235"
+  },
+  {
+    "id": "B035",
+    "nome": "CESENA",
+    "indirizzo": "Via Madre Teresa di Calcutta, 1",
+    "cap": "47043",
+    "citta": "Gatteo",
+    "provincia": "FC",
+    "regione": "Emilia-Romagna",
+    "telefono": "0541804811"
+  },
+  {
+    "id": "B036",
+    "nome": "MODENA",
+    "indirizzo": "V.le Europa, 32",
+    "cap": "41011",
+    "citta": "Campogalliano",
+    "provincia": "MO",
+    "regione": "Emilia-Romagna",
+    "telefono": "059521511"
+  },
+  {
+    "id": "B037",
+    "nome": "PARMA",
+    "indirizzo": "Via Lisbona, 1 Interporto di Parma",
+    "cap": "43010",
+    "citta": "Fontevivo",
+    "provincia": "PR",
+    "regione": "Emilia-Romagna",
+    "telefono": "0521679711"
+  },
+  {
+    "id": "B038",
+    "nome": "PARMA MESSAGGERIA",
+    "indirizzo": "Via Sofia",
+    "cap": "43010",
+    "citta": "Fontevivo",
+    "provincia": "PR",
+    "regione": "Emilia-Romagna",
+    "telefono": "0521364111"
+  },
+  {
+    "id": "B039",
+    "nome": "PIACENZA",
+    "indirizzo": "Via J. F. Kennedy",
+    "cap": "29012",
+    "citta": "Caorso",
+    "provincia": "PC",
+    "regione": "Emilia-Romagna",
+    "telefono": "0523590413"
+  },
+  {
+    "id": "B040",
+    "nome": "REGGIO EMILIA",
+    "indirizzo": "Via De Chirico, 35 - Loc. Cella",
+    "cap": "42100",
+    "citta": "Reggio Emilia",
+    "provincia": "RE",
+    "regione": "Emilia-Romagna",
+    "telefono": "0522944155"
+  },
+  {
+    "id": "B041",
+    "nome": "RAVENNA",
+    "indirizzo": "Via Canala, 91",
+    "cap": "48100",
+    "citta": "Ravenna",
+    "provincia": "RA",
+    "regione": "Emilia-Romagna",
+    "telefono": "0544463408"
+  },
+  {
+    "id": "B042",
+    "nome": "FAENZA",
+    "indirizzo": "Via Nove, 11",
+    "cap": "48018",
+    "citta": "Faenza",
+    "provincia": "RA",
+    "regione": "Emilia-Romagna",
+    "telefono": "0546646054"
+  },
+  {
+    "id": "B043",
+    "nome": "CATTOLICA",
+    "indirizzo": "Via Mercadante, 93/D",
+    "cap": "47841",
+    "citta": "Cattolica",
+    "provincia": "RN",
+    "regione": "Emilia-Romagna",
+    "telefono": "0541955201"
+  },
+  {
+    "id": "B044",
+    "nome": "PORDENONE",
+    "indirizzo": "Via Luciano Savio",
+    "cap": "33080",
+    "citta": "Roveredo in Piano",
+    "provincia": "PN",
+    "regione": "Friuli-Venezia Giulia",
+    "telefono": "0434590200"
+  },
+  {
+    "id": "B045",
+    "nome": "TRIESTE",
+    "indirizzo": "Via Querini, 4",
+    "cap": "34147",
+    "citta": "Trieste",
+    "provincia": "TS",
+    "regione": "Friuli-Venezia Giulia",
+    "telefono": "040280225"
+  },
+  {
+    "id": "B046",
+    "nome": "TRIESTE AURISINA",
+    "indirizzo": "Via Aurisina Cave, 44/E3",
+    "cap": "34011",
+    "citta": "Duino-Aurisina",
+    "provincia": "TS",
+    "regione": "Friuli-Venezia Giulia",
+    "telefono": "0402024190"
+  },
+  {
+    "id": "B047",
+    "nome": "UDINE",
+    "indirizzo": "Via Leonardo da Vinci, 55",
+    "cap": "33010",
+    "citta": "Reana del Rojale",
+    "provincia": "UD",
+    "regione": "Friuli-Venezia Giulia",
+    "telefono": "0432850301"
+  },
+  {
+    "id": "B048",
+    "nome": "GORIZIA",
+    "indirizzo": "Via Marinoni, 1",
+    "cap": "33057",
+    "citta": "Palmanova",
+    "provincia": "UD",
+    "regione": "Friuli-Venezia Giulia",
+    "telefono": "0432835711"
+  },
+  {
+    "id": "B049",
+    "nome": "FROSINONE",
+    "indirizzo": "Via Casilina, Km 69",
+    "cap": "03013",
+    "citta": "Ferentino",
+    "provincia": "FR",
+    "regione": "Lazio",
+    "telefono": "0775393420"
+  },
+  {
+    "id": "B050",
+    "nome": "CASSINO",
+    "indirizzo": "Via Solfegna Cantoni",
+    "cap": "03043",
+    "citta": "Cassino",
+    "provincia": "FR",
+    "regione": "Lazio",
+    "telefono": "0776300460"
+  },
+  {
+    "id": "B051",
+    "nome": "LATINA",
+    "indirizzo": "Strada Frassonetto",
+    "cap": "04100",
+    "citta": "Borgo San Michele",
+    "provincia": "LT",
+    "regione": "Lazio",
+    "telefono": "0773242212"
+  },
+  {
+    "id": "B052",
+    "nome": "ROMA AURELIO",
+    "indirizzo": "Via del Ponte Pisano, 94",
+    "cap": "00163",
+    "citta": "Roma",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "066591124"
+  },
+  {
+    "id": "B053",
+    "nome": "ROMA FIUMICINO",
+    "indirizzo": "Via della Corona Boreale, 240",
+    "cap": "00054",
+    "citta": "Fiumicino",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "07654581"
+  },
+  {
+    "id": "B054",
+    "nome": "ROMA FIANO",
+    "indirizzo": "Via dell'Artigianato, 14",
+    "cap": "00065",
+    "citta": "Fiano Romano",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "07654581"
+  },
+  {
+    "id": "B055",
+    "nome": "ROMA CASILINO",
+    "indirizzo": "Via Casilina, 1670",
+    "cap": "00133",
+    "citta": "Roma",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "062051370"
+  },
+  {
+    "id": "B056",
+    "nome": "ROMA CENTRO",
+    "indirizzo": "Via Capranesi, 20",
+    "cap": "00155",
+    "citta": "Roma",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "0622759002"
+  },
+  {
+    "id": "B057",
+    "nome": "ROMA LA RUSTICA",
+    "indirizzo": "Via Capranesi, 20",
+    "cap": "00155",
+    "citta": "Roma",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "06227371"
+  },
+  {
+    "id": "B058",
+    "nome": "POMEZIA",
+    "indirizzo": "Via delle Monachelle Vecchia, 134",
+    "cap": "00040",
+    "citta": "Pomezia",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "0691603911"
+  },
+  {
+    "id": "B059",
+    "nome": "ROMA FIANO 2",
+    "indirizzo": "Via del Commercio, 2",
+    "cap": "00065",
+    "citta": "Fiano Romano",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "0765455965"
+  },
+  {
+    "id": "B060",
+    "nome": "GUIDONIA",
+    "indirizzo": "Via Casal Bianco, 119",
+    "cap": "00012",
+    "citta": "Guidonia Montecelio",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "0622737311"
+  },
+  {
+    "id": "B061",
+    "nome": "GUIDONIA - SERVIZI LOGISTICI",
+    "indirizzo": "Via Casal Bianco, 119",
+    "cap": "00012",
+    "citta": "Guidonia Montecelio",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": null
+  },
+  {
+    "id": "B062",
+    "nome": "ROMA TIBURTINA",
+    "indirizzo": "Via Casal Bianco, 119",
+    "cap": "00012",
+    "citta": "Guidonia Montecelio",
+    "provincia": "RM",
+    "regione": "Lazio",
+    "telefono": "0622737411"
+  },
+  {
+    "id": "B063",
+    "nome": "VITERBO",
+    "indirizzo": "Via S.M. in Silice, 18",
+    "cap": "01100",
+    "citta": "Viterbo",
+    "provincia": "VT",
+    "regione": "Lazio",
+    "telefono": "0761345323"
+  },
+  {
+    "id": "B064",
+    "nome": "GENOVA FEGINO",
+    "indirizzo": "Via Quartini, 23",
+    "cap": "16161",
+    "citta": "Genova",
+    "provincia": "GE",
+    "regione": "Liguria",
+    "telefono": "0107415064"
+  },
+  {
+    "id": "B065",
+    "nome": "GENOVA CORNIGLIANO",
+    "indirizzo": "Via F.lli di Coronata, 36/D",
+    "cap": "16152",
+    "citta": "Genova",
+    "provincia": "GE",
+    "regione": "Liguria",
+    "telefono": "01072201"
+  },
+  {
+    "id": "B066",
+    "nome": "GENOVA BOLZANETO",
+    "indirizzo": "Via Fratelli Canepa, 130/B",
+    "cap": "16010",
+    "citta": "Serra Riccò",
+    "provincia": "GE",
+    "regione": "Liguria",
+    "telefono": "01072201"
+  },
+  {
+    "id": "B067",
+    "nome": "IMPERIA",
+    "indirizzo": "Via Argine Destro, 607",
+    "cap": "18100",
+    "citta": "Imperia",
+    "provincia": "IM",
+    "regione": "Liguria",
+    "telefono": "0183299770"
+  },
+  {
+    "id": "B068",
+    "nome": "LA SPEZIA",
+    "indirizzo": "Località Giarizza, 10",
+    "cap": "19020",
+    "citta": "Bolano",
+    "provincia": "SP",
+    "regione": "Liguria",
+    "telefono": "0187939710"
+  },
+  {
+    "id": "B069",
+    "nome": "SAVONA",
+    "indirizzo": "Via Briano, 7",
+    "cap": "17047",
+    "citta": "Quiliano-Valleggia",
+    "provincia": "SV",
+    "regione": "Liguria",
+    "telefono": "019886100"
+  },
+  {
+    "id": "B070",
+    "nome": "BERGAMO GRASSOBBIO",
+    "indirizzo": "Via Padre Elzi 2/4",
+    "cap": "24050",
+    "citta": "Grassobbio",
+    "provincia": "BG",
+    "regione": "Lombardia",
+    "telefono": "035335400"
+  },
+  {
+    "id": "B071",
+    "nome": "BERGAMO OSIO",
+    "indirizzo": "Via Santuario SNC - SP 151",
+    "cap": "24040",
+    "citta": "Stezzano",
+    "provincia": "BG",
+    "regione": "Lombardia",
+    "telefono": "0354824090"
+  },
+  {
+    "id": "B072",
+    "nome": "STEZZANO",
+    "indirizzo": "Via Santuario SNC - SP 151",
+    "cap": "24040",
+    "citta": "Stezzano",
+    "provincia": "BG",
+    "regione": "Lombardia",
+    "telefono": "0354824090"
+  },
+  {
+    "id": "B073",
+    "nome": "BRESCIA",
+    "indirizzo": "Via Sandro Pertini, 7",
+    "cap": "25046",
+    "citta": "Cazzago San Martino",
+    "provincia": "BS",
+    "regione": "Lombardia",
+    "telefono": "0307258211"
+  },
+  {
+    "id": "B074",
+    "nome": "DESENZANO",
+    "indirizzo": "Via Ticino - Colombare di Castiglione",
+    "cap": "25015",
+    "citta": "Desenzano del Garda",
+    "provincia": "BS",
+    "regione": "Lombardia",
+    "telefono": "0309127287"
+  },
+  {
+    "id": "B075",
+    "nome": "ROVATO",
+    "indirizzo": "Via Pertini, 20",
+    "cap": "25046",
+    "citta": "Cazzago San Martino",
+    "provincia": "BS",
+    "regione": "Lombardia",
+    "telefono": "0307258211"
+  },
+  {
+    "id": "B076",
+    "nome": "BRESCIA CENTRO",
+    "indirizzo": "Via A. Grandi, 51 Z.I.",
+    "cap": "25125",
+    "citta": "Brescia",
+    "provincia": "BS",
+    "regione": "Lombardia",
+    "telefono": "0303581792"
+  },
+  {
+    "id": "B077",
+    "nome": "COMO",
+    "indirizzo": "Via Cagnola, 49/c",
+    "cap": "22075",
+    "citta": "Lurate Caccivio",
+    "provincia": "CO",
+    "regione": "Lombardia",
+    "telefono": "031390814"
+  },
+  {
+    "id": "B078",
+    "nome": "CREMONA",
+    "indirizzo": "Via degli Artigiani, 11/13/15",
+    "cap": "26100",
+    "citta": "Cremona",
+    "provincia": "CR",
+    "regione": "Lombardia",
+    "telefono": "0372463684"
+  },
+  {
+    "id": "B079",
+    "nome": "LECCO",
+    "indirizzo": "Via Verdi, 20/22",
+    "cap": "23848",
+    "citta": "Oggiono",
+    "provincia": "LC",
+    "regione": "Lombardia",
+    "telefono": "0341260109"
+  },
+  {
+    "id": "B080",
+    "nome": "LODI",
+    "indirizzo": "Via Umbria 3 Fraz. Muzza - Loc.Codognino",
+    "cap": "26854",
+    "citta": "Cornegliano Laudense",
+    "provincia": "LO",
+    "regione": "Lombardia",
+    "telefono": "0371483355"
+  },
+  {
+    "id": "B081",
+    "nome": "MANTOVA",
+    "indirizzo": "Via Sicilia, 3",
+    "cap": "46030",
+    "citta": "Bigarello",
+    "provincia": "MN",
+    "regione": "Lombardia",
+    "telefono": "0376457057"
+  },
+  {
+    "id": "B082",
+    "nome": "MILANO BOVISA",
+    "indirizzo": "Via Don Minzoni, 10",
+    "cap": "20158",
+    "citta": "Milano",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "02393381"
+  },
+  {
+    "id": "B083",
+    "nome": "MILANO SEDRIANO",
+    "indirizzo": "Loc. Cascina Scaravella, 4",
+    "cap": "20018",
+    "citta": "Sedriano",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "02903141"
+  },
+  {
+    "id": "B084",
+    "nome": "MILANO CERTOSA",
+    "indirizzo": "Via Gottlieb Wilhelm Daimler, 57",
+    "cap": "20151",
+    "citta": "Milano",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "0233912534"
+  },
+  {
+    "id": "B085",
+    "nome": "MILANO CINISELLO",
+    "indirizzo": "Via Monfalcone, 15",
+    "cap": "20092",
+    "citta": "Cinisello Balsamo",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "02611121"
+  },
+  {
+    "id": "B086",
+    "nome": "MILANO SEGRATE",
+    "indirizzo": "Via Rugacesio, 6",
+    "cap": "20090",
+    "citta": "Segrate",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "022130331"
+  },
+  {
+    "id": "B087",
+    "nome": "MILANO ALBAIRATE",
+    "indirizzo": "Via Marcatutto, S.N.",
+    "cap": "20080",
+    "citta": "Albairate",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "0294260811"
+  },
+  {
+    "id": "B088",
+    "nome": "MILANO CEVEDALE",
+    "indirizzo": "Via Cevedale, 19",
+    "cap": "20158",
+    "citta": "Milano",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "02393381"
+  },
+  {
+    "id": "B089",
+    "nome": "MILANO SEDRIANO 2",
+    "indirizzo": "Via Marie Curie, 4",
+    "cap": "20018",
+    "citta": "Sedriano",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "02903141"
+  },
+  {
+    "id": "B090",
+    "nome": "MILANO LISCATE",
+    "indirizzo": "Via S. Paolo della Croce, 13",
+    "cap": "20060",
+    "citta": "Liscate",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "02952531"
+  },
+  {
+    "id": "B091",
+    "nome": "MILANO CENTRO",
+    "indirizzo": "Via Cassio Dione, 7",
+    "cap": "20138",
+    "citta": "Milano",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "025087411"
+  },
+  {
+    "id": "B092",
+    "nome": "ALBAIRATE - SERVIZI LOGISTICI",
+    "indirizzo": "Via Marcatutto, 5/a",
+    "cap": "20080",
+    "citta": "Albairate",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": null
+  },
+  {
+    "id": "B093",
+    "nome": "MILANO SEDRIANO - SERVIZI LOGISTICI",
+    "indirizzo": "Via Marie Curie, 6",
+    "cap": "20018",
+    "citta": "Sedriano",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": null
+  },
+  {
+    "id": "B094",
+    "nome": "MILANO BOVISA 2",
+    "indirizzo": "Via Don Minzoni, 10",
+    "cap": "20158",
+    "citta": "Milano",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "02393381"
+  },
+  {
+    "id": "B095",
+    "nome": "MILANO BOVISA 3",
+    "indirizzo": "Via Cevedale, 19",
+    "cap": "20158",
+    "citta": "Milano",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "02393381"
+  },
+  {
+    "id": "B096",
+    "nome": "MILANO LISCATE 2",
+    "indirizzo": "Via San Paolo della Croce, 15",
+    "cap": "20060",
+    "citta": "Liscate",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "02952531"
+  },
+  {
+    "id": "B097",
+    "nome": "PIEVE EMANUELE",
+    "indirizzo": "Via Enrico Berlinguer, 5",
+    "cap": "20072",
+    "citta": "Pieve Emanuele",
+    "provincia": "MI",
+    "regione": "Lombardia",
+    "telefono": "0290405211"
+  },
+  {
+    "id": "B098",
+    "nome": "MILANO SUD",
+    "indirizzo": "Via Stanislao Intini, 3",
+    "cap": "27015",
+    "citta": "Landriano",
+    "provincia": "PV",
+    "regione": "Lombardia",
+    "telefono": "0250871"
+  },
+  {
+    "id": "B099",
+    "nome": "CASEI GEROLA",
+    "indirizzo": "Via E. Fermi",
+    "cap": "27050",
+    "citta": "Casei Gerola",
+    "provincia": "PV",
+    "regione": "Lombardia",
+    "telefono": "038361660"
+  },
+  {
+    "id": "B100",
+    "nome": "LANDRIANO",
+    "indirizzo": "Via Stanislao Intini, 7/A",
+    "cap": "27015",
+    "citta": "Landriano",
+    "provincia": "PV",
+    "regione": "Lombardia",
+    "telefono": "0382659111"
+  },
+  {
+    "id": "B101",
+    "nome": "LIVIGNO",
+    "indirizzo": "Via Lorenzo Moro, 4",
+    "cap": "23010",
+    "citta": "Buglio in Monte",
+    "provincia": "SO",
+    "regione": "Lombardia",
+    "telefono": "0342493867"
+  },
+  {
+    "id": "B102",
+    "nome": "SONDRIO",
+    "indirizzo": "Via Ravioni, 41",
+    "cap": "23010",
+    "citta": "Cedrasco",
+    "provincia": "SO",
+    "regione": "Lombardia",
+    "telefono": "0342493867"
+  },
+  {
+    "id": "B103",
+    "nome": "VARESE GEMONIO",
+    "indirizzo": "Via Mattei, 5",
+    "cap": "21036",
+    "citta": "Gemonio",
+    "provincia": "VA",
+    "regione": "Lombardia",
+    "telefono": "0332610504"
+  },
+  {
+    "id": "B104",
+    "nome": "ORIGGIO",
+    "indirizzo": "Via del Lavoro, 13",
+    "cap": "21040",
+    "citta": "Origgio",
+    "provincia": "VA",
+    "regione": "Lombardia",
+    "telefono": "0296956011"
+  },
+  {
+    "id": "B105",
+    "nome": "MONZA",
+    "indirizzo": "Via delle Arti, 24",
+    "cap": "20863",
+    "citta": "Concorezzo",
+    "provincia": "MB",
+    "regione": "Lombardia",
+    "telefono": "0295354260"
+  },
+  {
+    "id": "B106",
+    "nome": "ANCONA",
+    "indirizzo": "Via Sbrozzola",
+    "cap": "60027",
+    "citta": "Osimo",
+    "provincia": "AN",
+    "regione": "Marche",
+    "telefono": "0717211811"
+  },
+  {
+    "id": "B107",
+    "nome": "ANCONA CENTRO",
+    "indirizzo": "Via Caduti del Lavoro, 3",
+    "cap": "60131",
+    "citta": "Ancona",
+    "provincia": "AN",
+    "regione": "Marche",
+    "telefono": "0712861797"
+  },
+  {
+    "id": "B108",
+    "nome": "JESI",
+    "indirizzo": "Via G.Di Vittorio",
+    "cap": "60035",
+    "citta": "Jesi",
+    "provincia": "AN",
+    "regione": "Marche",
+    "telefono": "0731215212"
+  },
+  {
+    "id": "B109",
+    "nome": "CIVITANOVA MARCHE",
+    "indirizzo": "Via Pietro Gobetti, 146/5a - Zona Interporto",
+    "cap": "62012",
+    "citta": "Civitanova Marche",
+    "provincia": "MC",
+    "regione": "Marche",
+    "telefono": "0733898001"
+  },
+  {
+    "id": "B110",
+    "nome": "PESARO",
+    "indirizzo": "Via Madonna dell'Arena, 28",
+    "cap": "61022",
+    "citta": "Vallefoglia",
+    "provincia": "PU",
+    "regione": "Marche",
+    "telefono": "0721855736"
+  },
+  {
+    "id": "B111",
+    "nome": "CAMPOBASSO",
+    "indirizzo": "Via Giuseppe Ferro, 12",
+    "cap": "86025",
+    "citta": "Ripalimosani",
+    "provincia": "CB",
+    "regione": "Molise",
+    "telefono": "0874390201"
+  },
+  {
+    "id": "B112",
+    "nome": "ALESSANDRIA",
+    "indirizzo": "Via dei Boschi, 12",
+    "cap": "15072",
+    "citta": "Casal Cermelli",
+    "provincia": "AL",
+    "regione": "Piemonte",
+    "telefono": "0131279171"
+  },
+  {
+    "id": "B113",
+    "nome": "ASTI",
+    "indirizzo": "Strada statale Asti-Casale, 53 b/c",
+    "cap": "14033",
+    "citta": "Castell'Alfero",
+    "provincia": "AT",
+    "regione": "Piemonte",
+    "telefono": "0141405765"
+  },
+  {
+    "id": "B114",
+    "nome": "BIELLA",
+    "indirizzo": "Via Casale, 101",
+    "cap": "13876",
+    "citta": "Sandigliano",
+    "provincia": "BI",
+    "regione": "Piemonte",
+    "telefono": "015671821"
+  },
+  {
+    "id": "B115",
+    "nome": "BRA",
+    "indirizzo": "Viale Gioachino Nogaris, 5",
+    "cap": "12042",
+    "citta": "Bra",
+    "provincia": "CN",
+    "regione": "Piemonte",
+    "telefono": "0172430005"
+  },
+  {
+    "id": "B116",
+    "nome": "CUNEO",
+    "indirizzo": "Via Artigianato, 11",
+    "cap": "12040",
+    "citta": "Sant'Albano Stura",
+    "provincia": "CN",
+    "regione": "Piemonte",
+    "telefono": "0172670028"
+  },
+  {
+    "id": "B117",
+    "nome": "BORGOMANERO",
+    "indirizzo": "Corso Italia, 17",
+    "cap": "28010",
+    "citta": "Fontaneto d'Agogna",
+    "provincia": "NO",
+    "regione": "Piemonte",
+    "telefono": "0322846581"
+  },
+  {
+    "id": "B118",
+    "nome": "NOVARA",
+    "indirizzo": "Via Marconi",
+    "cap": "28060",
+    "citta": "S. Pietro Mosezzo",
+    "provincia": "NO",
+    "regione": "Piemonte",
+    "telefono": "0321530700"
+  },
+  {
+    "id": "B119",
+    "nome": "TORINO ORBASSANO",
+    "indirizzo": "13^ strada, 9 Interporto",
+    "cap": "10040",
+    "citta": "Rivalta",
+    "provincia": "TO",
+    "regione": "Piemonte",
+    "telefono": "0113974111"
+  },
+  {
+    "id": "B120",
+    "nome": "TORINO PESCARITO",
+    "indirizzo": "Via Toscana, 37",
+    "cap": "10099",
+    "citta": "San Mauro Torinese",
+    "provincia": "TO",
+    "regione": "Piemonte",
+    "telefono": "0112740080"
+  },
+  {
+    "id": "B121",
+    "nome": "IVREA",
+    "indirizzo": "Strada R. Montalenghe, 41",
+    "cap": "10010",
+    "citta": "Scarmagno",
+    "provincia": "TO",
+    "regione": "Piemonte",
+    "telefono": "0125637778"
+  },
+  {
+    "id": "B122",
+    "nome": "TORINO GRUGLIASCO",
+    "indirizzo": "Decima Strada, 21",
+    "cap": "10095",
+    "citta": "Grugliasco",
+    "provincia": "TO",
+    "regione": "Piemonte",
+    "telefono": "0113484811"
+  },
+  {
+    "id": "B123",
+    "nome": "TORINO SUD",
+    "indirizzo": "Interporto SITO SUD - 1^ strada, 6B",
+    "cap": "10043",
+    "citta": "Orbassano",
+    "provincia": "TO",
+    "regione": "Piemonte",
+    "telefono": "0113273093"
+  },
+  {
+    "id": "B124",
+    "nome": "MONCALIERI",
+    "indirizzo": "Via Chiribiri, 8",
+    "cap": "10028",
+    "citta": "Trofarello",
+    "provincia": "TO",
+    "regione": "Piemonte",
+    "telefono": "0116481271"
+  },
+  {
+    "id": "B125",
+    "nome": "RIVOLI",
+    "indirizzo": "13^ strada, 13 - Interporto Torino",
+    "cap": "10090",
+    "citta": "Rivoli",
+    "provincia": "TO",
+    "regione": "Piemonte",
+    "telefono": "0113974111"
+  },
+  {
+    "id": "B126",
+    "nome": "SETTIMO TORINESE",
+    "indirizzo": "Via N. Paganini, 7",
+    "cap": "10036",
+    "citta": "Settimo Torinese",
+    "provincia": "TO",
+    "regione": "Piemonte",
+    "telefono": "0118014811"
+  },
+  {
+    "id": "B127",
+    "nome": "TORINO LOGISTICA",
+    "indirizzo": "11^ Strada, 11 Interporto",
+    "cap": "10098",
+    "citta": "Rivoli",
+    "provincia": "TO",
+    "regione": "Piemonte",
+    "telefono": null
+  },
+  {
+    "id": "B128",
+    "nome": "GRAVELLONA TOCE",
+    "indirizzo": "Via dell'Industria, 7",
+    "cap": "28924",
+    "citta": "Verbania",
+    "provincia": "VB",
+    "regione": "Piemonte",
+    "telefono": "0323586541"
+  },
+  {
+    "id": "B129",
+    "nome": "VERCELLI",
+    "indirizzo": "Via Famiglia Jona",
+    "cap": "13100",
+    "citta": "Vercelli",
+    "provincia": "VC",
+    "regione": "Piemonte",
+    "telefono": "0161394000"
+  },
+  {
+    "id": "B130",
+    "nome": "BARI",
+    "indirizzo": "Z.I. Via Nickmann, 4",
+    "cap": "70123",
+    "citta": "Bari",
+    "provincia": "BA",
+    "regione": "Puglia",
+    "telefono": "0805380011"
+  },
+  {
+    "id": "B131",
+    "nome": "BARI MESSAGGERIA",
+    "indirizzo": "Via delle rose, 9",
+    "cap": "70026",
+    "citta": "Modugno",
+    "provincia": "BA",
+    "regione": "Puglia",
+    "telefono": "0805834111"
+  },
+  {
+    "id": "B132",
+    "nome": "BRINDISI",
+    "indirizzo": "Via Litoranea s.n.",
+    "cap": "72100",
+    "citta": "Brindisi",
+    "provincia": "BR",
+    "regione": "Puglia",
+    "telefono": "0831571549"
+  },
+  {
+    "id": "B133",
+    "nome": "FOGGIA",
+    "indirizzo": "Strada Complanare S.S.16 Km. 684, Z.I.",
+    "cap": "71122",
+    "citta": "Borgo Cervaro",
+    "provincia": "FG",
+    "regione": "Puglia",
+    "telefono": "0881630788"
+  },
+  {
+    "id": "B134",
+    "nome": "LECCE",
+    "indirizzo": "Viale Grecia - Z.I. Viola",
+    "cap": "73100",
+    "citta": "Lecce",
+    "provincia": "LE",
+    "regione": "Puglia",
+    "telefono": "0832331444"
+  },
+  {
+    "id": "B135",
+    "nome": "LECCE SUD",
+    "indirizzo": "Z. I. Lotto 39",
+    "cap": "73020",
+    "citta": "Melpignano",
+    "provincia": "LE",
+    "regione": "Puglia",
+    "telefono": "0836311859"
+  },
+  {
+    "id": "B136",
+    "nome": "TARANTO",
+    "indirizzo": "Via per Statte, 7070",
+    "cap": "74100",
+    "citta": "Taranto",
+    "provincia": "TA",
+    "regione": "Puglia",
+    "telefono": "0994712412"
+  },
+  {
+    "id": "B137",
+    "nome": "TRANI",
+    "indirizzo": "Contrada Pezza del Tesoro",
+    "cap": "76125",
+    "citta": "Trani",
+    "provincia": "BT",
+    "regione": "Puglia",
+    "telefono": "0883586916"
+  },
+  {
+    "id": "B138",
+    "nome": "CAGLIARI",
+    "indirizzo": "III Strada Z.I. CACIP snc - Località Macchiareddu",
+    "cap": "09032",
+    "citta": "Assemini",
+    "provincia": "CA",
+    "regione": "Sardegna",
+    "telefono": "0702109111"
+  },
+  {
+    "id": "B139",
+    "nome": "CAGLIARI MESSAGGERIA",
+    "indirizzo": "Via della Tecnica, 12 A",
+    "cap": "09122",
+    "citta": "Cagliari",
+    "provincia": "CA",
+    "regione": "Sardegna",
+    "telefono": "0702109111"
+  },
+  {
+    "id": "B140",
+    "nome": "ORISTANO",
+    "indirizzo": "Z.I. Loc.Cirras",
+    "cap": "09096",
+    "citta": "S.Giusta",
+    "provincia": "OR",
+    "regione": "Sardegna",
+    "telefono": "0783352033"
+  },
+  {
+    "id": "B141",
+    "nome": "PORTO TORRES",
+    "indirizzo": "Via Vivaldi Z.I.",
+    "cap": "07046",
+    "citta": "Porto Torres",
+    "provincia": "SS",
+    "regione": "Sardegna",
+    "telefono": "079516212"
+  },
+  {
+    "id": "B142",
+    "nome": "OLBIA",
+    "indirizzo": "Via Sierra Leone, 18",
+    "cap": "07026",
+    "citta": "Olbia",
+    "provincia": "OT",
+    "regione": "Sardegna",
+    "telefono": "078954181"
+  },
+  {
+    "id": "B143",
+    "nome": "CAGLIARI ELMAS",
+    "indirizzo": "Via S.S. 130 KM 2,8",
+    "cap": "09067",
+    "citta": "Elmas",
+    "provincia": "SU",
+    "regione": "Sardegna",
+    "telefono": "0702110430"
+  },
+  {
+    "id": "B144",
+    "nome": "AGRIGENTO",
+    "indirizzo": "Viale dell'Industria - Lotto 22 Z.I.",
+    "cap": "92021",
+    "citta": "Aragona",
+    "provincia": "AG",
+    "regione": "Sicilia",
+    "telefono": "0922441936"
+  },
+  {
+    "id": "B145",
+    "nome": "CALTANISSETTA",
+    "indirizzo": "Via Empedocle, 25 - Z.I.",
+    "cap": "93100",
+    "citta": "Caltanissetta",
+    "provincia": "CL",
+    "regione": "Sicilia",
+    "telefono": "0934566283"
+  },
+  {
+    "id": "B146",
+    "nome": "CATANIA",
+    "indirizzo": "Via Pirandello",
+    "cap": "95032",
+    "citta": "Piano Tavola Belpasso",
+    "provincia": "CT",
+    "regione": "Sicilia",
+    "telefono": "0957561111"
+  },
+  {
+    "id": "B147",
+    "nome": "CATANIA CENTRO",
+    "indirizzo": "Via dell'industria 2/4/6",
+    "cap": "95040",
+    "citta": "Camporotondo Etneo",
+    "provincia": "CT",
+    "regione": "Sicilia",
+    "telefono": "0957561111"
+  },
+  {
+    "id": "B148",
+    "nome": "MESSINA",
+    "indirizzo": "S.S. 114 Bivio Galati",
+    "cap": "98134",
+    "citta": "S.Anna",
+    "provincia": "ME",
+    "regione": "Sicilia",
+    "telefono": "090639877"
+  },
+  {
+    "id": "B149",
+    "nome": "PALERMO CARINI",
+    "indirizzo": "Via Galileo Galilei 27/29",
+    "cap": "90044",
+    "citta": "Carini",
+    "provincia": "PA",
+    "regione": "Sicilia",
+    "telefono": "0916604411"
+  },
+  {
+    "id": "B150",
+    "nome": "PALERMO CENTRO",
+    "indirizzo": "Via Altofonte 120/B",
+    "cap": "90126",
+    "citta": "Palermo",
+    "provincia": "PA",
+    "regione": "Sicilia",
+    "telefono": "0918668343"
+  },
+  {
+    "id": "B151",
+    "nome": "RAGUSA",
+    "indirizzo": "S.S. 115 Km 316",
+    "cap": "97100",
+    "citta": "Contrada Majorana",
+    "provincia": "RG",
+    "regione": "Sicilia",
+    "telefono": "0932256554"
+  },
+  {
+    "id": "B152",
+    "nome": "SIRACUSA",
+    "indirizzo": "Contrada Targia, 44",
+    "cap": "96100",
+    "citta": "Siracusa",
+    "provincia": "SR",
+    "regione": "Sicilia",
+    "telefono": "0931492298"
+  },
+  {
+    "id": "B153",
+    "nome": "MARSALA",
+    "indirizzo": "Contrada Ciappola, 35/A",
+    "cap": "91025",
+    "citta": "Marsala",
+    "provincia": "TP",
+    "regione": "Sicilia",
+    "telefono": "0923733041"
+  },
+  {
+    "id": "B154",
+    "nome": "AREZZO",
+    "indirizzo": "Via Galileo Galilei, 20 - Loc. Pieve al Toppo",
+    "cap": "52041",
+    "citta": "Civitella Val di Chiana",
+    "provincia": "AR",
+    "regione": "Toscana",
+    "telefono": "0575410140"
+  },
+  {
+    "id": "B155",
+    "nome": "FIRENZE VALDARNO",
+    "indirizzo": "Strada Lungarno, 3913",
+    "cap": "52028",
+    "citta": "Terranuova Bracciolini",
+    "provincia": "AR",
+    "regione": "Toscana",
+    "telefono": "0559735111"
+  },
+  {
+    "id": "B156",
+    "nome": "FIRENZE VALDARNO - SERVIZI LOGISTICI",
+    "indirizzo": "Strada Lungarno, 3913",
+    "cap": "52028",
+    "citta": "Terranuova Bracciolini",
+    "provincia": "AR",
+    "regione": "Toscana",
+    "telefono": null
+  },
+  {
+    "id": "B157",
+    "nome": "FIRENZE CALENZANO",
+    "indirizzo": "Via Albert Einstein, 28 (Loc. Capalle)",
+    "cap": "50013",
+    "citta": "Campi Bisenzio",
+    "provincia": "FI",
+    "regione": "Toscana",
+    "telefono": "05588381"
+  },
+  {
+    "id": "B158",
+    "nome": "EMPOLI",
+    "indirizzo": "Via Partigiani d'Italia, 9-11",
+    "cap": "50053",
+    "citta": "Empoli",
+    "provincia": "FI",
+    "regione": "Toscana",
+    "telefono": "0571931960"
+  },
+  {
+    "id": "B159",
+    "nome": "FIRENZE OSMANNORO",
+    "indirizzo": "Via Majorana, 21-23-25",
+    "cap": "50019",
+    "citta": "Sesto Fiorentino",
+    "provincia": "FI",
+    "regione": "Toscana",
+    "telefono": "05530950"
+  },
+  {
+    "id": "B160",
+    "nome": "GROSSETO",
+    "indirizzo": "Via Zircone, 175",
+    "cap": "58100",
+    "citta": "Grosseto",
+    "provincia": "GR",
+    "regione": "Toscana",
+    "telefono": "0564467940"
+  },
+  {
+    "id": "B161",
+    "nome": "PIOMBINO",
+    "indirizzo": "Via Mincio Montegemoli",
+    "cap": "57025",
+    "citta": "Piombino",
+    "provincia": "LI",
+    "regione": "Toscana",
+    "telefono": "0565276670"
+  },
+  {
+    "id": "B162",
+    "nome": "LIVORNO",
+    "indirizzo": "Via Genova, 56/58",
+    "cap": "57014",
+    "citta": "Collesalvetti",
+    "provincia": "LI",
+    "regione": "Toscana",
+    "telefono": "050647111"
+  },
+  {
+    "id": "B163",
+    "nome": "LUCCA",
+    "indirizzo": "Via dell'Aione",
+    "cap": "55100",
+    "citta": "Sorbano del Giudice",
+    "provincia": "LU",
+    "regione": "Toscana",
+    "telefono": "0583583474"
+  },
+  {
+    "id": "B164",
+    "nome": "PISA",
+    "indirizzo": "Via Pietrasantina, 19",
+    "cap": "56017",
+    "citta": "Madonna dell'Acqua",
+    "provincia": "PI",
+    "regione": "Toscana",
+    "telefono": "050890739"
+  },
+  {
+    "id": "B165",
+    "nome": "PISA LAVORIA",
+    "indirizzo": "Via Lavoria, 56/o-p-q-r",
+    "cap": "56040",
+    "citta": "Crespina",
+    "provincia": "PI",
+    "regione": "Toscana",
+    "telefono": "050647111"
+  },
+  {
+    "id": "B166",
+    "nome": "PISTOIA",
+    "indirizzo": "Via Montessori - Z.I. S.Agostino",
+    "cap": "51100",
+    "citta": "Pistoia",
+    "provincia": "PT",
+    "regione": "Toscana",
+    "telefono": "0573935711"
+  },
+  {
+    "id": "B167",
+    "nome": "PRATO",
+    "indirizzo": "Via Ada Negri, 53",
+    "cap": "59100",
+    "citta": "Prato",
+    "provincia": "PO",
+    "regione": "Toscana",
+    "telefono": "0574470450"
+  },
+  {
+    "id": "B168",
+    "nome": "FIRENZE TRE VILLE",
+    "indirizzo": "Via dei Confini, 44",
+    "cap": "59100",
+    "citta": "Prato",
+    "provincia": "PO",
+    "regione": "Toscana",
+    "telefono": "0574584151"
+  },
+  {
+    "id": "B169",
+    "nome": "SIENA",
+    "indirizzo": "Via Resistenza",
+    "cap": "53035",
+    "citta": "Badesse di Monteriggioni",
+    "provincia": "SI",
+    "regione": "Toscana",
+    "telefono": "0577309006"
+  },
+  {
+    "id": "B170",
+    "nome": "MERANO",
+    "indirizzo": "Zona Industriale, 8",
+    "cap": "39011",
+    "citta": "Merano",
+    "provincia": "BZ",
+    "regione": "Trentino-Alto Adige",
+    "telefono": "0473550185"
+  },
+  {
+    "id": "B171",
+    "nome": "BRESSANONE",
+    "indirizzo": "Via Brennero, 17/B",
+    "cap": "39040",
+    "citta": "Varna",
+    "provincia": "BZ",
+    "regione": "Trentino-Alto Adige",
+    "telefono": "0472200921"
+  },
+  {
+    "id": "B172",
+    "nome": "BOLZANO",
+    "indirizzo": "Via Toni Ebner, 16",
+    "cap": "39100",
+    "citta": "Bolzano",
+    "provincia": "BZ",
+    "regione": "Trentino-Alto Adige",
+    "telefono": "0471502746"
+  },
+  {
+    "id": "B173",
+    "nome": "TRENTO",
+    "indirizzo": "Via Innsbruck, 20",
+    "cap": "38121",
+    "citta": "Trento",
+    "provincia": "TN",
+    "regione": "Trentino-Alto Adige",
+    "telefono": "0461961070"
+  },
+  {
+    "id": "B174",
+    "nome": "ROVERETO",
+    "indirizzo": "Viale Caproni, 28",
+    "cap": "38068",
+    "citta": "Rovereto",
+    "provincia": "TN",
+    "regione": "Trentino-Alto Adige",
+    "telefono": "0464481511"
+  },
+  {
+    "id": "B175",
+    "nome": "PERUGIA",
+    "indirizzo": "Via Gustavo Benucci, 224-226-228",
+    "cap": "06135",
+    "citta": "Ponte San Giovanni",
+    "provincia": "PG",
+    "regione": "Umbria",
+    "telefono": "0755978611"
+  },
+  {
+    "id": "B176",
+    "nome": "FOLIGNO",
+    "indirizzo": "V.le Roma, 14/16",
+    "cap": "06031",
+    "citta": "Bevagna",
+    "provincia": "PG",
+    "regione": "Umbria",
+    "telefono": "0742360537"
+  },
+  {
+    "id": "B177",
+    "nome": "CITTA' DI CASTELLO",
+    "indirizzo": "Via Giotto, 9",
+    "cap": "06016",
+    "citta": "San Giustino Selci",
+    "provincia": "PG",
+    "regione": "Umbria",
+    "telefono": "0758583985"
+  },
+  {
+    "id": "B178",
+    "nome": "TERNI",
+    "indirizzo": "Str.Prov.le Maratta, Km 8.700",
+    "cap": "05036",
+    "citta": "Narni Stazione",
+    "provincia": "TR",
+    "regione": "Umbria",
+    "telefono": "0744751609"
+  },
+  {
+    "id": "B179",
+    "nome": "AOSTA",
+    "indirizzo": "L'Île-des-Lapins 14/S",
+    "cap": "11020",
+    "citta": "Pollein",
+    "provincia": "AO",
+    "regione": "Valle d'Aosta",
+    "telefono": "0165361090"
+  },
+  {
+    "id": "B180",
+    "nome": "BELLUNO",
+    "indirizzo": "Via Meassa, 289 - Località Sagrogna",
+    "cap": "32100",
+    "citta": "Belluno",
+    "provincia": "BL",
+    "regione": "Veneto",
+    "telefono": "0437927533"
+  },
+  {
+    "id": "B181",
+    "nome": "PADOVA EST",
+    "indirizzo": "Viale Navigazione Interna, 83",
+    "cap": "35027",
+    "citta": "Noventa Padovana",
+    "provincia": "PD",
+    "regione": "Veneto",
+    "telefono": "0497808820"
+  },
+  {
+    "id": "B182",
+    "nome": "PADOVA INTERPORTO",
+    "indirizzo": "Via Inghilterra, 11",
+    "cap": "35127",
+    "citta": "Padova",
+    "provincia": "PD",
+    "regione": "Veneto",
+    "telefono": "0498287811"
+  },
+  {
+    "id": "B183",
+    "nome": "PADOVA MESSAGGERIA",
+    "indirizzo": "Via Nuova Zelanda, 6",
+    "cap": "35127",
+    "citta": "Padova",
+    "provincia": "PD",
+    "regione": "Veneto",
+    "telefono": "0497621111"
+  },
+  {
+    "id": "B184",
+    "nome": "ROVIGO",
+    "indirizzo": "Via della Cooperazione, 1/A",
+    "cap": "45100",
+    "citta": "Rovigo",
+    "provincia": "RO",
+    "regione": "Veneto",
+    "telefono": "0425474457"
+  },
+  {
+    "id": "B185",
+    "nome": "ROVIGO - SERVIZI LOGISTICI",
+    "indirizzo": "Via della Cooperazione, 1/b",
+    "cap": "45100",
+    "citta": "Rovigo",
+    "provincia": "RO",
+    "regione": "Veneto",
+    "telefono": null
+  },
+  {
+    "id": "B186",
+    "nome": "ROVIGO MESSAGGERIA",
+    "indirizzo": "Via Cooperazione, 1/B",
+    "cap": "45100",
+    "citta": "Rovigo",
+    "provincia": "RO",
+    "regione": "Veneto",
+    "telefono": "0425985711"
+  },
+  {
+    "id": "B187",
+    "nome": "TREVISO VILLORBA",
+    "indirizzo": "Via F.lli Cervi",
+    "cap": "31020",
+    "citta": "Villorba",
+    "provincia": "TV",
+    "regione": "Veneto",
+    "telefono": "0422611811"
+  },
+  {
+    "id": "B188",
+    "nome": "TREVISO CASALE SUL SILE",
+    "indirizzo": "Via M.L. King, 2",
+    "cap": "31032",
+    "citta": "Casale sul Sile",
+    "provincia": "TV",
+    "regione": "Veneto",
+    "telefono": "0422702311"
+  },
+  {
+    "id": "B189",
+    "nome": "CESSALTO",
+    "indirizzo": "Via Dante, 14",
+    "cap": "31040",
+    "citta": "Cessalto",
+    "provincia": "TV",
+    "regione": "Veneto",
+    "telefono": "0421327100"
+  },
+  {
+    "id": "B190",
+    "nome": "VENEZIA",
+    "indirizzo": "Via Forte Marghera, 26 M",
+    "cap": "30172",
+    "citta": "Mestre",
+    "provincia": "VE",
+    "regione": "Veneto",
+    "telefono": "0415318944"
+  },
+  {
+    "id": "B191",
+    "nome": "PORTOGRUARO",
+    "indirizzo": "Via E.Duse, 19",
+    "cap": "30020",
+    "citta": "Summaga Di Portogruaro",
+    "provincia": "VE",
+    "regione": "Veneto",
+    "telefono": "0421204755"
+  },
+  {
+    "id": "B192",
+    "nome": "SALZANO",
+    "indirizzo": "Via del Lavoro, 1",
+    "cap": "30030",
+    "citta": "Salzano",
+    "provincia": "VE",
+    "regione": "Veneto",
+    "telefono": "0415740394"
+  },
+  {
+    "id": "B193",
+    "nome": "VERONA S.G. LUPATOTO",
+    "indirizzo": "Via Monte Pastello",
+    "cap": "37057",
+    "citta": "S.Giovanni Lupatoto",
+    "provincia": "VR",
+    "regione": "Veneto",
+    "telefono": "0458950111"
+  },
+  {
+    "id": "B194",
+    "nome": "VERONA BUSSOLENGO",
+    "indirizzo": "Via dell'Industria, 5",
+    "cap": "37012",
+    "citta": "Bussolengo",
+    "provincia": "VR",
+    "regione": "Veneto",
+    "telefono": "0456719111"
+  },
+  {
+    "id": "B195",
+    "nome": "VERONA Z.A.I.",
+    "indirizzo": "Via Torricelli, 69",
+    "cap": "37136",
+    "citta": "Verona",
+    "provincia": "VR",
+    "regione": "Veneto",
+    "telefono": "0458620220"
+  },
+  {
+    "id": "B196",
+    "nome": "VERONA BUSSOLENGO - SERVIZI LOGISTICI",
+    "indirizzo": "Via dell'Industria, 13",
+    "cap": "37012",
+    "citta": "Bussolengo",
+    "provincia": "VR",
+    "regione": "Veneto",
+    "telefono": null
+  },
+  {
+    "id": "B197",
+    "nome": "VERONA NORD",
+    "indirizzo": "Via dell'Industria, 13",
+    "cap": "37012",
+    "citta": "Bussolengo",
+    "provincia": "VR",
+    "regione": "Veneto",
+    "telefono": "0456719111"
+  },
+  {
+    "id": "B198",
+    "nome": "SCHIO",
+    "indirizzo": "vicolo Puglia, 3",
+    "cap": "36015",
+    "citta": "Schio",
+    "provincia": "VI",
+    "regione": "Veneto",
+    "telefono": "0445575600"
+  },
+  {
+    "id": "B199",
+    "nome": "BASSANO",
+    "indirizzo": "Via delle Viole, 19/21/23",
+    "cap": "36061",
+    "citta": "Bassano del Grappa",
+    "provincia": "VI",
+    "regione": "Veneto",
+    "telefono": "0424568398"
+  },
+  {
+    "id": "B200",
+    "nome": "VICENZA",
+    "indirizzo": "Via Dell'Artigianato, 48",
+    "cap": "36100",
+    "citta": "Vicenza",
+    "provincia": "VI",
+    "regione": "Veneto",
+    "telefono": "0444571244"
+  }
+]

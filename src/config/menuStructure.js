@@ -29,14 +29,14 @@ export const MENU_GROUPS = [
   {
     id: 'gestione',
     label: 'Gestione',
-    icon: 'IconSettings',
+    icon: 'IconBriefcase',
     collapsed: true,
     collapsible: true,
     items: [
-      { id: 'filiali', label: 'Filiali Fermopoint', icon: 'IconBuilding', section: 'filiali' },
-      { id: 'filialiBrt', label: 'Filiali BRT', icon: 'IconBuilding', section: 'filialiBrt' },
-      { id: 'contratti', label: 'Contratti', icon: 'IconDocument', section: 'contratti' },
-      { id: 'utenti', label: 'Utenti', icon: 'IconUsers', section: 'utenti', adminOnly: true },
+      { id: 'filiali',    label: 'Filiali Fermopoint', icon: 'IconBuilding', section: 'filiali' },
+      { id: 'filialiBrt', label: 'Filiali BRT',        icon: 'IconBuilding', section: 'filialiBrt' },
+      { id: 'contratti',  label: 'Contratti',          icon: 'IconDocument', section: 'contratti' },
+      { id: 'utenti',     label: 'Utenti',             icon: 'IconUsers',    section: 'utenti', adminOnly: true },
     ],
   },
   {
@@ -47,7 +47,18 @@ export const MENU_GROUPS = [
     collapsible: true,
     items: [
       { id: 'eccezioni', label: 'Eccezioni', icon: 'IconAlert', section: 'eccezioni', badge: true },
-      { id: 'report', label: 'Report', icon: 'IconChart', section: 'report' },
+      { id: 'report',    label: 'Report',    icon: 'IconChart', section: 'report' },
+    ],
+  },
+  {
+    id: 'info',
+    label: 'Info',
+    icon: 'IconInfo',
+    collapsed: true,
+    collapsible: true,
+    items: [
+      { id: 'releaseNotes', label: 'Release Notes', icon: 'IconTag',   section: 'releaseNotes' },
+      { id: 'credits',      label: 'Credits',       icon: 'IconHeart', section: 'credits' },
     ],
   },
 ]

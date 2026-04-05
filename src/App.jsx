@@ -14,7 +14,8 @@ import Contratti from './components/sections/Contratti'
 import Utenti from './components/sections/Utenti'
 import Eccezioni from './components/sections/Eccezioni'
 import Report from './components/sections/Report'
-import Documentazione from './components/sections/Documentazione'
+import ReleaseNotes from './components/sections/ReleaseNotes'
+import Credits from './components/sections/Credits'
 import ProgressToast from './components/ui/ProgressToast'
 import { seedDemoHistory } from './services/historyService'
 import { TutorialProvider } from './contexts/TutorialContext'
@@ -24,44 +25,35 @@ import { ECCEZIONI } from './data/stub'
 import './App.css'
 
 const SESSION_KEY = 'fp_ct_user'
-
 let _notifCounter = 1
 
 function loadSavedUser() {
   try {
     const raw = localStorage.getItem(SESSION_KEY)
     return raw ? JSON.parse(raw) : null
-  } catch {
-    return null
-  }
+  } catch { return null }
 }
 
 export default function App() {
-  const [user, setUser]               = useState(() => loadSavedUser())
-  // page: 'landing' | 'login' | 'app'
-  const [page, setPage]               = useState(() => loadSavedUser() ? 'app' : 'landing')
-  const [section, setSection]         = useState('overview')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [user,          setUser]          = useState(() => loadSavedUser())
+  const [page,          setPage]          = useState(() => loadSavedUser() ? 'app' : 'landing')
+  const [section,       setSection]       = useState('overview')
+  const [sidebarOpen,   setSidebarOpen]   = useState(false)
   const [notifications, setNotifications] = useState([])
-  const [activeJob, setActiveJob]     = useState(null)
+  const [activeJob,     setActiveJob]     = useState(null)
 
-  // Sincronizza user su localStorage
   useEffect(() => {
-    if (user) {
-      localStorage.setItem(SESSION_KEY, JSON.stringify(user))
-    } else {
-      localStorage.removeItem(SESSION_KEY)
-    }
+    if (user) localStorage.setItem(SESSION_KEY, JSON.stringify(user))
+    else       localStorage.removeItem(SESSION_KEY)
   }, [user])
 
-  // Seed demo history events on first load
   useEffect(() => { seedDemoHistory() }, [])
 
   const eccezioniAperte = ECCEZIONI.filter(e => e.stato === 'Aperta').length
 
   // ── Notification helpers ────────────────────────────────────────
   const addNotification = useCallback((type, title, message) => {
-    const n = { id: _notifCounter++, type, title, message, ts: new Date(), read: false }
+    const n = { id: _notifCounter++, type, title, message, ts: new Date(), read: false, archived: false }
     setNotifications(prev => [n, ...prev])
   }, [])
 
@@ -70,11 +62,15 @@ export default function App() {
   }, [])
 
   const markAllRead = useCallback(() => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })))
+    setNotifications(prev => prev.map(n => n.archived ? n : { ...n, read: true }))
   }, [])
 
   const clearNotif = useCallback((id) => {
     setNotifications(prev => prev.filter(n => n.id !== id))
+  }, [])
+
+  const archiveNotif = useCallback((id) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, archived: true, read: true } : n))
   }, [])
 
   // ── Background job simulation ───────────────────────────────────
@@ -83,14 +79,14 @@ export default function App() {
     setActiveJob({ id: jobId, label, progress: 0, status: 'running', detail: 'Connessione al sistema AS/400…' })
 
     const steps = [
-      { pct: 8,  detail: 'Autenticazione…' },
-      { pct: 18, detail: 'Recupero lista spedizioni…' },
-      { pct: 32, detail: 'Download dati provincia 1/4…' },
-      { pct: 48, detail: 'Download dati provincia 2/4…' },
-      { pct: 62, detail: 'Download dati provincia 3/4…' },
-      { pct: 76, detail: 'Download dati provincia 4/4…' },
-      { pct: 88, detail: 'Elaborazione e normalizzazione…' },
-      { pct: 96, detail: 'Validazione record…' },
+      { pct: 8,   detail: 'Autenticazione…' },
+      { pct: 18,  detail: 'Recupero lista spedizioni…' },
+      { pct: 32,  detail: 'Download dati provincia 1/4…' },
+      { pct: 48,  detail: 'Download dati provincia 2/4…' },
+      { pct: 62,  detail: 'Download dati provincia 3/4…' },
+      { pct: 76,  detail: 'Download dati provincia 4/4…' },
+      { pct: 88,  detail: 'Elaborazione e normalizzazione…' },
+      { pct: 96,  detail: 'Validazione record…' },
       { pct: 100, detail: null },
     ]
 
@@ -109,47 +105,32 @@ export default function App() {
       }
       const { pct, detail } = steps[stepIdx++]
       setActiveJob(j => j?.id === jobId ? { ...j, progress: pct, detail: detail ?? 'Finalizzazione…' } : j)
-      const delay = MIN_STEP + Math.random() * (MAX_STEP - MIN_STEP)
-      setTimeout(tick, delay)
+      setTimeout(tick, MIN_STEP + Math.random() * (MAX_STEP - MIN_STEP))
     }
 
     setTimeout(tick, 400)
   }, [addNotification])
 
-  // ── Auth handlers ──────────────────────────────────────────────
-  function handleLogin(u) {
-    setUser(u)
-    setPage('app')
-  }
-
-  function handleLogout() {
-    setUser(null)
-    setPage('landing')
-    setSection('overview')
-  }
-
-  // ── Nav handler ───────────────────────────────────────────────
-  function handleNav(id) {
-    setSection(id)
-    setSidebarOpen(false)
-  }
+  function handleLogin(u)  { setUser(u); setPage('app') }
+  function handleLogout()  { setUser(null); setPage('landing'); setSection('overview') }
+  function handleNav(id)   { setSection(id); setSidebarOpen(false) }
 
   const SECTIONS = {
-    overview:   <Overview />,
-    spedizioni: <Spedizioni onStartJob={startJob} addNotification={addNotification} />,
-    giri:       <Giri onStartJob={startJob} addNotification={addNotification} />,
-    punti:      <PuntiRitiro />,
-    flotta:     <Flotta />,
-    filiali:    <Filiali />,
-    filialiBrt: <FilialiBrt />,
-    contratti:  <Contratti />,
-    utenti:     <Utenti currentUser={user} />,
-    eccezioni:  <Eccezioni />,
-    report:     <Report />,
-    docs:       <Documentazione />,
+    overview:     <Overview />,
+    spedizioni:   <Spedizioni onStartJob={startJob} addNotification={addNotification} />,
+    giri:         <Giri onStartJob={startJob} addNotification={addNotification} />,
+    punti:        <PuntiRitiro />,
+    flotta:       <Flotta />,
+    filiali:      <Filiali />,
+    filialiBrt:   <FilialiBrt />,
+    contratti:    <Contratti />,
+    utenti:       <Utenti currentUser={user} />,
+    eccezioni:    <Eccezioni />,
+    report:       <Report />,
+    releaseNotes: <ReleaseNotes />,
+    credits:      <Credits />,
   }
 
-  // ── Routing — tutto dentro i provider per evitare errori context ──
   return (
     <ThemeProvider>
     <I18nProvider>
@@ -169,11 +150,7 @@ export default function App() {
 
       {page === 'app' && user && (
         <div className="app-shell">
-          {/* Backdrop mobile */}
-          <div
-            className={`sidebar-backdrop${sidebarOpen ? ' show' : ''}`}
-            onClick={() => setSidebarOpen(false)}
-          />
+          <div className={`sidebar-backdrop${sidebarOpen ? ' show' : ''}`} onClick={() => setSidebarOpen(false)} />
 
           <Sidebar
             active={section}
@@ -194,13 +171,13 @@ export default function App() {
               onMarkRead={markRead}
               onMarkAllRead={markAllRead}
               onClearNotif={clearNotif}
+              onArchiveNotif={archiveNotif}
             />
             <main className="app-content">
               {SECTIONS[section]}
             </main>
           </div>
 
-          {/* Global progress toast */}
           <ProgressToast job={activeJob} />
         </div>
       )}
