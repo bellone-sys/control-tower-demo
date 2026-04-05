@@ -143,7 +143,7 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
       {/* Link documentazione e playbook */}
       <div className="sidebar-docs-section">
         <a
-          href="/control-tower-demo/docs/manuale.md"
+          href="/control-tower-demo/manuale.html"
           target="_blank"
           rel="noopener noreferrer"
           className="nav-item sidebar-docs-link"
