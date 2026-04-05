@@ -6,8 +6,10 @@ import Header from './components/Header'
 import Overview from './components/sections/Overview'
 import Spedizioni from './components/sections/Spedizioni'
 import Giri from './components/sections/Giri'
+import Scenari from './components/sections/Scenari'
 import PuntiRitiro from './components/sections/PuntiRitiro'
 import Flotta from './components/sections/Flotta'
+import Autisti from './components/sections/Autisti'
 import Filiali from './components/sections/Filiali'
 import FilialiBrt from './components/sections/FilialiBrt'
 import Contratti from './components/sections/Contratti'
@@ -117,9 +119,11 @@ export default function App() {
 
   const SECTIONS = {
     overview:     <Overview />,
-    spedizioni:   <Spedizioni onStartJob={startJob} addNotification={addNotification} />,
+    spedizioni:   <Spedizioni onStartJob={startJob} addNotification={addNotification} onNav={handleNav} />,
+    scenari:      <Scenari onStartJob={startJob} addNotification={addNotification} />,
     giri:         <Giri onStartJob={startJob} addNotification={addNotification} />,
     punti:        <PuntiRitiro />,
+    autisti:      <Autisti />,
     flotta:       <Flotta />,
     filiali:      <Filiali />,
     filialiBrt:   <FilialiBrt />,

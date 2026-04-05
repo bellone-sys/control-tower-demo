@@ -3,10 +3,10 @@ import './Sections.css'
 import './ReleaseNotes.css'
 
 const UNRELEASED = [
-  'Wizard importazione da filiale BRT nella creazione filiale Fermopoint',
-  'Sezione Filiali BRT (200 filiali, read-only, filtri regione/provincia)',
-  'Gestione utenti avanzata: toggle stato, auth type SSO/password, reset password flow',
-  'Fix logout / riorganizzazione provider React',
+  'Sezione Eccezioni: gestione avanzata con workflow di risoluzione',
+  'Dashboard Overview: grafici temporali con storico 30/60/90 giorni',
+  'Export dati: download CSV/Excel per spedizioni, giri e report',
+  'Integrazione OptimoRoute: calcolo ottimizzazione reale via API',
 ]
 
 const TYPE_LABELS = {

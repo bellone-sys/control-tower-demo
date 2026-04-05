@@ -9,7 +9,9 @@ const TRANSLATIONS = {
     'nav.overview':    'Panoramica',
     'nav.spedizioni':  'Spedizioni',
     'nav.giri':        'Giri',
+    'nav.scenari':     'Scenari',
     'nav.punti':       'PUDO',
+    'nav.autisti':     'Autisti',
     'nav.flotta':      'Flotta',
     'nav.filiali':     'Filiali',
     'nav.contratti':   'Contratti',
@@ -85,7 +87,9 @@ const TRANSLATIONS = {
     'nav.overview':    'Overview',
     'nav.spedizioni':  'Shipments',
     'nav.giri':        'Routes',
+    'nav.scenari':     'Scenarios',
     'nav.punti':       'PUDO',
+    'nav.autisti':     'Drivers',
     'nav.flotta':      'Fleet',
     'nav.filiali':     'Branches',
     'nav.contratti':   'Contracts',
@@ -160,7 +164,9 @@ const TRANSLATIONS = {
     'nav.overview':    'Vue d\'ensemble',
     'nav.spedizioni':  'Expéditions',
     'nav.giri':        'Tournées',
+    'nav.scenari':     'Scénarios',
     'nav.punti':       'PUDO',
+    'nav.autisti':     'Chauffeurs',
     'nav.flotta':      'Flotte',
     'nav.filiali':     'Agences',
     'nav.contratti':   'Contrats',
@@ -235,7 +241,9 @@ const TRANSLATIONS = {
     'nav.overview':    'Übersicht',
     'nav.spedizioni':  'Sendungen',
     'nav.giri':        'Touren',
+    'nav.scenari':     'Szenarien',
     'nav.punti':       'PUDO',
+    'nav.autisti':     'Fahrer',
     'nav.flotta':      'Fuhrpark',
     'nav.filiali':     'Filialen',
     'nav.contratti':   'Verträge',
@@ -314,13 +322,15 @@ const I18nContext = createContext(null)
 
 const STORAGE_KEY = 'fp_ct_language'
 
+const SUPPORTED_LANGS = ['it', 'en', 'fr', 'de']
+
 function detectInitialLang() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved === 'it' || saved === 'en') return saved
+    if (SUPPORTED_LANGS.includes(saved)) return saved
   } catch { /* ignore */ }
-  const browserLang = (navigator.language || 'it').substring(0, 2)
-  return browserLang === 'en' ? 'en' : 'it'
+  const browserLang = (navigator.language || navigator.userLanguage || 'it').slice(0, 2).toLowerCase()
+  return SUPPORTED_LANGS.includes(browserLang) ? browserLang : 'it'
 }
 
 export function I18nProvider({ children }) {

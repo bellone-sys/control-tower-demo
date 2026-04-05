@@ -1,5 +1,54 @@
 [
   {
+    "version": "0.15.0",
+    "tag": "v0.15.0",
+    "date": "2026-04-05",
+    "type": "minor",
+    "title": "Scenari e Autisti dedicati, lingua browser, giro/scenario in spedizioni",
+    "highlights": [
+      "Sezione Scenari separata dai Giri con voce menu dedicata (tab Scenari + Preferiti)",
+      "Sezione Autisti separata dalla Flotta con voce menu dedicata",
+      "Lingua interfaccia rilevata automaticamente dalle impostazioni del browser (navigator.language)",
+      "Supporto lingue browser esteso: francese e tedesco ora riconosciuti correttamente",
+      "Elenco spedizioni: giro e scenario linkabili con navigazione diretta alla sezione",
+      "Fix versioning: package.json e version.js allineati al tag Git (era bloccato a 0.12.0)"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.14.0",
+    "tag": "v0.14.0",
+    "date": "2026-04-05",
+    "type": "minor",
+    "title": "Filtri spedizioni avanzati, modal PUDO e dettaglio audit per riga",
+    "highlights": [
+      "Filtro PUDO per ID con label [ID] Nome, separato dal filtro tipologia (Negozio/Locker)",
+      "Filtro tipologia PUDO derivato automaticamente da pudosRoma.json",
+      "Filtro data con selettore periodo: Oggi, Ieri, Ultimi 7 giorni, Ultimo mese, Personalizzato",
+      "Colonna PUDO: dot colorato (verde=negozio, blu=locker) e nome cliccabile",
+      "Modal PUDO: tipo, CAP, civico, coordinate con link Google Maps, orari di apertura per giorno",
+      "Riga espandibile: strip audit con data importazione, ultimo aggiornamento, modalità API/Upload, utente o chiave API"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.13.0",
+    "tag": "v0.13.0",
+    "date": "2026-04-05",
+    "type": "minor",
+    "title": "Icone, notifiche avanzate, Release Notes, Credits, i18n completo, migrazione dati JSON",
+    "highlights": [
+      "Icona impostazioni sostituita con ghiera Feather (cog) in Header e Sidebar",
+      "Icona gruppo Gestione cambiata in briefcase",
+      "Notifiche avanzate: tab Attive/Archiviate, archivia singola notifica, svuota archivio",
+      "Nuove sezioni Release Notes (timeline versioni) e Credits (Elipse Srl, stack, copyright)",
+      "i18n completo: cambio lingua aggiorna navigazione, header e pannello impostazioni in tempo reale",
+      "Rimossi dark mode, opzione Segui sistema e link Manuale Utente dalle impostazioni",
+      "Migrazione dati mockati in src/data/json/*.json per bundle HTML più leggero"
+    ],
+    "breaking": false
+  },
+  {
     "version": "0.12.0",
     "tag": "v0.12.0",
     "date": "2026-03-28",
@@ -23,7 +72,7 @@
     "highlights": [
       "Raffinamento visivo dell'intera interfaccia: spaziature, tipografia e micro-animazioni",
       "Dati regionali integrati: province e regioni italiane con aggregazioni statistiche",
-      "Layout completamente responsive per tablet e dispositivi mobile (breakpoint 768px e 1024px)",
+      "Layout completamente responsive per tablet e dispositivi mobile",
       "Miglioramenti performance: lazy loading sezioni, memo su componenti pesanti",
       "Correzioni bug minori su filtri Spedizioni e pannello laterale Giri"
     ],
@@ -54,8 +103,7 @@
       "Riorganizzazione menu principale con raggruppamento logico: Operativo, Anagrafica, Analisi",
       "Sistema tutorial interattivo a step per onboarding nuovi utenti (6 tour guidati)",
       "Pannello Impostazioni utente: preferenze notifiche, lingua, fuso orario e tema",
-      "Foundation dati: refactoring dei mock data in struttura normalizzata con relazioni esplicite",
-      "Breadcrumb di navigazione e gestione stato URL per deep linking alle sezioni"
+      "Foundation dati: refactoring dei mock data in struttura normalizzata con relazioni esplicite"
     ],
     "breaking": false
   },
@@ -97,8 +145,7 @@
       "Nuova landing page pubblica con presentazione del prodotto e accesso al demo",
       "Filtri avanzati sezione Spedizioni: per stato, corriere, data, PUDO di destinazione",
       "Risolto bug che causava la chiusura inattesa del pannello laterale al cambio giro",
-      "Aggiunta paginazione lato client sulla lista spedizioni (50 per pagina)",
-      "Tooltip informativi sulle KPI card dell'overview con spiegazione del calcolo"
+      "Aggiunta paginazione lato client sulla lista spedizioni"
     ],
     "breaking": false
   },
@@ -110,10 +157,9 @@
     "title": "Importazione spedizioni, barra progresso e notifiche",
     "highlights": [
       "Importazione spedizioni da file CSV con mapping colonne e anteprima dati",
-      "Barra progresso globale per operazioni asincrone (import, export, calcolo scenari)",
+      "Barra progresso globale per operazioni asincrone",
       "Sistema notifiche in-app: toast per conferme, warning e aggiornamenti in background",
-      "Storico importazioni con log degli errori di validazione riga per riga",
-      "Indicatore di stato connessione API OptimoRoute nella barra superiore"
+      "Storico importazioni con log degli errori di validazione riga per riga"
     ],
     "breaking": false
   },
@@ -124,9 +170,9 @@
     "type": "patch",
     "title": "Playbook operativo e download PDF",
     "highlights": [
-      "Aggiunto Playbook Operativo nella sezione documentazione: procedure di apertura/chiusura PUDO",
-      "Funzione di download PDF del playbook direttamente dalla UI senza dipendenze esterne",
-      "Correzione indice del manuale utente con link rapidi ai capitoli"
+      "Aggiunto Playbook Operativo nella sezione documentazione",
+      "Funzione di download PDF del playbook direttamente dalla UI",
+      "Correzione indice del manuale utente"
     ],
     "breaking": false
   },
@@ -137,10 +183,9 @@
     "type": "minor",
     "title": "Rinomina PUDO, volume m³ e volume disponibile",
     "highlights": [
-      "Rinomina entità da 'Punto di ritiro' a 'PUDO' (Pick-Up Drop-Off) in tutta l'app",
+      "Rinomina entità da 'Punto di ritiro' a 'PUDO' in tutta l'app",
       "Aggiunta gestione volume m³ per ogni PUDO: capacità totale, occupata e disponibile",
       "Indicatore visuale volume disponibile con barra percentuale e soglie di allerta",
-      "Campo tipo PUDO (tabacchi, edicola, farmacia, supermercato, altro) con icona dedicata",
       "Filtro per tipo PUDO nella lista e sulla mappa"
     ],
     "breaking": false
@@ -155,8 +200,7 @@
       "Nuova sezione Spedizioni con lista, stato tracking e assegnazione a PUDO",
       "Scenari di Ottimizzazione: prima versione con lista scenari salvati e confronto KPI",
       "Pipeline CI/CD con GitHub Actions: lint, build e deploy automatico su Netlify",
-      "Prima versione documentazione tecnica in /docs con architettura e componenti principali",
-      "Aggiunta pagina 404 con redirect alla home e link alle sezioni principali"
+      "Prima versione documentazione tecnica in /docs"
     ],
     "breaking": false
   },
@@ -167,7 +211,7 @@
     "type": "patch",
     "title": "Fix mappa giri, stellina preferiti e icona tab",
     "highlights": [
-      "Risolto bug rendering mappa giri: i percorsi non venivano ridisegnati al cambio scenario",
+      "Risolto bug rendering mappa giri: percorsi non ridisegnati al cambio scenario",
       "Toggle stellina per marcare giri preferiti con persistenza in localStorage",
       "Aggiunta favicon e icona tab personalizzata con logo Fermopoint"
     ],
@@ -182,8 +226,7 @@
     "highlights": [
       "Nuova sezione Giri: lista giri giornalieri con mappa Leaflet e percorso ottimizzato",
       "Pannello laterale dettaglio giro: fermate ordinate, corriere assegnato, KPI distanza/tempo",
-      "Template giri predefiniti per configurazioni ricorrenti (centro città, periferia, ecc.)",
-      "Filtro PUDO per tipo nella mappa: visualizzazione selettiva per categoria",
+      "Template giri predefiniti per configurazioni ricorrenti",
       "Calcolo automatico stima tempi di percorrenza basato su distanza e velocità media"
     ],
     "breaking": false
@@ -196,10 +239,8 @@
     "title": "Versioning centralizzato, responsive completo e anagrafiche base",
     "highlights": [
       "Sistema versioning centralizzato in version.js con visualizzazione nel footer",
-      "Layout responsive completo per tutte le sezioni esistenti (desktop, tablet, mobile)",
-      "Sezione Utenti: gestione operatori con ruoli (admin, dispatcher, viewer)",
-      "Sezione Filiali Fermopoint: anagrafica sedi con indirizzo, cap e referente",
-      "Sezioni Flotta e Carburanti: parco veicoli e monitoraggio costi carburante mensili"
+      "Layout responsive completo per tutte le sezioni esistenti",
+      "Sezione Utenti, Filiali Fermopoint, Flotta e Carburanti"
     ],
     "breaking": false
   },
@@ -210,11 +251,10 @@
     "type": "minor",
     "title": "Struttura iniziale Fermopoint Control Tower",
     "highlights": [
-      "Setup progetto React + Vite con Leaflet per mappe e React Router per la navigazione",
-      "Layout applicativo principale: sidebar navigazione, header con breadcrumb, area contenuto",
-      "Sezione Overview con KPI card placeholder: PUDO attivi, spedizioni del giorno, giri pianificati",
-      "Palette colori e tipografia Fermopoint/DPD applicata tramite CSS custom properties",
-      "Prima versione sezione PUDO con lista mock e mappa Roma con marker posizionati"
+      "Setup progetto React + Vite con Leaflet per mappe",
+      "Layout applicativo principale: sidebar navigazione, header, area contenuto",
+      "Sezione Overview con KPI card: PUDO attivi, spedizioni del giorno, giri pianificati",
+      "Palette colori e tipografia Fermopoint/DPD applicata tramite CSS custom properties"
     ],
     "breaking": false
   }

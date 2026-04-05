@@ -20,10 +20,12 @@ export const MENU_GROUPS = [
     collapsed: false,
     collapsible: true,
     items: [
-      { id: 'spedizioni', label: 'Spedizioni', icon: 'IconBox', section: 'spedizioni' },
-      { id: 'giri', label: 'Giri', icon: 'IconRoute', section: 'giri' },
-      { id: 'punti', label: 'PUDO', icon: 'IconMap', section: 'punti' },
-      { id: 'flotta', label: 'Flotta', icon: 'IconTruck', section: 'flotta' },
+      { id: 'spedizioni', label: 'Spedizioni', icon: 'IconBox',      section: 'spedizioni' },
+      { id: 'scenari',    label: 'Scenari',    icon: 'IconScenario', section: 'scenari' },
+      { id: 'giri',       label: 'Giri',       icon: 'IconRoute',    section: 'giri' },
+      { id: 'punti',      label: 'PUDO',       icon: 'IconMap',      section: 'punti' },
+      { id: 'autisti',    label: 'Autisti',    icon: 'IconPerson',   section: 'autisti' },
+      { id: 'flotta',     label: 'Flotta',     icon: 'IconTruck',    section: 'flotta' },
     ],
   },
   {

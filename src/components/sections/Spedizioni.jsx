@@ -126,7 +126,7 @@ function PaginationPages({ current, total, onPage }) {
 }
 
 // ── Main component ───────────────────────────────────────
-export default function Spedizioni({ onStartJob }) {
+export default function Spedizioni({ onStartJob, onNav }) {
   const [search,          setSearch]          = useState('')
   const [filterTipo,      setFilterTipo]      = useState([])
   const [filterTipoPudo,  setFilterTipoPudo]  = useState([])
@@ -393,6 +393,31 @@ export default function Spedizioni({ onStartJob }) {
                       <tr className="spd-detail-row">
                         <td colSpan={9}>
                           <div className="spd-detail-strip">
+
+                            {s.giroId && (
+                              <>
+                                <div className="spd-detail-item">
+                                  <span className="spd-detail-icon">🔄</span>
+                                  <span className="spd-detail-lbl">Giro</span>
+                                  <button className="spd-link-nav" onClick={() => onNav('giri')}>
+                                    {s.giroId}
+                                  </button>
+                                </div>
+                                <span className="spd-detail-sep" />
+                              </>
+                            )}
+                            {s.scenarioId && (
+                              <>
+                                <div className="spd-detail-item">
+                                  <span className="spd-detail-icon">📊</span>
+                                  <span className="spd-detail-lbl">Scenario</span>
+                                  <button className="spd-link-nav" onClick={() => onNav('scenari')}>
+                                    {s.scenarioId}
+                                  </button>
+                                </div>
+                                <span className="spd-detail-sep" />
+                              </>
+                            )}
 
                             <div className="spd-detail-item">
                               <span className="spd-detail-icon">📥</span>
