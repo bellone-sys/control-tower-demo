@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import pudosRoma from '../../../../data/pudosRoma.json'
 import { FILIALI } from '../../../../data/filiali'
 import { getCiPudo } from '../../../../data/spedizioni'
@@ -155,9 +155,8 @@ export default function ScenarioWizard({ existingScenario, onClose, onConfirm })
         {/* Stepper */}
         <div className="wizard-stepper">
           {STEPS.map((s, i) => (
-            <>
+            <React.Fragment key={s.id}>
               <div
-                key={s.id}
                 className={`wizard-step-item${step === s.id ? ' active' : step > s.id ? ' done' : ''}`}
               >
                 <div className="wizard-step-num">
@@ -166,9 +165,9 @@ export default function ScenarioWizard({ existingScenario, onClose, onConfirm })
                 <span className="wizard-step-label">{s.label}</span>
               </div>
               {i < STEPS.length - 1 && (
-                <div key={`conn-${s.id}`} className="wizard-step-connector" />
+                <div className="wizard-step-connector" />
               )}
-            </>
+            </React.Fragment>
           ))}
         </div>
 

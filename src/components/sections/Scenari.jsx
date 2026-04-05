@@ -7,7 +7,6 @@ import TabPreferiti from './giri/TabPreferiti'
 import './Giri.css'
 
 export default function Scenari({ onStartJob, addNotification }) {
-  const [tab]  = useState('scenari')
   const [activeTab, setActiveTab] = useState('scenari')
   const [giri] = useState(GIRI_INIT)
 

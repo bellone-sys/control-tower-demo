@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import L from 'leaflet'
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
 import { getCiPudo } from '../../../../data/spedizioni'

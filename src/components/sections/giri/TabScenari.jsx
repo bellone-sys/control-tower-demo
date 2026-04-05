@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { FILIALI } from '../../../data/filiali'
 import { getCiScenario, getCiGiro } from '../../../data/spedizioni'
 import ScenarioWizard from './wizard/ScenarioWizard'
+import ErrorBoundary from '../../ui/ErrorBoundary'
 import './TabScenari.css'
 import './wizard/ScenarioWizard.css'
 import '../flotta/TabCarburanti.css'
@@ -227,11 +228,13 @@ export default function TabScenari({ giri, onStartJob, addNotification }) {
 
       {/* Wizard */}
       {showWizard && (
-        <ScenarioWizard
-          existingScenario={editScenario}
-          onClose={() => { setShowWizard(false); setEditScenario(null) }}
-          onConfirm={handleWizardConfirm}
-        />
+        <ErrorBoundary key={`wizard-${editScenario?.filialeId ?? 'new'}`}>
+          <ScenarioWizard
+            existingScenario={editScenario}
+            onClose={() => { setShowWizard(false); setEditScenario(null) }}
+            onConfirm={handleWizardConfirm}
+          />
+        </ErrorBoundary>
       )}
     </div>
   )
