@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useTutorial } from '../../contexts/TutorialContext'
 import { useI18n } from '../../contexts/I18nContext'
+import { useTheme } from '../../contexts/ThemeContext'
+import { APP_VERSION } from '../../version'
 import './SettingsPanel.css'
 
 /**
@@ -10,6 +12,7 @@ import './SettingsPanel.css'
 export default function SettingsPanel({ onClose }) {
   const { settings, dismissTutorial, resetTutorial, resetAllTutorials, setTutorialsEnabled } = useTutorial()
   const { lang, setLang } = useI18n()
+  const { preference, isDark, setTheme } = useTheme()
   const [activeTab, setActiveTab] = useState('tutorials')
   const [confirmReset, setConfirmReset] = useState(false)
 
@@ -167,9 +170,12 @@ export default function SettingsPanel({ onClose }) {
                   className="settings-select"
                   value={lang}
                   onChange={e => setLang(e.target.value)}
+                  aria-label="Seleziona lingua"
                 >
                   <option value="it">🇮🇹 Italiano</option>
                   <option value="en">🇬🇧 English</option>
+                  <option value="fr">🇫🇷 Français</option>
+                  <option value="de">🇩🇪 Deutsch</option>
                 </select>
               </div>
 
@@ -178,13 +184,29 @@ export default function SettingsPanel({ onClose }) {
               <div className="settings-option">
                 <div>
                   <div className="settings-option-label">Dark mode</div>
-                  <div className="settings-option-hint">Attiva la modalità scura (prossimamente)</div>
+                  <div className="settings-option-hint">Attiva la modalità scura</div>
                 </div>
-                <label className="settings-toggle settings-toggle-disabled">
+                <label className="settings-toggle" aria-label="Attiva dark mode">
                   <input
                     type="checkbox"
-                    checked={settings.preferences.darkMode}
-                    disabled
+                    checked={isDark}
+                    onChange={e => setTheme(e.target.checked ? 'dark' : 'light')}
+                  />
+                  <div className="settings-toggle-track" />
+                  <div className="settings-toggle-thumb" />
+                </label>
+              </div>
+
+              <div className="settings-option">
+                <div>
+                  <div className="settings-option-label">Segui sistema</div>
+                  <div className="settings-option-hint">Usa la preferenza di sistema (chiaro/scuro)</div>
+                </div>
+                <label className="settings-toggle" aria-label="Segui preferenza sistema">
+                  <input
+                    type="checkbox"
+                    checked={preference === 'system'}
+                    onChange={e => setTheme(e.target.checked ? 'system' : (isDark ? 'dark' : 'light'))}
                   />
                   <div className="settings-toggle-track" />
                   <div className="settings-toggle-thumb" />
@@ -206,7 +228,7 @@ export default function SettingsPanel({ onClose }) {
                   </svg>
                 </div>
                 <div className="settings-about-title">Control Tower</div>
-                <div className="settings-about-version">v0.11.0</div>
+                <div className="settings-about-version">v{APP_VERSION}</div>
                 <div className="settings-about-desc">
                   Sistema di gestione logistica con raccolta DPD
                 </div>
@@ -216,7 +238,7 @@ export default function SettingsPanel({ onClose }) {
                 <div className="settings-about-info">
                   <div className="settings-about-item">
                     <span className="settings-about-label">Versione:</span>
-                    <span>0.11.0 - Phase 3 Polish</span>
+                    <span>{APP_VERSION} - Phase 4</span>
                   </div>
                   <div className="settings-about-item">
                     <span className="settings-about-label">Ultimo aggiornamento:</span>

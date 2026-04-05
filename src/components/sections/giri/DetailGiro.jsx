@@ -4,6 +4,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { FILIALI } from '../../../data/filiali'
 import { DRIVERS, MEZZI, MODELLI_MEZZI } from '../../../data/flotta'
+import EntityHistory from '../../ui/EntityHistory'
 import './DetailGiro.css'
 
 // Calcola i bounds su un array di {lat, lng}
@@ -53,6 +54,7 @@ function getStatoClass(stato) {
 
 export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate }) {
   const [justSaved, setJustSaved] = useState(false)
+  const [activeTab, setActiveTab] = useState('details')
 
   const filiale = FILIALI.find(f => f.id === giro.filialeId)
   const driver  = DRIVERS.find(d => d.id === giro.autoreId)
@@ -98,8 +100,32 @@ export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate })
         <button className="giro-detail-close" onClick={onClose} title="Chiudi">×</button>
       </div>
 
+      {/* Sub-tabs: Dettagli | Cronologia */}
+      <div className="giro-detail-tabs" role="tablist" aria-label="Sezioni dettaglio giro">
+        {[
+          { id: 'details',  label: 'Dettagli' },
+          { id: 'history',  label: '🕐 Cronologia' },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            aria-controls={`panel-${tab.id}`}
+            className={`giro-detail-tab${activeTab === tab.id ? ' active' : ''}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       {/* Body: mappa + timeline */}
-      <div className="giro-detail-body">
+      <div
+        id="panel-details"
+        role="tabpanel"
+        aria-labelledby="tab-details"
+        hidden={activeTab !== 'details'}
+        className="giro-detail-body">
         {/* Mappa — key={giro.id} forza rimount quando cambia giro */}
         <div className="giro-map-col">
           <MapContainer
@@ -186,6 +212,17 @@ export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate })
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Cronologia tab */}
+      <div
+        id="panel-history"
+        role="tabpanel"
+        aria-labelledby="tab-history"
+        hidden={activeTab !== 'history'}
+        style={{ padding: '0 20px 20px' }}
+      >
+        <EntityHistory entityType="giro" entityId={giro.id} />
       </div>
 
       {/* Footer */}

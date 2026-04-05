@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { FILIALI as FILIALI_INIT, STATI_FILIALE, REGIONI } from '../../data/filiali'
 import MultiSelect from '../ui/MultiSelect'
+import EntityHistory from '../ui/EntityHistory'
 import './Sections.css'
 import './Filiali.css'
 import '../sections/flotta/Flotta.css'
@@ -63,6 +64,7 @@ export default function Filiali() {
   const [sortDir,      setSortDir]      = useState('asc')
   const [page,         setPage]         = useState(1)
   const [modal,        setModal]        = useState(null)
+  const [modalTab,     setModalTab]     = useState('form')
   const [form,         setForm]         = useState(EMPTY_FORM)
   const [errors,       setErrors]       = useState({})
   const [deleteId,     setDeleteId]     = useState(null)
@@ -301,12 +303,19 @@ export default function Filiali() {
 
       {/* ===== MODAL ===== */}
       {modal && (
-        <div className="modal-overlay" onClick={() => setModal(null)}>
+        <div className="modal-overlay" onClick={() => setModal(null)} role="dialog" aria-modal="true" aria-label={modal.mode === 'add' ? 'Nuova filiale' : `Modifica filiale ${modal.filiale?.nome}`}>
           <div className="modal-box modal-wide" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>{modal.mode === 'add' ? 'Nuova filiale' : `Modifica — ${modal.filiale.nome}`}</h3>
-              <button className="modal-close" onClick={() => setModal(null)}>×</button>
+              <button className="modal-close" onClick={() => setModal(null)} aria-label="Chiudi">×</button>
             </div>
+            {/* Sub-tabs: Form | Cronologia (solo in edit mode) */}
+            {modal.mode === 'edit' && (
+              <div className="modal-tabs" role="tablist">
+                <button role="tab" aria-selected={modalTab === 'form'} className={`modal-tab${modalTab === 'form' ? ' active' : ''}`} onClick={() => setModalTab('form')}>Dati</button>
+                <button role="tab" aria-selected={modalTab === 'history'} className={`modal-tab${modalTab === 'history' ? ' active' : ''}`} onClick={() => setModalTab('history')}>🕐 Cronologia</button>
+              </div>
+            )}
             <div className="modal-body">
 
               <div className="modal-section-title">Anagrafica</div>
@@ -392,12 +401,19 @@ export default function Filiali() {
               </div>
 
             </div>
+            {modal.mode === 'edit' && modalTab === 'history' && (
+              <div style={{ padding: '0 24px 16px' }}>
+                <EntityHistory entityType="filiale" entityId={modal.filiale.id} />
+              </div>
+            )}
+            {(modal.mode === 'add' || modalTab === 'form') && (
             <div className="modal-footer">
               <button className="btn-secondary" onClick={() => setModal(null)}>Annulla</button>
               <button className="btn-primary"   onClick={handleSave}>
                 {modal.mode === 'add' ? 'Aggiungi filiale' : 'Salva modifiche'}
               </button>
             </div>
+            )}
           </div>
         </div>
       )}
