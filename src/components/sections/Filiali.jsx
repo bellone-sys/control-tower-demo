@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { FILIALI as FILIALI_INIT, STATI_FILIALE, REGIONI } from '../../data/filiali'
+import { FILIALI_BRT } from '../../data/filialiBrt'
 import MultiSelect from '../ui/MultiSelect'
 import EntityHistory from '../ui/EntityHistory'
 import './Sections.css'
@@ -56,18 +57,21 @@ function Pagination({ page, total, onPage, pageSize, total_items }) {
 }
 
 export default function Filiali() {
-  const [filiali,      setFiliali]      = useState(FILIALI_INIT)
-  const [search,       setSearch]       = useState('')
-  const [filterStati,  setFilterStati]  = useState([])
-  const [filterRegioni,setFilterRegioni]= useState([])
-  const [sortKey,      setSortKey]      = useState('nome')
-  const [sortDir,      setSortDir]      = useState('asc')
-  const [page,         setPage]         = useState(1)
-  const [modal,        setModal]        = useState(null)
-  const [modalTab,     setModalTab]     = useState('form')
-  const [form,         setForm]         = useState(EMPTY_FORM)
-  const [errors,       setErrors]       = useState({})
-  const [deleteId,     setDeleteId]     = useState(null)
+  const [filiali,       setFiliali]       = useState(FILIALI_INIT)
+  const [search,        setSearch]        = useState('')
+  const [filterStati,   setFilterStati]   = useState([])
+  const [filterRegioni, setFilterRegioni] = useState([])
+  const [sortKey,       setSortKey]       = useState('nome')
+  const [sortDir,       setSortDir]       = useState('asc')
+  const [page,          setPage]          = useState(1)
+  const [modal,         setModal]         = useState(null)
+  const [modalTab,      setModalTab]      = useState('form')
+  const [form,          setForm]          = useState(EMPTY_FORM)
+  const [errors,        setErrors]        = useState({})
+  const [deleteId,      setDeleteId]      = useState(null)
+  // BRT import flow
+  const [brtSearch,     setBrtSearch]     = useState('')
+  const [brtSource,     setBrtSource]     = useState(null) // filiale BRT usata come sorgente
 
   function handleSort(key) {
     if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
@@ -75,7 +79,11 @@ export default function Filiali() {
   }
 
   function openAdd() {
-    setForm(EMPTY_FORM); setErrors({}); setModal({ mode: 'add' })
+    setForm(EMPTY_FORM)
+    setErrors({})
+    setBrtSearch('')
+    setBrtSource(null)
+    setModal({ mode: 'add', step: 'source' })
   }
 
   function openEdit(f) {
@@ -90,6 +98,22 @@ export default function Filiali() {
     })
     setErrors({})
     setModal({ mode: 'edit', filiale: f })
+  }
+
+  // Importa i campi disponibili da una filiale BRT e avanza al form
+  function importFromBrt(brt) {
+    setForm({
+      ...EMPTY_FORM,
+      nome:      brt.nome,
+      via:       brt.indirizzo,
+      cap:       brt.cap,
+      citta:     brt.citta,
+      provincia: brt.provincia,
+      regione:   brt.regione,
+      telefono:  brt.telefono || '',
+    })
+    setBrtSource(brt)
+    setModal(m => ({ ...m, step: 'form' }))
   }
 
   function validate() {
@@ -130,6 +154,19 @@ export default function Filiali() {
     setDeleteId(null)
   }
 
+  // Filtra le filiali BRT per il picker
+  const filteredBrt = useMemo(() => {
+    if (!brtSearch.trim()) return FILIALI_BRT
+    const q = brtSearch.toLowerCase()
+    return FILIALI_BRT.filter(b =>
+      b.nome.toLowerCase().includes(q)     ||
+      b.citta.toLowerCase().includes(q)    ||
+      b.provincia.toLowerCase().includes(q)||
+      b.regione.toLowerCase().includes(q)  ||
+      (b.cap && b.cap.includes(q))
+    )
+  }, [brtSearch])
+
   const filtered = useMemo(() => {
     let list = filiali
     if (search.trim()) {
@@ -157,6 +194,113 @@ export default function Filiali() {
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const setF = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
+
+  // Titolo header modale in base al passo
+  function modalTitle() {
+    if (modal.mode === 'edit') return `Modifica — ${modal.filiale.nome}`
+    if (modal.step === 'brt-picker') return 'Importa da filiale BRT'
+    if (modal.step === 'form' && brtSource) return `Nuova filiale — da ${brtSource.nome}`
+    return 'Nuova filiale'
+  }
+
+  // Rendering del form (condiviso add-form + edit)
+  function renderForm() {
+    return (
+      <>
+        {/* Notice importazione BRT */}
+        {modal.mode === 'add' && brtSource && (
+          <div className="brt-import-notice">
+            <span className="brt-import-icon">🔗</span>
+            <div>
+              <span className="brt-import-label">Importato da BRT · {brtSource.nome}</span>
+              <span className="brt-import-sub"> — Completa i campi mancanti e verifica i dati prima di salvare.</span>
+            </div>
+          </div>
+        )}
+
+        <div className="modal-section-title">Anagrafica</div>
+        <div className="form-grid form-grid-3">
+          <div className="form-field full">
+            <label className="form-label">Nome filiale *</label>
+            <input className={`form-input${errors.nome ? ' error' : ''}`} value={form.nome} onChange={setF('nome')} placeholder="es. Milano Bovisa" />
+          </div>
+          <div className="form-field full">
+            <label className="form-label">Via / Indirizzo *</label>
+            <input className={`form-input${errors.via ? ' error' : ''}`} value={form.via} onChange={setF('via')} />
+          </div>
+          <div className="form-field">
+            <label className="form-label">CAP *</label>
+            <input className={`form-input${errors.cap ? ' error' : ''}`} value={form.cap} onChange={setF('cap')} maxLength={5} />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Città *</label>
+            <input className={`form-input${errors.citta ? ' error' : ''}`} value={form.citta} onChange={setF('citta')} />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Provincia</label>
+            <input className="form-input" value={form.provincia} onChange={setF('provincia')} maxLength={2} style={{ textTransform: 'uppercase' }} placeholder="MI" />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Regione</label>
+            <select className="form-select" value={form.regione} onChange={setF('regione')}>
+              <option value="">— Seleziona —</option>
+              {REGIONI.map(r => <option key={r}>{r}</option>)}
+            </select>
+          </div>
+          <div className="form-field">
+            <label className="form-label">Latitudine</label>
+            <input type="number" step="0.0001" className="form-input" value={form.lat} onChange={setF('lat')} placeholder="45.1234" />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Longitudine</label>
+            <input type="number" step="0.0001" className="form-input" value={form.lng} onChange={setF('lng')} placeholder="9.5678" />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Stato</label>
+            <select className="form-select" value={form.stato} onChange={setF('stato')}>
+              {STATI_FILIALE.map(s => <option key={s}>{s}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div className="modal-section-title" style={{ marginTop: 20 }}>Contatti e responsabile</div>
+        <div className="form-grid form-grid-3">
+          <div className="form-field">
+            <label className="form-label">Telefono</label>
+            <input className="form-input" value={form.telefono} onChange={setF('telefono')} placeholder="+39 02 000 0000" />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Email filiale *</label>
+            <input className={`form-input${errors.email ? ' error' : ''}`} value={form.email} onChange={setF('email')} placeholder="filiale@fermopoint.it" />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Responsabile</label>
+            <input className="form-input" value={form.responsabile} onChange={setF('responsabile')} />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Email responsabile</label>
+            <input className="form-input" value={form.emailResponsabile} onChange={setF('emailResponsabile')} placeholder="nome.cognome@fermopoint.it" />
+          </div>
+        </div>
+
+        <div className="modal-section-title" style={{ marginTop: 20 }}>Dati operativi</div>
+        <div className="form-grid form-grid-3">
+          <div className="form-field">
+            <label className="form-label">Superficie (m²)</label>
+            <input type="number" className="form-input" value={form.superficie} onChange={setF('superficie')} min="0" />
+          </div>
+          <div className="form-field">
+            <label className="form-label">PUDO gestiti</label>
+            <input type="number" className="form-input" value={form.puntiRitiro} onChange={setF('puntiRitiro')} min="0" />
+          </div>
+          <div className="form-field">
+            <label className="form-label">Data apertura</label>
+            <input type="date" className="form-input" value={form.dataApertura} onChange={setF('dataApertura')} />
+          </div>
+        </div>
+      </>
+    )
+  }
 
   return (
     <div className="section-content">
@@ -303,117 +447,147 @@ export default function Filiali() {
 
       {/* ===== MODAL ===== */}
       {modal && (
-        <div className="modal-overlay" onClick={() => setModal(null)} role="dialog" aria-modal="true" aria-label={modal.mode === 'add' ? 'Nuova filiale' : `Modifica filiale ${modal.filiale?.nome}`}>
+        <div className="modal-overlay" onClick={() => setModal(null)} role="dialog" aria-modal="true"
+          aria-label={modal.mode === 'add' ? 'Nuova filiale' : `Modifica filiale ${modal.filiale?.nome}`}>
           <div className="modal-box modal-wide" onClick={e => e.stopPropagation()}>
+
+            {/* Header */}
             <div className="modal-header">
-              <h3>{modal.mode === 'add' ? 'Nuova filiale' : `Modifica — ${modal.filiale.nome}`}</h3>
+              <h3>{modalTitle()}</h3>
               <button className="modal-close" onClick={() => setModal(null)} aria-label="Chiudi">×</button>
             </div>
-            {/* Sub-tabs: Form | Cronologia (solo in edit mode) */}
+
+            {/* Tabs (solo edit) */}
             {modal.mode === 'edit' && (
               <div className="modal-tabs" role="tablist">
-                <button role="tab" aria-selected={modalTab === 'form'} className={`modal-tab${modalTab === 'form' ? ' active' : ''}`} onClick={() => setModalTab('form')}>Dati</button>
+                <button role="tab" aria-selected={modalTab === 'form'}    className={`modal-tab${modalTab === 'form'    ? ' active' : ''}`} onClick={() => setModalTab('form')}>Dati</button>
                 <button role="tab" aria-selected={modalTab === 'history'} className={`modal-tab${modalTab === 'history' ? ' active' : ''}`} onClick={() => setModalTab('history')}>🕐 Cronologia</button>
               </div>
             )}
-            <div className="modal-body">
 
-              <div className="modal-section-title">Anagrafica</div>
-              <div className="form-grid form-grid-3">
-                <div className="form-field full">
-                  <label className="form-label">Nome filiale *</label>
-                  <input className={`form-input${errors.nome ? ' error' : ''}`} value={form.nome} onChange={setF('nome')} placeholder="es. Milano Bovisa" />
-                </div>
-                <div className="form-field full">
-                  <label className="form-label">Via / Indirizzo *</label>
-                  <input className={`form-input${errors.via ? ' error' : ''}`} value={form.via} onChange={setF('via')} />
-                </div>
-                <div className="form-field">
-                  <label className="form-label">CAP *</label>
-                  <input className={`form-input${errors.cap ? ' error' : ''}`} value={form.cap} onChange={setF('cap')} maxLength={5} />
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Città *</label>
-                  <input className={`form-input${errors.citta ? ' error' : ''}`} value={form.citta} onChange={setF('citta')} />
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Provincia</label>
-                  <input className="form-input" value={form.provincia} onChange={setF('provincia')} maxLength={2} style={{ textTransform: 'uppercase' }} placeholder="MI" />
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Regione</label>
-                  <select className="form-select" value={form.regione} onChange={setF('regione')}>
-                    <option value="">— Seleziona —</option>
-                    {REGIONI.map(r => <option key={r}>{r}</option>)}
-                  </select>
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Latitudine</label>
-                  <input type="number" step="0.0001" className="form-input" value={form.lat} onChange={setF('lat')} placeholder="45.1234" />
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Longitudine</label>
-                  <input type="number" step="0.0001" className="form-input" value={form.lng} onChange={setF('lng')} placeholder="9.5678" />
-                </div>
+            {/* ── STEP: sorgente ── */}
+            {modal.mode === 'add' && modal.step === 'source' && (
+              <div className="modal-body">
+                <p className="add-source-subtitle">Come vuoi creare la nuova filiale Fermopoint?</p>
+                <div className="add-source-options">
 
-                <div className="form-field">
-                  <label className="form-label">Stato</label>
-                  <select className="form-select" value={form.stato} onChange={setF('stato')}>
-                    {STATI_FILIALE.map(s => <option key={s}>{s}</option>)}
-                  </select>
+                  <button className="add-source-option" onClick={() => setModal(m => ({ ...m, step: 'brt-picker' }))}>
+                    <span className="add-source-icon">🔗</span>
+                    <div className="add-source-text">
+                      <div className="add-source-title">Importa da filiale BRT</div>
+                      <div className="add-source-desc">
+                        Seleziona una delle {FILIALI_BRT.length} filiali BRT esistenti per pre-compilare
+                        indirizzo, città e provincia. Potrai modificare e integrare tutti i dati prima di salvare.
+                      </div>
+                    </div>
+                  </button>
+
+                  <button className="add-source-option" onClick={() => setModal(m => ({ ...m, step: 'form' }))}>
+                    <span className="add-source-icon">✏️</span>
+                    <div className="add-source-text">
+                      <div className="add-source-title">Crea da zero</div>
+                      <div className="add-source-desc">
+                        Inserisci manualmente tutti i dati della nuova filiale Fermopoint senza partire
+                        da un'anagrafica BRT esistente.
+                      </div>
+                    </div>
+                  </button>
+
                 </div>
               </div>
+            )}
 
-              <div className="modal-section-title" style={{ marginTop: 20 }}>Contatti e responsabile</div>
-              <div className="form-grid form-grid-3">
-                <div className="form-field">
-                  <label className="form-label">Telefono</label>
-                  <input className="form-input" value={form.telefono} onChange={setF('telefono')} placeholder="+39 02 000 0000" />
+            {/* ── STEP: BRT picker ── */}
+            {modal.mode === 'add' && modal.step === 'brt-picker' && (
+              <div className="modal-body brt-picker-body">
+                <div className="brt-picker-search-wrap">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                  </svg>
+                  <input
+                    type="text"
+                    className="brt-picker-search"
+                    placeholder="Cerca filiale BRT per nome, città, provincia, regione…"
+                    value={brtSearch}
+                    onChange={e => setBrtSearch(e.target.value)}
+                    autoFocus
+                  />
+                  {brtSearch && (
+                    <button className="search-clear" onClick={() => setBrtSearch('')}>×</button>
+                  )}
                 </div>
-                <div className="form-field">
-                  <label className="form-label">Email filiale *</label>
-                  <input className={`form-input${errors.email ? ' error' : ''}`} value={form.email} onChange={setF('email')} placeholder="filiale@fermopoint.it" />
+                <div className="brt-picker-count">
+                  {filteredBrt.length === FILIALI_BRT.length
+                    ? `${FILIALI_BRT.length} filiali BRT disponibili`
+                    : `${filteredBrt.length} risultati su ${FILIALI_BRT.length}`}
                 </div>
-                <div className="form-field">
-                  <label className="form-label">Responsabile</label>
-                  <input className="form-input" value={form.responsabile} onChange={setF('responsabile')} />
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Email responsabile</label>
-                  <input className="form-input" value={form.emailResponsabile} onChange={setF('emailResponsabile')} placeholder="nome.cognome@fermopoint.it" />
+                <div className="brt-picker-list">
+                  {filteredBrt.length === 0 && (
+                    <div className="brt-picker-empty">Nessuna filiale BRT trovata per "{brtSearch}".</div>
+                  )}
+                  {filteredBrt.map(b => (
+                    <button key={b.id} className="brt-picker-item" onClick={() => importFromBrt(b)}>
+                      <div className="brt-picker-item-inner">
+                        <div className="brt-picker-avatar">{b.nome.slice(0, 2)}</div>
+                        <div className="brt-picker-info">
+                          <div className="brt-picker-nome">{b.nome}</div>
+                          <div className="brt-picker-addr">
+                            {b.indirizzo} · {b.cap} {b.citta} ({b.provincia}) · {b.regione}
+                          </div>
+                        </div>
+                        <svg className="brt-picker-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </button>
+                  ))}
                 </div>
               </div>
+            )}
 
-              <div className="modal-section-title" style={{ marginTop: 20 }}>Dati operativi</div>
-              <div className="form-grid form-grid-3">
-                <div className="form-field">
-                  <label className="form-label">Superficie (m²)</label>
-                  <input type="number" className="form-input" value={form.superficie} onChange={setF('superficie')} min="0" />
-                </div>
-                <div className="form-field">
-                  <label className="form-label">PUDO gestiti</label>
-                  <input type="number" className="form-input" value={form.puntiRitiro} onChange={setF('puntiRitiro')} min="0" />
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Data apertura</label>
-                  <input type="date" className="form-input" value={form.dataApertura} onChange={setF('dataApertura')} />
-                </div>
+            {/* ── STEP: form (add) + edit form ── */}
+            {(modal.mode === 'edit' || (modal.mode === 'add' && modal.step === 'form')) && (
+              <div className="modal-body">
+                {(modal.mode === 'add' || modalTab === 'form') && renderForm()}
+                {modal.mode === 'edit' && modalTab === 'history' && (
+                  <EntityHistory entityType="filiale" entityId={modal.filiale.id} />
+                )}
               </div>
+            )}
 
-            </div>
+            {/* ── Cronologia panel (edit, outside modal-body scroll) ── */}
             {modal.mode === 'edit' && modalTab === 'history' && (
               <div style={{ padding: '0 24px 16px' }}>
-                <EntityHistory entityType="filiale" entityId={modal.filiale.id} />
+                {/* rendered inline above */}
               </div>
             )}
-            {(modal.mode === 'add' || modalTab === 'form') && (
-            <div className="modal-footer">
-              <button className="btn-secondary" onClick={() => setModal(null)}>Annulla</button>
-              <button className="btn-primary"   onClick={handleSave}>
-                {modal.mode === 'add' ? 'Aggiungi filiale' : 'Salva modifiche'}
-              </button>
-            </div>
+
+            {/* Footer */}
+            {modal.mode === 'add' && modal.step === 'source' && (
+              <div className="modal-footer">
+                <button className="btn-secondary" onClick={() => setModal(null)}>Annulla</button>
+              </div>
             )}
+            {modal.mode === 'add' && modal.step === 'brt-picker' && (
+              <div className="modal-footer">
+                <button className="btn-secondary" onClick={() => setModal(m => ({ ...m, step: 'source' }))}>← Indietro</button>
+              </div>
+            )}
+            {modal.mode === 'add' && modal.step === 'form' && (
+              <div className="modal-footer">
+                <button className="btn-secondary" onClick={() => {
+                  setModal(m => ({ ...m, step: brtSource ? 'brt-picker' : 'source' }))
+                }}>← Indietro</button>
+                <button className="btn-primary" onClick={handleSave}>Aggiungi filiale</button>
+              </div>
+            )}
+            {modal.mode === 'edit' && modalTab === 'form' && (
+              <div className="modal-footer">
+                <button className="btn-secondary" onClick={() => setModal(null)}>Annulla</button>
+                <button className="btn-primary"   onClick={handleSave}>Salva modifiche</button>
+              </div>
+            )}
+
           </div>
         </div>
       )}
