@@ -1,21 +1,44 @@
 import './Sidebar.css'
+import { useState, useEffect } from 'react'
 import { APP_VERSION } from '../version'
+import { MENU_GROUPS, getVisibleMenuGroups, getMenuGroupState, setMenuGroupState } from '../config/menuStructure'
 
-const NAV_ITEMS = [
-  { id: 'overview',   label: 'Panoramica',    icon: IconGrid },
-  { id: 'spedizioni', label: 'Spedizioni',     icon: IconBox },
-  { id: 'giri',       label: 'Giri',           icon: IconRoute },
-  { id: 'punti',      label: 'PUDO',            icon: IconMap },
-  { id: 'flotta',     label: 'Flotta',         icon: IconTruck },
-  { id: 'filiali',    label: 'Filiali',        icon: IconBuilding },
-  { id: 'eccezioni',  label: 'Eccezioni',      icon: IconAlert, badge: true },
-  { id: 'report',     label: 'Report',         icon: IconChart },
-  { id: 'utenti',     label: 'Utenti',         icon: IconUsers, adminOnly: true },
-]
+const ICON_MAP = {
+  IconGrid: IconGrid,
+  IconBox: IconBox,
+  IconRoute: IconRoute,
+  IconMap: IconMap,
+  IconAlert: IconAlert,
+  IconChart: IconChart,
+  IconUsers: IconUsers,
+  IconBuilding: IconBuilding,
+  IconTruck: IconTruck,
+  IconSettings: IconSettings,
+  IconDocument: IconDocument,
+}
 
 export default function Sidebar({ active, onNav, eccezioniCount, user, open, onClose }) {
   const isAdmin = user?.ruolo === 'admin'
-  const visibleItems = NAV_ITEMS.filter(item => !item.adminOnly || isAdmin)
+  const visibleGroups = getVisibleMenuGroups(isAdmin)
+
+  const [groupStates, setGroupStates] = useState({})
+
+  useEffect(() => {
+    // Initialize group states from localStorage
+    const states = {}
+    visibleGroups.forEach(group => {
+      const stored = getMenuGroupState(group.id)
+      states[group.id] = stored !== null ? stored : group.collapsed
+    })
+    setGroupStates(states)
+  }, [visibleGroups])
+
+  const toggleGroup = (groupId) => {
+    const newState = !groupStates[groupId]
+    setGroupStates(prev => ({ ...prev, [groupId]: newState }))
+    setMenuGroupState(groupId, newState)
+  }
+
   return (
     <aside className={`sidebar${open ? ' open' : ''}`}>
       <div className="sidebar-logo">
@@ -36,21 +59,83 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
       </div>
 
       <nav className="sidebar-nav">
-        {visibleItems.map(item => {
-          const Icon = item.icon
-          const isActive = active === item.id
+        {visibleGroups.map(group => {
+          const isCollapsed = groupStates[group.id]
+
+          if (!group.collapsible || group.label === null) {
+            // Single items group (no collapsing)
+            return (
+              <div key={group.id} className="nav-group">
+                {group.items.map(item => {
+                  const Icon = ICON_MAP[item.icon]
+                  const isActive = active === item.section
+                  return (
+                    <button
+                      key={item.id}
+                      className={`nav-item ${isActive ? 'active' : ''}`}
+                      onClick={() => onNav(item.section)}
+                    >
+                      {Icon && <Icon />}
+                      <span>{item.label}</span>
+                      {item.badge && eccezioniCount > 0 && (
+                        <span className="nav-badge">{eccezioniCount}</span>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+            )
+          }
+
+          // Collapsible group
           return (
-            <button
-              key={item.id}
-              className={`nav-item ${isActive ? 'active' : ''}`}
-              onClick={() => onNav(item.id)}
-            >
-              <Icon />
-              <span>{item.label}</span>
-              {item.badge && eccezioniCount > 0 && (
-                <span className="nav-badge">{eccezioniCount}</span>
+            <div key={group.id} className="nav-group-collapsible">
+              <button
+                className="nav-group-header"
+                onClick={() => toggleGroup(group.id)}
+              >
+                {group.icon && ICON_MAP[group.icon] && (() => {
+                  const Icon = ICON_MAP[group.icon]
+                  return <Icon />
+                })()}
+                <span>{group.label}</span>
+                <svg
+                  className={`group-chevron${isCollapsed ? '' : ' open'}`}
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+
+              {!isCollapsed && (
+                <div className="nav-group-items">
+                  {group.items.map(item => {
+                    const Icon = ICON_MAP[item.icon]
+                    const isActive = active === item.section
+                    return (
+                      <button
+                        key={item.id}
+                        className={`nav-item nav-subitem ${isActive ? 'active' : ''}`}
+                        onClick={() => onNav(item.section)}
+                      >
+                        {Icon && <Icon />}
+                        <span>{item.label}</span>
+                        {item.badge && eccezioniCount > 0 && (
+                          <span className="nav-badge">{eccezioniCount}</span>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
               )}
-            </button>
+            </div>
           )
         })}
       </nav>
@@ -176,6 +261,20 @@ function IconClipboard() {
       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
       <rect x="8" y="2" width="8" height="4" rx="1"/>
       <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+    </svg>
+  )
+}
+function IconSettings() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m4.24-4.24l4.24-4.24"/>
+    </svg>
+  )
+}
+function IconDocument() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/>
     </svg>
   )
 }

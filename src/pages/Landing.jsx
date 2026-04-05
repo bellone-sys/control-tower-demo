@@ -1,9 +1,16 @@
 import { APP_VERSION } from '../version'
+import TutorialOverlay from '../components/tutorials/TutorialOverlay'
 import './Landing.css'
 
 export default function Landing({ isAuthenticated, onGoToDashboard, onGoToLogin }) {
   return (
     <div className="landing-page">
+      <TutorialOverlay
+        id="landing_page"
+        title="📍 Benvenuto in Fermopoint"
+        description="Fermopoint Control Tower è il tuo sistema completo di gestione della logistica con raccolta DPD. Accedi per iniziare."
+        position="bottom-right"
+      />
       {/* Background decorativo */}
       <div className="landing-bg" />
 

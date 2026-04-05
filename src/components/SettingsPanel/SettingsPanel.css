@@ -1,0 +1,456 @@
+/* ===== SETTINGS PANEL ===== */
+
+.settings-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+}
+
+.settings-panel-modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 520px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 200ms ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settings-panel-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--fp-gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.settings-panel-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+}
+
+.settings-panel-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--fp-gray-mid);
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.settings-panel-close:hover {
+  color: var(--fp-red);
+}
+
+/* Tabs */
+.settings-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--fp-gray-light);
+  flex-shrink: 0;
+}
+
+.settings-tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  color: var(--fp-gray-mid);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 150ms ease, border-bottom-color 150ms ease;
+  border-bottom: 2px solid transparent;
+}
+
+.settings-tab:hover {
+  color: var(--fp-charcoal);
+}
+
+.settings-tab.active {
+  color: var(--fp-red);
+  border-bottom-color: var(--fp-red);
+}
+
+/* Content */
+.settings-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Options */
+.settings-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settings-option-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fp-charcoal);
+  margin-bottom: 4px;
+}
+
+.settings-option-hint {
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+  line-height: 1.4;
+}
+
+/* Toggle */
+.settings-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  width: 44px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.settings-toggle input {
+  display: none;
+}
+
+.settings-toggle-track {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--fp-gray-light);
+  border-radius: 12px;
+  transition: background 150ms ease;
+}
+
+.settings-toggle-thumb {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 10px;
+  left: 2px;
+  transition: left 150ms ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.settings-toggle input:checked + .settings-toggle-track {
+  background: var(--fp-red);
+}
+
+.settings-toggle input:checked ~ .settings-toggle-thumb {
+  left: 22px;
+}
+
+.settings-toggle-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.settings-toggle-disabled input {
+  cursor: not-allowed;
+}
+
+/* Select */
+.settings-select {
+  padding: 8px 12px;
+  border: 1px solid var(--fp-gray-light);
+  border-radius: 6px;
+  background: white;
+  color: var(--fp-charcoal);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+
+.settings-select:hover {
+  border-color: var(--fp-gray-mid);
+}
+
+.settings-select:focus {
+  outline: none;
+  border-color: var(--fp-red);
+}
+
+/* Divider */
+.settings-divider {
+  height: 1px;
+  background: var(--fp-gray-light);
+  margin: 8px 0;
+}
+
+/* Tutorials List */
+.settings-tutorials-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-list-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fp-gray-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.settings-tutorial-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--fp-gray-light-bg);
+  border-radius: 6px;
+  gap: 12px;
+}
+
+.settings-tutorial-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fp-charcoal);
+  margin-bottom: 2px;
+}
+
+.settings-tutorial-desc {
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+}
+
+.settings-tutorial-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--fp-gray-light);
+  border-radius: 4px;
+  background: white;
+  color: var(--fp-charcoal);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.settings-tutorial-btn:hover {
+  background: var(--fp-gray-light-bg);
+  border-color: var(--fp-gray-mid);
+}
+
+.settings-tutorial-btn-reset {
+  color: var(--fp-red);
+  border-color: var(--fp-red);
+}
+
+.settings-tutorial-btn-reset:hover {
+  background: rgba(220, 0, 50, 0.05);
+}
+
+.settings-tutorial-badge {
+  font-size: 12px;
+  color: #2E7D32;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.settings-action-btn {
+  padding: 10px 16px;
+  border: 1px solid var(--fp-red);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fp-red);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.settings-action-btn:hover {
+  background: rgba(220, 0, 50, 0.05);
+}
+
+.settings-action-btn-reset {
+  border-color: var(--fp-red);
+  color: var(--fp-red);
+}
+
+/* Confirm Box */
+.settings-confirm-box {
+  padding: 12px;
+  background: rgba(220, 0, 50, 0.05);
+  border: 1px solid rgba(220, 0, 50, 0.2);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-confirm-text {
+  font-size: 13px;
+  color: var(--fp-charcoal);
+  font-weight: 500;
+}
+
+.settings-confirm-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.settings-confirm-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--fp-gray-light);
+  border-radius: 4px;
+  background: white;
+  color: var(--fp-charcoal);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.settings-confirm-btn:hover {
+  border-color: var(--fp-gray-mid);
+}
+
+.settings-confirm-btn-confirm {
+  background: var(--fp-red);
+  color: white;
+  border-color: var(--fp-red);
+}
+
+.settings-confirm-btn-confirm:hover {
+  background: #a90034;
+  border-color: #a90034;
+}
+
+/* About Section */
+.settings-about {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-about-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.settings-about-logo svg {
+  width: 110px;
+  height: auto;
+}
+
+.settings-about-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+  margin: 0;
+}
+
+.settings-about-version {
+  font-size: 14px;
+  color: var(--fp-red);
+  font-weight: 500;
+}
+
+.settings-about-desc {
+  font-size: 13px;
+  color: var(--fp-gray-mid);
+  line-height: 1.5;
+}
+
+.settings-about-divider {
+  height: 1px;
+  background: var(--fp-gray-light);
+  margin: 8px 0;
+}
+
+.settings-about-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.settings-about-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+}
+
+.settings-about-label {
+  font-weight: 500;
+  color: var(--fp-charcoal);
+}
+
+/* Scrollbar styling */
+.settings-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.settings-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.settings-content::-webkit-scrollbar-thumb {
+  background: var(--fp-gray-light);
+  border-radius: 2px;
+}
+
+.settings-content::-webkit-scrollbar-thumb:hover {
+  background: var(--fp-gray-mid);
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .settings-panel-modal {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .settings-panel-header {
+    padding: 16px;
+  }
+
+  .settings-content {
+    padding: 16px;
+  }
+}

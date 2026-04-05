@@ -1,0 +1,223 @@
+/* ===== TUTORIAL OVERLAY ===== */
+
+.tutorial-overlay {
+  position: fixed;
+  padding: 16px;
+  max-width: 320px;
+  border-radius: 8px;
+  background: var(--fp-charcoal);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  pointer-events: none;
+}
+
+.tutorial-overlay.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Position variants */
+.tutorial-overlay-top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.tutorial-overlay-bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+.tutorial-overlay-bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.tutorial-overlay-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tutorial-overlay-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tutorial-overlay-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.4;
+}
+
+.tutorial-overlay-close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.tutorial-overlay-close:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tutorial-overlay-body {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tutorial-overlay-body p {
+  margin: 0;
+}
+
+.tutorial-overlay-action {
+  align-self: flex-start;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background: var(--fp-red);
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms ease, transform 100ms ease;
+}
+
+.tutorial-overlay-action:hover {
+  background: #a90034;
+}
+
+.tutorial-overlay-action:active {
+  transform: scale(0.98);
+}
+
+/* ===== TUTORIAL TOOLTIP ===== */
+
+.tutorial-tooltip-target {
+  position: relative;
+  display: inline-block;
+}
+
+.tutorial-tooltip {
+  position: fixed;
+  background: white;
+  border: 1px solid var(--fp-gray-light);
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 150ms ease-out, transform 150ms ease-out;
+  pointer-events: none;
+}
+
+.tutorial-tooltip.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* Tooltip arrow (pseudo-element alternative: using border tricks) */
+.tutorial-tooltip::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border: 1px solid var(--fp-gray-light);
+  border-right: none;
+  border-bottom: none;
+  transform: rotate(45deg);
+}
+
+.tutorial-tooltip-top::before {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -4px;
+}
+
+.tutorial-tooltip-bottom::before {
+  top: -5px;
+  left: 50%;
+  margin-left: -4px;
+  border: 1px solid var(--fp-gray-light);
+  border-left: none;
+  border-top: none;
+}
+
+.tutorial-tooltip-left::before {
+  right: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border: 1px solid var(--fp-gray-light);
+  border-top: none;
+  border-right: none;
+}
+
+.tutorial-tooltip-right::before {
+  left: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border: 1px solid var(--fp-gray-light);
+  border-bottom: none;
+  border-left: none;
+}
+
+.tutorial-tooltip-inner {
+  position: relative;
+  padding: 12px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tutorial-tooltip-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+  margin: 0;
+}
+
+.tutorial-tooltip-content {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fp-gray-mid);
+}
+
+.tutorial-tooltip-content p {
+  margin: 0;
+}
+
+.tutorial-tooltip-dismiss {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fp-gray-mid);
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.tutorial-tooltip-dismiss:hover {
+  color: var(--fp-red);
+}

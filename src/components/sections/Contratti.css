@@ -1,0 +1,198 @@
+.contratti-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contratti-section .section-header {
+  margin-bottom: 8px;
+}
+
+.contratti-section .section-header p {
+  color: var(--fp-gray-mid);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* Tabs */
+.contratti-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--fp-gray-light);
+  background: white;
+  padding: 0;
+}
+
+.contratti-tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  color: var(--fp-gray-mid);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+  border-bottom: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.contratti-tab:hover {
+  color: var(--fp-charcoal);
+}
+
+.contratti-tab.active {
+  color: var(--fp-red);
+  border-bottom-color: var(--fp-red);
+}
+
+.tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--fp-red);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.contratti-tab.active .tab-count {
+  background: var(--fp-red);
+}
+
+.contratti-tab .tab-count {
+  background: var(--fp-gray-light);
+  color: var(--fp-gray-mid);
+}
+
+/* Tab Content */
+.contratti-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tab-description {
+  font-size: 13px;
+  color: var(--fp-gray-mid);
+  padding: 12px 16px;
+  background: var(--fp-gray-light-bg);
+  border-radius: 6px;
+}
+
+/* Error Message */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(220, 0, 50, 0.05);
+  border: 1px solid rgba(220, 0, 50, 0.2);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--fp-red);
+}
+
+.error-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Upload Section */
+.contratti-upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: white;
+  border: 1px solid var(--fp-gray-light);
+  border-radius: 8px;
+}
+
+.contratti-upload-section h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+}
+
+/* Contracts List */
+.contratti-list-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contratti-list-section h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+}
+
+.contratti-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Empty State */
+.contratti-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  padding: 40px 24px;
+  background: var(--fp-gray-light-bg);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.contratti-empty h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+}
+
+.contratti-empty p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--fp-gray-mid);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contratti-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .contratti-tab {
+    min-width: 150px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .contratti-upload-section {
+    padding: 16px;
+  }
+
+  .contratti-empty {
+    min-height: 250px;
+  }
+}
