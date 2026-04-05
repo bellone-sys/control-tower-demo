@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Requisiti — Fermopoint Control Tower</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --charcoal: #414042; --red: #DC0032; --bg: #f5f5f7; --white: #ffffff;
+      --gray: #808285; --cool-gray: #e8e8ea; --sidebar-w: 240px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--charcoal); display: flex; min-height: 100vh; }
+    .sidebar { width: var(--sidebar-w); flex-shrink: 0; background: var(--charcoal); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .sidebar-logo { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; align-items: center; gap: 12px; }
+    .sidebar-logo-badge { width: 36px; height: 36px; background: var(--red); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .sidebar-logo-text { display: flex; flex-direction: column; }
+    .sidebar-logo-brand { font-size: 8px; letter-spacing: 1.5px; color: rgba(255,255,255,.5); text-transform: uppercase; font-weight: 300; }
+    .sidebar-logo-title { font-size: 11px; color: #fff; font-weight: 500; }
+    .sidebar-nav { flex: 1; padding: 16px 8px; display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-label { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,.3); padding: 8px 12px 4px; }
+    .sidebar-nav a { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 6px; color: rgba(255,255,255,.6); font-size: 13px; text-decoration: none; transition: background .15s, color .15s; }
+    .sidebar-nav a:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+    .sidebar-nav a.active { background: var(--red); color: #fff; }
+    .sidebar-nav a .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.3); flex-shrink: 0; }
+    .sidebar-nav a.active .dot { background: rgba(255,255,255,.7); }
+    .sidebar-footer { padding: 14px 20px; border-top: 1px solid rgba(255,255,255,.08); font-size: 11px; color: rgba(255,255,255,.3); }
+    .main { flex: 1; min-width: 0; padding: 40px 48px; max-width: 900px; }
+    .back-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--white); border: 1px solid var(--cool-gray); border-radius: 8px; padding: 8px 16px; font-size: 13px; color: var(--charcoal); text-decoration: none; cursor: pointer; font-family: var(--font); transition: background .15s, border-color .15s; margin-bottom: 32px; }
+    .back-btn:hover { background: var(--bg); border-color: #ccc; }
+    .page-title { font-size: 28px; font-weight: 700; color: var(--charcoal); margin-bottom: 6px; line-height: 1.2; }
+    .page-subtitle { font-size: 14px; color: var(--gray); margin-bottom: 40px; }
+    .page-subtitle span { display: inline-block; background: var(--red); color: #fff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
+    .doc-section { margin-bottom: 48px; scroll-margin-top: 32px; }
+    .doc-section h2 { font-size: 20px; font-weight: 700; color: var(--charcoal); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--red); display: inline-block; }
+    .doc-section h3 { font-size: 15px; font-weight: 600; color: var(--charcoal); margin: 20px 0 8px; }
+    .doc-section p { font-size: 14px; line-height: 1.7; color: var(--charcoal); margin-bottom: 12px; }
+    .doc-section ul, .doc-section ol { padding-left: 20px; margin-bottom: 12px; }
+    .doc-section ul li, .doc-section ol li { font-size: 14px; line-height: 1.7; color: var(--charcoal); margin-bottom: 4px; }
+    .doc-section strong { font-weight: 600; }
+    code { font-family: 'Courier New', Courier, monospace; font-size: 12px; background: #f0f0f0; border: 1px solid #e0e0e0; border-radius: 4px; padding: 1px 6px; color: var(--red); }
+    .info-box { background: #e3f0fb; border-left: 4px solid #1565C0; border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--charcoal); line-height: 1.6; }
+    .warn-box { background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--charcoal); line-height: 1.6; }
+    .table-responsive { overflow-x: auto; margin: 16px 0; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { background: var(--charcoal); color: #fff; text-align: left; padding: 10px 14px; font-weight: 600; font-size: 12px; }
+    .data-table td { padding: 9px 14px; border-bottom: 1px solid var(--cool-gray); vertical-align: top; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: #fafafa; }
+    .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+    .badge-must { background: #ffebee; color: #c62828; }
+    .badge-should { background: #fff8e1; color: #f57f17; }
+    .badge-could { background: #e8f5e9; color: #2e7d32; }
+    .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; gap: 12px; flex-wrap: wrap; }
+    .pdf-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--charcoal); border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; color: #fff; cursor: pointer; font-family: var(--font); transition: background .15s; }
+    .pdf-btn:hover { background: #555; }
+    .sidebar-divider { border: none; border-top: 1px solid rgba(255,255,255,.08); margin: 8px 12px; }
+    .sidebar-other-link { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 6px; color: rgba(255,255,255,.4); font-size: 12px; text-decoration: none; transition: background .15s, color .15s; }
+    .sidebar-other-link:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.7); }
+    .page-footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--cool-gray); font-size: 12px; color: var(--gray); }
+    @media print {
+      body { display: block; background: #fff; }
+      .sidebar, .top-bar { display: none !important; }
+      .main { padding: 20px; max-width: 100%; }
+      .data-table th { background: #414042 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      @page { margin: 2cm 1.5cm; }
+    }
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-badge">FP</div>
+    <div class="sidebar-logo-text">
+      <span class="sidebar-logo-brand">Fermopoint</span>
+      <span class="sidebar-logo-title">Control Tower</span>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-label">Sezioni</div>
+    <a href="#obiettivo"><span class="dot"></span>Obiettivo e Scope</a>
+    <a href="#attori"><span class="dot"></span>Attori del Sistema</a>
+    <a href="#funzionali"><span class="dot"></span>Requisiti Funzionali</a>
+    <a href="#non-funzionali"><span class="dot"></span>Requisiti Non Funzionali</a>
+    <a href="#vincoli"><span class="dot"></span>Vincoli e Assunzioni</a>
+    <hr class="sidebar-divider"/>
+    <div class="sidebar-label">Documenti</div>
+    <a href="/control-tower-demo/manuale.html" class="sidebar-other-link"><span class="dot"></span>Manuale Utente</a>
+    <a href="/control-tower-demo/requisiti.html" class="sidebar-other-link" style="color:rgba(255,255,255,.7)"><span class="dot"></span>Requisiti</a>
+    <a href="/control-tower-demo/funzionale.html" class="sidebar-other-link"><span class="dot"></span>Doc. Funzionale</a>
+    <a href="/control-tower-demo/tecnica.html" class="sidebar-other-link"><span class="dot"></span>Doc. Tecnica</a>
+    <a href="/control-tower-demo/api.html" class="sidebar-other-link"><span class="dot"></span>API Reference</a>
+    <a href="/control-tower-demo/playbook.html" class="sidebar-other-link"><span class="dot"></span>Playbook Operativo</a>
+  </nav>
+  <div class="sidebar-footer">v0.12.0 · Aprile 2026</div>
+</aside>
+<main class="main">
+
+  <div class="top-bar">
+    <a href="/control-tower-demo/" class="back-btn">&#8592; Torna alla home</a>
+    <button class="pdf-btn" onclick="window.print()">&#128438; Stampa / Esporta PDF</button>
+  </div>
+
+  <h1 class="page-title">Documento dei Requisiti</h1>
+  <p class="page-subtitle">
+    Fermopoint Control Tower &mdash; Specifica completa dei requisiti di sistema
+    <span>v0.12.0</span>
+  </p>
+
+  <!-- 1. OBIETTIVO E SCOPE -->
+  <section class="doc-section" id="obiettivo">
+    <h2>1. Obiettivo e Scope</h2>
+
+    <h3>1.1 Descrizione del Sistema</h3>
+    <p>
+      <strong>Fermopoint Control Tower</strong> è un'applicazione web di gestione operativa progettata per supportare
+      il network di distribuzione <strong>DPD Italia / Fermopoint</strong>. Il sistema centralizza il monitoraggio
+      e la pianificazione di spedizioni, giri di consegna, punti di ritiro (PUDO), flotta veicoli, filiali e
+      contratti commerciali in un'unica interfaccia operativa.
+    </p>
+    <p>
+      Il sistema si posiziona come strumento di <strong>decision support</strong> per i responsabili di filiale e
+      gli operatori logistici, consentendo di passare da una gestione reattiva a una proattiva grazie a KPI in
+      tempo reale, scenari di ottimizzazione dei giri e un sistema di allerta per le eccezioni operative.
+    </p>
+
+    <h3>1.2 Contesto Aziendale</h3>
+    <p>
+      DPD Italia opera attraverso una rete capillare di filiali e punti di ritiro Fermopoint distribuiti su tutto
+      il territorio nazionale. La gestione operativa coinvolge quotidianamente:
+    </p>
+    <ul>
+      <li>Centinaia di giri di consegna pianificati su base giornaliera</li>
+      <li>Migliaia di spedizioni tracciate dal ritiro alla consegna finale</li>
+      <li>Una flotta mista di veicoli propri e in subappalto</li>
+      <li>Una rete di PUDO (Pick-Up and Drop-Off) convenzionati su tutto il territorio</li>
+      <li>Contratti con corrieri partner e punti di ritiro soggetti a revisione periodica</li>
+    </ul>
+    <p>
+      L'integrazione con i sistemi legacy (<strong>AS/400</strong>) e con il motore di ottimizzazione
+      <strong>OptimoRoute</strong> consente di importare dati reali e generare piani di consegna ottimizzati
+      direttamente dalla Control Tower.
+    </p>
+
+    <h3>1.3 Obiettivi del Progetto</h3>
+    <ol>
+      <li>Fornire una <strong>visione unificata</strong> delle operazioni giornaliere tramite dashboard KPI</li>
+      <li>Ridurre i tempi di pianificazione dei giri attraverso scenari di ottimizzazione automatica</li>
+      <li>Migliorare la visibilità sulle eccezioni operative (ritardi, mancate consegne, anomalie)</li>
+      <li>Digitalizzare la gestione dei contratti con analisi AI dei documenti PDF</li>
+      <li>Standardizzare i processi operativi tra le diverse filiali del network</li>
+    </ol>
+
+    <h3>1.4 Scope del Sistema</h3>
+    <div class="info-box">
+      <strong>In scope:</strong> Dashboard operativa, gestione spedizioni, giri di consegna, ottimizzazione scenari,
+      gestione PUDO (lista e mappa), flotta (veicoli, carburanti, manutenzioni), filiali, contratti PDF con AI,
+      gestione utenti e permessi, eccezioni operative, report, impostazioni personalizzazione, cronologia modifiche.
+    </div>
+    <div class="warn-box">
+      <strong>Out of scope (versione corrente):</strong> Tracking real-time GPS dei veicoli, integrazione diretta
+      con sistemi di pagamento, gestione HR del personale, modulo contabilità e fatturazione automatica.
+    </div>
+  </section>
+
+  <!-- 2. ATTORI DEL SISTEMA -->
+  <section class="doc-section" id="attori">
+    <h2>2. Attori del Sistema</h2>
+
+    <p>Il sistema prevede tre ruoli principali con diversi livelli di accesso e responsabilità operative.</p>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Ruolo</th>
+            <th>Descrizione</th>
+            <th>Accesso alle Funzionalità</th>
+            <th>Tipico Utente</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Admin</strong></td>
+            <td>Accesso completo a tutte le funzionalità del sistema, inclusa la gestione degli utenti, configurazione globale e visualizzazione dei log di audit.</td>
+            <td>
+              Dashboard · Spedizioni · Giri · Scenari · PUDO · Flotta · Filiali · Contratti · Utenti · Eccezioni · Report · Impostazioni · Cronologia
+            </td>
+            <td>IT Manager, Responsabile Operations DPD Italia</td>
+          </tr>
+          <tr>
+            <td><strong>Manager</strong></td>
+            <td>Accesso operativo completo alle funzionalità di pianificazione e monitoraggio. Può creare e modificare entità operative ma non gestisce utenti né configurazione di sistema.</td>
+            <td>
+              Dashboard · Spedizioni · Giri · Scenari · PUDO · Flotta · Filiali · Contratti · Eccezioni · Report
+            </td>
+            <td>Responsabile di filiale, Coordinatore logistico</td>
+          </tr>
+          <tr>
+            <td><strong>Operatore</strong></td>
+            <td>Accesso in lettura e inserimento dati operativi quotidiani. Non può modificare configurazioni, contratti o dati anagrafici delle filiali.</td>
+            <td>
+              Dashboard (sola lettura KPI) · Spedizioni (solo visualizzazione) · Giri (solo esecuzione) · PUDO (sola lettura) · Eccezioni (segnalazione)
+            </td>
+            <td>Autista, Addetto al punto di ritiro, Operatore di magazzino</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2.1 Matrice dei Permessi</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Modulo</th>
+            <th>Admin</th>
+            <th>Manager</th>
+            <th>Operatore</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dashboard KPI</td>
+            <td>Lettura / Configurazione</td>
+            <td>Lettura</td>
+            <td>Lettura parziale</td>
+          </tr>
+          <tr>
+            <td>Spedizioni</td>
+            <td>CRUD + Import</td>
+            <td>CRUD + Import</td>
+            <td>Lettura</td>
+          </tr>
+          <tr>
+            <td>Giri di Consegna</td>
+            <td>CRUD</td>
+            <td>CRUD</td>
+            <td>Lettura + Esecuzione</td>
+          </tr>
+          <tr>
+            <td>Scenari Ottimizzazione</td>
+            <td>CRUD</td>
+            <td>CRUD</td>
+            <td>Nessuno</td>
+          </tr>
+          <tr>
+            <td>PUDO</td>
+            <td>CRUD + Mappa</td>
+            <td>CRUD + Mappa</td>
+            <td>Lettura + Mappa</td>
+          </tr>
+          <tr>
+            <td>Flotta (Veicoli)</td>
+            <td>CRUD</td>
+            <td>CRUD</td>
+            <td>Nessuno</td>
+          </tr>
+          <tr>
+            <td>Flotta (Carburanti)</td>
+            <td>CRUD</td>
+            <td>CRUD</td>
+            <td>Inserimento rifornimenti</td>
+          </tr>
+          <tr>
+            <td>Flotta (Manutenzioni)</td>
+            <td>CRUD</td>
+            <td>CRUD</td>
+            <td>Segnalazione guasti</td>
+          </tr>
+          <tr>
+            <td>Filiali</td>
+            <td>CRUD</td>
+            <td>Lettura</td>
+            <td>Nessuno</td>
+          </tr>
+          <tr>
+            <td>Contratti</td>
+            <td>CRUD + AI Analysis</td>
+            <td>Lettura + AI Analysis</td>
+            <td>Nessuno</td>
+          </tr>
+          <tr>
+            <td>Gestione Utenti</td>
+            <td>CRUD</td>
+            <td>Nessuno</td>
+            <td>Nessuno</td>
+          </tr>
+          <tr>
+            <td>Eccezioni</td>
+            <td>CRUD + Risoluzione</td>
+            <td>CRUD + Risoluzione</td>
+            <td>Segnalazione</td>
+          </tr>
+          <tr>
+            <td>Report</td>
+            <td>Tutti i report + Export</td>
+            <td>Report filiale + Export</td>
+            <td>Nessuno</td>
+          </tr>
+          <tr>
+            <td>Impostazioni</td>
+            <td>Globali + Personali</td>
+            <td>Personali</td>
+            <td>Personali (solo tema/lingua)</td>
+          </tr>
+          <tr>
+            <td>Cronologia Modifiche</td>
+            <td>Accesso completo</td>
+            <td>Accesso filiale</td>
+            <td>Nessuno</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. REQUISITI FUNZIONALI -->
+  <section class="doc-section" id="funzionali">
+    <h2>3. Requisiti Funzionali</h2>
+
+    <p>
+      I requisiti funzionali sono identificati dal prefisso <code>RF</code> seguito da un numero progressivo.
+      La priorità è classificata secondo la convenzione MoSCoW:
+      <span class="badge badge-must">MUST</span> requisito obbligatorio,
+      <span class="badge badge-should">SHOULD</span> altamente raccomandato,
+      <span class="badge badge-could">COULD</span> desiderabile ma opzionale.
+    </p>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:80px">ID</th>
+            <th>Descrizione</th>
+            <th style="width:90px">Priorità</th>
+            <th style="width:140px">Sezione App</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Login / Sessione -->
+          <tr>
+            <td><code>RF001</code></td>
+            <td>
+              <strong>Autenticazione utente:</strong> Il sistema deve consentire il login tramite email e password.
+              La sessione deve essere persistita in <code>localStorage</code> e ripristinata automaticamente al
+              riavvio dell'applicazione. Il logout deve cancellare tutti i dati di sessione.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Login / Sessione</td>
+          </tr>
+          <tr>
+            <td><code>RF002</code></td>
+            <td>
+              <strong>Gestione sessione e timeout:</strong> La sessione deve scadere automaticamente dopo un periodo
+              di inattività configurabile (default 8 ore). Al timeout, l'utente deve essere reindirizzato alla
+              pagina di login con un messaggio esplicativo.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+            <td>Login / Sessione</td>
+          </tr>
+          <!-- Dashboard KPI -->
+          <tr>
+            <td><code>RF003</code></td>
+            <td>
+              <strong>Panoramica KPI operativi:</strong> La dashboard principale deve esporre almeno i seguenti
+              indicatori in tempo reale: numero spedizioni del giorno (totale, consegnate, in transito, anomalie),
+              tasso di consegna al primo tentativo, numero giri pianificati vs eseguiti, PUDO attivi vs inattivi,
+              veicoli disponibili vs in manutenzione.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Dashboard</td>
+          </tr>
+          <tr>
+            <td><code>RF004</code></td>
+            <td>
+              <strong>Grafici e trend storici:</strong> La dashboard deve includere almeno un grafico temporale
+              (ultimi 7/30 giorni) per i principali KPI, con possibilità di filtrare per filiale o periodo.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+            <td>Dashboard</td>
+          </tr>
+          <!-- Import Spedizioni -->
+          <tr>
+            <td><code>RF005</code></td>
+            <td>
+              <strong>Import spedizioni via API:</strong> Il sistema deve esporre un endpoint REST per l'import
+              batch di spedizioni da sistemi esterni (AS/400, TMS). Il payload deve supportare almeno i campi:
+              codice tracking, mittente, destinatario, indirizzo, peso, volume, servizio, stato.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Spedizioni</td>
+          </tr>
+          <tr>
+            <td><code>RF006</code></td>
+            <td>
+              <strong>Import spedizioni via file:</strong> L'utente deve poter importare spedizioni caricando file
+              in formato <code>CSV</code> o <code>Excel (.xlsx)</code>. Il sistema deve validare i dati,
+              mostrare un'anteprima prima della conferma e segnalare le righe con errori.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Spedizioni</td>
+          </tr>
+          <!-- Gestione Giri -->
+          <tr>
+            <td><code>RF007</code></td>
+            <td>
+              <strong>Gestione giri di consegna:</strong> Il sistema deve consentire la creazione, modifica ed
+              eliminazione di giri di consegna. Ogni giro deve includere: data, filiale, veicolo assegnato,
+              autista, lista spedizioni associate, orario di partenza stimato e stato (pianificato, in corso, completato).
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Giri</td>
+          </tr>
+          <!-- Ottimizzazione Scenari -->
+          <tr>
+            <td><code>RF008</code></td>
+            <td>
+              <strong>Wizard creazione scenario:</strong> Il sistema deve guidare l'utente nella creazione di uno
+              scenario di ottimizzazione tramite un wizard a 5 passi: (1) selezione filiale e data, (2) selezione
+              spedizioni, (3) configurazione parametri OptimoRoute (finestre orarie, capacità veicoli, priorità),
+              (4) anteprima mappa del piano generato, (5) conferma e salvataggio.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Scenari</td>
+          </tr>
+          <tr>
+            <td><code>RF009</code></td>
+            <td>
+              <strong>Confronto scenari:</strong> Il sistema deve permettere il confronto side-by-side di due
+              scenari alternativi, mostrando metriche differenziali (km totali, numero fermate, tempo stimato,
+              costo carburante) per supportare la decisione del responsabile.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+            <td>Scenari</td>
+          </tr>
+          <!-- PUDO -->
+          <tr>
+            <td><code>RF010</code></td>
+            <td>
+              <strong>Gestione PUDO — Lista:</strong> Il sistema deve presentare l'elenco completo dei punti PUDO
+              con funzionalità di ricerca full-text, filtri per stato (attivo/inattivo/sospeso), tipo, cap e
+              filiale di riferimento. Deve essere possibile esportare la lista in CSV.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>PUDO / Lista</td>
+          </tr>
+          <tr>
+            <td><code>RF011</code></td>
+            <td>
+              <strong>Gestione PUDO — Mappa interattiva:</strong> Il sistema deve visualizzare i PUDO su mappa
+              (Leaflet) con marker colorati per stato e cluster automatico ad alta densità. Cliccando su un marker
+              deve aprirsi un popup con le informazioni principali del PUDO e un link alla scheda dettaglio.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>PUDO / Mappa</td>
+          </tr>
+          <tr>
+            <td><code>RF012</code></td>
+            <td>
+              <strong>Check-in PUDO:</strong> Il sistema deve supportare il processo di check-in operativo del
+              PUDO (visita periodica di verifica), registrando data, operatore, esito e note. La cronologia dei
+              check-in deve essere accessibile dalla scheda del PUDO.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+            <td>PUDO / Check-in</td>
+          </tr>
+          <!-- Flotta -->
+          <tr>
+            <td><code>RF013</code></td>
+            <td>
+              <strong>Gestione flotta — Veicoli:</strong> Il sistema deve gestire l'anagrafica dei veicoli con
+              almeno: targa, tipo, portata (kg/m³), anno immatricolazione, filiale di assegnazione, stato
+              (disponibile, in uso, in manutenzione, dismesso) e scadenze documenti (revisione, assicurazione,
+              bollo) con notifica in prossimità della scadenza.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Flotta / Veicoli</td>
+          </tr>
+          <tr>
+            <td><code>RF014</code></td>
+            <td>
+              <strong>Gestione flotta — Rifornimenti carburante:</strong> Il sistema deve registrare i rifornimenti
+              di carburante per ogni veicolo (data, km percorsi, litri, costo, operatore) e calcolare
+              automaticamente il consumo medio (l/100 km) per monitorare l'efficienza energetica della flotta.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+            <td>Flotta / Carburanti</td>
+          </tr>
+          <tr>
+            <td><code>RF015</code></td>
+            <td>
+              <strong>Gestione flotta — Manutenzioni:</strong> Il sistema deve gestire interventi di manutenzione
+              programmata e straordinaria con: tipo intervento, data, km, officina, costo e allegati (fattura PDF).
+              Deve essere possibile pianificare manutenzioni future con promemoria automatici.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+            <td>Flotta / Manutenzioni</td>
+          </tr>
+          <!-- Filiali -->
+          <tr>
+            <td><code>RF016</code></td>
+            <td>
+              <strong>Gestione filiali:</strong> Il sistema deve gestire l'anagrafica delle filiali DPD/Fermopoint
+              con: nome, codice, indirizzo, responsabile, numero veicoli assegnati, numero PUDO nel bacino e
+              KPI di filiale (volume spedizioni, tasso consegna). Solo gli Admin possono creare o modificare filiali.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Filiali</td>
+          </tr>
+          <!-- Contratti -->
+          <tr>
+            <td><code>RF017</code></td>
+            <td>
+              <strong>Gestione contratti — Upload e visualizzazione PDF:</strong> Il sistema deve consentire
+              l'upload di contratti in formato PDF, associandoli a un PUDO o filiale. I contratti devono essere
+              visualizzabili inline (senza download obbligatorio) con metadati editabili (data stipula, scadenza,
+              tipo contratto, stato).
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Contratti</td>
+          </tr>
+          <tr>
+            <td><code>RF018</code></td>
+            <td>
+              <strong>Analisi contratti con AI:</strong> Il sistema deve offrire la possibilità di sottoporre il
+              testo di un contratto a un modello AI (Claude API) per estrarre automaticamente: clausole principali,
+              condizioni economiche, scadenze, obblighi delle parti e rischi rilevanti.
+            </td>
+            <td><span class="badge badge-could">COULD</span></td>
+            <td>Contratti / AI</td>
+          </tr>
+          <!-- Gestione Utenti -->
+          <tr>
+            <td><code>RF019</code></td>
+            <td>
+              <strong>Gestione utenti:</strong> Gli Admin devono poter creare, modificare, disattivare ed eliminare
+              account utente. Ogni account deve avere: nome, email, ruolo (Admin/Manager/Operatore), filiale di
+              appartenenza e stato attivo/inattivo. Deve essere possibile resettare la password dell'utente.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Utenti</td>
+          </tr>
+          <!-- Eccezioni -->
+          <tr>
+            <td><code>RF020</code></td>
+            <td>
+              <strong>Gestione eccezioni operative:</strong> Il sistema deve consentire la segnalazione, il
+              tracciamento e la risoluzione di eccezioni operative (mancata consegna, danneggiamento, giacenza
+              scaduta, PUDO non operativo). Ogni eccezione deve avere: tipo, priorità, spedizione/PUDO associato,
+              note e stato (aperta, in gestione, risolta).
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+            <td>Eccezioni</td>
+          </tr>
+          <!-- Report -->
+          <tr>
+            <td><code>RF021</code></td>
+            <td>
+              <strong>Report operativi:</strong> Il sistema deve generare report configurabili per: spedizioni
+              (per filiale, per periodo, per stato), performance PUDO (volumi ricevuti, tasso ritiro),
+              utilizzo flotta (km percorsi, costi carburante, fermo tecnico). I report devono essere
+              esportabili in formato PDF e CSV.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+            <td>Report</td>
+          </tr>
+          <!-- Impostazioni -->
+          <tr>
+            <td><code>RF022</code></td>
+            <td>
+              <strong>Impostazioni — Lingua:</strong> Il sistema deve supportare la selezione della lingua
+              dell'interfaccia tra italiano (IT), inglese (EN), francese (FR) e tedesco (DE). La preferenza
+              deve essere salvata nel profilo utente e persistita tra le sessioni.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+            <td>Impostazioni</td>
+          </tr>
+          <tr>
+            <td><code>RF023</code></td>
+            <td>
+              <strong>Impostazioni — Tema:</strong> Il sistema deve offrire la scelta tra tema chiaro (light) e
+              tema scuro (dark mode). La preferenza deve rispettare anche il setting di sistema
+              (<code>prefers-color-scheme</code>) se non esplicitamente sovrascritta dall'utente.
+            </td>
+            <td><span class="badge badge-could">COULD</span></td>
+            <td>Impostazioni / Dark Mode</td>
+          </tr>
+          <tr>
+            <td><code>RF024</code></td>
+            <td>
+              <strong>Impostazioni — Tutorial interattivo:</strong> Il sistema deve includere un tutorial guidato
+              (tooltip overlay) che accompagni i nuovi utenti nella scoperta delle funzionalità principali.
+              Il tutorial deve essere riattivabile manualmente dalle impostazioni.
+            </td>
+            <td><span class="badge badge-could">COULD</span></td>
+            <td>Impostazioni / Tutorial</td>
+          </tr>
+          <!-- Cronologia -->
+          <tr>
+            <td><code>RF025</code></td>
+            <td>
+              <strong>Cronologia modifiche (Audit Log):</strong> Il sistema deve registrare tutte le operazioni
+              di creazione, modifica ed eliminazione effettuate da qualsiasi utente, con: timestamp, utente,
+              entità modificata, vecchio valore e nuovo valore. La cronologia deve essere consultabile dagli
+              Admin con filtri per utente, entità e intervallo temporale.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+            <td>Cronologia</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4. REQUISITI NON FUNZIONALI -->
+  <section class="doc-section" id="non-funzionali">
+    <h2>4. Requisiti Non Funzionali</h2>
+
+    <p>
+      I requisiti non funzionali sono identificati dal prefisso <code>RNF</code>. Definiscono le qualità
+      di sistema trasversali che devono essere rispettate indipendentemente dalla funzionalità specifica.
+    </p>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:80px">ID</th>
+            <th>Categoria</th>
+            <th>Descrizione e Criteri di Accettazione</th>
+            <th style="width:90px">Priorità</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>RNF001</code></td>
+            <td><strong>Performance</strong></td>
+            <td>
+              Il caricamento iniziale dell'applicazione (First Contentful Paint) deve avvenire entro
+              <strong>2 secondi</strong> su connessione a banda larga standard (≥ 10 Mbps).
+              Le transizioni tra pagine interne non devono superare <strong>500 ms</strong>.
+              Il rendering della mappa PUDO con fino a 500 marker deve completarsi entro <strong>1 secondo</strong>.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+          </tr>
+          <tr>
+            <td><code>RNF002</code></td>
+            <td><strong>Accessibilità</strong></td>
+            <td>
+              L'interfaccia deve rispettare le linee guida <strong>WCAG 2.1 livello AA</strong>. In particolare:
+              contrasto minimo testo/sfondo 4.5:1 (3:1 per testi grandi), tutti gli elementi interattivi
+              devono essere raggiungibili via tastiera, i form devono avere label associate, le immagini
+              devono avere attributo <code>alt</code> significativo.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+          </tr>
+          <tr>
+            <td><code>RNF003</code></td>
+            <td><strong>Sicurezza sessione</strong></td>
+            <td>
+              I token di autenticazione devono essere conservati in <code>localStorage</code> con crittografia
+              applicativa. Le password non devono mai essere salvate in chiaro. Il sistema deve implementare
+              protezione CSRF per le chiamate API. In produzione, tutte le comunicazioni devono avvenire
+              esclusivamente su <strong>HTTPS</strong>.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+          </tr>
+          <tr>
+            <td><code>RNF004</code></td>
+            <td><strong>Compatibilità browser</strong></td>
+            <td>
+              Il sistema deve funzionare correttamente nelle ultime due versioni stabili dei seguenti browser:
+              Google Chrome, Mozilla Firefox, Microsoft Edge, Apple Safari. Non è richiesto il supporto a
+              Internet Explorer o browser con market share inferiore all'1% nel segmento enterprise europeo.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+          </tr>
+          <tr>
+            <td><code>RNF005</code></td>
+            <td><strong>Responsività mobile</strong></td>
+            <td>
+              L'interfaccia deve essere utilizzabile su dispositivi con schermo a partire da <strong>768 px</strong>
+              di larghezza (tablet). Per schermi inferiori a 768 px (smartphone), le funzionalità principali
+              di consultazione (dashboard, lista spedizioni, mappa PUDO) devono rimanere accessibili in layout
+              adattivo. Le funzionalità di inserimento dati complesse sono ottimizzate per desktop.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+          </tr>
+          <tr>
+            <td><code>RNF006</code></td>
+            <td><strong>Internazionalizzazione</strong></td>
+            <td>
+              Il sistema deve supportare l'internazionalizzazione (i18n) per le lingue: Italiano (IT, default),
+              Inglese (EN), Francese (FR), Tedesco (DE). Tutte le stringhe dell'interfaccia devono essere
+              esternalizzate in file di traduzione. Date e numeri devono essere formattati secondo la locale
+              selezionata. La lingua può essere modificata senza ricaricare l'applicazione.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+          </tr>
+          <tr>
+            <td><code>RNF007</code></td>
+            <td><strong>Persistenza dati locale</strong></td>
+            <td>
+              Le preferenze utente (tema, lingua, filtri attivi, colonne visibili nelle tabelle) devono essere
+              persistite in <code>localStorage</code> e ripristinate automaticamente alla sessione successiva.
+              La dimensione totale dei dati persistiti non deve superare <strong>5 MB</strong> per utente.
+            </td>
+            <td><span class="badge badge-must">MUST</span></td>
+          </tr>
+          <tr>
+            <td><code>RNF008</code></td>
+            <td><strong>Estensibilità API</strong></td>
+            <td>
+              L'architettura del sistema deve prevedere uno strato API REST documentato (OpenAPI 3.0) che
+              consenta l'integrazione con sistemi terzi senza modifiche al frontend. Le API devono essere
+              versionate (<code>/api/v1/</code>) per garantire la retrocompatibilità nelle evoluzioni future.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+          </tr>
+          <tr>
+            <td><code>RNF009</code></td>
+            <td><strong>Dark Mode</strong></td>
+            <td>
+              Il sistema deve fornire un tema scuro completo, applicato a tutti i componenti dell'interfaccia
+              inclusi tabelle, form, sidebar, mappa e grafici. Il contrasto dei colori in dark mode deve
+              rispettare i requisiti WCAG 2.1 AA. La transizione tra tema chiaro e scuro deve avvenire con
+              animazione CSS di durata ≤ 200 ms.
+            </td>
+            <td><span class="badge badge-could">COULD</span></td>
+          </tr>
+          <tr>
+            <td><code>RNF010</code></td>
+            <td><strong>Manutenibilità</strong></td>
+            <td>
+              Il codice sorgente deve seguire una struttura modulare con separazione chiara tra componenti UI,
+              logica di business e layer dati. La copertura dei test automatici (unit + integration) deve essere
+              ≥ 70% per i moduli core (autenticazione, import spedizioni, gestione giri, scenari). Il progetto
+              deve includere una pipeline CI/CD con lint, test e build automatici.
+            </td>
+            <td><span class="badge badge-should">SHOULD</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5. VINCOLI E ASSUNZIONI -->
+  <section class="doc-section" id="vincoli">
+    <h2>5. Vincoli e Assunzioni</h2>
+
+    <h3>5.1 Ambiente Demo vs Produzione</h3>
+    <div class="warn-box">
+      <strong>Attenzione:</strong> La versione corrente del sistema è un <strong>ambiente demo</strong>.
+      Tutti i dati visualizzati (spedizioni, giri, PUDO, veicoli, contratti, utenti) sono fittizi e generati
+      a scopo dimostrativo. Non vi è alcuna connessione a sistemi reali DPD/Fermopoint in questa fase.
+    </div>
+    <p>
+      La transizione all'ambiente di produzione richiederà:
+    </p>
+    <ul>
+      <li>Configurazione delle credenziali reali per i sistemi integrati (AS/400, OptimoRoute, Claude API)</li>
+      <li>Migrazione e validazione dei dati anagrafici reali (PUDO, filiali, veicoli, utenti)</li>
+      <li>Test di carico e penetration test prima del go-live</li>
+      <li>Formazione degli utenti finali tramite il tutorial integrato e il manuale utente</li>
+    </ul>
+
+    <h3>5.2 Dati Fittizi</h3>
+    <p>
+      I dati presenti nell'ambiente demo sono generati con le seguenti convenzioni:
+    </p>
+    <ul>
+      <li>Codici tracking nel formato <code>DPD-XXXXXXXX</code> con sequenza numerica progressiva</li>
+      <li>Indirizzi relativi a comuni italiani reali ma associati a destinatari inesistenti</li>
+      <li>PUDO con denominazioni commerciali di fantasia (es. <em>Tabaccheria Centrale</em>, <em>Edicola Roma</em>)</li>
+      <li>Nomi utenti e autisti generati casualmente, non riferibili a persone reali</li>
+      <li>Contratti PDF con testo segnaposto (<em>Lorem Ipsum</em>) per test dell'analisi AI</li>
+    </ul>
+
+    <h3>5.3 Mock AS/400</h3>
+    <p>
+      L'integrazione con il sistema legacy <strong>AS/400</strong> di DPD Italia è simulata tramite un layer
+      mock che restituisce risposte predefinite per le seguenti operazioni:
+    </p>
+    <ul>
+      <li>Ricerca spedizione per codice tracking</li>
+      <li>Aggiornamento stato spedizione</li>
+      <li>Export lista spedizioni del giorno per filiale</li>
+      <li>Creazione giacenza e notifica al mittente</li>
+    </ul>
+    <div class="info-box">
+      In produzione, il mock AS/400 sarà sostituito da chiamate REST verso il middleware di integrazione
+      aziendale (ESB). La struttura del payload è già allineata con le specifiche del middleware DPD Italia
+      (versione API 3.2).
+    </div>
+
+    <h3>5.4 Mock OptimoRoute</h3>
+    <p>
+      Il motore di ottimizzazione <strong>OptimoRoute</strong> è integrato nella funzionalità Scenari per la
+      generazione di piani di giro ottimizzati. Nell'ambiente demo, le chiamate API a OptimoRoute sono
+      intercettate da un mock che:
+    </p>
+    <ul>
+      <li>Simula un tempo di elaborazione realistico (3–8 secondi) per le richieste di ottimizzazione</li>
+      <li>Restituisce piani di giro plausibili basati sulle coordinate degli indirizzi forniti in input</li>
+      <li>Rispetta la struttura del payload reale OptimoRoute API v2 per facilitare la migrazione</li>
+    </ul>
+    <p>
+      La configurazione dei parametri OptimoRoute disponibili nel wizard (finestre orarie, capacità veicolo,
+      numero massimo di fermate, velocità media, bilanciamento del carico) rispecchia le opzioni reali
+      dell'API OptimoRoute e sarà pienamente funzionale in produzione una volta configurata la chiave API.
+    </p>
+
+    <h3>5.5 Vincoli Tecnologici</h3>
+    <ul>
+      <li>
+        <strong>Frontend:</strong> L'applicazione è sviluppata con <strong>React</strong> (Vite) e non richiede
+        un server applicativo dedicato; può essere deployata su qualsiasi CDN o hosting statico (es. Netlify,
+        Vercel, AWS S3 + CloudFront).
+      </li>
+      <li>
+        <strong>Mappe:</strong> Il componente cartografico è basato su <strong>Leaflet</strong> con tile layer
+        OpenStreetMap. In produzione è possibile sostituire il tile provider con una soluzione commerciale
+        (Mapbox, HERE) per SLA garantiti e maggior dettaglio cartografico.
+      </li>
+      <li>
+        <strong>Analisi AI:</strong> L'analisi dei contratti utilizza le API di <strong>Anthropic Claude</strong>.
+        Il feature richiede una chiave API valida e l'accesso alla rete internet dal browser dell'utente.
+        Non vengono inviati dati sensibili senza esplicita conferma dell'utente.
+      </li>
+      <li>
+        <strong>Storage:</strong> In assenza di un backend dedicato nella versione demo, tutti i dati operativi
+        sono gestiti in memoria (React state) e parzialmente persistiti in <code>localStorage</code>.
+        In produzione sarà necessario un backend con database relazionale (PostgreSQL raccomandato) e
+        un sistema di autenticazione centralizzato (OAuth 2.0 / SAML 2.0 per SSO aziendale DPD).
+      </li>
+    </ul>
+
+    <h3>5.6 Assunzioni</h3>
+    <ol>
+      <li>
+        Gli utenti finali dispongono di un browser moderno aggiornato e di una connessione internet stabile
+        (minimo 4 Mbps) nelle sedi operative.
+      </li>
+      <li>
+        Il dato anagrafico dei PUDO (ragione sociale, indirizzo, coordinate GPS) è fornito da DPD Italia
+        in formato strutturato (CSV o JSON) al momento del setup iniziale in produzione.
+      </li>
+      <li>
+        La responsabilità della correttezza dei dati importati tramite file (spedizioni) è dell'utente
+        che effettua l'upload; il sistema esegue validazione formale ma non semantica.
+      </li>
+      <li>
+        Le notifiche di scadenza (documenti veicoli, contratti) sono gestite lato client tramite controllo
+        delle date al login; in produzione sarà necessario un servizio di notifica backend (email/push).
+      </li>
+    </ol>
+  </section>
+
+  <div class="page-footer">
+    Documento dei Requisiti — Fermopoint Control Tower v0.12.0 &middot; Aprile 2026 &middot;
+    Uso interno DPD Italia / Fermopoint. Documento riservato.
+  </div>
+
+</main>
+<script>
+  const sections = document.querySelectorAll('.doc-section[id]')
+  const navLinks = document.querySelectorAll('.sidebar-nav a[href^="#"]')
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'))
+        const link = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`)
+        if (link) link.classList.add('active')
+      }
+    })
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 })
+  sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>

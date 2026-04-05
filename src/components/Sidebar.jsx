@@ -153,13 +153,43 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
           <span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
         </a>
         <a
-          href="/control-tower-demo/glossario.html"
+          href="/control-tower-demo/requisiti.html"
           target="_blank"
           rel="noopener noreferrer"
           className="nav-item sidebar-docs-link"
         >
           <IconDocument />
-          <span>Documentazione</span>
+          <span>Requisiti</span>
+          <span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
+        </a>
+        <a
+          href="/control-tower-demo/funzionale.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-item sidebar-docs-link"
+        >
+          <IconDocument />
+          <span>Doc. Funzionale</span>
+          <span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
+        </a>
+        <a
+          href="/control-tower-demo/tecnica.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-item sidebar-docs-link"
+        >
+          <IconDocument />
+          <span>Doc. Tecnica</span>
+          <span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
+        </a>
+        <a
+          href="/control-tower-demo/api.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-item sidebar-docs-link"
+        >
+          <IconDocument />
+          <span>API Reference</span>
           <span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
         </a>
         <a
