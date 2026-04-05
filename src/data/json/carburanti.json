@@ -1,0 +1,212 @@
+[
+  {
+    "data": "2026-03-05",
+    "diesel": 1.699,
+    "benzina": 1.793,
+    "gpl": 0.722,
+    "elettrico": 0.243
+  },
+  {
+    "data": "2026-03-06",
+    "diesel": 1.702,
+    "benzina": 1.796,
+    "gpl": 0.72,
+    "elettrico": 0.243
+  },
+  {
+    "data": "2026-03-07",
+    "diesel": 1.698,
+    "benzina": 1.791,
+    "gpl": 0.719,
+    "elettrico": 0.242
+  },
+  {
+    "data": "2026-03-08",
+    "diesel": 1.694,
+    "benzina": 1.787,
+    "gpl": 0.72,
+    "elettrico": 0.242
+  },
+  {
+    "data": "2026-03-09",
+    "diesel": 1.697,
+    "benzina": 1.79,
+    "gpl": 0.721,
+    "elettrico": 0.242
+  },
+  {
+    "data": "2026-03-10",
+    "diesel": 1.702,
+    "benzina": 1.795,
+    "gpl": 0.723,
+    "elettrico": 0.244
+  },
+  {
+    "data": "2026-03-11",
+    "diesel": 1.706,
+    "benzina": 1.799,
+    "gpl": 0.724,
+    "elettrico": 0.244
+  },
+  {
+    "data": "2026-03-12",
+    "diesel": 1.71,
+    "benzina": 1.803,
+    "gpl": 0.725,
+    "elettrico": 0.245
+  },
+  {
+    "data": "2026-03-13",
+    "diesel": 1.714,
+    "benzina": 1.807,
+    "gpl": 0.726,
+    "elettrico": 0.245
+  },
+  {
+    "data": "2026-03-14",
+    "diesel": 1.718,
+    "benzina": 1.811,
+    "gpl": 0.726,
+    "elettrico": 0.246
+  },
+  {
+    "data": "2026-03-15",
+    "diesel": 1.722,
+    "benzina": 1.815,
+    "gpl": 0.727,
+    "elettrico": 0.246
+  },
+  {
+    "data": "2026-03-16",
+    "diesel": 1.725,
+    "benzina": 1.818,
+    "gpl": 0.728,
+    "elettrico": 0.247
+  },
+  {
+    "data": "2026-03-17",
+    "diesel": 1.721,
+    "benzina": 1.814,
+    "gpl": 0.727,
+    "elettrico": 0.247
+  },
+  {
+    "data": "2026-03-18",
+    "diesel": 1.717,
+    "benzina": 1.809,
+    "gpl": 0.725,
+    "elettrico": 0.246
+  },
+  {
+    "data": "2026-03-19",
+    "diesel": 1.713,
+    "benzina": 1.805,
+    "gpl": 0.724,
+    "elettrico": 0.246
+  },
+  {
+    "data": "2026-03-20",
+    "diesel": 1.709,
+    "benzina": 1.801,
+    "gpl": 0.723,
+    "elettrico": 0.245
+  },
+  {
+    "data": "2026-03-21",
+    "diesel": 1.705,
+    "benzina": 1.797,
+    "gpl": 0.722,
+    "elettrico": 0.244
+  },
+  {
+    "data": "2026-03-22",
+    "diesel": 1.701,
+    "benzina": 1.793,
+    "gpl": 0.721,
+    "elettrico": 0.244
+  },
+  {
+    "data": "2026-03-23",
+    "diesel": 1.697,
+    "benzina": 1.789,
+    "gpl": 0.72,
+    "elettrico": 0.243
+  },
+  {
+    "data": "2026-03-24",
+    "diesel": 1.694,
+    "benzina": 1.786,
+    "gpl": 0.719,
+    "elettrico": 0.243
+  },
+  {
+    "data": "2026-03-25",
+    "diesel": 1.691,
+    "benzina": 1.783,
+    "gpl": 0.718,
+    "elettrico": 0.242
+  },
+  {
+    "data": "2026-03-26",
+    "diesel": 1.688,
+    "benzina": 1.779,
+    "gpl": 0.717,
+    "elettrico": 0.241
+  },
+  {
+    "data": "2026-03-27",
+    "diesel": 1.685,
+    "benzina": 1.776,
+    "gpl": 0.716,
+    "elettrico": 0.241
+  },
+  {
+    "data": "2026-03-28",
+    "diesel": 1.682,
+    "benzina": 1.773,
+    "gpl": 0.715,
+    "elettrico": 0.24
+  },
+  {
+    "data": "2026-03-29",
+    "diesel": 1.679,
+    "benzina": 1.77,
+    "gpl": 0.714,
+    "elettrico": 0.24
+  },
+  {
+    "data": "2026-03-30",
+    "diesel": 1.676,
+    "benzina": 1.767,
+    "gpl": 0.713,
+    "elettrico": 0.239
+  },
+  {
+    "data": "2026-03-31",
+    "diesel": 1.68,
+    "benzina": 1.771,
+    "gpl": 0.714,
+    "elettrico": 0.239
+  },
+  {
+    "data": "2026-04-01",
+    "diesel": 1.677,
+    "benzina": 1.768,
+    "gpl": 0.713,
+    "elettrico": 0.238
+  },
+  {
+    "data": "2026-04-02",
+    "diesel": 1.673,
+    "benzina": 1.764,
+    "gpl": 0.712,
+    "elettrico": 0.238
+  },
+  {
+    "data": "2026-04-03",
+    "diesel": 1.671,
+    "benzina": 1.761,
+    "gpl": 0.711,
+    "elettrico": 0.237
+  }
+]

@@ -1,0 +1,207 @@
+/* ===== RELEASE NOTES ===== */
+
+/* Header */
+.rn-header {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 28px 32px 24px;
+  border-left: 4px solid var(--fp-red);
+}
+
+.rn-header-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--fp-charcoal);
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.rn-header-subtitle {
+  font-size: 14px;
+  color: var(--fp-gray-mid);
+  margin: 0;
+  line-height: 1.55;
+  max-width: 680px;
+}
+
+/* Timeline container */
+.rn-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+/* Vertical connector line (decorative) */
+.rn-timeline::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--fp-cool-gray);
+  border-radius: 2px;
+  z-index: 0;
+}
+
+/* Single release card */
+.rn-item {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.rn-item:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Left accent bar */
+.rn-item-accent {
+  width: 4px;
+  flex-shrink: 0;
+  background: var(--fp-gray-mid);
+}
+
+/* Card body */
+.rn-item-body {
+  flex: 1;
+  padding: 16px 20px 18px;
+  min-width: 0;
+}
+
+/* Meta row: badge + tag + title + date */
+.rn-item-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-bottom: 12px;
+}
+
+/* Version type badge */
+.rn-version-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Monospace version tag */
+.rn-tag {
+  font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+  background: var(--fp-bg);
+  border: 1px solid var(--fp-cool-gray);
+  border-radius: 4px;
+  padding: 1px 7px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Release title */
+.rn-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+  flex: 1;
+  min-width: 160px;
+}
+
+/* Release date */
+.rn-date {
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* Highlights bullet list */
+.rn-highlights {
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.rn-highlights li {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.6;
+  padding: 1px 0;
+}
+
+.rn-highlights li + li {
+  margin-top: 2px;
+}
+
+/* Unreleased / In sviluppo card */
+.rn-unreleased {
+  border: 1.5px dashed #E65100;
+  box-shadow: none;
+}
+
+.rn-unreleased .rn-title {
+  color: #E65100;
+}
+
+.rn-unreleased .rn-highlights li {
+  color: #666;
+}
+
+.rn-unreleased:hover {
+  box-shadow: 0 2px 10px rgba(230, 81, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .rn-header {
+    padding: 20px 18px 18px;
+  }
+
+  .rn-header-title {
+    font-size: 18px;
+  }
+
+  .rn-item-body {
+    padding: 14px 14px 16px;
+  }
+
+  .rn-item-meta {
+    gap: 6px 8px;
+    margin-bottom: 10px;
+  }
+
+  .rn-date {
+    margin-left: 0;
+    order: 10;
+    width: 100%;
+  }
+
+  .rn-title {
+    font-size: 13px;
+    min-width: 0;
+    width: 100%;
+    order: 5;
+  }
+
+  .rn-highlights li {
+    font-size: 12px;
+  }
+}

@@ -1,96 +1,69 @@
 import { useState } from 'react'
 import { useTutorial } from '../../contexts/TutorialContext'
 import { useI18n } from '../../contexts/I18nContext'
-import { useTheme } from '../../contexts/ThemeContext'
 import { APP_VERSION } from '../../version'
 import './SettingsPanel.css'
 
-/**
- * SettingsPanel - User preferences and tutorial management
- * Modal-style component accessed from header
- */
+const TUTORIALS_LIST = [
+  { id: 'landing_page',             label: '📍 Landing Page',           description: 'Introduzione all\'app' },
+  { id: 'spedizioni_overview',      label: '📦 Spedizioni',              description: 'Gestione spedizioni' },
+  { id: 'giri_concept',             label: '🚚 Giri Concept',            description: 'Concetto di giri ottimizzati' },
+  { id: 'scenario_wizard_step1',    label: '🧙 Scenario Wizard Step 1',  description: 'Area e filiale' },
+  { id: 'scenario_wizard_complete', label: '✅ Scenario Wizard Complete', description: 'Conferma scenario' },
+  { id: 'pudo_map',                 label: '🗺️ PUDO Map',                description: 'Visualizzazione PUDO' },
+  { id: 'flotta_dashboard',         label: '🚗 Flotta Dashboard',         description: 'Dashboard flotta' },
+  { id: 'contratti_section',        label: '📋 Contratti',               description: 'Gestione contratti' },
+  { id: 'settings_panel',           label: '⚙️ Settings Panel',          description: 'Pannello impostazioni' },
+]
+
+const LANG_OPTIONS = [
+  { value: 'it', flag: '🇮🇹', label: 'Italiano' },
+  { value: 'en', flag: '🇬🇧', label: 'English' },
+  { value: 'fr', flag: '🇫🇷', label: 'Français' },
+  { value: 'de', flag: '🇩🇪', label: 'Deutsch' },
+]
+
 export default function SettingsPanel({ onClose }) {
-  const { settings, dismissTutorial, resetTutorial, resetAllTutorials, setTutorialsEnabled } = useTutorial()
-  const { lang, setLang } = useI18n()
-  const { preference, isDark, setTheme } = useTheme()
+  const { settings, resetTutorial, resetAllTutorials, setTutorialsEnabled } = useTutorial()
+  const { lang, setLang, t } = useI18n()
   const [activeTab, setActiveTab] = useState('tutorials')
   const [confirmReset, setConfirmReset] = useState(false)
-
-  const handleTutorialsToggle = (enabled) => {
-    setTutorialsEnabled(enabled)
-  }
-
-  const handleResetAll = () => {
-    resetAllTutorials()
-    setConfirmReset(false)
-  }
-
-  // All available tutorials
-  const TUTORIALS_LIST = [
-    { id: 'landing_page', label: '📍 Landing Page', description: 'Introduzione all\'app' },
-    { id: 'spedizioni_overview', label: '📦 Spedizioni', description: 'Gestione spedizioni' },
-    { id: 'giri_concept', label: '🚚 Giri Concept', description: 'Concetto di giri ottimizzati' },
-    { id: 'scenario_wizard_step1', label: '🧙 Scenario Wizard Step 1', description: 'Area e filiale' },
-    { id: 'scenario_wizard_complete', label: '✅ Scenario Wizard Complete', description: 'Conferma scenario' },
-    { id: 'pudo_map', label: '🗺️ PUDO Map', description: 'Visualizzazione PUDO' },
-    { id: 'flotta_dashboard', label: '🚗 Flotta Dashboard', description: 'Dashboard flotta' },
-    { id: 'contratti_section', label: '📋 Contratti', description: 'Gestione contratti' },
-    { id: 'settings_panel', label: '⚙️ Settings Panel', description: 'Pannello impostazioni' },
-  ]
 
   return (
     <div className="settings-panel-overlay" onClick={onClose}>
       <div className="settings-panel-modal" onClick={e => e.stopPropagation()}>
+
         {/* Header */}
         <div className="settings-panel-header">
-          <h2>Impostazioni</h2>
-          <button
-            className="settings-panel-close"
-            onClick={onClose}
-            aria-label="Chiudi impostazioni"
-          >
-            ✕
-          </button>
+          <h2>{t('settings.title', 'Impostazioni')}</h2>
+          <button className="settings-panel-close" onClick={onClose} aria-label="Chiudi impostazioni">✕</button>
         </div>
 
         {/* Tabs */}
         <div className="settings-tabs">
-          <button
-            className={`settings-tab ${activeTab === 'tutorials' ? 'active' : ''}`}
-            onClick={() => setActiveTab('tutorials')}
-          >
-            Tutorial
+          <button className={`settings-tab ${activeTab === 'tutorials' ? 'active' : ''}`} onClick={() => setActiveTab('tutorials')}>
+            {t('settings.tab.tutorials', 'Tutorial')}
           </button>
-          <button
-            className={`settings-tab ${activeTab === 'interface' ? 'active' : ''}`}
-            onClick={() => setActiveTab('interface')}
-          >
-            Interfaccia
+          <button className={`settings-tab ${activeTab === 'interface' ? 'active' : ''}`} onClick={() => setActiveTab('interface')}>
+            {t('settings.tab.interface', 'Interfaccia')}
           </button>
-          <button
-            className={`settings-tab ${activeTab === 'about' ? 'active' : ''}`}
-            onClick={() => setActiveTab('about')}
-          >
-            Info
+          <button className={`settings-tab ${activeTab === 'about' ? 'active' : ''}`} onClick={() => setActiveTab('about')}>
+            {t('settings.tab.about', 'Info')}
           </button>
         </div>
 
-        {/* Content */}
         <div className="settings-content">
-          {/* Tutorials Tab */}
+
+          {/* ── Tab Tutorial ── */}
           {activeTab === 'tutorials' && (
             <div className="settings-section">
               <div className="settings-option">
                 <div>
-                  <div className="settings-option-label">Abilita tutorial</div>
-                  <div className="settings-option-hint">Mostra suggerimenti interattivi al primo utilizzo</div>
+                  <div className="settings-option-label">{t('settings.tutorials.enable', 'Abilita tutorial')}</div>
+                  <div className="settings-option-hint">{t('settings.tutorials.enable.hint', 'Mostra suggerimenti interattivi al primo utilizzo')}</div>
                 </div>
                 <label className="settings-toggle">
-                  <input
-                    type="checkbox"
-                    checked={settings.tutorials.enabled}
-                    onChange={e => handleTutorialsToggle(e.target.checked)}
-                  />
+                  <input type="checkbox" checked={settings.tutorials.enabled} onChange={e => setTutorialsEnabled(e.target.checked)} />
                   <div className="settings-toggle-track" />
                   <div className="settings-toggle-thumb" />
                 </label>
@@ -99,7 +72,6 @@ export default function SettingsPanel({ onClose }) {
               {settings.tutorials.enabled && (
                 <>
                   <div className="settings-divider" />
-
                   <div className="settings-tutorials-list">
                     <div className="settings-list-title">Tutorial disponibili</div>
                     {TUTORIALS_LIST.map(tut => {
@@ -111,10 +83,7 @@ export default function SettingsPanel({ onClose }) {
                             <div className="settings-tutorial-desc">{tut.description}</div>
                           </div>
                           {isDismissed ? (
-                            <button
-                              className="settings-tutorial-btn settings-tutorial-btn-reset"
-                              onClick={() => resetTutorial(tut.id)}
-                            >
+                            <button className="settings-tutorial-btn settings-tutorial-btn-reset" onClick={() => resetTutorial(tut.id)}>
                               Riabilita
                             </button>
                           ) : (
@@ -124,31 +93,20 @@ export default function SettingsPanel({ onClose }) {
                       )
                     })}
                   </div>
-
                   <div className="settings-divider" />
-
                   {!confirmReset ? (
-                    <button
-                      className="settings-action-btn settings-action-btn-reset"
-                      onClick={() => setConfirmReset(true)}
-                    >
+                    <button className="settings-action-btn settings-action-btn-reset" onClick={() => setConfirmReset(true)}>
                       Ripristina tutti i tutorial
                     </button>
                   ) : (
                     <div className="settings-confirm-box">
                       <div className="settings-confirm-text">Ripristinare tutti i tutorial?</div>
                       <div className="settings-confirm-actions">
-                        <button
-                          className="settings-confirm-btn settings-confirm-btn-cancel"
-                          onClick={() => setConfirmReset(false)}
-                        >
-                          Annulla
+                        <button className="settings-confirm-btn settings-confirm-btn-cancel" onClick={() => setConfirmReset(false)}>
+                          {t('action.cancel', 'Annulla')}
                         </button>
-                        <button
-                          className="settings-confirm-btn settings-confirm-btn-confirm"
-                          onClick={handleResetAll}
-                        >
-                          Ripristina
+                        <button className="settings-confirm-btn settings-confirm-btn-confirm" onClick={() => { resetAllTutorials(); setConfirmReset(false) }}>
+                          {t('action.reset', 'Ripristina')}
                         </button>
                       </div>
                     </div>
@@ -158,64 +116,24 @@ export default function SettingsPanel({ onClose }) {
             </div>
           )}
 
-          {/* Interface Tab */}
+          {/* ── Tab Interfaccia ── */}
           {activeTab === 'interface' && (
             <div className="settings-section">
               <div className="settings-option">
                 <div>
-                  <div className="settings-option-label">Lingua</div>
-                  <div className="settings-option-hint">Seleziona la lingua dell'interfaccia</div>
+                  <div className="settings-option-label">{t('settings.language', 'Lingua')}</div>
+                  <div className="settings-option-hint">{t('settings.language.hint', 'Seleziona la lingua dell\'interfaccia')}</div>
                 </div>
-                <select
-                  className="settings-select"
-                  value={lang}
-                  onChange={e => setLang(e.target.value)}
-                  aria-label="Seleziona lingua"
-                >
-                  <option value="it">🇮🇹 Italiano</option>
-                  <option value="en">🇬🇧 English</option>
-                  <option value="fr">🇫🇷 Français</option>
-                  <option value="de">🇩🇪 Deutsch</option>
+                <select className="settings-select" value={lang} onChange={e => setLang(e.target.value)} aria-label="Seleziona lingua">
+                  {LANG_OPTIONS.map(l => (
+                    <option key={l.value} value={l.value}>{l.flag} {l.label}</option>
+                  ))}
                 </select>
-              </div>
-
-              <div className="settings-divider" />
-
-              <div className="settings-option">
-                <div>
-                  <div className="settings-option-label">Dark mode</div>
-                  <div className="settings-option-hint">Attiva la modalità scura</div>
-                </div>
-                <label className="settings-toggle" aria-label="Attiva dark mode">
-                  <input
-                    type="checkbox"
-                    checked={isDark}
-                    onChange={e => setTheme(e.target.checked ? 'dark' : 'light')}
-                  />
-                  <div className="settings-toggle-track" />
-                  <div className="settings-toggle-thumb" />
-                </label>
-              </div>
-
-              <div className="settings-option">
-                <div>
-                  <div className="settings-option-label">Segui sistema</div>
-                  <div className="settings-option-hint">Usa la preferenza di sistema (chiaro/scuro)</div>
-                </div>
-                <label className="settings-toggle" aria-label="Segui preferenza sistema">
-                  <input
-                    type="checkbox"
-                    checked={preference === 'system'}
-                    onChange={e => setTheme(e.target.checked ? 'system' : (isDark ? 'dark' : 'light'))}
-                  />
-                  <div className="settings-toggle-track" />
-                  <div className="settings-toggle-thumb" />
-                </label>
               </div>
             </div>
           )}
 
-          {/* About Tab */}
+          {/* ── Tab Info ── */}
           {activeTab === 'about' && (
             <div className="settings-section">
               <div className="settings-about">
@@ -229,37 +147,30 @@ export default function SettingsPanel({ onClose }) {
                 </div>
                 <div className="settings-about-title">Control Tower</div>
                 <div className="settings-about-version">v{APP_VERSION}</div>
-                <div className="settings-about-desc">
-                  Sistema di gestione logistica con raccolta DPD
-                </div>
+                <div className="settings-about-desc">Sistema di gestione logistica con raccolta DPD</div>
 
                 <div className="settings-about-divider" />
 
                 <div className="settings-about-info">
                   <div className="settings-about-item">
-                    <span className="settings-about-label">Versione:</span>
-                    <span>{APP_VERSION} - Phase 4</span>
+                    <span className="settings-about-label">Versione</span>
+                    <span>{APP_VERSION}</span>
                   </div>
                   <div className="settings-about-item">
-                    <span className="settings-about-label">Ultimo aggiornamento:</span>
-                    <span>2026-04-05</span>
+                    <span className="settings-about-label">Sviluppato da</span>
+                    <span>Elipse Srl</span>
                   </div>
                   <div className="settings-about-item">
-                    <span className="settings-about-label">Status:</span>
+                    <span className="settings-about-label">Status</span>
                     <span>Production (Demo)</span>
                   </div>
                 </div>
 
                 <div className="settings-about-divider" />
 
-                <a
-                  href="/docs/manuale.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="settings-manual-link"
-                >
-                  📖 Apri Manuale Utente
-                </a>
+                <div className="settings-about-copyright">
+                  © 2016–2026 Elipse Srl · Tutti i diritti riservati
+                </div>
               </div>
             </div>
           )}

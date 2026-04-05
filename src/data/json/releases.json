@@ -1,0 +1,221 @@
+[
+  {
+    "version": "0.12.0",
+    "tag": "v0.12.0",
+    "date": "2026-03-28",
+    "type": "minor",
+    "title": "Dark mode, internazionalizzazione e accessibilità WCAG 2.1 AA",
+    "highlights": [
+      "Tema scuro (dark mode) attivabile da impostazioni, con persistenza della preferenza utente",
+      "Internazionalizzazione completa in 4 lingue: italiano, inglese, francese e tedesco",
+      "Cronologia entità: storico delle modifiche per PUDO, giri e contratti con diff visuale",
+      "Conformità accessibilità WCAG 2.1 AA: focus visibile, contrasti corretti, navigazione da tastiera",
+      "Nuova sezione Documentazione con viewer Markdown per manuale utente e playbook operativo"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.11.0",
+    "tag": "v0.11.0",
+    "date": "2026-03-10",
+    "type": "minor",
+    "title": "Polish, i18n, dati regionali e responsiveness",
+    "highlights": [
+      "Raffinamento visivo dell'intera interfaccia: spaziature, tipografia e micro-animazioni",
+      "Dati regionali integrati: province e regioni italiane con aggregazioni statistiche",
+      "Layout completamente responsive per tablet e dispositivi mobile (breakpoint 768px e 1024px)",
+      "Miglioramenti performance: lazy loading sezioni, memo su componenti pesanti",
+      "Correzioni bug minori su filtri Spedizioni e pannello laterale Giri"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.10.0",
+    "tag": "v0.10.0",
+    "date": "2026-02-17",
+    "type": "minor",
+    "title": "Gestione contratti e scenari preferiti",
+    "highlights": [
+      "Nuova sezione Contratti: lista, dettaglio e scadenze dei contratti di servizio con i PUDO",
+      "Scenari preferiti: possibilità di marcare scenari di ottimizzazione con stellina e filtrarli",
+      "Export PDF dei contratti attivi con firma digitale simulata",
+      "Storico rinnovi contrattuali con timeline visuale per ogni PUDO",
+      "Widget KPI scadenze in homepage: contratti in scadenza entro 30/60/90 giorni"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.9.0",
+    "tag": "v0.9.0",
+    "date": "2026-01-24",
+    "type": "minor",
+    "title": "Architettura dati, menu riorganizzato, tutorial e impostazioni",
+    "highlights": [
+      "Riorganizzazione menu principale con raggruppamento logico: Operativo, Anagrafica, Analisi",
+      "Sistema tutorial interattivo a step per onboarding nuovi utenti (6 tour guidati)",
+      "Pannello Impostazioni utente: preferenze notifiche, lingua, fuso orario e tema",
+      "Foundation dati: refactoring dei mock data in struttura normalizzata con relazioni esplicite",
+      "Breadcrumb di navigazione e gestione stato URL per deep linking alle sezioni"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.8.0",
+    "tag": "v0.8.0",
+    "date": "2025-12-20",
+    "type": "minor",
+    "title": "Wizard creazione scenario a 5 passi e parametri OptimoRoute",
+    "highlights": [
+      "Wizard modale a 5 passi per la creazione di scenari di ottimizzazione giri",
+      "Integrazione parametri OptimoRoute: time window, capacità veicolo, priorità PUDO",
+      "Anteprima mappa dello scenario prima della conferma con stima km e tempi",
+      "Salvataggio bozze scenario con ripristino automatico in caso di chiusura accidentale",
+      "Validazione in tempo reale dei parametri con messaggi di errore contestuali"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.7.1",
+    "tag": "v0.7.1",
+    "date": "2025-12-05",
+    "type": "patch",
+    "title": "Fix crash Leaflet divIcon in produzione",
+    "highlights": [
+      "Risolto crash runtime causato da import errato di Leaflet in build di produzione",
+      "Import esplicito `import L from 'leaflet'` in tutti i componenti mappa per compatibilità Vite",
+      "Aggiunto fallback icona marker di default in caso di asset mancante"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.7.0",
+    "tag": "v0.7.0",
+    "date": "2025-11-28",
+    "type": "minor",
+    "title": "Landing page, filtri spedizioni e fix pannello giro",
+    "highlights": [
+      "Nuova landing page pubblica con presentazione del prodotto e accesso al demo",
+      "Filtri avanzati sezione Spedizioni: per stato, corriere, data, PUDO di destinazione",
+      "Risolto bug che causava la chiusura inattesa del pannello laterale al cambio giro",
+      "Aggiunta paginazione lato client sulla lista spedizioni (50 per pagina)",
+      "Tooltip informativi sulle KPI card dell'overview con spiegazione del calcolo"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.6.0",
+    "tag": "v0.6.0",
+    "date": "2025-11-07",
+    "type": "minor",
+    "title": "Importazione spedizioni, barra progresso e notifiche",
+    "highlights": [
+      "Importazione spedizioni da file CSV con mapping colonne e anteprima dati",
+      "Barra progresso globale per operazioni asincrone (import, export, calcolo scenari)",
+      "Sistema notifiche in-app: toast per conferme, warning e aggiornamenti in background",
+      "Storico importazioni con log degli errori di validazione riga per riga",
+      "Indicatore di stato connessione API OptimoRoute nella barra superiore"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.5.1",
+    "tag": "v0.5.1",
+    "date": "2025-10-22",
+    "type": "patch",
+    "title": "Playbook operativo e download PDF",
+    "highlights": [
+      "Aggiunto Playbook Operativo nella sezione documentazione: procedure di apertura/chiusura PUDO",
+      "Funzione di download PDF del playbook direttamente dalla UI senza dipendenze esterne",
+      "Correzione indice del manuale utente con link rapidi ai capitoli"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.5.0",
+    "tag": "v0.5.0",
+    "date": "2025-10-10",
+    "type": "minor",
+    "title": "Rinomina PUDO, volume m³ e volume disponibile",
+    "highlights": [
+      "Rinomina entità da 'Punto di ritiro' a 'PUDO' (Pick-Up Drop-Off) in tutta l'app",
+      "Aggiunta gestione volume m³ per ogni PUDO: capacità totale, occupata e disponibile",
+      "Indicatore visuale volume disponibile con barra percentuale e soglie di allerta",
+      "Campo tipo PUDO (tabacchi, edicola, farmacia, supermercato, altro) con icona dedicata",
+      "Filtro per tipo PUDO nella lista e sulla mappa"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.4.0",
+    "tag": "v0.4.0",
+    "date": "2025-09-19",
+    "type": "minor",
+    "title": "Sezione Spedizioni, scenari CI e documentazione iniziale",
+    "highlights": [
+      "Nuova sezione Spedizioni con lista, stato tracking e assegnazione a PUDO",
+      "Scenari di Ottimizzazione: prima versione con lista scenari salvati e confronto KPI",
+      "Pipeline CI/CD con GitHub Actions: lint, build e deploy automatico su Netlify",
+      "Prima versione documentazione tecnica in /docs con architettura e componenti principali",
+      "Aggiunta pagina 404 con redirect alla home e link alle sezioni principali"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.3.1",
+    "tag": "v0.3.1",
+    "date": "2025-09-04",
+    "type": "patch",
+    "title": "Fix mappa giri, stellina preferiti e icona tab",
+    "highlights": [
+      "Risolto bug rendering mappa giri: i percorsi non venivano ridisegnati al cambio scenario",
+      "Toggle stellina per marcare giri preferiti con persistenza in localStorage",
+      "Aggiunta favicon e icona tab personalizzata con logo Fermopoint"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.3.0",
+    "tag": "v0.3.0",
+    "date": "2025-08-22",
+    "type": "minor",
+    "title": "Sezione Giri con pannello laterale, template e filtro tipo PUDO",
+    "highlights": [
+      "Nuova sezione Giri: lista giri giornalieri con mappa Leaflet e percorso ottimizzato",
+      "Pannello laterale dettaglio giro: fermate ordinate, corriere assegnato, KPI distanza/tempo",
+      "Template giri predefiniti per configurazioni ricorrenti (centro città, periferia, ecc.)",
+      "Filtro PUDO per tipo nella mappa: visualizzazione selettiva per categoria",
+      "Calcolo automatico stima tempi di percorrenza basato su distanza e velocità media"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.2.0",
+    "tag": "v0.2.0",
+    "date": "2025-08-01",
+    "type": "minor",
+    "title": "Versioning centralizzato, responsive completo e anagrafiche base",
+    "highlights": [
+      "Sistema versioning centralizzato in version.js con visualizzazione nel footer",
+      "Layout responsive completo per tutte le sezioni esistenti (desktop, tablet, mobile)",
+      "Sezione Utenti: gestione operatori con ruoli (admin, dispatcher, viewer)",
+      "Sezione Filiali Fermopoint: anagrafica sedi con indirizzo, cap e referente",
+      "Sezioni Flotta e Carburanti: parco veicoli e monitoraggio costi carburante mensili"
+    ],
+    "breaking": false
+  },
+  {
+    "version": "0.1.0",
+    "tag": "v0.1.0",
+    "date": "2025-07-14",
+    "type": "minor",
+    "title": "Struttura iniziale Fermopoint Control Tower",
+    "highlights": [
+      "Setup progetto React + Vite con Leaflet per mappe e React Router per la navigazione",
+      "Layout applicativo principale: sidebar navigazione, header con breadcrumb, area contenuto",
+      "Sezione Overview con KPI card placeholder: PUDO attivi, spedizioni del giorno, giri pianificati",
+      "Palette colori e tipografia Fermopoint/DPD applicata tramite CSS custom properties",
+      "Prima versione sezione PUDO con lista mock e mappa Roma con marker posizionati"
+    ],
+    "breaking": false
+  }
+]
