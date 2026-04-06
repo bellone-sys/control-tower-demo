@@ -141,9 +141,15 @@ export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate })
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
+            {/* Ombra percorso */}
             <Polyline
               positions={polyline}
-              pathOptions={{ color: '#808285', weight: 2.5, dashArray: '6 4', opacity: 0.8 }}
+              pathOptions={{ color: '#fff', weight: 6, opacity: 0.6 }}
+            />
+            {/* Percorso principale */}
+            <Polyline
+              positions={polyline}
+              pathOptions={{ color: '#DC0032', weight: 3.5, opacity: 1 }}
             />
 
             {/* Depot */}

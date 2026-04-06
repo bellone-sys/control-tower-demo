@@ -1,27 +1,29 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import L from 'leaflet'
-import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker, Marker } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
-import { FILIALI_BRT } from '../../../../data/brtFiliali'
+import { FILIALI_BRT } from '../../../../data/filialiBrt'
 import { PROVINCE_PER_REGIONE } from '../../../../data/province'
-import { getCiPudo } from '../../../../data/spedizioni'
 import pudosRoma from '../../../../data/pudosRoma.json'
 import TutorialOverlay from '../../../tutorials/TutorialOverlay'
 import 'leaflet/dist/leaflet.css'
 
-const PERIODI = [
-  { val: 7,  label: '7gg' },
-  { val: 14, label: '14gg' },
-  { val: 30, label: '1 mese' },
-  { val: 60, label: '2 mesi' },
-]
-
-function ciColor(ci) {
-  if (ci >= 4)   return '#2E7D32'
-  if (ci >= 2.5) return '#E65100'
-  if (ci > 0)    return '#1565C0'
-  return '#9E9E9E'
+function isLocker(p) {
+  return p.name.toLowerCase().includes('locker')
 }
+
+function makeLockerIcon() {
+  return L.divIcon({
+    html: `<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0.5" y="0.5" width="9" height="9" rx="2" fill="#414042" stroke="white" stroke-width="1"/>
+    </svg>`,
+    className: '',
+    iconSize: [10, 10],
+    iconAnchor: [5, 5],
+  })
+}
+
+const LOCKER_ICON = makeLockerIcon()
 
 // BRT selection modal
 function BrtModal({ onSelect, onClose }) {
@@ -91,7 +93,7 @@ function BrtModal({ onSelect, onClose }) {
   )
 }
 
-export default function WizardStep1({ data, onChange }) {
+export default function WizardStep1({ data, onChange, errors = [] }) {
   const [showBrt, setShowBrt] = useState(false)
   const [showProvinceDropdown, setShowProvinceDropdown] = useState(false)
   const [provSearch, setProvSearch] = useState('')
@@ -115,6 +117,10 @@ export default function WizardStep1({ data, onChange }) {
 
   const selectedFiliale = allFilialiCombo.find(f => f.id === data.filialeId) || null
 
+  // Validation flags
+  const errNome    = errors.some(e => e.toLowerCase().includes('nome'))
+  const errFiliale = errors.some(e => e.toLowerCase().includes('filiale'))
+
   // Filter province dropdown
   const filteredRegioni = PROVINCE_PER_REGIONE.map(r => ({
     ...r,
@@ -137,13 +143,14 @@ export default function WizardStep1({ data, onChange }) {
     setShowBrt(false)
   }
 
-  // Compute PUDO positions for map (only PUDOs with CI > 0 get labeled marker, others get dot)
-  const pudosWithCi = pudosRoma
-    .map(p => ({ ...p, ci: getCiPudo(p.id, data.periodoGg) }))
-    .filter(p => p.ci > 0)
+  // Split PUDOs into lockers and regular for map rendering
+  const { pudosRegolari, pudosLocker } = useMemo(() => ({
+    pudosRegolari: pudosRoma.slice(0, 800).filter(p => !isLocker(p)),
+    pudosLocker:   pudosRoma.slice(0, 800).filter(p =>  isLocker(p)),
+  }), [])
 
   // Map center: filiale or Rome default
-  const mapCenter = selectedFiliale
+  const mapCenter = (selectedFiliale?.lat != null && selectedFiliale?.lng != null)
     ? [selectedFiliale.lat, selectedFiliale.lng]
     : [41.9028, 12.4964]
 
@@ -152,129 +159,42 @@ export default function WizardStep1({ data, onChange }) {
       <TutorialOverlay
         id="scenario_wizard_step1"
         title="📍 Step 1: Area e Filiale"
-        description="Seleziona le province di interesse, scegli una filiale (Fermopoint o BRT), e configura il periodo CI. La mappa visualizza tutti i PUDO disponibili."
+        description="Scegli una filiale di riferimento (Fermopoint o BRT). In alternativa puoi selezionare manualmente le province di interesse."
         position="bottom-right"
       />
 
       {/* Left panel */}
       <div className="wizard-side-panel">
+
         {/* Nome scenario */}
         <div className="ws-row">
-          <div className="ws-section-title">Nome scenario</div>
+          <div className="ws-section-title">
+            Nome scenario <span style={{ color: 'var(--fp-red)' }}>*</span>
+          </div>
           <input
-            className="wizard-nome-input"
+            className={`wizard-nome-input${errNome ? ' ws-input-error' : ''}`}
             type="text"
             placeholder="Es. Roma Est — Aprile 2026"
             value={data.nomeScenario}
             onChange={e => onChange({ nomeScenario: e.target.value })}
             maxLength={60}
           />
-        </div>
-
-        {/* Periodo CI */}
-        <div className="ws-row">
-          <div className="ws-section-title">Periodo CI (storico)</div>
-          <div className="wizard-periodo-pills">
-            {PERIODI.map(p => (
-              <button
-                key={p.val}
-                className={`wizard-periodo-pill${data.periodoGg === p.val ? ' active' : ''}`}
-                onClick={() => onChange({ periodoGg: p.val })}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-          <div style={{ fontSize: 11, color: 'var(--fp-gray-mid)', marginTop: 4 }}>
-            Il CI medio per PUDO viene calcolato sul periodo selezionato.
-          </div>
-        </div>
-
-        {/* Province */}
-        <div className="ws-row" ref={provRef}>
-          <div className="ws-section-title">Selezione province</div>
-          <div style={{ position: 'relative' }}>
-            <button
-              type="button"
-              className="province-trigger"
-              onClick={() => setShowProvinceDropdown(o => !o)}
-              style={{ width: '100%' }}
-            >
-              <span>
-                {data.province.length === 0
-                  ? 'Seleziona province…'
-                  : `${data.province.length} province selezionate`}
-              </span>
-              <span style={{ fontSize: 10, color: 'var(--fp-gray-mid)' }}>{showProvinceDropdown ? '▲' : '▼'}</span>
-            </button>
-
-            {showProvinceDropdown && (
-              <div className="province-dropdown" style={{ position: 'absolute', zIndex: 500, width: '100%' }}>
-                <div className="province-search">
-                  <input
-                    type="text"
-                    placeholder="Cerca provincia…"
-                    value={provSearch}
-                    onChange={e => setProvSearch(e.target.value)}
-                    autoFocus
-                  />
-                </div>
-                <div className="province-quick">
-                  <button type="button" onClick={() => onChange({ province: PROVINCE_PER_REGIONE.flatMap(r => r.province.map(p => p.codice)) })}>Tutte</button>
-                  <button type="button" onClick={() => onChange({ province: [] })}>Nessuna</button>
-                </div>
-                <div className="province-list">
-                  {filteredRegioni.map(region => (
-                    <div key={region.regione}>
-                      <button type="button" className="province-region-header">
-                        <span>{region.regione}</span>
-                      </button>
-                      <div className="province-items">
-                        {region.province.map(p => {
-                          const isSel = data.province.includes(p.codice)
-                          return (
-                            <button
-                              key={p.codice}
-                              type="button"
-                              className={`province-item${isSel ? ' selected' : ''}`}
-                              onClick={() => toggleProv(p.codice)}
-                            >
-                              <span className="province-check">{isSel ? '✓' : ' '}</span>
-                              <span className="province-code">{p.codice}</span>
-                              <span className="province-nome">{p.nome}</span>
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Selected province chips */}
-          {data.province.length > 0 && (
-            <div className="wizard-province-pills" style={{ marginTop: 6 }}>
-              {data.province.map(cod => (
-                <span key={cod} className="wizard-prov-chip">
-                  {cod}
-                  <button onClick={() => toggleProv(cod)} title="Rimuovi">×</button>
-                </span>
-              ))}
-            </div>
+          {errNome && (
+            <div className="ws-field-error">Inserisci un nome per lo scenario</div>
           )}
         </div>
 
-        {/* Filiale */}
+        {/* Filiale — scelta primaria */}
         <div className="ws-row">
-          <div className="ws-section-title">Filiale di riferimento *</div>
-          <div className="wizard-filiale-list">
+          <div className="ws-section-title">
+            Filiale di riferimento <span style={{ color: 'var(--fp-red)' }}>*</span>
+          </div>
+          <div className={`wizard-filiale-list${errFiliale ? ' ws-list-error' : ''}`}>
             {allFilialiCombo.map(f => (
               <button
                 key={f.id}
                 className={`wizard-filiale-item${data.filialeId === f.id ? ' selected' : ''}`}
-                onClick={() => onChange({ filialeId: f.id })}
+                onClick={() => onChange({ filialeId: f.id, province: [] })}
               >
                 <div className={`wfi-avatar${f.tipo === 'brt' ? ' brt' : ''}`}>
                   {f.tipo === 'brt' ? 'B' : f.nome.charAt(0)}
@@ -291,18 +211,100 @@ export default function WizardStep1({ data, onChange }) {
 
             <button className="wizard-filiale-add-btn" onClick={() => setShowBrt(true)}>
               <span style={{ fontSize: 16 }}>＋</span>
-              Aggiungi filiale BRT
+              Aggiungi filiale da elenco filiali BRT
             </button>
           </div>
+          {errFiliale && (
+            <div className="ws-field-error">Seleziona una filiale di riferimento</div>
+          )}
         </div>
 
-        {/* PUDO count info */}
-        {pudosWithCi.length > 0 && (
-          <div className="ws-filter-info">
-            <span className="ws-filter-count">{pudosWithCi.length}</span>
-            PUDO con CI &gt; 0 nell'area
+        {/* Selezione zona — alternativa quando non c'è filiale */}
+        {!data.filialeId && (
+          <div className="ws-row" ref={provRef}>
+            <div className="ws-zona-divider">
+              <span>oppure seleziona zona</span>
+            </div>
+            <div className="ws-section-title" style={{ marginTop: 10 }}>Selezione zona</div>
+            <div style={{ position: 'relative' }}>
+              <button
+                type="button"
+                className="province-trigger"
+                onClick={() => setShowProvinceDropdown(o => !o)}
+                style={{ width: '100%' }}
+              >
+                <span>
+                  {data.province.length === 0
+                    ? 'Seleziona province…'
+                    : `${data.province.length} province selezionate`}
+                </span>
+                <span style={{ fontSize: 10, color: 'var(--fp-gray-mid)' }}>{showProvinceDropdown ? '▲' : '▼'}</span>
+              </button>
+
+              {showProvinceDropdown && (
+                <div className="province-dropdown" style={{ position: 'absolute', zIndex: 500, width: '100%' }}>
+                  <div className="province-search">
+                    <input
+                      type="text"
+                      placeholder="Cerca provincia…"
+                      value={provSearch}
+                      onChange={e => setProvSearch(e.target.value)}
+                      autoFocus
+                    />
+                  </div>
+                  <div className="province-quick">
+                    <button type="button" onClick={() => onChange({ province: PROVINCE_PER_REGIONE.flatMap(r => r.province.map(p => p.codice)) })}>Tutte</button>
+                    <button type="button" onClick={() => onChange({ province: [] })}>Nessuna</button>
+                  </div>
+                  <div className="province-list">
+                    {filteredRegioni.map(region => (
+                      <div key={region.regione}>
+                        <button type="button" className="province-region-header">
+                          <span>{region.regione}</span>
+                        </button>
+                        <div className="province-items">
+                          {region.province.map(p => {
+                            const isSel = data.province.includes(p.codice)
+                            return (
+                              <button
+                                key={p.codice}
+                                type="button"
+                                className={`province-item${isSel ? ' selected' : ''}`}
+                                onClick={() => toggleProv(p.codice)}
+                              >
+                                <span className="province-check">{isSel ? '✓' : ' '}</span>
+                                <span className="province-code">{p.codice}</span>
+                                <span className="province-nome">{p.nome}</span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Selected province chips */}
+            {data.province.length > 0 && (
+              <div className="wizard-province-pills" style={{ marginTop: 6 }}>
+                {data.province.map(cod => (
+                  <span key={cod} className="wizard-prov-chip">
+                    {cod}
+                    <button onClick={() => toggleProv(cod)} title="Rimuovi">×</button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         )}
+
+        {/* PUDO count info */}
+        <div className="ws-filter-info">
+          <span className="ws-filter-count">{pudosRoma.length}</span>
+          PUDO disponibili nell'area ({pudosRoma.filter(p => isLocker(p)).length} locker)
+        </div>
       </div>
 
       {/* Map panel */}
@@ -319,32 +321,33 @@ export default function WizardStep1({ data, onChange }) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {/* All PUDOs as small dots */}
-          {pudosRoma.slice(0, 600).map(p => (
+          {/* PUDO regolari — cerchio */}
+          {pudosRegolari.map(p => (
             <CircleMarker
               key={p.id}
               center={[p.lat, p.lng]}
-              radius={3}
-              pathOptions={{ color: '#808285', fillColor: '#808285', fillOpacity: 0.5, weight: 0 }}
+              radius={5}
+              pathOptions={{ color: '#414042', fillColor: '#414042', fillOpacity: 0.7, weight: 1 }}
+              eventHandlers={{
+                mouseover: (e) => e.target.bindTooltip(
+                  `<b>${p.name}</b><br/><span style="font-size:10px;opacity:.75">${p.id} · ${p.cap}</span>`,
+                  { direction: 'top', offset: L.point(0, -8) }
+                ).openTooltip(),
+                mouseout: (e) => { e.target.closeTooltip(); e.target.unbindTooltip() },
+              }}
             />
           ))}
 
-          {/* PUDOs with CI — tooltip nativo Leaflet (no react-leaflet Tooltip, v5 compat) */}
-          {pudosWithCi.map(p => (
-            <CircleMarker
-              key={`ci-${p.id}`}
-              center={[p.lat, p.lng]}
-              radius={10}
-              pathOptions={{
-                color: ciColor(p.ci),
-                fillColor: ciColor(p.ci),
-                fillOpacity: 0.9,
-                weight: 2,
-              }}
+          {/* Locker — icona quadrata */}
+          {pudosLocker.map(p => (
+            <Marker
+              key={p.id}
+              position={[p.lat, p.lng]}
+              icon={LOCKER_ICON}
               eventHandlers={{
                 mouseover: (e) => e.target.bindTooltip(
-                  `<b>${p.ci.toFixed(2)} CI</b> — ${p.name}<br/><span style="font-size:10px;opacity:.75">${p.id} · ${p.cap}</span>`,
-                  { direction: 'top', offset: L.point(0, -12) }
+                  `<b>🔒 ${p.name}</b><br/><span style="font-size:10px;opacity:.75">${p.id} · ${p.cap}</span>`,
+                  { direction: 'top', offset: L.point(0, -10) }
                 ).openTooltip(),
                 mouseout: (e) => { e.target.closeTooltip(); e.target.unbindTooltip() },
               }}
@@ -352,7 +355,7 @@ export default function WizardStep1({ data, onChange }) {
           ))}
 
           {/* Filiale depot marker */}
-          {selectedFiliale && (
+          {selectedFiliale?.lat != null && (
             <CircleMarker
               center={[selectedFiliale.lat, selectedFiliale.lng]}
               radius={14}
@@ -368,19 +371,20 @@ export default function WizardStep1({ data, onChange }) {
         <div style={{
           position: 'absolute', bottom: 12, right: 12, zIndex: 1000,
           background: 'rgba(255,255,255,0.95)', borderRadius: 8, padding: '8px 12px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.15)', fontSize: 11, display: 'flex', flexDirection: 'column', gap: 4,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.15)', fontSize: 11, display: 'flex', flexDirection: 'column', gap: 6,
         }}>
-          {[
-            { color: '#2E7D32', label: 'CI ≥ 4 (alto)' },
-            { color: '#E65100', label: 'CI 2.5–4 (medio)' },
-            { color: '#1565C0', label: 'CI < 2.5 (basso)' },
-            { color: '#9E9E9E', label: 'CI non disponibile' },
-          ].map(({ color, label }) => (
-            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <div style={{ width: 10, height: 10, borderRadius: '50%', background: color, flexShrink: 0 }} />
-              <span>{label}</span>
-            </div>
-          ))}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#414042', flexShrink: 0 }} />
+            <span>PUDO</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ width: 10, height: 10, borderRadius: 2, background: '#414042', flexShrink: 0 }} />
+            <span>Locker</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#DC0032', flexShrink: 0 }} />
+            <span>Filiale</span>
+          </div>
         </div>
       </div>
 

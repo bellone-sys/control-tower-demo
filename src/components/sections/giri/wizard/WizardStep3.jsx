@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import L from 'leaflet'
 import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
@@ -22,49 +22,71 @@ function distKm(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
+function isLocker(p) {
+  return p.name.toLowerCase().includes('locker')
+}
+
+// Icona tipo PUDO: cerchio = PUDO, quadrato = locker
+function PudoTypeIcon({ locker }) {
+  return locker
+    ? <svg width="10" height="10" viewBox="0 0 10 10" style={{ flexShrink: 0 }} xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.5" y="0.5" width="9" height="9" rx="2" fill="#808285" stroke="#808285" strokeWidth="0.5"/>
+      </svg>
+    : <svg width="10" height="10" viewBox="0 0 10 10" style={{ flexShrink: 0 }} xmlns="http://www.w3.org/2000/svg">
+        <circle cx="5" cy="5" r="4.5" fill="#808285" stroke="#808285" strokeWidth="0.5"/>
+      </svg>
+}
+
 export default function WizardStep3({ data, onChange }) {
+  const [search, setSearch]   = useState('')
+  const [sortBy, setSortBy]   = useState('ci') // 'ci' | 'dist' | 'name'
+  const [filterType, setFilterType] = useState('all') // 'all' | 'pudo' | 'locker'
+
   const allFiliali = [...FILIALI, ...(data.extraFiliali || [])]
   const filiale = allFiliali.find(f => f.id === data.filialeId)
 
-  // Candidate PUDOs (from step 2 filters)
-  const candidates = useMemo(() => {
-    return pudosRoma.map(p => {
-      const ci = getCiPudo(p.id, data.periodoGg)
-      const dist = filiale ? distKm(filiale.lat, filiale.lng, p.lat, p.lng) : 999
-      const passesFilter = ci >= data.ciMin && dist <= data.raggioKm
-      return { ...p, ci, dist }
-    }).filter(p => p.ci > 0 || data.pudoSelezionati.has(p.id))
-     .sort((a, b) => b.ci - a.ci)
-  }, [data.periodoGg, data.ciMin, data.raggioKm, data.filialeId, data.extraFiliali])
-
-  // Visible candidates: those passing filter + those manually added
   const visibleCandidates = useMemo(() => {
     return pudosRoma.map(p => {
       const ci = getCiPudo(p.id, data.periodoGg)
       const dist = filiale ? distKm(filiale.lat, filiale.lng, p.lat, p.lng) : 999
-      return { ...p, ci, dist }
+      return { ...p, ci, dist, locker: isLocker(p) }
     }).filter(p => {
       const passesFilter = p.ci >= data.ciMin && p.dist <= data.raggioKm
-      const manuallyAdded = data.pudoSelezionati.has(p.id)
-      return passesFilter || manuallyAdded
+      return passesFilter || data.pudoSelezionati.has(p.id)
     })
   }, [data.periodoGg, data.ciMin, data.raggioKm, data.filialeId, data.extraFiliali, data.pudoSelezionati])
 
+  // Filtered + sorted list for sidebar
+  const displayList = useMemo(() => {
+    let list = [...visibleCandidates]
+
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.id.toLowerCase().includes(q) ||
+        p.cap.includes(q)
+      )
+    }
+
+    if (filterType === 'pudo')   list = list.filter(p => !p.locker)
+    if (filterType === 'locker') list = list.filter(p =>  p.locker)
+
+    if (sortBy === 'ci')   list.sort((a, b) => b.ci - a.ci)
+    if (sortBy === 'dist') list.sort((a, b) => a.dist - b.dist)
+    if (sortBy === 'name') list.sort((a, b) => a.name.localeCompare(b.name))
+
+    return list
+  }, [visibleCandidates, search, sortBy, filterType])
+
   function togglePudo(pudoId) {
     const next = new Set(data.pudoSelezionati)
-    if (next.has(pudoId)) {
-      next.delete(pudoId)
-    } else {
-      next.add(pudoId)
-    }
+    if (next.has(pudoId)) next.delete(pudoId)
+    else next.add(pudoId)
     onChange({ pudoSelezionati: next })
   }
 
-  const selectedList = visibleCandidates
-    .filter(p => data.pudoSelezionati.has(p.id))
-    .sort((a, b) => b.ci - a.ci)
-
-  const mapCenter = filiale ? [filiale.lat, filiale.lng] : [41.9028, 12.4964]
+  const mapCenter = (filiale?.lat != null) ? [filiale.lat, filiale.lng] : [41.9028, 12.4964]
 
   return (
     <div className="step3-layout">
@@ -81,10 +103,7 @@ export default function WizardStep3({ data, onChange }) {
             <button
               className="btn-secondary"
               style={{ flex: 1, height: 28, fontSize: 11 }}
-              onClick={() => {
-                const all = new Set(visibleCandidates.map(p => p.id))
-                onChange({ pudoSelezionati: all })
-              }}
+              onClick={() => onChange({ pudoSelezionati: new Set(visibleCandidates.map(p => p.id)) })}
             >
               Seleziona tutti
             </button>
@@ -96,10 +115,63 @@ export default function WizardStep3({ data, onChange }) {
               Deseleziona tutti
             </button>
           </div>
+
+          {/* Ricerca */}
+          <input
+            type="text"
+            placeholder="Cerca per nome, ID, CAP…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              marginTop: 8, width: '100%', boxSizing: 'border-box',
+              border: '1px solid var(--fp-border)', borderRadius: 6,
+              padding: '5px 8px', fontSize: 11, outline: 'none',
+            }}
+          />
+
+          {/* Filtro tipo + ordinamento */}
+          <div style={{ display: 'flex', gap: 4, marginTop: 6 }}>
+            {/* Tipo */}
+            <select
+              value={filterType}
+              onChange={e => setFilterType(e.target.value)}
+              style={{
+                flex: 1, fontSize: 10, border: '1px solid var(--fp-border)',
+                borderRadius: 5, padding: '3px 4px', background: 'var(--fp-bg)',
+                color: 'var(--fp-charcoal)',
+              }}
+            >
+              <option value="all">Tutti i tipi</option>
+              <option value="pudo">Solo PUDO</option>
+              <option value="locker">Solo Locker</option>
+            </select>
+
+            {/* Ordina */}
+            <select
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value)}
+              style={{
+                flex: 1, fontSize: 10, border: '1px solid var(--fp-border)',
+                borderRadius: 5, padding: '3px 4px', background: 'var(--fp-bg)',
+                color: 'var(--fp-charcoal)',
+              }}
+            >
+              <option value="ci">Ordina: CI ↓</option>
+              <option value="dist">Ordina: distanza ↑</option>
+              <option value="name">Ordina: A–Z</option>
+            </select>
+          </div>
+
+          {/* Contatore risultati */}
+          {(search || filterType !== 'all') && (
+            <div style={{ fontSize: 10, color: 'var(--fp-gray-mid)', marginTop: 4 }}>
+              {displayList.length} risultati su {visibleCandidates.length}
+            </div>
+          )}
         </div>
 
         <div className="step3-pudo-list">
-          {visibleCandidates.sort((a, b) => b.ci - a.ci).map(p => {
+          {displayList.map(p => {
             const isSel = data.pudoSelezionati.has(p.id)
             return (
               <div
@@ -107,16 +179,22 @@ export default function WizardStep3({ data, onChange }) {
                 className={`step3-pudo-row${isSel ? ' included' : ' excluded'}`}
                 onClick={() => togglePudo(p.id)}
               >
+                {/* Pallino CI */}
                 <div style={{
                   width: 8, height: 8, borderRadius: '50%',
                   background: ciColor(p.ci), flexShrink: 0,
                 }} />
+
+                {/* Icona tipo */}
+                <PudoTypeIcon locker={p.locker} />
+
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--fp-charcoal)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {p.name}
                   </div>
                   <div style={{ fontSize: 10, color: 'var(--fp-gray-mid)' }}>
                     {p.id} · {p.dist < 999 ? `${p.dist.toFixed(1)} km` : ''}
+                    {p.locker && <span style={{ marginLeft: 4, color: '#808285', fontWeight: 600 }}>LOCKER</span>}
                   </div>
                 </div>
                 <span className="step3-pudo-ci" style={{ color: ciColor(p.ci) }}>
@@ -129,10 +207,11 @@ export default function WizardStep3({ data, onChange }) {
             )
           })}
 
-          {visibleCandidates.length === 0 && (
+          {displayList.length === 0 && (
             <div style={{ padding: 20, textAlign: 'center', color: 'var(--fp-gray-mid)', fontSize: 12 }}>
-              Nessun PUDO visibile.<br />
-              Modifica i filtri nel passo precedente.
+              {visibleCandidates.length === 0
+                ? <>Nessun PUDO visibile.<br />Modifica i filtri nel passo precedente.</>
+                : 'Nessun risultato per la ricerca.'}
             </div>
           )}
         </div>
@@ -152,7 +231,6 @@ export default function WizardStep3({ data, onChange }) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {/* All visible candidates */}
           {visibleCandidates.map(p => {
             const isSel = data.pudoSelezionati.has(p.id)
             return (
@@ -169,7 +247,7 @@ export default function WizardStep3({ data, onChange }) {
                 eventHandlers={{
                   click: () => togglePudo(p.id),
                   mouseover: (e) => e.target.bindTooltip(
-                    `<b>${p.name}</b><br/>CI: ${p.ci > 0 ? p.ci.toFixed(2) : 'N/D'}<br/>${isSel ? '✓ click per escludere' : '○ click per includere'}`,
+                    `<b>${p.locker ? '🔒 ' : ''}${p.name}</b><br/>CI: ${p.ci > 0 ? p.ci.toFixed(2) : 'N/D'}<br/>${isSel ? '✓ click per escludere' : '○ click per includere'}`,
                     { direction: 'top', offset: L.point(0, -8) }
                   ).openTooltip(),
                   mouseout: (e) => { e.target.closeTooltip(); e.target.unbindTooltip() },
@@ -178,8 +256,7 @@ export default function WizardStep3({ data, onChange }) {
             )
           })}
 
-          {/* Filiale */}
-          {filiale && (
+          {filiale?.lat != null && (
             <CircleMarker
               center={[filiale.lat, filiale.lng]}
               radius={14}

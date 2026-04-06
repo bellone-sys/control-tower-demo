@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 import L from 'leaflet'
-import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker, Circle, useMap } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
 import { getCiPudo } from '../../../../data/spedizioni'
 import pudosRoma from '../../../../data/pudosRoma.json'
@@ -21,6 +21,18 @@ function distKm(lat1, lng1, lat2, lng2) {
   const a = Math.sin(dLat / 2) ** 2 +
     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+}
+
+// Adatta il viewport al cerchio del raggio
+function RadiusFitter({ center, radiusM }) {
+  const map = useMap()
+  useEffect(() => {
+    if (center && radiusM) {
+      const bounds = L.latLng(center).toBounds(radiusM * 2)
+      map.fitBounds(bounds, { padding: [24, 24], maxZoom: 13 })
+    }
+  }, [center[0], center[1], radiusM]) // eslint-disable-line
+  return null
 }
 
 export default function WizardStep2({ data, onChange }) {
@@ -51,7 +63,7 @@ export default function WizardStep2({ data, onChange }) {
     return { pudosFiltered: filtered, pudosTotali: totali }
   }, [data.ciMin, data.raggioKm, data.periodoGg, data.filialeId, data.extraFiliali])
 
-  const mapCenter = filiale ? [filiale.lat, filiale.lng] : [41.9028, 12.4964]
+  const mapCenter = (filiale?.lat != null) ? [filiale.lat, filiale.lng] : [41.9028, 12.4964]
 
   return (
     <div className="wizard-step-layout">
@@ -62,6 +74,30 @@ export default function WizardStep2({ data, onChange }) {
         </div>
         <div style={{ fontSize: 12, color: 'var(--fp-gray-mid)', marginBottom: 16, lineHeight: 1.5 }}>
           Imposta i criteri di inclusione automatica. Potrai raffinare manualmente al passo successivo.
+        </div>
+
+        {/* Periodo CI */}
+        <div className="ws-row" style={{ marginBottom: 8 }}>
+          <div className="ws-section-title">Periodo CI (storico)</div>
+          <div className="wizard-periodo-pills">
+            {[
+              { val: 7,  label: '7gg' },
+              { val: 14, label: '14gg' },
+              { val: 30, label: '1 mese' },
+              { val: 60, label: '2 mesi' },
+            ].map(p => (
+              <button
+                key={p.val}
+                className={`wizard-periodo-pill${data.periodoGg === p.val ? ' active' : ''}`}
+                onClick={() => onChange({ periodoGg: p.val })}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <div style={{ fontSize: 11, color: 'var(--fp-gray-mid)', marginTop: 2 }}>
+            Il CI medio per PUDO viene calcolato sul periodo selezionato.
+          </div>
         </div>
 
         {/* CI minimo */}
@@ -178,14 +214,29 @@ export default function WizardStep2({ data, onChange }) {
             )
           })}
 
-          {/* Raggio cerchio */}
-          {filiale && (() => {
-            // Draw circle approximation as polyline points
-            return null // Leaflet Circle component not imported to keep bundle light
-          })()}
+          {/* Cerchio raggio */}
+          {filiale?.lat != null && (
+            <>
+              <Circle
+                center={[filiale.lat, filiale.lng]}
+                radius={data.raggioKm * 1000}
+                pathOptions={{
+                  color: '#DC0032',
+                  fillColor: '#DC0032',
+                  fillOpacity: 0.06,
+                  weight: 2,
+                  dashArray: '6 4',
+                }}
+              />
+              <RadiusFitter
+                center={[filiale.lat, filiale.lng]}
+                radiusM={data.raggioKm * 1000}
+              />
+            </>
+          )}
 
           {/* Filiale */}
-          {filiale && (
+          {filiale?.lat != null && (
             <CircleMarker
               center={[filiale.lat, filiale.lng]}
               radius={14}

@@ -45,10 +45,15 @@ const INIT_DATA = {
   clustering: false,
   depotTrips: false,
   depotVisitDuration: 15,
-  pesoMaxKg: 700,
-  volumeMaxM3: 8,
-  compartimentazione: false,
+  flotta: [{ modelloId: 'CAT005', quantita: 3 }],
+  pausaPranzo: false,
+  pausaPranzoDurata: 30,
+  pausaPranzoStart: '12:00',
+  pausaPranzoEnd: '14:00',
   durataFermata: 12,
+  durataFermataMode: 'fixed', // 'fixed' | 'ci'
+  durataFermataMin: 5,
+  durataFermataMax: 20,
   prioritaDefault: 'M',
 }
 
@@ -120,16 +125,16 @@ export default function ScenarioWizard({ existingScenario, onClose, onConfirm })
     setStep(s => s - 1)
   }
 
-  function handleConfirm() {
+  function handleConfirm(mode = 'api') {
     const errs = validate(step, data)
     if (errs.length) { setErrors(errs); return }
-    onConfirm(data)
+    onConfirm(data, mode)
   }
 
   const isLast = step === STEPS.length
 
   const stepComponents = {
-    1: <WizardStep1 data={data} onChange={updateData} />,
+    1: <WizardStep1 data={data} onChange={updateData} errors={errors} />,
     2: <WizardStep2 data={data} onChange={updateData} />,
     3: <WizardStep3 data={data} onChange={updateData} />,
     4: <WizardStep4 data={data} onChange={updateData} />,
@@ -194,12 +199,22 @@ export default function ScenarioWizard({ existingScenario, onClose, onConfirm })
               Passo {step} di {STEPS.length}
             </span>
             {isLast ? (
-              <button className="btn-primary" onClick={handleConfirm}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 6 }}>
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-                </svg>
-                Invia a OptimoRoute
-              </button>
+              <>
+                <button className="btn-secondary" onClick={() => handleConfirm('download')}
+                  title="Scarica i file da caricare manualmente su OptimoRoute">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 5 }}>
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  Scarica file
+                </button>
+                <button className="btn-primary" onClick={() => handleConfirm('api')}
+                  title="Invia direttamente a OptimoRoute via API">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 5 }}>
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                  Invia a OptimoRoute
+                </button>
+              </>
             ) : (
               <button className="btn-primary" onClick={goNext}>
                 Avanti →
