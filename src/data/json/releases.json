@@ -1,5 +1,23 @@
 [
   {
+    "version": "0.16.0",
+    "tag": "v0.16.0",
+    "date": "2026-04-06",
+    "type": "minor",
+    "title": "Wizard scenari redesign completo — flotta reale, mappe, validazione",
+    "highlights": [
+      "Step 1: filiale come scelta primaria, province come alternativa; modal filiali BRT con 200 sedi reali",
+      "Step 1: mappa PUDO con icone distinte locker/negozio; validazione rossa su campi obbligatori",
+      "Step 2: cerchio raggio grafico sulla mappa aggiornato in tempo reale; Periodo CI spostato da step 1",
+      "Step 3: icona tipo PUDO/locker, ricerca testuale e ordinamento lista",
+      "Step 4: flotta da anagrafica reale MODELLI_MEZZI; capacità vs fabbisogno con alert; durata fermata proporzionale al CI; pausa pranzo con durata e finestra temporale",
+      "Step 5: riepilogo aggiornato con tutti i nuovi parametri; box capacità verde/rosso; due azioni: Scarica file / Invia a OptimoRoute",
+      "Dettaglio giro: percorso visualizzato come linea rossa solida sulla mappa",
+      "z-index wizard alzato a 1100 per non sovrapporsi ai controlli Leaflet"
+    ],
+    "breaking": false
+  },
+  {
     "version": "0.15.0",
     "tag": "v0.15.0",
     "date": "2026-04-05",
