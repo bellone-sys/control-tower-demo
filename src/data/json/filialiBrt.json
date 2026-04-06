@@ -7,7 +7,9 @@
     "citta": "S.Giovanni Teatino",
     "provincia": "CH",
     "regione": "Abruzzo",
-    "telefono": "085440511"
+    "telefono": "085440511",
+    "lat": 42.38,
+    "lng": 14.16
   },
   {
     "id": "B002",
@@ -17,7 +19,9 @@
     "citta": "San Salvo",
     "provincia": "CH",
     "regione": "Abruzzo",
-    "telefono": "0873545703"
+    "telefono": "0873545703",
+    "lat": 42.04,
+    "lng": 14.73
   },
   {
     "id": "B003",
@@ -27,7 +31,9 @@
     "citta": "Monticchio",
     "provincia": "AQ",
     "regione": "Abruzzo",
-    "telefono": "0862441621"
+    "telefono": "0862441621",
+    "lat": 42.35,
+    "lng": 13.40
   },
   {
     "id": "B004",
@@ -37,7 +43,9 @@
     "citta": "Cepagatti",
     "provincia": "PE",
     "regione": "Abruzzo",
-    "telefono": "0859769411"
+    "telefono": "0859769411",
+    "lat": 42.37,
+    "lng": 13.99
   },
   {
     "id": "B005",
@@ -47,7 +55,9 @@
     "citta": "Mosciano Sant'Angelo",
     "provincia": "TE",
     "regione": "Abruzzo",
-    "telefono": "0858062350"
+    "telefono": "0858062350",
+    "lat": 42.69,
+    "lng": 13.89
   },
   {
     "id": "B006",
@@ -57,7 +67,9 @@
     "citta": "Colonnella",
     "provincia": "TE",
     "regione": "Abruzzo",
-    "telefono": "073565461"
+    "telefono": "073565461",
+    "lat": 42.87,
+    "lng": 13.85
   },
   {
     "id": "B007",
@@ -67,7 +79,9 @@
     "citta": "Matera",
     "provincia": "MT",
     "regione": "Basilicata",
-    "telefono": "0835339127"
+    "telefono": "0835339127",
+    "lat": 40.67,
+    "lng": 16.60
   },
   {
     "id": "B008",
@@ -77,7 +91,9 @@
     "citta": "Potenza",
     "provincia": "PZ",
     "regione": "Basilicata",
-    "telefono": "0971485674"
+    "telefono": "0971485674",
+    "lat": 40.64,
+    "lng": 15.80
   },
   {
     "id": "B009",
@@ -87,7 +103,9 @@
     "citta": "Marcellinara",
     "provincia": "CZ",
     "regione": "Calabria",
-    "telefono": "0961902611"
+    "telefono": "0961902611",
+    "lat": 38.90,
+    "lng": 16.47
   },
   {
     "id": "B010",
@@ -97,7 +115,9 @@
     "citta": "Rende",
     "provincia": "CS",
     "regione": "Calabria",
-    "telefono": "0984839602"
+    "telefono": "0984839602",
+    "lat": 39.33,
+    "lng": 16.18
   },
   {
     "id": "B011",
@@ -107,7 +127,9 @@
     "citta": "Castrovillari",
     "provincia": "CS",
     "regione": "Calabria",
-    "telefono": "098138293"
+    "telefono": "098138293",
+    "lat": 39.81,
+    "lng": 16.20
   },
   {
     "id": "B012",
@@ -117,7 +139,9 @@
     "citta": "Crotone",
     "provincia": "KR",
     "regione": "Calabria",
-    "telefono": null
+    "telefono": null,
+    "lat": 39.08,
+    "lng": 17.12
   },
   {
     "id": "B013",
@@ -127,7 +151,9 @@
     "citta": "Villa San Giovanni",
     "provincia": "RC",
     "regione": "Calabria",
-    "telefono": "0965372333"
+    "telefono": "0965372333",
+    "lat": 38.22,
+    "lng": 15.64
   },
   {
     "id": "B014",
@@ -137,7 +163,9 @@
     "citta": "Vibo Valentia",
     "provincia": "VV",
     "regione": "Calabria",
-    "telefono": "0963265556"
+    "telefono": "0963265556",
+    "lat": 38.68,
+    "lng": 16.10
   },
   {
     "id": "B015",
@@ -147,7 +175,9 @@
     "citta": "Santorelli",
     "provincia": "AV",
     "regione": "Campania",
-    "telefono": "0825627272"
+    "telefono": "0825627272",
+    "lat": 40.91,
+    "lng": 14.79
   },
   {
     "id": "B016",
@@ -157,7 +187,9 @@
     "citta": "Marcianise",
     "provincia": "CE",
     "regione": "Campania",
-    "telefono": "0823512611"
+    "telefono": "0823512611",
+    "lat": 41.03,
+    "lng": 14.29
   },
   {
     "id": "B017",
@@ -167,7 +199,9 @@
     "citta": "Marcianise",
     "provincia": "CE",
     "regione": "Campania",
-    "telefono": "0823512711"
+    "telefono": "0823512711",
+    "lat": 41.03,
+    "lng": 14.29
   },
   {
     "id": "B018",
@@ -177,7 +211,9 @@
     "citta": "Nola",
     "provincia": "NA",
     "regione": "Campania",
-    "telefono": "0815109353"
+    "telefono": "0815109353",
+    "lat": 40.93,
+    "lng": 14.52
   },
   {
     "id": "B019",
@@ -187,7 +223,9 @@
     "citta": "Casandrino",
     "provincia": "NA",
     "regione": "Campania",
-    "telefono": "0815054423"
+    "telefono": "0815054423",
+    "lat": 40.93,
+    "lng": 14.16
   },
   {
     "id": "B020",
@@ -197,7 +235,9 @@
     "citta": "Castellammare di Stabia",
     "provincia": "NA",
     "regione": "Campania",
-    "telefono": "0818018692"
+    "telefono": "0818018692",
+    "lat": 40.70,
+    "lng": 14.48
   },
   {
     "id": "B021",
@@ -207,7 +247,9 @@
     "citta": "Casandrino",
     "provincia": "NA",
     "regione": "Campania",
-    "telefono": "0813982411"
+    "telefono": "0813982411",
+    "lat": 40.93,
+    "lng": 14.16
   },
   {
     "id": "B022",
@@ -217,7 +259,9 @@
     "citta": "Casandrino",
     "provincia": "NA",
     "regione": "Campania",
-    "telefono": "0813982411"
+    "telefono": "0813982411",
+    "lat": 40.93,
+    "lng": 14.15
   },
   {
     "id": "B023",
@@ -227,7 +271,9 @@
     "citta": "Casandrino",
     "provincia": "NA",
     "regione": "Campania",
-    "telefono": null
+    "telefono": null,
+    "lat": 40.93,
+    "lng": 14.16
   },
   {
     "id": "B024",
@@ -237,7 +283,9 @@
     "citta": "Montecorvino Pugliano",
     "provincia": "SA",
     "regione": "Campania",
-    "telefono": "0828355350"
+    "telefono": "0828355350",
+    "lat": 40.67,
+    "lng": 14.98
   },
   {
     "id": "B025",
@@ -247,7 +295,9 @@
     "citta": "Atena Lucana",
     "provincia": "SA",
     "regione": "Campania",
-    "telefono": "0975511416"
+    "telefono": "0975511416",
+    "lat": 40.46,
+    "lng": 15.55
   },
   {
     "id": "B026",
@@ -257,7 +307,9 @@
     "citta": "Bologna",
     "provincia": "BO",
     "regione": "Emilia-Romagna",
-    "telefono": "0516032111"
+    "telefono": "0516032111",
+    "lat": 44.50,
+    "lng": 11.40
   },
   {
     "id": "B027",
@@ -267,7 +319,9 @@
     "citta": "Bentivoglio",
     "provincia": "BO",
     "regione": "Emilia-Romagna",
-    "telefono": "0516657011"
+    "telefono": "0516657011",
+    "lat": 44.59,
+    "lng": 11.42
   },
   {
     "id": "B028",
@@ -277,7 +331,9 @@
     "citta": "Imola",
     "provincia": "BO",
     "regione": "Emilia-Romagna",
-    "telefono": "0542643275"
+    "telefono": "0542643275",
+    "lat": 44.35,
+    "lng": 11.71
   },
   {
     "id": "B029",
@@ -287,7 +343,9 @@
     "citta": "Valsamoggia",
     "provincia": "BO",
     "regione": "Emilia-Romagna",
-    "telefono": "051739328"
+    "telefono": "051739328",
+    "lat": 44.46,
+    "lng": 11.10
   },
   {
     "id": "B030",
@@ -297,7 +355,9 @@
     "citta": "Bologna",
     "provincia": "BO",
     "regione": "Emilia-Romagna",
-    "telefono": null
+    "telefono": null,
+    "lat": 44.50,
+    "lng": 11.40
   },
   {
     "id": "B031",
@@ -307,7 +367,9 @@
     "citta": "Valsamoggia",
     "provincia": "BO",
     "regione": "Emilia-Romagna",
-    "telefono": null
+    "telefono": null,
+    "lat": 44.46,
+    "lng": 11.10
   },
   {
     "id": "B032",
@@ -317,7 +379,9 @@
     "citta": "Bologna",
     "provincia": "BO",
     "regione": "Emilia-Romagna",
-    "telefono": "0516032111"
+    "telefono": "0516032111",
+    "lat": 44.50,
+    "lng": 11.40
   },
   {
     "id": "B033",
@@ -327,7 +391,9 @@
     "citta": "Ferrara",
     "provincia": "FE",
     "regione": "Emilia-Romagna",
-    "telefono": "0532773628"
+    "telefono": "0532773628",
+    "lat": 44.84,
+    "lng": 11.62
   },
   {
     "id": "B034",
@@ -337,7 +403,9 @@
     "citta": "Forlì",
     "provincia": "FC",
     "regione": "Emilia-Romagna",
-    "telefono": "0543722235"
+    "telefono": "0543722235",
+    "lat": 44.22,
+    "lng": 12.04
   },
   {
     "id": "B035",
@@ -347,7 +415,9 @@
     "citta": "Gatteo",
     "provincia": "FC",
     "regione": "Emilia-Romagna",
-    "telefono": "0541804811"
+    "telefono": "0541804811",
+    "lat": 44.10,
+    "lng": 12.39
   },
   {
     "id": "B036",
@@ -357,7 +427,9 @@
     "citta": "Campogalliano",
     "provincia": "MO",
     "regione": "Emilia-Romagna",
-    "telefono": "059521511"
+    "telefono": "059521511",
+    "lat": 44.69,
+    "lng": 10.84
   },
   {
     "id": "B037",
@@ -367,7 +439,9 @@
     "citta": "Fontevivo",
     "provincia": "PR",
     "regione": "Emilia-Romagna",
-    "telefono": "0521679711"
+    "telefono": "0521679711",
+    "lat": 44.79,
+    "lng": 10.17
   },
   {
     "id": "B038",
@@ -377,7 +451,9 @@
     "citta": "Fontevivo",
     "provincia": "PR",
     "regione": "Emilia-Romagna",
-    "telefono": "0521364111"
+    "telefono": "0521364111",
+    "lat": 44.79,
+    "lng": 10.17
   },
   {
     "id": "B039",
@@ -387,7 +463,9 @@
     "citta": "Caorso",
     "provincia": "PC",
     "regione": "Emilia-Romagna",
-    "telefono": "0523590413"
+    "telefono": "0523590413",
+    "lat": 45.05,
+    "lng": 9.87
   },
   {
     "id": "B040",
@@ -397,7 +475,9 @@
     "citta": "Reggio Emilia",
     "provincia": "RE",
     "regione": "Emilia-Romagna",
-    "telefono": "0522944155"
+    "telefono": "0522944155",
+    "lat": 44.70,
+    "lng": 10.63
   },
   {
     "id": "B041",
@@ -407,7 +487,9 @@
     "citta": "Ravenna",
     "provincia": "RA",
     "regione": "Emilia-Romagna",
-    "telefono": "0544463408"
+    "telefono": "0544463408",
+    "lat": 44.42,
+    "lng": 12.20
   },
   {
     "id": "B042",
@@ -417,7 +499,9 @@
     "citta": "Faenza",
     "provincia": "RA",
     "regione": "Emilia-Romagna",
-    "telefono": "0546646054"
+    "telefono": "0546646054",
+    "lat": 44.29,
+    "lng": 11.88
   },
   {
     "id": "B043",
@@ -427,7 +511,9 @@
     "citta": "Cattolica",
     "provincia": "RN",
     "regione": "Emilia-Romagna",
-    "telefono": "0541955201"
+    "telefono": "0541955201",
+    "lat": 43.96,
+    "lng": 12.74
   },
   {
     "id": "B044",
@@ -437,7 +523,9 @@
     "citta": "Roveredo in Piano",
     "provincia": "PN",
     "regione": "Friuli-Venezia Giulia",
-    "telefono": "0434590200"
+    "telefono": "0434590200",
+    "lat": 45.97,
+    "lng": 12.62
   },
   {
     "id": "B045",
@@ -447,7 +535,9 @@
     "citta": "Trieste",
     "provincia": "TS",
     "regione": "Friuli-Venezia Giulia",
-    "telefono": "040280225"
+    "telefono": "040280225",
+    "lat": 45.65,
+    "lng": 13.77
   },
   {
     "id": "B046",
@@ -457,7 +547,9 @@
     "citta": "Duino-Aurisina",
     "provincia": "TS",
     "regione": "Friuli-Venezia Giulia",
-    "telefono": "0402024190"
+    "telefono": "0402024190",
+    "lat": 45.76,
+    "lng": 13.70
   },
   {
     "id": "B047",
@@ -467,7 +559,9 @@
     "citta": "Reana del Rojale",
     "provincia": "UD",
     "regione": "Friuli-Venezia Giulia",
-    "telefono": "0432850301"
+    "telefono": "0432850301",
+    "lat": 46.12,
+    "lng": 13.22
   },
   {
     "id": "B048",
@@ -477,7 +571,9 @@
     "citta": "Palmanova",
     "provincia": "UD",
     "regione": "Friuli-Venezia Giulia",
-    "telefono": "0432835711"
+    "telefono": "0432835711",
+    "lat": 45.91,
+    "lng": 13.31
   },
   {
     "id": "B049",
@@ -487,7 +583,9 @@
     "citta": "Ferentino",
     "provincia": "FR",
     "regione": "Lazio",
-    "telefono": "0775393420"
+    "telefono": "0775393420",
+    "lat": 41.69,
+    "lng": 13.25
   },
   {
     "id": "B050",
@@ -497,7 +595,9 @@
     "citta": "Cassino",
     "provincia": "FR",
     "regione": "Lazio",
-    "telefono": "0776300460"
+    "telefono": "0776300460",
+    "lat": 41.49,
+    "lng": 13.83
   },
   {
     "id": "B051",
@@ -507,7 +607,9 @@
     "citta": "Borgo San Michele",
     "provincia": "LT",
     "regione": "Lazio",
-    "telefono": "0773242212"
+    "telefono": "0773242212",
+    "lat": 41.46,
+    "lng": 12.87
   },
   {
     "id": "B052",
@@ -517,7 +619,9 @@
     "citta": "Roma",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "066591124"
+    "telefono": "066591124",
+    "lat": 41.90,
+    "lng": 12.41
   },
   {
     "id": "B053",
@@ -527,7 +631,9 @@
     "citta": "Fiumicino",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "07654581"
+    "telefono": "07654581",
+    "lat": 41.76,
+    "lng": 12.24
   },
   {
     "id": "B054",
@@ -537,7 +643,9 @@
     "citta": "Fiano Romano",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "07654581"
+    "telefono": "07654581",
+    "lat": 42.17,
+    "lng": 12.59
   },
   {
     "id": "B055",
@@ -547,7 +655,9 @@
     "citta": "Roma",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "062051370"
+    "telefono": "062051370",
+    "lat": 41.85,
+    "lng": 12.61
   },
   {
     "id": "B056",
@@ -557,7 +667,9 @@
     "citta": "Roma",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "0622759002"
+    "telefono": "0622759002",
+    "lat": 41.90,
+    "lng": 12.56
   },
   {
     "id": "B057",
@@ -567,7 +679,9 @@
     "citta": "Roma",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "06227371"
+    "telefono": "06227371",
+    "lat": 41.90,
+    "lng": 12.57
   },
   {
     "id": "B058",
@@ -577,7 +691,9 @@
     "citta": "Pomezia",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "0691603911"
+    "telefono": "0691603911",
+    "lat": 41.67,
+    "lng": 12.51
   },
   {
     "id": "B059",
@@ -587,7 +703,9 @@
     "citta": "Fiano Romano",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "0765455965"
+    "telefono": "0765455965",
+    "lat": 42.17,
+    "lng": 12.59
   },
   {
     "id": "B060",
@@ -597,7 +715,9 @@
     "citta": "Guidonia Montecelio",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "0622737311"
+    "telefono": "0622737311",
+    "lat": 41.99,
+    "lng": 12.72
   },
   {
     "id": "B061",
@@ -607,7 +727,9 @@
     "citta": "Guidonia Montecelio",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": null
+    "telefono": null,
+    "lat": 41.99,
+    "lng": 12.72
   },
   {
     "id": "B062",
@@ -617,7 +739,9 @@
     "citta": "Guidonia Montecelio",
     "provincia": "RM",
     "regione": "Lazio",
-    "telefono": "0622737411"
+    "telefono": "0622737411",
+    "lat": 41.99,
+    "lng": 12.72
   },
   {
     "id": "B063",
@@ -627,7 +751,9 @@
     "citta": "Viterbo",
     "provincia": "VT",
     "regione": "Lazio",
-    "telefono": "0761345323"
+    "telefono": "0761345323",
+    "lat": 42.42,
+    "lng": 12.10
   },
   {
     "id": "B064",
@@ -637,7 +763,9 @@
     "citta": "Genova",
     "provincia": "GE",
     "regione": "Liguria",
-    "telefono": "0107415064"
+    "telefono": "0107415064",
+    "lat": 44.44,
+    "lng": 8.89
   },
   {
     "id": "B065",
@@ -647,7 +775,9 @@
     "citta": "Genova",
     "provincia": "GE",
     "regione": "Liguria",
-    "telefono": "01072201"
+    "telefono": "01072201",
+    "lat": 44.42,
+    "lng": 8.87
   },
   {
     "id": "B066",
@@ -657,7 +787,9 @@
     "citta": "Serra Riccò",
     "provincia": "GE",
     "regione": "Liguria",
-    "telefono": "01072201"
+    "telefono": "01072201",
+    "lat": 44.48,
+    "lng": 8.93
   },
   {
     "id": "B067",
@@ -667,7 +799,9 @@
     "citta": "Imperia",
     "provincia": "IM",
     "regione": "Liguria",
-    "telefono": "0183299770"
+    "telefono": "0183299770",
+    "lat": 43.89,
+    "lng": 8.03
   },
   {
     "id": "B068",
@@ -677,7 +811,9 @@
     "citta": "Bolano",
     "provincia": "SP",
     "regione": "Liguria",
-    "telefono": "0187939710"
+    "telefono": "0187939710",
+    "lat": 44.11,
+    "lng": 9.84
   },
   {
     "id": "B069",
@@ -687,7 +823,9 @@
     "citta": "Quiliano-Valleggia",
     "provincia": "SV",
     "regione": "Liguria",
-    "telefono": "019886100"
+    "telefono": "019886100",
+    "lat": 44.29,
+    "lng": 8.40
   },
   {
     "id": "B070",
@@ -697,7 +835,9 @@
     "citta": "Grassobbio",
     "provincia": "BG",
     "regione": "Lombardia",
-    "telefono": "035335400"
+    "telefono": "035335400",
+    "lat": 45.66,
+    "lng": 9.73
   },
   {
     "id": "B071",
@@ -707,7 +847,9 @@
     "citta": "Stezzano",
     "provincia": "BG",
     "regione": "Lombardia",
-    "telefono": "0354824090"
+    "telefono": "0354824090",
+    "lat": 45.64,
+    "lng": 9.65
   },
   {
     "id": "B072",
@@ -717,7 +859,9 @@
     "citta": "Stezzano",
     "provincia": "BG",
     "regione": "Lombardia",
-    "telefono": "0354824090"
+    "telefono": "0354824090",
+    "lat": 45.64,
+    "lng": 9.65
   },
   {
     "id": "B073",
@@ -727,7 +871,9 @@
     "citta": "Cazzago San Martino",
     "provincia": "BS",
     "regione": "Lombardia",
-    "telefono": "0307258211"
+    "telefono": "0307258211",
+    "lat": 45.59,
+    "lng": 9.99
   },
   {
     "id": "B074",
@@ -737,7 +883,9 @@
     "citta": "Desenzano del Garda",
     "provincia": "BS",
     "regione": "Lombardia",
-    "telefono": "0309127287"
+    "telefono": "0309127287",
+    "lat": 45.47,
+    "lng": 10.54
   },
   {
     "id": "B075",
@@ -747,7 +895,9 @@
     "citta": "Cazzago San Martino",
     "provincia": "BS",
     "regione": "Lombardia",
-    "telefono": "0307258211"
+    "telefono": "0307258211",
+    "lat": 45.59,
+    "lng": 9.99
   },
   {
     "id": "B076",
@@ -757,7 +907,9 @@
     "citta": "Brescia",
     "provincia": "BS",
     "regione": "Lombardia",
-    "telefono": "0303581792"
+    "telefono": "0303581792",
+    "lat": 45.54,
+    "lng": 10.21
   },
   {
     "id": "B077",
@@ -767,7 +919,9 @@
     "citta": "Lurate Caccivio",
     "provincia": "CO",
     "regione": "Lombardia",
-    "telefono": "031390814"
+    "telefono": "031390814",
+    "lat": 45.79,
+    "lng": 9.00
   },
   {
     "id": "B078",
@@ -777,7 +931,9 @@
     "citta": "Cremona",
     "provincia": "CR",
     "regione": "Lombardia",
-    "telefono": "0372463684"
+    "telefono": "0372463684",
+    "lat": 45.13,
+    "lng": 10.02
   },
   {
     "id": "B079",
@@ -787,7 +943,9 @@
     "citta": "Oggiono",
     "provincia": "LC",
     "regione": "Lombardia",
-    "telefono": "0341260109"
+    "telefono": "0341260109",
+    "lat": 45.78,
+    "lng": 9.36
   },
   {
     "id": "B080",
@@ -797,7 +955,9 @@
     "citta": "Cornegliano Laudense",
     "provincia": "LO",
     "regione": "Lombardia",
-    "telefono": "0371483355"
+    "telefono": "0371483355",
+    "lat": 45.24,
+    "lng": 9.50
   },
   {
     "id": "B081",
@@ -807,7 +967,9 @@
     "citta": "Bigarello",
     "provincia": "MN",
     "regione": "Lombardia",
-    "telefono": "0376457057"
+    "telefono": "0376457057",
+    "lat": 45.15,
+    "lng": 10.83
   },
   {
     "id": "B082",
@@ -817,7 +979,9 @@
     "citta": "Milano",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "02393381"
+    "telefono": "02393381",
+    "lat": 45.50,
+    "lng": 9.16
   },
   {
     "id": "B083",
@@ -827,7 +991,9 @@
     "citta": "Sedriano",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "02903141"
+    "telefono": "02903141",
+    "lat": 45.48,
+    "lng": 8.97
   },
   {
     "id": "B084",
@@ -837,7 +1003,9 @@
     "citta": "Milano",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "0233912534"
+    "telefono": "0233912534",
+    "lat": 45.50,
+    "lng": 9.13
   },
   {
     "id": "B085",
@@ -847,7 +1015,9 @@
     "citta": "Cinisello Balsamo",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "02611121"
+    "telefono": "02611121",
+    "lat": 45.56,
+    "lng": 9.22
   },
   {
     "id": "B086",
@@ -857,7 +1027,9 @@
     "citta": "Segrate",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "022130331"
+    "telefono": "022130331",
+    "lat": 45.49,
+    "lng": 9.30
   },
   {
     "id": "B087",
@@ -867,7 +1039,9 @@
     "citta": "Albairate",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "0294260811"
+    "telefono": "0294260811",
+    "lat": 45.42,
+    "lng": 8.93
   },
   {
     "id": "B088",
@@ -877,7 +1051,9 @@
     "citta": "Milano",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "02393381"
+    "telefono": "02393381",
+    "lat": 45.50,
+    "lng": 9.16
   },
   {
     "id": "B089",
@@ -887,7 +1063,9 @@
     "citta": "Sedriano",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "02903141"
+    "telefono": "02903141",
+    "lat": 45.48,
+    "lng": 8.97
   },
   {
     "id": "B090",
@@ -897,7 +1075,9 @@
     "citta": "Liscate",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "02952531"
+    "telefono": "02952531",
+    "lat": 45.46,
+    "lng": 9.40
   },
   {
     "id": "B091",
@@ -907,7 +1087,9 @@
     "citta": "Milano",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "025087411"
+    "telefono": "025087411",
+    "lat": 45.46,
+    "lng": 9.22
   },
   {
     "id": "B092",
@@ -917,7 +1099,9 @@
     "citta": "Albairate",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": null
+    "telefono": null,
+    "lat": 45.42,
+    "lng": 8.93
   },
   {
     "id": "B093",
@@ -927,7 +1111,9 @@
     "citta": "Sedriano",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": null
+    "telefono": null,
+    "lat": 45.48,
+    "lng": 8.97
   },
   {
     "id": "B094",
@@ -937,7 +1123,9 @@
     "citta": "Milano",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "02393381"
+    "telefono": "02393381",
+    "lat": 45.50,
+    "lng": 9.16
   },
   {
     "id": "B095",
@@ -947,7 +1135,9 @@
     "citta": "Milano",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "02393381"
+    "telefono": "02393381",
+    "lat": 45.50,
+    "lng": 9.17
   },
   {
     "id": "B096",
@@ -957,7 +1147,9 @@
     "citta": "Liscate",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "02952531"
+    "telefono": "02952531",
+    "lat": 45.46,
+    "lng": 9.40
   },
   {
     "id": "B097",
@@ -967,7 +1159,9 @@
     "citta": "Pieve Emanuele",
     "provincia": "MI",
     "regione": "Lombardia",
-    "telefono": "0290405211"
+    "telefono": "0290405211",
+    "lat": 45.35,
+    "lng": 9.19
   },
   {
     "id": "B098",
@@ -977,7 +1171,9 @@
     "citta": "Landriano",
     "provincia": "PV",
     "regione": "Lombardia",
-    "telefono": "0250871"
+    "telefono": "0250871",
+    "lat": 45.31,
+    "lng": 9.26
   },
   {
     "id": "B099",
@@ -987,7 +1183,9 @@
     "citta": "Casei Gerola",
     "provincia": "PV",
     "regione": "Lombardia",
-    "telefono": "038361660"
+    "telefono": "038361660",
+    "lat": 45.00,
+    "lng": 8.93
   },
   {
     "id": "B100",
@@ -997,7 +1195,9 @@
     "citta": "Landriano",
     "provincia": "PV",
     "regione": "Lombardia",
-    "telefono": "0382659111"
+    "telefono": "0382659111",
+    "lat": 45.31,
+    "lng": 9.26
   },
   {
     "id": "B101",
@@ -1007,7 +1207,9 @@
     "citta": "Buglio in Monte",
     "provincia": "SO",
     "regione": "Lombardia",
-    "telefono": "0342493867"
+    "telefono": "0342493867",
+    "lat": 46.22,
+    "lng": 9.71
   },
   {
     "id": "B102",
@@ -1017,7 +1219,9 @@
     "citta": "Cedrasco",
     "provincia": "SO",
     "regione": "Lombardia",
-    "telefono": "0342493867"
+    "telefono": "0342493867",
+    "lat": 46.17,
+    "lng": 9.87
   },
   {
     "id": "B103",
@@ -1027,7 +1231,9 @@
     "citta": "Gemonio",
     "provincia": "VA",
     "regione": "Lombardia",
-    "telefono": "0332610504"
+    "telefono": "0332610504",
+    "lat": 45.87,
+    "lng": 8.72
   },
   {
     "id": "B104",
@@ -1037,7 +1243,9 @@
     "citta": "Origgio",
     "provincia": "VA",
     "regione": "Lombardia",
-    "telefono": "0296956011"
+    "telefono": "0296956011",
+    "lat": 45.60,
+    "lng": 9.01
   },
   {
     "id": "B105",
@@ -1047,7 +1255,9 @@
     "citta": "Concorezzo",
     "provincia": "MB",
     "regione": "Lombardia",
-    "telefono": "0295354260"
+    "telefono": "0295354260",
+    "lat": 45.59,
+    "lng": 9.34
   },
   {
     "id": "B106",
@@ -1057,7 +1267,9 @@
     "citta": "Osimo",
     "provincia": "AN",
     "regione": "Marche",
-    "telefono": "0717211811"
+    "telefono": "0717211811",
+    "lat": 43.48,
+    "lng": 13.48
   },
   {
     "id": "B107",
@@ -1067,7 +1279,9 @@
     "citta": "Ancona",
     "provincia": "AN",
     "regione": "Marche",
-    "telefono": "0712861797"
+    "telefono": "0712861797",
+    "lat": 43.62,
+    "lng": 13.50
   },
   {
     "id": "B108",
@@ -1077,7 +1291,9 @@
     "citta": "Jesi",
     "provincia": "AN",
     "regione": "Marche",
-    "telefono": "0731215212"
+    "telefono": "0731215212",
+    "lat": 43.52,
+    "lng": 13.24
   },
   {
     "id": "B109",
@@ -1087,7 +1303,9 @@
     "citta": "Civitanova Marche",
     "provincia": "MC",
     "regione": "Marche",
-    "telefono": "0733898001"
+    "telefono": "0733898001",
+    "lat": 43.30,
+    "lng": 13.73
   },
   {
     "id": "B110",
@@ -1097,7 +1315,9 @@
     "citta": "Vallefoglia",
     "provincia": "PU",
     "regione": "Marche",
-    "telefono": "0721855736"
+    "telefono": "0721855736",
+    "lat": 43.86,
+    "lng": 12.74
   },
   {
     "id": "B111",
@@ -1107,7 +1327,9 @@
     "citta": "Ripalimosani",
     "provincia": "CB",
     "regione": "Molise",
-    "telefono": "0874390201"
+    "telefono": "0874390201",
+    "lat": 41.58,
+    "lng": 14.64
   },
   {
     "id": "B112",
@@ -1117,7 +1339,9 @@
     "citta": "Casal Cermelli",
     "provincia": "AL",
     "regione": "Piemonte",
-    "telefono": "0131279171"
+    "telefono": "0131279171",
+    "lat": 44.88,
+    "lng": 8.60
   },
   {
     "id": "B113",
@@ -1127,7 +1351,9 @@
     "citta": "Castell'Alfero",
     "provincia": "AT",
     "regione": "Piemonte",
-    "telefono": "0141405765"
+    "telefono": "0141405765",
+    "lat": 44.97,
+    "lng": 8.24
   },
   {
     "id": "B114",
@@ -1137,7 +1363,9 @@
     "citta": "Sandigliano",
     "provincia": "BI",
     "regione": "Piemonte",
-    "telefono": "015671821"
+    "telefono": "015671821",
+    "lat": 45.54,
+    "lng": 8.06
   },
   {
     "id": "B115",
@@ -1147,7 +1375,9 @@
     "citta": "Bra",
     "provincia": "CN",
     "regione": "Piemonte",
-    "telefono": "0172430005"
+    "telefono": "0172430005",
+    "lat": 44.70,
+    "lng": 7.86
   },
   {
     "id": "B116",
@@ -1157,7 +1387,9 @@
     "citta": "Sant'Albano Stura",
     "provincia": "CN",
     "regione": "Piemonte",
-    "telefono": "0172670028"
+    "telefono": "0172670028",
+    "lat": 44.39,
+    "lng": 7.59
   },
   {
     "id": "B117",
@@ -1167,7 +1399,9 @@
     "citta": "Fontaneto d'Agogna",
     "provincia": "NO",
     "regione": "Piemonte",
-    "telefono": "0322846581"
+    "telefono": "0322846581",
+    "lat": 45.65,
+    "lng": 8.45
   },
   {
     "id": "B118",
@@ -1177,7 +1411,9 @@
     "citta": "S. Pietro Mosezzo",
     "provincia": "NO",
     "regione": "Piemonte",
-    "telefono": "0321530700"
+    "telefono": "0321530700",
+    "lat": 45.44,
+    "lng": 8.57
   },
   {
     "id": "B119",
@@ -1187,7 +1423,9 @@
     "citta": "Rivalta",
     "provincia": "TO",
     "regione": "Piemonte",
-    "telefono": "0113974111"
+    "telefono": "0113974111",
+    "lat": 44.97,
+    "lng": 7.52
   },
   {
     "id": "B120",
@@ -1197,7 +1435,9 @@
     "citta": "San Mauro Torinese",
     "provincia": "TO",
     "regione": "Piemonte",
-    "telefono": "0112740080"
+    "telefono": "0112740080",
+    "lat": 45.10,
+    "lng": 7.79
   },
   {
     "id": "B121",
@@ -1207,7 +1447,9 @@
     "citta": "Scarmagno",
     "provincia": "TO",
     "regione": "Piemonte",
-    "telefono": "0125637778"
+    "telefono": "0125637778",
+    "lat": 45.47,
+    "lng": 7.87
   },
   {
     "id": "B122",
@@ -1217,7 +1459,9 @@
     "citta": "Grugliasco",
     "provincia": "TO",
     "regione": "Piemonte",
-    "telefono": "0113484811"
+    "telefono": "0113484811",
+    "lat": 45.05,
+    "lng": 7.57
   },
   {
     "id": "B123",
@@ -1227,7 +1471,9 @@
     "citta": "Orbassano",
     "provincia": "TO",
     "regione": "Piemonte",
-    "telefono": "0113273093"
+    "telefono": "0113273093",
+    "lat": 44.98,
+    "lng": 7.54
   },
   {
     "id": "B124",
@@ -1237,7 +1483,9 @@
     "citta": "Trofarello",
     "provincia": "TO",
     "regione": "Piemonte",
-    "telefono": "0116481271"
+    "telefono": "0116481271",
+    "lat": 44.98,
+    "lng": 7.73
   },
   {
     "id": "B125",
@@ -1247,7 +1495,9 @@
     "citta": "Rivoli",
     "provincia": "TO",
     "regione": "Piemonte",
-    "telefono": "0113974111"
+    "telefono": "0113974111",
+    "lat": 45.07,
+    "lng": 7.52
   },
   {
     "id": "B126",
@@ -1257,7 +1507,9 @@
     "citta": "Settimo Torinese",
     "provincia": "TO",
     "regione": "Piemonte",
-    "telefono": "0118014811"
+    "telefono": "0118014811",
+    "lat": 45.14,
+    "lng": 7.77
   },
   {
     "id": "B127",
@@ -1267,7 +1519,9 @@
     "citta": "Rivoli",
     "provincia": "TO",
     "regione": "Piemonte",
-    "telefono": null
+    "telefono": null,
+    "lat": 45.07,
+    "lng": 7.52
   },
   {
     "id": "B128",
@@ -1277,7 +1531,9 @@
     "citta": "Verbania",
     "provincia": "VB",
     "regione": "Piemonte",
-    "telefono": "0323586541"
+    "telefono": "0323586541",
+    "lat": 45.93,
+    "lng": 8.42
   },
   {
     "id": "B129",
@@ -1287,7 +1543,9 @@
     "citta": "Vercelli",
     "provincia": "VC",
     "regione": "Piemonte",
-    "telefono": "0161394000"
+    "telefono": "0161394000",
+    "lat": 45.33,
+    "lng": 8.42
   },
   {
     "id": "B130",
@@ -1297,7 +1555,9 @@
     "citta": "Bari",
     "provincia": "BA",
     "regione": "Puglia",
-    "telefono": "0805380011"
+    "telefono": "0805380011",
+    "lat": 41.13,
+    "lng": 16.87
   },
   {
     "id": "B131",
@@ -1307,7 +1567,9 @@
     "citta": "Modugno",
     "provincia": "BA",
     "regione": "Puglia",
-    "telefono": "0805834111"
+    "telefono": "0805834111",
+    "lat": 41.10,
+    "lng": 16.78
   },
   {
     "id": "B132",
@@ -1317,7 +1579,9 @@
     "citta": "Brindisi",
     "provincia": "BR",
     "regione": "Puglia",
-    "telefono": "0831571549"
+    "telefono": "0831571549",
+    "lat": 40.63,
+    "lng": 17.94
   },
   {
     "id": "B133",
@@ -1327,7 +1591,9 @@
     "citta": "Borgo Cervaro",
     "provincia": "FG",
     "regione": "Puglia",
-    "telefono": "0881630788"
+    "telefono": "0881630788",
+    "lat": 41.44,
+    "lng": 15.55
   },
   {
     "id": "B134",
@@ -1337,7 +1603,9 @@
     "citta": "Lecce",
     "provincia": "LE",
     "regione": "Puglia",
-    "telefono": "0832331444"
+    "telefono": "0832331444",
+    "lat": 40.35,
+    "lng": 18.17
   },
   {
     "id": "B135",
@@ -1347,7 +1615,9 @@
     "citta": "Melpignano",
     "provincia": "LE",
     "regione": "Puglia",
-    "telefono": "0836311859"
+    "telefono": "0836311859",
+    "lat": 40.19,
+    "lng": 18.22
   },
   {
     "id": "B136",
@@ -1357,7 +1627,9 @@
     "citta": "Taranto",
     "provincia": "TA",
     "regione": "Puglia",
-    "telefono": "0994712412"
+    "telefono": "0994712412",
+    "lat": 40.48,
+    "lng": 17.24
   },
   {
     "id": "B137",
@@ -1367,7 +1639,9 @@
     "citta": "Trani",
     "provincia": "BT",
     "regione": "Puglia",
-    "telefono": "0883586916"
+    "telefono": "0883586916",
+    "lat": 41.27,
+    "lng": 16.42
   },
   {
     "id": "B138",
@@ -1377,7 +1651,9 @@
     "citta": "Assemini",
     "provincia": "CA",
     "regione": "Sardegna",
-    "telefono": "0702109111"
+    "telefono": "0702109111",
+    "lat": 39.28,
+    "lng": 9.00
   },
   {
     "id": "B139",
@@ -1387,7 +1663,9 @@
     "citta": "Cagliari",
     "provincia": "CA",
     "regione": "Sardegna",
-    "telefono": "0702109111"
+    "telefono": "0702109111",
+    "lat": 39.22,
+    "lng": 9.11
   },
   {
     "id": "B140",
@@ -1397,7 +1675,9 @@
     "citta": "S.Giusta",
     "provincia": "OR",
     "regione": "Sardegna",
-    "telefono": "0783352033"
+    "telefono": "0783352033",
+    "lat": 39.89,
+    "lng": 8.64
   },
   {
     "id": "B141",
@@ -1407,7 +1687,9 @@
     "citta": "Porto Torres",
     "provincia": "SS",
     "regione": "Sardegna",
-    "telefono": "079516212"
+    "telefono": "079516212",
+    "lat": 40.84,
+    "lng": 8.40
   },
   {
     "id": "B142",
@@ -1417,7 +1699,9 @@
     "citta": "Olbia",
     "provincia": "OT",
     "regione": "Sardegna",
-    "telefono": "078954181"
+    "telefono": "078954181",
+    "lat": 40.92,
+    "lng": 9.50
   },
   {
     "id": "B143",
@@ -1427,7 +1711,9 @@
     "citta": "Elmas",
     "provincia": "SU",
     "regione": "Sardegna",
-    "telefono": "0702110430"
+    "telefono": "0702110430",
+    "lat": 39.27,
+    "lng": 9.05
   },
   {
     "id": "B144",
@@ -1437,7 +1723,9 @@
     "citta": "Aragona",
     "provincia": "AG",
     "regione": "Sicilia",
-    "telefono": "0922441936"
+    "telefono": "0922441936",
+    "lat": 37.40,
+    "lng": 13.62
   },
   {
     "id": "B145",
@@ -1447,7 +1735,9 @@
     "citta": "Caltanissetta",
     "provincia": "CL",
     "regione": "Sicilia",
-    "telefono": "0934566283"
+    "telefono": "0934566283",
+    "lat": 37.49,
+    "lng": 14.06
   },
   {
     "id": "B146",
@@ -1457,7 +1747,9 @@
     "citta": "Piano Tavola Belpasso",
     "provincia": "CT",
     "regione": "Sicilia",
-    "telefono": "0957561111"
+    "telefono": "0957561111",
+    "lat": 37.58,
+    "lng": 14.98
   },
   {
     "id": "B147",
@@ -1467,7 +1759,9 @@
     "citta": "Camporotondo Etneo",
     "provincia": "CT",
     "regione": "Sicilia",
-    "telefono": "0957561111"
+    "telefono": "0957561111",
+    "lat": 37.55,
+    "lng": 15.01
   },
   {
     "id": "B148",
@@ -1477,7 +1771,9 @@
     "citta": "S.Anna",
     "provincia": "ME",
     "regione": "Sicilia",
-    "telefono": "090639877"
+    "telefono": "090639877",
+    "lat": 38.18,
+    "lng": 15.56
   },
   {
     "id": "B149",
@@ -1487,7 +1783,9 @@
     "citta": "Carini",
     "provincia": "PA",
     "regione": "Sicilia",
-    "telefono": "0916604411"
+    "telefono": "0916604411",
+    "lat": 38.13,
+    "lng": 13.18
   },
   {
     "id": "B150",
@@ -1497,7 +1795,9 @@
     "citta": "Palermo",
     "provincia": "PA",
     "regione": "Sicilia",
-    "telefono": "0918668343"
+    "telefono": "0918668343",
+    "lat": 38.10,
+    "lng": 13.34
   },
   {
     "id": "B151",
@@ -1507,7 +1807,9 @@
     "citta": "Contrada Majorana",
     "provincia": "RG",
     "regione": "Sicilia",
-    "telefono": "0932256554"
+    "telefono": "0932256554",
+    "lat": 36.93,
+    "lng": 14.73
   },
   {
     "id": "B152",
@@ -1517,7 +1819,9 @@
     "citta": "Siracusa",
     "provincia": "SR",
     "regione": "Sicilia",
-    "telefono": "0931492298"
+    "telefono": "0931492298",
+    "lat": 37.08,
+    "lng": 15.29
   },
   {
     "id": "B153",
@@ -1527,7 +1831,9 @@
     "citta": "Marsala",
     "provincia": "TP",
     "regione": "Sicilia",
-    "telefono": "0923733041"
+    "telefono": "0923733041",
+    "lat": 37.80,
+    "lng": 12.43
   },
   {
     "id": "B154",
@@ -1537,7 +1843,9 @@
     "citta": "Civitella Val di Chiana",
     "provincia": "AR",
     "regione": "Toscana",
-    "telefono": "0575410140"
+    "telefono": "0575410140",
+    "lat": 43.39,
+    "lng": 11.81
   },
   {
     "id": "B155",
@@ -1547,7 +1855,9 @@
     "citta": "Terranuova Bracciolini",
     "provincia": "AR",
     "regione": "Toscana",
-    "telefono": "0559735111"
+    "telefono": "0559735111",
+    "lat": 43.55,
+    "lng": 11.58
   },
   {
     "id": "B156",
@@ -1557,7 +1867,9 @@
     "citta": "Terranuova Bracciolini",
     "provincia": "AR",
     "regione": "Toscana",
-    "telefono": null
+    "telefono": null,
+    "lat": 43.55,
+    "lng": 11.58
   },
   {
     "id": "B157",
@@ -1567,7 +1879,9 @@
     "citta": "Campi Bisenzio",
     "provincia": "FI",
     "regione": "Toscana",
-    "telefono": "05588381"
+    "telefono": "05588381",
+    "lat": 43.85,
+    "lng": 11.10
   },
   {
     "id": "B158",
@@ -1577,7 +1891,9 @@
     "citta": "Empoli",
     "provincia": "FI",
     "regione": "Toscana",
-    "telefono": "0571931960"
+    "telefono": "0571931960",
+    "lat": 43.72,
+    "lng": 10.95
   },
   {
     "id": "B159",
@@ -1587,7 +1903,9 @@
     "citta": "Sesto Fiorentino",
     "provincia": "FI",
     "regione": "Toscana",
-    "telefono": "05530950"
+    "telefono": "05530950",
+    "lat": 43.83,
+    "lng": 11.19
   },
   {
     "id": "B160",
@@ -1597,7 +1915,9 @@
     "citta": "Grosseto",
     "provincia": "GR",
     "regione": "Toscana",
-    "telefono": "0564467940"
+    "telefono": "0564467940",
+    "lat": 42.76,
+    "lng": 11.11
   },
   {
     "id": "B161",
@@ -1607,7 +1927,9 @@
     "citta": "Piombino",
     "provincia": "LI",
     "regione": "Toscana",
-    "telefono": "0565276670"
+    "telefono": "0565276670",
+    "lat": 42.93,
+    "lng": 10.52
   },
   {
     "id": "B162",
@@ -1617,7 +1939,9 @@
     "citta": "Collesalvetti",
     "provincia": "LI",
     "regione": "Toscana",
-    "telefono": "050647111"
+    "telefono": "050647111",
+    "lat": 43.58,
+    "lng": 10.47
   },
   {
     "id": "B163",
@@ -1627,7 +1951,9 @@
     "citta": "Sorbano del Giudice",
     "provincia": "LU",
     "regione": "Toscana",
-    "telefono": "0583583474"
+    "telefono": "0583583474",
+    "lat": 43.82,
+    "lng": 10.48
   },
   {
     "id": "B164",
@@ -1637,7 +1963,9 @@
     "citta": "Madonna dell'Acqua",
     "provincia": "PI",
     "regione": "Toscana",
-    "telefono": "050890739"
+    "telefono": "050890739",
+    "lat": 43.75,
+    "lng": 10.36
   },
   {
     "id": "B165",
@@ -1647,7 +1975,9 @@
     "citta": "Crespina",
     "provincia": "PI",
     "regione": "Toscana",
-    "telefono": "050647111"
+    "telefono": "050647111",
+    "lat": 43.63,
+    "lng": 10.49
   },
   {
     "id": "B166",
@@ -1657,7 +1987,9 @@
     "citta": "Pistoia",
     "provincia": "PT",
     "regione": "Toscana",
-    "telefono": "0573935711"
+    "telefono": "0573935711",
+    "lat": 43.93,
+    "lng": 10.90
   },
   {
     "id": "B167",
@@ -1667,7 +1999,9 @@
     "citta": "Prato",
     "provincia": "PO",
     "regione": "Toscana",
-    "telefono": "0574470450"
+    "telefono": "0574470450",
+    "lat": 43.88,
+    "lng": 11.10
   },
   {
     "id": "B168",
@@ -1677,7 +2011,9 @@
     "citta": "Prato",
     "provincia": "PO",
     "regione": "Toscana",
-    "telefono": "0574584151"
+    "telefono": "0574584151",
+    "lat": 43.88,
+    "lng": 11.10
   },
   {
     "id": "B169",
@@ -1687,7 +2023,9 @@
     "citta": "Badesse di Monteriggioni",
     "provincia": "SI",
     "regione": "Toscana",
-    "telefono": "0577309006"
+    "telefono": "0577309006",
+    "lat": 43.38,
+    "lng": 11.17
   },
   {
     "id": "B170",
@@ -1697,7 +2035,9 @@
     "citta": "Merano",
     "provincia": "BZ",
     "regione": "Trentino-Alto Adige",
-    "telefono": "0473550185"
+    "telefono": "0473550185",
+    "lat": 46.67,
+    "lng": 11.16
   },
   {
     "id": "B171",
@@ -1707,7 +2047,9 @@
     "citta": "Varna",
     "provincia": "BZ",
     "regione": "Trentino-Alto Adige",
-    "telefono": "0472200921"
+    "telefono": "0472200921",
+    "lat": 46.72,
+    "lng": 11.65
   },
   {
     "id": "B172",
@@ -1717,7 +2059,9 @@
     "citta": "Bolzano",
     "provincia": "BZ",
     "regione": "Trentino-Alto Adige",
-    "telefono": "0471502746"
+    "telefono": "0471502746",
+    "lat": 46.50,
+    "lng": 11.36
   },
   {
     "id": "B173",
@@ -1727,7 +2071,9 @@
     "citta": "Trento",
     "provincia": "TN",
     "regione": "Trentino-Alto Adige",
-    "telefono": "0461961070"
+    "telefono": "0461961070",
+    "lat": 46.07,
+    "lng": 11.12
   },
   {
     "id": "B174",
@@ -1737,7 +2083,9 @@
     "citta": "Rovereto",
     "provincia": "TN",
     "regione": "Trentino-Alto Adige",
-    "telefono": "0464481511"
+    "telefono": "0464481511",
+    "lat": 45.89,
+    "lng": 11.04
   },
   {
     "id": "B175",
@@ -1747,7 +2095,9 @@
     "citta": "Ponte San Giovanni",
     "provincia": "PG",
     "regione": "Umbria",
-    "telefono": "0755978611"
+    "telefono": "0755978611",
+    "lat": 43.10,
+    "lng": 12.40
   },
   {
     "id": "B176",
@@ -1757,7 +2107,9 @@
     "citta": "Bevagna",
     "provincia": "PG",
     "regione": "Umbria",
-    "telefono": "0742360537"
+    "telefono": "0742360537",
+    "lat": 42.93,
+    "lng": 12.60
   },
   {
     "id": "B177",
@@ -1767,7 +2119,9 @@
     "citta": "San Giustino Selci",
     "provincia": "PG",
     "regione": "Umbria",
-    "telefono": "0758583985"
+    "telefono": "0758583985",
+    "lat": 43.47,
+    "lng": 12.23
   },
   {
     "id": "B178",
@@ -1777,7 +2131,9 @@
     "citta": "Narni Stazione",
     "provincia": "TR",
     "regione": "Umbria",
-    "telefono": "0744751609"
+    "telefono": "0744751609",
+    "lat": 42.53,
+    "lng": 12.51
   },
   {
     "id": "B179",
@@ -1787,7 +2143,9 @@
     "citta": "Pollein",
     "provincia": "AO",
     "regione": "Valle d'Aosta",
-    "telefono": "0165361090"
+    "telefono": "0165361090",
+    "lat": 45.72,
+    "lng": 7.36
   },
   {
     "id": "B180",
@@ -1797,7 +2155,9 @@
     "citta": "Belluno",
     "provincia": "BL",
     "regione": "Veneto",
-    "telefono": "0437927533"
+    "telefono": "0437927533",
+    "lat": 46.14,
+    "lng": 12.22
   },
   {
     "id": "B181",
@@ -1807,7 +2167,9 @@
     "citta": "Noventa Padovana",
     "provincia": "PD",
     "regione": "Veneto",
-    "telefono": "0497808820"
+    "telefono": "0497808820",
+    "lat": 45.42,
+    "lng": 11.92
   },
   {
     "id": "B182",
@@ -1817,7 +2179,9 @@
     "citta": "Padova",
     "provincia": "PD",
     "regione": "Veneto",
-    "telefono": "0498287811"
+    "telefono": "0498287811",
+    "lat": 45.43,
+    "lng": 11.87
   },
   {
     "id": "B183",
@@ -1827,7 +2191,9 @@
     "citta": "Padova",
     "provincia": "PD",
     "regione": "Veneto",
-    "telefono": "0497621111"
+    "telefono": "0497621111",
+    "lat": 45.43,
+    "lng": 11.87
   },
   {
     "id": "B184",
@@ -1837,7 +2203,9 @@
     "citta": "Rovigo",
     "provincia": "RO",
     "regione": "Veneto",
-    "telefono": "0425474457"
+    "telefono": "0425474457",
+    "lat": 45.07,
+    "lng": 11.79
   },
   {
     "id": "B185",
@@ -1847,7 +2215,9 @@
     "citta": "Rovigo",
     "provincia": "RO",
     "regione": "Veneto",
-    "telefono": null
+    "telefono": null,
+    "lat": 45.07,
+    "lng": 11.79
   },
   {
     "id": "B186",
@@ -1857,7 +2227,9 @@
     "citta": "Rovigo",
     "provincia": "RO",
     "regione": "Veneto",
-    "telefono": "0425985711"
+    "telefono": "0425985711",
+    "lat": 45.07,
+    "lng": 11.79
   },
   {
     "id": "B187",
@@ -1867,7 +2239,9 @@
     "citta": "Villorba",
     "provincia": "TV",
     "regione": "Veneto",
-    "telefono": "0422611811"
+    "telefono": "0422611811",
+    "lat": 45.70,
+    "lng": 12.24
   },
   {
     "id": "B188",
@@ -1877,7 +2251,9 @@
     "citta": "Casale sul Sile",
     "provincia": "TV",
     "regione": "Veneto",
-    "telefono": "0422702311"
+    "telefono": "0422702311",
+    "lat": 45.59,
+    "lng": 12.30
   },
   {
     "id": "B189",
@@ -1887,7 +2263,9 @@
     "citta": "Cessalto",
     "provincia": "TV",
     "regione": "Veneto",
-    "telefono": "0421327100"
+    "telefono": "0421327100",
+    "lat": 45.73,
+    "lng": 12.61
   },
   {
     "id": "B190",
@@ -1897,7 +2275,9 @@
     "citta": "Mestre",
     "provincia": "VE",
     "regione": "Veneto",
-    "telefono": "0415318944"
+    "telefono": "0415318944",
+    "lat": 45.48,
+    "lng": 12.24
   },
   {
     "id": "B191",
@@ -1907,7 +2287,9 @@
     "citta": "Summaga Di Portogruaro",
     "provincia": "VE",
     "regione": "Veneto",
-    "telefono": "0421204755"
+    "telefono": "0421204755",
+    "lat": 45.79,
+    "lng": 12.84
   },
   {
     "id": "B192",
@@ -1917,7 +2299,9 @@
     "citta": "Salzano",
     "provincia": "VE",
     "regione": "Veneto",
-    "telefono": "0415740394"
+    "telefono": "0415740394",
+    "lat": 45.53,
+    "lng": 12.11
   },
   {
     "id": "B193",
@@ -1927,7 +2311,9 @@
     "citta": "S.Giovanni Lupatoto",
     "provincia": "VR",
     "regione": "Veneto",
-    "telefono": "0458950111"
+    "telefono": "0458950111",
+    "lat": 45.37,
+    "lng": 11.03
   },
   {
     "id": "B194",
@@ -1937,7 +2323,9 @@
     "citta": "Bussolengo",
     "provincia": "VR",
     "regione": "Veneto",
-    "telefono": "0456719111"
+    "telefono": "0456719111",
+    "lat": 45.47,
+    "lng": 10.85
   },
   {
     "id": "B195",
@@ -1947,7 +2335,9 @@
     "citta": "Verona",
     "provincia": "VR",
     "regione": "Veneto",
-    "telefono": "0458620220"
+    "telefono": "0458620220",
+    "lat": 45.42,
+    "lng": 10.98
   },
   {
     "id": "B196",
@@ -1957,7 +2347,9 @@
     "citta": "Bussolengo",
     "provincia": "VR",
     "regione": "Veneto",
-    "telefono": null
+    "telefono": null,
+    "lat": 45.47,
+    "lng": 10.85
   },
   {
     "id": "B197",
@@ -1967,7 +2359,9 @@
     "citta": "Bussolengo",
     "provincia": "VR",
     "regione": "Veneto",
-    "telefono": "0456719111"
+    "telefono": "0456719111",
+    "lat": 45.47,
+    "lng": 10.85
   },
   {
     "id": "B198",
@@ -1977,7 +2371,9 @@
     "citta": "Schio",
     "provincia": "VI",
     "regione": "Veneto",
-    "telefono": "0445575600"
+    "telefono": "0445575600",
+    "lat": 45.72,
+    "lng": 11.36
   },
   {
     "id": "B199",
@@ -1987,7 +2383,9 @@
     "citta": "Bassano del Grappa",
     "provincia": "VI",
     "regione": "Veneto",
-    "telefono": "0424568398"
+    "telefono": "0424568398",
+    "lat": 45.77,
+    "lng": 11.73
   },
   {
     "id": "B200",
@@ -1997,6 +2395,8 @@
     "citta": "Vicenza",
     "provincia": "VI",
     "regione": "Veneto",
-    "telefono": "0444571244"
+    "telefono": "0444571244",
+    "lat": 45.55,
+    "lng": 11.55
   }
 ]

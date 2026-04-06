@@ -1,8 +1,11 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { FILIALI as FILIALI_INIT, STATI_FILIALE, REGIONI } from '../../data/filiali'
 import { FILIALI_BRT } from '../../data/filialiBrt'
 import MultiSelect from '../ui/MultiSelect'
 import EntityHistory from '../ui/EntityHistory'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import './Sections.css'
 import './Filiali.css'
 import '../sections/flotta/Flotta.css'
@@ -191,9 +194,45 @@ export default function Filiali() {
     })
   }, [filiali, search, filterStati, filterRegioni, sortKey, sortDir])
 
+  const [viewMode, setViewMode] = useState('list')
+
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const setF = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
+
+  // Colori marker per stato
+  const STATO_COLOR = {
+    'Attiva':          '#2E7D32',
+    'Inattiva':        '#808285',
+    'In manutenzione': '#F57C00',
+  }
+
+  function makeFilialIcon(f) {
+    const color = STATO_COLOR[f.stato] || '#414042'
+    const initials = f.nome.slice(0, 2).toUpperCase()
+    return L.divIcon({
+      html: `<div style="width:34px;height:34px;border-radius:50%;background:${color};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);font-family:sans-serif">${initials}</div>`,
+      className: '',
+      iconSize: [34, 34],
+      iconAnchor: [17, 17],
+    })
+  }
+
+  // Fitter bounds per la mappa filiali
+  function FilialiBoundsSync({ points }) {
+    const map = useMap()
+    useEffect(() => {
+      const valid = points.filter(p => p.lat && p.lng)
+      if (!valid.length) return
+      if (valid.length === 1) {
+        map.setView([valid[0].lat, valid[0].lng], 10)
+      } else {
+        const bounds = L.latLngBounds(valid.map(p => [p.lat, p.lng]))
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 })
+      }
+    }, [points.map(p => p.id).join(',')])
+    return null
+  }
 
   // Titolo header modale in base al passo
   function modalTitle() {
@@ -332,6 +371,23 @@ export default function Filiali() {
           <h3>Filiali</h3>
           <div className="card-actions">
             <span className="card-label">{filtered.length} di {filiali.length}</span>
+            {/* View toggle */}
+            <div style={{ display: 'flex', border: '1px solid var(--fp-border)', borderRadius: 7, overflow: 'hidden' }}>
+              <button
+                onClick={() => setViewMode('list')}
+                title="Visualizzazione elenco"
+                style={{ padding: '5px 10px', background: viewMode === 'list' ? 'var(--fp-charcoal)' : 'white', color: viewMode === 'list' ? 'white' : 'var(--fp-gray-mid)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </button>
+              <button
+                onClick={() => setViewMode('map')}
+                title="Visualizzazione mappa"
+                style={{ padding: '5px 10px', background: viewMode === 'map' ? 'var(--fp-charcoal)' : 'white', color: viewMode === 'map' ? 'white' : 'var(--fp-gray-mid)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', borderLeft: '1px solid var(--fp-border)' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+              </button>
+            </div>
             <button className="btn-primary" onClick={openAdd}>+ Aggiungi</button>
           </div>
         </div>
@@ -353,7 +409,49 @@ export default function Filiali() {
           <MultiSelect placeholder="Tutte le regioni"  options={REGIONI_OPT} value={filterRegioni} onChange={v => { setFilterRegioni(v); setPage(1) }} />
         </div>
 
-        <div className="table-wrap">
+        {/* ── MAP VIEW ── */}
+        {viewMode === 'map' && (
+          <div style={{ height: 480, margin: '0 0 8px', borderRadius: 10, overflow: 'hidden', border: '1px solid var(--fp-border)' }}>
+            <MapContainer
+              key="filiali-map"
+              center={[42.5, 12.5]}
+              zoom={6}
+              style={{ width: '100%', height: '100%' }}
+              scrollWheelZoom
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <FilialiBoundsSync points={filtered} />
+              {filtered.filter(f => f.lat && f.lng).map(f => (
+                <Marker key={f.id} position={[f.lat, f.lng]} icon={makeFilialIcon(f)}>
+                  <Popup>
+                    <div style={{ minWidth: 180, fontFamily: 'sans-serif' }}>
+                      <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4 }}>{f.nome}</div>
+                      <div style={{ fontSize: 12, color: '#555', marginBottom: 2 }}>{f.via}</div>
+                      <div style={{ fontSize: 12, color: '#555', marginBottom: 6 }}>{f.cap} {f.citta} ({f.provincia})</div>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', fontSize: 11 }}>
+                        <span style={{ background: STATO_COLOR[f.stato] + '20', color: STATO_COLOR[f.stato], padding: '2px 7px', borderRadius: 10, fontWeight: 600 }}>{f.stato}</span>
+                        <span style={{ color: '#666' }}>📍 {f.puntiRitiro} PUDO</span>
+                      </div>
+                      {f.responsabile && <div style={{ fontSize: 11, color: '#888', marginTop: 5 }}>👤 {f.responsabile}</div>}
+                      <button
+                        onClick={() => { openEdit(f); }}
+                        style={{ marginTop: 8, fontSize: 11, padding: '3px 10px', background: '#DC0032', color: 'white', border: 'none', borderRadius: 5, cursor: 'pointer', width: '100%' }}
+                      >
+                        Modifica
+                      </button>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
+        )}
+
+        {/* ── LIST VIEW ── */}
+        {viewMode === 'list' && <div className="table-wrap">
           <table className="data-table">
             <thead>
               <tr>
@@ -440,9 +538,9 @@ export default function Filiali() {
             </tbody>
           </table>
           {pageData.length === 0 && <div className="table-empty">Nessuna filiale trovata.</div>}
-        </div>
+        </div>}
 
-        <Pagination page={page} total={totalPages} onPage={setPage} pageSize={PAGE_SIZE} total_items={filtered.length} />
+        {viewMode === 'list' && <Pagination page={page} total={totalPages} onPage={setPage} pageSize={PAGE_SIZE} total_items={filtered.length} />}
       </div>
 
       {/* ===== MODAL ===== */}

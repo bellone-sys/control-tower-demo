@@ -1,6 +1,9 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { FILIALI_BRT, PROVINCE_BRT, REGIONI_BRT } from '../../data/filialiBrt'
 import MultiSelect from '../ui/MultiSelect'
+import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import './Sections.css'
 import './FilialiBrt.css'
 
@@ -80,11 +83,24 @@ export default function FilialiBrt() {
     })
   }, [search, filterRegioni, filterProvince, sortKey, sortDir])
 
+  const [viewMode, setViewMode] = useState('list')
+
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   const regioniUniche  = new Set(FILIALI_BRT.map(f => f.regione)).size
   const provinceUniche = new Set(FILIALI_BRT.map(f => f.provincia)).size
+
+  function BrtBoundsSync({ points }) {
+    const map = useMap()
+    useEffect(() => {
+      const valid = points.filter(p => p.lat && p.lng)
+      if (!valid.length) return
+      const bounds = L.latLngBounds(valid.map(p => [p.lat, p.lng]))
+      map.fitBounds(bounds, { padding: [30, 30], maxZoom: 12 })
+    }, [points.length])
+    return null
+  }
 
   return (
     <div className="section-content">
@@ -111,6 +127,16 @@ export default function FilialiBrt() {
           <div className="card-actions">
             <span className="brt-badge">BRT</span>
             <span className="card-label">{filtered.length} di {FILIALI_BRT.length}</span>
+            <div style={{ display: 'flex', border: '1px solid var(--fp-border)', borderRadius: 7, overflow: 'hidden' }}>
+              <button onClick={() => setViewMode('list')} title="Elenco"
+                style={{ padding: '5px 10px', background: viewMode === 'list' ? 'var(--fp-charcoal)' : 'white', color: viewMode === 'list' ? 'white' : 'var(--fp-gray-mid)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </button>
+              <button onClick={() => setViewMode('map')} title="Mappa"
+                style={{ padding: '5px 10px', background: viewMode === 'map' ? 'var(--fp-charcoal)' : 'white', color: viewMode === 'map' ? 'white' : 'var(--fp-gray-mid)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', borderLeft: '1px solid var(--fp-border)' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -143,7 +169,39 @@ export default function FilialiBrt() {
           />
         </div>
 
-        <div className="table-wrap">
+        {/* MAP VIEW */}
+        {viewMode === 'map' && (
+          <div style={{ height: 520, margin: '0 0 8px', borderRadius: 10, overflow: 'hidden', border: '1px solid var(--fp-border)' }}>
+            <MapContainer key="brt-map" center={[42.5, 12.5]} zoom={6} style={{ width: '100%', height: '100%' }} scrollWheelZoom>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <BrtBoundsSync points={filtered} />
+              {filtered.filter(f => f.lat && f.lng).map(f => (
+                <CircleMarker
+                  key={f.id}
+                  center={[f.lat, f.lng]}
+                  radius={6}
+                  pathOptions={{ color: '#DC0032', fillColor: '#DC0032', fillOpacity: 0.85, weight: 1.5 }}
+                >
+                  <Popup>
+                    <div style={{ minWidth: 160, fontFamily: 'sans-serif' }}>
+                      <div style={{ fontWeight: 700, fontSize: 12, marginBottom: 3 }}>{f.nome}</div>
+                      <div style={{ fontSize: 11, color: '#555' }}>{f.indirizzo}</div>
+                      <div style={{ fontSize: 11, color: '#555', marginBottom: 4 }}>{f.cap} {f.citta} ({f.provincia})</div>
+                      <div style={{ fontSize: 11, color: '#888' }}>{f.regione}</div>
+                      {f.telefono && <div style={{ fontSize: 11, marginTop: 3 }}>📞 {f.telefono}</div>}
+                    </div>
+                  </Popup>
+                </CircleMarker>
+              ))}
+            </MapContainer>
+          </div>
+        )}
+
+        {/* LIST VIEW */}
+        {viewMode === 'list' && <div className="table-wrap">
           <table className="data-table brt-table">
             <thead>
               <tr>
@@ -180,15 +238,15 @@ export default function FilialiBrt() {
           {pageData.length === 0 && (
             <div className="table-empty">Nessuna filiale trovata.</div>
           )}
-        </div>
+        </div>}
 
-        <Pagination
+        {viewMode === 'list' && <Pagination
           page={page}
           total={totalPages}
           onPage={setPage}
           pageSize={PAGE_SIZE}
           total_items={filtered.length}
-        />
+        />}
       </div>
     </div>
   )
