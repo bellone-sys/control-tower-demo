@@ -4,7 +4,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { FILIALI } from '../../../data/filiali'
 import { DRIVERS, MEZZI, MODELLI_MEZZI } from '../../../data/flotta'
-import EntityHistory from '../../ui/EntityHistory'
+import AuditPanel from '../../ui/AuditPanel'
 import './DetailGiro.css'
 
 // Calcola i bounds su un array di {lat, lng}
@@ -54,7 +54,7 @@ function getStatoClass(stato) {
 
 export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate }) {
   const [justSaved, setJustSaved] = useState(false)
-  const [activeTab, setActiveTab] = useState('details')
+  const [auditOpen, setAuditOpen] = useState(false)
 
   const filiale = FILIALI.find(f => f.id === giro.filialeId)
   const driver  = DRIVERS.find(d => d.id === giro.autoreId)
@@ -100,32 +100,31 @@ export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate })
         <button className="giro-detail-close" onClick={onClose} title="Chiudi">×</button>
       </div>
 
-      {/* Sub-tabs: Dettagli | Cronologia */}
-      <div className="giro-detail-tabs" role="tablist" aria-label="Sezioni dettaglio giro">
-        {[
-          { id: 'details',  label: 'Dettagli' },
-          { id: 'history',  label: '🕐 Cronologia' },
-        ].map(tab => (
-          <button
-            key={tab.id}
-            role="tab"
-            aria-selected={activeTab === tab.id}
-            aria-controls={`panel-${tab.id}`}
-            className={`giro-detail-tab${activeTab === tab.id ? ' active' : ''}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Audit panel trigger */}
+      <div className="giro-detail-tabs">
+        <button className="giro-detail-tab active" style={{ cursor: 'default' }}>Dettagli</button>
+        <button
+          className="giro-detail-tab"
+          onClick={() => setAuditOpen(true)}
+          title="Cronologia modifiche"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 4 }}>
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Cronologia
+        </button>
       </div>
 
-      {/* Body: mappa + timeline */}
-      <div
-        id="panel-details"
-        role="tabpanel"
-        aria-labelledby="tab-details"
-        hidden={activeTab !== 'details'}
-        className="giro-detail-body">
+      <AuditPanel
+        open={auditOpen}
+        onClose={() => setAuditOpen(false)}
+        entityType="giro"
+        entityId={giro.id}
+        entityLabel={`${giro.id} · ${giro.nome}`}
+      />
+
+      {/* Body */}
+      <div className="giro-detail-body">
         {/* Mappa — key={giro.id} forza rimount quando cambia giro */}
         <div className="giro-map-col">
           <MapContainer
@@ -218,17 +217,6 @@ export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate })
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Cronologia tab */}
-      <div
-        id="panel-history"
-        role="tabpanel"
-        aria-labelledby="tab-history"
-        hidden={activeTab !== 'history'}
-        style={{ padding: '0 20px 20px' }}
-      >
-        <EntityHistory entityType="giro" entityId={giro.id} />
       </div>
 
       {/* Footer */}

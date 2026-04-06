@@ -1,5 +1,5 @@
 import './Sidebar.css'
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { APP_VERSION } from '../version'
 import { getVisibleMenuGroups, getMenuGroupState, setMenuGroupState } from '../config/menuStructure'
 import { useI18n } from '../contexts/I18nContext'
@@ -54,17 +54,15 @@ const ICON_MAP = {
 export default function Sidebar({ active, onNav, eccezioniCount, user, open, onClose }) {
   const { t } = useI18n()
   const isAdmin = user?.ruolo === 'admin'
-  const visibleGroups = getVisibleMenuGroups(isAdmin)
-  const [groupStates, setGroupStates] = useState({})
-
-  useEffect(() => {
+  const visibleGroups = useMemo(() => getVisibleMenuGroups(isAdmin), [isAdmin])
+  const [groupStates, setGroupStates] = useState(() => {
     const states = {}
-    visibleGroups.forEach(group => {
+    getVisibleMenuGroups(isAdmin).forEach(group => {
       const stored = getMenuGroupState(group.id)
       states[group.id] = stored !== null ? stored : group.collapsed
     })
-    setGroupStates(states)
-  }, [visibleGroups])
+    return states
+  })
 
   const toggleGroup = (groupId) => {
     const newState = !groupStates[groupId]
@@ -141,28 +139,7 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
         })}
       </nav>
 
-      <div className="sidebar-docs-section">
-        <a href="/control-tower-demo/manuale.html"   target="_blank" rel="noopener noreferrer" className="nav-item sidebar-docs-link">
-          <IconBook /><span>Manuale Utente</span><span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
-        </a>
-        <a href="/control-tower-demo/requisiti.html" target="_blank" rel="noopener noreferrer" className="nav-item sidebar-docs-link">
-          <IconDocument /><span>Requisiti</span><span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
-        </a>
-        <a href="/control-tower-demo/funzionale.html" target="_blank" rel="noopener noreferrer" className="nav-item sidebar-docs-link">
-          <IconDocument /><span>Doc. Funzionale</span><span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
-        </a>
-        <a href="/control-tower-demo/tecnica.html"   target="_blank" rel="noopener noreferrer" className="nav-item sidebar-docs-link">
-          <IconDocument /><span>Doc. Tecnica</span><span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
-        </a>
-        <a href="/control-tower-demo/api.html"       target="_blank" rel="noopener noreferrer" className="nav-item sidebar-docs-link">
-          <IconDocument /><span>API Reference</span><span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
-        </a>
-        <a href="/control-tower-demo/playbook.html"  target="_blank" rel="noopener noreferrer" className="nav-item sidebar-docs-link">
-          <IconClipboard /><span>Playbook Operativo</span><span style={{ marginLeft: 'auto', fontSize: 10, opacity: .6 }}>↗</span>
-        </a>
-      </div>
-
-      <div className="sidebar-footer">
+<div className="sidebar-footer">
         <div className="sidebar-version">v{APP_VERSION} · Demo</div>
       </div>
     </aside>

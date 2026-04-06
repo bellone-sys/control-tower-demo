@@ -1,5 +1,23 @@
 [
   {
+    "version": "0.17.0",
+    "tag": "v0.17.0",
+    "date": "2026-04-06",
+    "type": "minor",
+    "title": "PUDO: vista mappa, audit panel, indirizzo completo; footer doc links",
+    "highlights": [
+      "PUDO: toggle lista/mappa con CircleMarker Leaflet (negozio verde, locker blu)",
+      "PUDO: colonna Indirizzo unificata con via, civico e CAP; campo via aggiunto a 12 PUDO campione",
+      "PUDO: codice ID e coordinate copiabili con click nella tabella",
+      "PUDO: chip ID copiabile nell'header del dettaglio",
+      "Audit panel slide-in da destra con cronologia modifiche (mock JSON + localStorage) per PUDO e Giri",
+      "Footer fisso con link alla documentazione (rimosso dalla sidebar)",
+      "Sidebar: fix loop infinito su re-render dei gruppi di menu",
+      "Fix coordinate outlier IT15147 (lat 4.86 → 41.86)"
+    ],
+    "breaking": false
+  },
+  {
     "version": "0.16.0",
     "tag": "v0.16.0",
     "date": "2026-04-06",

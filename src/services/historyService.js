@@ -1,3 +1,5 @@
+import AUDIT_MOCK from '../data/json/auditHistory.json'
+
 /**
  * History Service — Cronologia modifiche per entità
  *
@@ -91,8 +93,12 @@ export function recordEvent({ entityType, entityId, action, label, field, oldVal
  * @returns {object[]} events sorted newest first
  */
 export function getEntityHistory(entityType, entityId, limit = 50) {
-  const all = loadAll()
-  return all
+  const localEvents  = loadAll()
+  const mockEvents   = AUDIT_MOCK.filter(e => e.entityType === entityType && e.entityId === entityId)
+  // Merge: local events take priority; deduplicate by id
+  const seen = new Set(localEvents.map(e => e.id))
+  const merged = [...localEvents, ...mockEvents.filter(e => !seen.has(e.id))]
+  return merged
     .filter(e => e.entityType === entityType && e.entityId === entityId)
     .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
     .slice(0, limit)

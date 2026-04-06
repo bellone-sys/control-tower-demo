@@ -1,7 +1,10 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import pudosRoma from '../../data/pudosRoma.json'
 import PuntiRitiroDetail from './PuntiRitiroDetail'
 import MultiSelect from '../ui/MultiSelect'
+import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import './Sections.css'
 import './PuntiRitiro.css'
 
@@ -50,6 +53,41 @@ const SORT_OPTIONS = [
   { value: 'cap-asc',  label: 'CAP ↑' },
 ]
 
+function CopyId({ id }) {
+  const [copied, setCopied] = useState(false)
+  function copy(e) {
+    e.stopPropagation()
+    navigator.clipboard.writeText(id).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1600)
+    })
+  }
+  return (
+    <button
+      className="copy-id-btn"
+      onClick={copy}
+      title="Copia codice"
+    >
+      <code className="id-code">{id}</code>
+      {copied
+        ? <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        : <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      }
+    </button>
+  )
+}
+
+function PudoBoundsSync({ points }) {
+  const map = useMap()
+  useEffect(() => {
+    const valid = points.filter(p => p.lat && p.lng)
+    if (!valid.length) return
+    const bounds = L.latLngBounds(valid.map(p => [p.lat, p.lng]))
+    map.fitBounds(bounds, { padding: [30, 30], maxZoom: 14 })
+  }, [points.length])
+  return null
+}
+
 export default function PuntiRitiro() {
   const [search, setSearch]     = useState('')
   const [filterCap, setFilterCap] = useState([])
@@ -57,6 +95,7 @@ export default function PuntiRitiro() {
   const [sort, setSort]         = useState('name-asc')
   const [page, setPage]         = useState(1)
   const [selected, setSelected] = useState(null)
+  const [viewMode, setViewMode] = useState('list')
 
   const filtered = useMemo(() => {
     let list = pudosRoma
@@ -98,7 +137,19 @@ export default function PuntiRitiro() {
       <div className="card">
         <div className="card-header">
           <h3>PUDO — Roma</h3>
-          <span className="card-label">{filtered.length} PUDO su {pudosRoma.length}</span>
+          <div className="card-actions">
+            <span className="card-label">{filtered.length} PUDO su {pudosRoma.length}</span>
+            <div style={{ display: 'flex', border: '1px solid var(--fp-border)', borderRadius: 7, overflow: 'hidden' }}>
+              <button onClick={() => setViewMode('list')} title="Elenco"
+                style={{ padding: '5px 10px', background: viewMode === 'list' ? 'var(--fp-charcoal)' : 'white', color: viewMode === 'list' ? 'white' : 'var(--fp-gray-mid)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </button>
+              <button onClick={() => setViewMode('map')} title="Mappa"
+                style={{ padding: '5px 10px', background: viewMode === 'map' ? 'var(--fp-charcoal)' : 'white', color: viewMode === 'map' ? 'white' : 'var(--fp-gray-mid)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', borderLeft: '1px solid var(--fp-border)' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Toolbar */}
@@ -137,15 +188,55 @@ export default function PuntiRitiro() {
           </select>
         </div>
 
+        {/* MAP VIEW */}
+        {viewMode === 'map' && (
+          <div style={{ height: 520, margin: '0 0 8px', borderRadius: 10, overflow: 'hidden', border: '1px solid var(--fp-border)' }}>
+            <MapContainer key="pudo-map" center={[41.9028, 12.4964]} zoom={11} style={{ width: '100%', height: '100%' }} scrollWheelZoom>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <PudoBoundsSync points={filtered} />
+              {filtered.filter(p => p.lat && p.lng).map(p => {
+                const tipo = getPudoTipo(p)
+                const color = tipo === 'locker' ? '#1565C0' : '#2E7D32'
+                return (
+                  <CircleMarker
+                    key={p.id}
+                    center={[p.lat, p.lng]}
+                    radius={5}
+                    pathOptions={{ color, fillColor: color, fillOpacity: 0.85, weight: 1.5 }}
+                  >
+                    <Popup>
+                      <div style={{ minWidth: 160, fontFamily: 'sans-serif' }}>
+                        <div style={{ fontWeight: 700, fontSize: 12, marginBottom: 3 }}>
+                          {tipo === 'locker' ? '🔒' : '🏪'} {p.name}
+                        </div>
+                        <div style={{ fontSize: 11, color: '#555' }}>
+                          {p.via ? `${p.via}${p.civico ? ` ${p.civico}` : ''}` : `CAP ${p.cap}${p.civico ? `, n. ${p.civico}` : ''}`}
+                        </div>
+                        <div style={{ fontSize: 11, color: '#888', marginBottom: 6 }}>{p.lat.toFixed(4)}, {p.lng.toFixed(4)}</div>
+                        <button
+                          style={{ fontSize: 11, padding: '3px 10px', background: '#DC0032', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' }}
+                          onClick={() => setSelected(p)}
+                        >Dettaglio</button>
+                      </div>
+                    </Popup>
+                  </CircleMarker>
+                )
+              })}
+            </MapContainer>
+          </div>
+        )}
+
         {/* Table */}
-        <div className="table-wrap">
+        {viewMode === 'list' && <div className="table-wrap">
           <table className="data-table">
             <thead>
               <tr>
                 <th>Codice</th>
                 <th>Nome</th>
-                <th>CAP</th>
-                <th>Civico</th>
+                <th>Indirizzo</th>
                 <th>Coordinate</th>
                 <th>Vol. disp.</th>
                 <th>Orari</th>
@@ -158,15 +249,16 @@ export default function PuntiRitiro() {
                 const orariOggi = p.hours[oggi]
                 return (
                   <tr key={p.id} className="pr-row" onClick={() => setSelected(p)}>
-                    <td><code className="id-code">{p.id}</code></td>
+                    <td><CopyId id={p.id} /></td>
                     <td className="pr-name">
                       <span className="pudo-tipo-icon">{getPudoTipo(p) === 'locker' ? '🔒' : '🏪'}</span>
                       {p.name}
                     </td>
-                    <td>{p.cap}</td>
-                    <td className="td-small">{p.civico || '—'}</td>
+                    <td className="td-addr">
+                      {p.via ? `${p.via}${p.civico ? `, ${p.civico}` : ''}, ` : ''}{p.cap} — Roma (RM)
+                    </td>
                     <td className="td-small coord-cell">
-                      {p.lat.toFixed(4)}, {p.lng.toFixed(4)}
+                      <CopyId id={`${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}`} />
                     </td>
                     <td className="td-small">
                       {getPudoVolumeLibero(p)} m³
@@ -199,10 +291,10 @@ export default function PuntiRitiro() {
           {pageData.length === 0 && (
             <div className="table-empty">Nessun PUDO trovato.</div>
           )}
-        </div>
+        </div>}
 
         {/* Pagination */}
-        {totalPages > 1 && (
+        {viewMode === 'list' && totalPages > 1 && (
           <div className="pagination">
             <button className="page-btn" onClick={() => setPage(1)} disabled={page === 1}>«</button>
             <button className="page-btn" onClick={() => setPage(p => p - 1)} disabled={page === 1}>‹</button>

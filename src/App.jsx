@@ -180,6 +180,19 @@ export default function App() {
             <main className="app-content">
               {SECTIONS[section]}
             </main>
+            <footer className="app-docs-footer">
+              <a href="/control-tower-demo/manuale.html"    target="_blank" rel="noopener noreferrer">Manuale Utente ↗</a>
+              <span className="app-docs-sep" />
+              <a href="/control-tower-demo/requisiti.html"  target="_blank" rel="noopener noreferrer">Requisiti ↗</a>
+              <span className="app-docs-sep" />
+              <a href="/control-tower-demo/funzionale.html" target="_blank" rel="noopener noreferrer">Doc. Funzionale ↗</a>
+              <span className="app-docs-sep" />
+              <a href="/control-tower-demo/tecnica.html"    target="_blank" rel="noopener noreferrer">Doc. Tecnica ↗</a>
+              <span className="app-docs-sep" />
+              <a href="/control-tower-demo/api.html"        target="_blank" rel="noopener noreferrer">API Reference ↗</a>
+              <span className="app-docs-sep" />
+              <a href="/control-tower-demo/playbook.html"   target="_blank" rel="noopener noreferrer">Playbook Operativo ↗</a>
+            </footer>
           </div>
 
           <ProgressToast job={activeJob} />

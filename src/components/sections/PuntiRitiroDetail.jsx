@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import EntityHistory from '../ui/EntityHistory'
+import AuditPanel from '../ui/AuditPanel'
 import './PuntiRitiroDetail.css'
 
 const DAYS = ['lun','mar','mer','gio','ven','sab','dom']
@@ -35,10 +35,18 @@ function getPudoVolumeLibero(pudo) {
 export default function PuntiRitiroDetail({ pudo, onBack }) {
   const mapRef = useRef(null)
   const mapInstance = useRef(null)
-  const [activeTab, setActiveTab] = useState('details')
+  const [auditOpen, setAuditOpen] = useState(false)
 
   const todayIdx = [0,1,2,3,4,5,6][(new Date().getDay() + 6) % 7] // Mon=0
   const todayKey = DAYS[todayIdx]
+  const [copied, setCopied] = useState(false)
+
+  function copyId() {
+    navigator.clipboard.writeText(pudo.id).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
+    })
+  }
 
   useEffect(() => {
     let map
@@ -110,30 +118,31 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
         </button>
         <h2 className="detail-title">
           Dettagli <span className="text-red">PUDO</span>
+          <button className="pudo-id-chip" onClick={copyId} title="Copia ID">
+            <code>{pudo.id}</code>
+            {copied
+              ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            }
+          </button>
         </h2>
-        {/* Sub-tabs */}
-        <div className="detail-subtabs" role="tablist" aria-label="Sezioni dettaglio PUDO" style={{ marginLeft: 'auto', display: 'flex', gap: 0 }}>
-          {[{ id: 'details', label: 'Dettagli' }, { id: 'history', label: '🕐 Cronologia' }].map(tab => (
-            <button
-              key={tab.id}
-              role="tab"
-              aria-selected={activeTab === tab.id}
-              className={`giro-detail-tab${activeTab === tab.id ? ' active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        <button className="btn-audit" onClick={() => setAuditOpen(true)} title="Cronologia modifiche" style={{ marginLeft: 'auto' }}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Cronologia
+        </button>
       </div>
 
-      {activeTab === 'history' && (
-        <div style={{ background: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', padding: '16px 24px' }}>
-          <EntityHistory entityType="pudo" entityId={pudo.id} />
-        </div>
-      )}
+      <AuditPanel
+        open={auditOpen}
+        onClose={() => setAuditOpen(false)}
+        entityType="pudo"
+        entityId={pudo.id}
+        entityLabel={`${pudo.id} · ${pudo.name}`}
+      />
 
-      <div className="detail-grid" hidden={activeTab !== 'details'}>
+      <div className="detail-grid">
 
         {/* Map — smaller */}
         <div className="detail-map-wrap">
@@ -158,7 +167,10 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
               <li>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 <span className="info-value">
-                  {pudo.cap}{pudo.civico ? `, ${pudo.civico}` : ''} — Roma (RM)
+                  {pudo.via
+                    ? `${pudo.via}${pudo.civico ? ` ${pudo.civico}` : ''}, ${pudo.cap} — Roma (RM)`
+                    : `${pudo.cap}${pudo.civico ? `, n. ${pudo.civico}` : ''} — Roma (RM)`
+                  }
                 </span>
               </li>
               <li>
