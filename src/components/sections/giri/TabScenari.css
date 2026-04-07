@@ -85,6 +85,17 @@
 .scenario-stat-val { font-size: 18px; font-weight: 600; color: var(--fp-charcoal); line-height: 1; }
 .scenario-stat-label { font-size: 10px; color: var(--fp-gray-mid); margin-top: 3px; text-align: center; }
 
+.scenario-stat-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--fp-font);
+  transition: background var(--transition);
+  padding: 12px 8px;
+}
+.scenario-stat-btn:hover { background: #f5f5f5; }
+.sc-stat-link { color: var(--fp-red) !important; text-decoration: underline; text-underline-offset: 2px; }
+
 .scenario-expand-btn {
   background: none;
   border: none;
@@ -282,6 +293,36 @@
 
 /* Resources warning in card footer */
 .sc-res-warn { font-size: 11px; color: #E65100; flex: 1; }
+
+/* Resources block */
+.sc-risorse-block { border-top: none; }
+.sc-risorse-text { font-size: 11px; font-style: normal; }
+.sc-risorse-text-ok      { color: #2E7D32; font-weight: 600; }
+.sc-risorse-text-partial { color: #E65100; font-weight: 500; }
+.sc-risorse-ok      { background: #f1f8f1; }
+.sc-risorse-partial { background: #fff8f2; }
+
+/* Clone badge */
+.sc-clone-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 8px;
+  background: #e3f0fb;
+  color: #1565C0;
+  margin-left: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+
+/* Danger action button */
+.scenario-action-btn.sc-btn-danger {
+  color: #DC0032;
+  border-color: #ffc9d3;
+}
+.scenario-action-btn.sc-btn-danger:hover { border-color: #DC0032; background: #fff0f3; }
 
 /* Scenario header info area */
 .scenario-header-info { flex: 1; min-width: 0; }

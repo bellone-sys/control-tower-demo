@@ -6,29 +6,31 @@ import { useI18n } from '../contexts/I18nContext'
 
 // Mappa item.id → chiave i18n
 const SECTION_KEYS = {
-  overview:     'nav.overview',
-  spedizioni:   'nav.spedizioni',
-  scenari:      'nav.scenari',
-  giri:         'nav.giri',
-  punti:        'nav.punti',
-  autisti:      'nav.autisti',
-  flotta:       'nav.flotta',
-  filiali:      'nav.filiali',
-  filialiBrt:   'nav.filialiBrt',
-  contratti:    'nav.contratti',
-  utenti:       'nav.utenti',
-  eccezioni:    'nav.eccezioni',
-  report:       'nav.report',
-  releaseNotes: 'nav.releaseNotes',
-  credits:      'nav.credits',
+  overview:       'nav.overview',
+  spedizioni:     'nav.spedizioni',
+  scenari:        'nav.scenari',
+  giri:           'nav.giri',
+  punti:          'nav.punti',
+  autisti:        'nav.autisti',
+  flotta:         'nav.flotta',
+  filiali:        'nav.filiali',
+  filialiBrt:     'nav.filialiBrt',
+  contratti:      'nav.contratti',
+  utenti:         'nav.utenti',
+  eccezioni:      'nav.eccezioni',
+  report:         'nav.report',
+  economics:      'nav.economics',
+  releaseNotes:   'nav.releaseNotes',
+  credits:        'nav.credits',
 }
 
 // Mappa group.id → chiave i18n
 const GROUP_KEYS = {
-  operazioni:   'nav.group.operations',
-  gestione:     'nav.group.management',
-  monitoraggio: 'nav.group.monitoring',
-  info:         'nav.group.info',
+  pianificazione:  'nav.group.planning',
+  amministrazione: 'nav.group.administration',
+  anagrafiche:     'nav.group.registry',
+  dati:            'nav.group.data',
+  monitoraggio:    'nav.group.monitoring',
 }
 
 const ICON_MAP = {
@@ -49,6 +51,7 @@ const ICON_MAP = {
   IconHeart:     IconHeart,
   IconScenario:  IconScenario,
   IconPerson:    IconPerson,
+  IconCoin:      IconCoin,
 }
 
 export default function Sidebar({ active, onNav, eccezioniCount, user, open, onClose }) {
@@ -300,6 +303,15 @@ function IconScenario() {
       <circle cx="19" cy="19" r="2"/>
       <path d="M7 12h4l4.5-5.5"/>
       <path d="M7 12h4l4.5 5.5"/>
+    </svg>
+  )
+}
+function IconCoin() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M14.5 8.5C14 7.5 13 7 12 7c-1.7 0-3 1.1-3 2.5 0 1.8 2 2.5 3 3s3 1.2 3 3c0 1.4-1.3 2.5-3 2.5-1 0-2-.5-2.5-1.5"/>
+      <line x1="12" y1="5" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="19"/>
     </svg>
   )
 }

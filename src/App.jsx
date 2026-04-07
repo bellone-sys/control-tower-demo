@@ -24,7 +24,20 @@ import { TutorialProvider } from './contexts/TutorialContext'
 import { I18nProvider } from './contexts/I18nContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { ECCEZIONI } from './data/stub'
+import { APP_VERSION } from './version'
 import './App.css'
+
+function PlaceholderSection({ title, icon, desc }) {
+  return (
+    <div className="section-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
+      <div style={{ textAlign: 'center', color: 'var(--fp-gray-mid)' }}>
+        <div style={{ fontSize: 48, marginBottom: 16 }}>{icon}</div>
+        <div style={{ fontSize: 18, fontWeight: 600, color: 'var(--fp-charcoal)', marginBottom: 8 }}>{title}</div>
+        <div style={{ fontSize: 13, maxWidth: 380, lineHeight: 1.5 }}>{desc}</div>
+      </div>
+    </div>
+  )
+}
 
 const SESSION_KEY = 'fp_ct_user'
 let _notifCounter = 1
@@ -133,6 +146,7 @@ export default function App() {
     report:       <Report />,
     releaseNotes: <ReleaseNotes />,
     credits:      <Credits />,
+    economics:    <PlaceholderSection title="Economics" icon="💰" desc="Dashboard economica in sviluppo: margini per filiale, costo per consegna, revenue per giro." />,
   }
 
   return (
@@ -181,17 +195,30 @@ export default function App() {
               {SECTIONS[section]}
             </main>
             <footer className="app-docs-footer">
-              <a href="/control-tower-demo/manuale.html"    target="_blank" rel="noopener noreferrer">Manuale Utente ↗</a>
-              <span className="app-docs-sep" />
-              <a href="/control-tower-demo/requisiti.html"  target="_blank" rel="noopener noreferrer">Requisiti ↗</a>
-              <span className="app-docs-sep" />
-              <a href="/control-tower-demo/funzionale.html" target="_blank" rel="noopener noreferrer">Doc. Funzionale ↗</a>
-              <span className="app-docs-sep" />
-              <a href="/control-tower-demo/tecnica.html"    target="_blank" rel="noopener noreferrer">Doc. Tecnica ↗</a>
-              <span className="app-docs-sep" />
-              <a href="/control-tower-demo/api.html"        target="_blank" rel="noopener noreferrer">API Reference ↗</a>
-              <span className="app-docs-sep" />
-              <a href="/control-tower-demo/playbook.html"   target="_blank" rel="noopener noreferrer">Playbook Operativo ↗</a>
+              <div className="app-footer-section">
+                <span className="app-footer-label">Documentazione</span>
+                <div className="app-footer-links">
+                  <a href="/control-tower-demo/manuale.html"    target="_blank" rel="noopener noreferrer">Manuale Utente ↗</a>
+                  <a href="/control-tower-demo/requisiti.html"  target="_blank" rel="noopener noreferrer">Requisiti ↗</a>
+                  <a href="/control-tower-demo/funzionale.html" target="_blank" rel="noopener noreferrer">Doc. Funzionale ↗</a>
+                  <a href="/control-tower-demo/tecnica.html"    target="_blank" rel="noopener noreferrer">Doc. Tecnica ↗</a>
+                  <a href="/control-tower-demo/api.html"        target="_blank" rel="noopener noreferrer">API Reference ↗</a>
+                  <a href="/control-tower-demo/playbook.html"   target="_blank" rel="noopener noreferrer">Playbook Operativo ↗</a>
+                </div>
+              </div>
+              <span className="app-footer-divider" />
+              <div className="app-footer-section">
+                <span className="app-footer-label">Piattaforma</span>
+                <div className="app-footer-links">
+                  <button className="app-footer-nav" onClick={() => handleNav('releaseNotes')}>Release Notes</button>
+                  <button className="app-footer-nav" onClick={() => handleNav('credits')}>Credits</button>
+                </div>
+              </div>
+              <span className="app-footer-divider" />
+              <div className="app-footer-section app-footer-version">
+                <span className="app-footer-label">Versione</span>
+                <span className="app-footer-ver-val">v{APP_VERSION} · Demo</span>
+              </div>
             </footer>
           </div>
 
