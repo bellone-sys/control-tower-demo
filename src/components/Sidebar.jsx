@@ -22,6 +22,7 @@ const SECTION_KEYS = {
   report:         'nav.report',
   economics:        'nav.economics',
   esecuzioneGiri:   'nav.esecuzioneGiri',
+  segnalazioni:     'nav.segnalazioni',
   releaseNotes:     'nav.releaseNotes',
   credits:          'nav.credits',
 }
@@ -56,9 +57,10 @@ const ICON_MAP = {
   IconPerson:    IconPerson,
   IconCoin:      IconCoin,
   IconPlay:      IconPlay,
+  IconFlag:      IconFlag,
 }
 
-export default function Sidebar({ active, onNav, eccezioniCount, user, open, onClose }) {
+export default function Sidebar({ active, onNav, eccezioniCount, segnalazioniCount, user, open, onClose }) {
   const { t } = useI18n()
   const isAdmin = user?.ruolo === 'admin'
   const visibleGroups = useMemo(() => getVisibleMenuGroups(isAdmin), [isAdmin])
@@ -108,7 +110,8 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
                     <button key={item.id} className={`nav-item ${isActive ? 'active' : ''}`} onClick={() => onNav(item.section)}>
                       {Icon && <Icon />}
                       <span>{t(SECTION_KEYS[item.id], item.label)}</span>
-                      {item.badge && eccezioniCount > 0 && <span className="nav-badge">{eccezioniCount}</span>}
+                      {item.badge && item.id === 'segnalazioni' && segnalazioniCount > 0 && <span className="nav-badge">{segnalazioniCount}</span>}
+                      {item.badge && item.id !== 'segnalazioni' && eccezioniCount > 0 && <span className="nav-badge">{eccezioniCount}</span>}
                     </button>
                   )
                 })}
@@ -136,7 +139,8 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
                       <button key={item.id} className={`nav-item nav-subitem ${isActive ? 'active' : ''}`} onClick={() => onNav(item.section)}>
                         {Icon && <Icon />}
                         <span>{t(SECTION_KEYS[item.id], item.label)}</span>
-                        {item.badge && eccezioniCount > 0 && <span className="nav-badge">{eccezioniCount}</span>}
+                        {item.badge && item.id === 'segnalazioni' && segnalazioniCount > 0 && <span className="nav-badge">{segnalazioniCount}</span>}
+                        {item.badge && item.id !== 'segnalazioni' && eccezioniCount > 0 && <span className="nav-badge">{eccezioniCount}</span>}
                       </button>
                     )
                   })}
@@ -345,6 +349,15 @@ function IconPerson() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="7" r="4"/>
       <path d="M4 21v-1a8 8 0 0 1 16 0v1"/>
+    </svg>
+  )
+}
+/** Bandierina — Segnalazioni */
+function IconFlag({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+      <line x1="4" y1="22" x2="4" y2="15"/>
     </svg>
   )
 }

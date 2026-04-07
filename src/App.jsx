@@ -19,12 +19,14 @@ import Report from './components/sections/Report'
 import ReleaseNotes from './components/sections/ReleaseNotes'
 import Credits from './components/sections/Credits'
 import EsecuzioneGiri from './components/sections/EsecuzioneGiri'
+import Segnalazioni from './components/sections/Segnalazioni'
 import ProgressToast from './components/ui/ProgressToast'
 import { seedDemoHistory } from './services/historyService'
 import { TutorialProvider } from './contexts/TutorialContext'
 import { I18nProvider } from './contexts/I18nContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { ECCEZIONI } from './data/stub'
+import { SEGNALAZIONI_INIT } from './data/segnalazioni'
 import { APP_VERSION } from './version'
 import './App.css'
 
@@ -65,7 +67,8 @@ export default function App() {
 
   useEffect(() => { seedDemoHistory() }, [])
 
-  const eccezioniAperte = ECCEZIONI.filter(e => e.stato === 'Aperta').length
+  const eccezioniAperte   = ECCEZIONI.filter(e => e.stato === 'Aperta').length
+  const segnalazioniNonLette = SEGNALAZIONI_INIT.filter(s => s.stato === 'Non letta').length
 
   // ── Notification helpers ────────────────────────────────────────
   const addNotification = useCallback((type, title, message) => {
@@ -149,6 +152,7 @@ export default function App() {
     credits:      <Credits />,
     economics:      <PlaceholderSection title="Economics" icon="💰" desc="Dashboard economica in sviluppo: margini per filiale, costo per consegna, revenue per giro." />,
     esecuzioneGiri: <EsecuzioneGiri />,
+    segnalazioni:   <Segnalazioni />,
   }
 
   return (
@@ -176,6 +180,7 @@ export default function App() {
             active={section}
             onNav={handleNav}
             eccezioniCount={eccezioniAperte}
+            segnalazioniCount={segnalazioniNonLette}
             user={user}
             open={sidebarOpen}
             onClose={() => setSidebarOpen(false)}

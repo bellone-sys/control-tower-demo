@@ -67,6 +67,7 @@ export const MENU_GROUPS = [
     collapsible: true,
     items: [
       { id: 'esecuzioneGiri', label: 'Giri', icon: 'IconRoute', section: 'esecuzioneGiri' },
+      { id: 'segnalazioni', label: 'Segnalazioni', icon: 'IconFlag', section: 'segnalazioni', badge: true },
     ],
   },
   {
