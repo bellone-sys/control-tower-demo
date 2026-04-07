@@ -190,7 +190,8 @@
       "targa": "FB 452 KL",
       "stato": "In servizio",
       "km": 87420,
-      "autoreId": "D003"
+      "autoreId": "D003",
+      "filialeId": "F_ROMA"
     },
     {
       "id": "M002",
@@ -198,7 +199,8 @@
       "targa": "EK 218 MR",
       "stato": "Disponibile",
       "km": 34100,
-      "autoreId": null
+      "autoreId": null,
+      "filialeId": "F_ROMA"
     },
     {
       "id": "M003",
@@ -206,7 +208,8 @@
       "targa": "GH 731 PA",
       "stato": "In servizio",
       "km": 61850,
-      "autoreId": "D001"
+      "autoreId": "D001",
+      "filialeId": "F_ROMA"
     },
     {
       "id": "M004",
@@ -214,7 +217,8 @@
       "targa": "DC 904 YT",
       "stato": "Manutenzione",
       "km": 112300,
-      "autoreId": null
+      "autoreId": null,
+      "filialeId": "F_ROMA"
     },
     {
       "id": "M005",
@@ -222,7 +226,8 @@
       "targa": "AT 067 BN",
       "stato": "In servizio",
       "km": 43600,
-      "autoreId": "D005"
+      "autoreId": "D005",
+      "filialeId": "F001"
     },
     {
       "id": "M006",
@@ -230,7 +235,8 @@
       "targa": "RP 389 CV",
       "stato": "Disponibile",
       "km": 12400,
-      "autoreId": null
+      "autoreId": null,
+      "filialeId": "F001"
     },
     {
       "id": "M007",
@@ -238,7 +244,8 @@
       "targa": "LM 555 ZQ",
       "stato": "In servizio",
       "km": 78900,
-      "autoreId": "D002"
+      "autoreId": "D002",
+      "filialeId": "F001"
     },
     {
       "id": "M008",
@@ -246,7 +253,8 @@
       "targa": "VN 120 EX",
       "stato": "Disponibile",
       "km": 8700,
-      "autoreId": null
+      "autoreId": null,
+      "filialeId": "F002"
     },
     {
       "id": "M009",
@@ -254,7 +262,8 @@
       "targa": "SB 641 GT",
       "stato": "Manutenzione",
       "km": 156000,
-      "autoreId": null
+      "autoreId": null,
+      "filialeId": "F002"
     },
     {
       "id": "M010",
@@ -262,7 +271,8 @@
       "targa": "QF 772 HU",
       "stato": "In servizio",
       "km": 29300,
-      "autoreId": "D004"
+      "autoreId": "D004",
+      "filialeId": "F002"
     },
     {
       "id": "M011",
@@ -270,7 +280,8 @@
       "targa": "JK 438 WS",
       "stato": "Disponibile",
       "km": 51200,
-      "autoreId": null
+      "autoreId": null,
+      "filialeId": "F003"
     },
     {
       "id": "M012",
@@ -278,7 +289,8 @@
       "targa": "TZ 290 LC",
       "stato": "In servizio",
       "km": 19800,
-      "autoreId": "D006"
+      "autoreId": "D006",
+      "filialeId": "F003"
     }
   ],
   "DRIVERS": [
@@ -292,7 +304,8 @@
       "dataNascita": "1985-03-12",
       "stato": "In servizio",
       "mezzoId": "M003",
-      "km_anno": 42300
+      "km_anno": 42300,
+      "filialeId": "F_ROMA"
     },
     {
       "id": "D002",
@@ -304,7 +317,8 @@
       "dataNascita": "1991-07-24",
       "stato": "In servizio",
       "mezzoId": "M007",
-      "km_anno": 38100
+      "km_anno": 38100,
+      "filialeId": "F_ROMA"
     },
     {
       "id": "D003",
@@ -316,7 +330,8 @@
       "dataNascita": "1978-11-05",
       "stato": "In servizio",
       "mezzoId": "M001",
-      "km_anno": 55700
+      "km_anno": 55700,
+      "filialeId": "F_ROMA"
     },
     {
       "id": "D004",
@@ -328,7 +343,8 @@
       "dataNascita": "1994-02-18",
       "stato": "In servizio",
       "mezzoId": "M010",
-      "km_anno": 29800
+      "km_anno": 29800,
+      "filialeId": "F_ROMA"
     },
     {
       "id": "D005",
@@ -340,7 +356,8 @@
       "dataNascita": "1982-09-30",
       "stato": "In servizio",
       "mezzoId": "M005",
-      "km_anno": 48200
+      "km_anno": 48200,
+      "filialeId": "F001"
     },
     {
       "id": "D006",
@@ -352,7 +369,8 @@
       "dataNascita": "1997-05-14",
       "stato": "In servizio",
       "mezzoId": "M012",
-      "km_anno": 21400
+      "km_anno": 21400,
+      "filialeId": "F001"
     },
     {
       "id": "D007",
@@ -364,7 +382,8 @@
       "dataNascita": "1975-12-22",
       "stato": "Disponibile",
       "mezzoId": null,
-      "km_anno": 61000
+      "km_anno": 61000,
+      "filialeId": "F002"
     },
     {
       "id": "D008",
@@ -376,7 +395,8 @@
       "dataNascita": "1989-08-07",
       "stato": "Disponibile",
       "mezzoId": null,
-      "km_anno": 33500
+      "km_anno": 33500,
+      "filialeId": "F002"
     },
     {
       "id": "D009",
@@ -388,7 +408,8 @@
       "dataNascita": "1987-04-03",
       "stato": "Ferie",
       "mezzoId": null,
-      "km_anno": 44800
+      "km_anno": 44800,
+      "filialeId": "F003"
     },
     {
       "id": "D010",
@@ -400,7 +421,8 @@
       "dataNascita": "1993-10-19",
       "stato": "Malattia",
       "mezzoId": null,
-      "km_anno": 18700
+      "km_anno": 18700,
+      "filialeId": "F003"
     }
   ]
 }

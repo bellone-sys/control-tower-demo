@@ -177,17 +177,39 @@
   border-bottom: 1px solid #ffe0b2;
 }
 
-/* Scheduling row */
+/* Scheduling block */
+.sc-sched-block {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--fp-cool-gray);
+  background: var(--fp-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sc-sched-empty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--fp-gray-light);
+  font-style: italic;
+}
 .sc-sched-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  border-bottom: 1px solid var(--fp-cool-gray);
-  background: var(--fp-bg);
+  gap: 6px;
   flex-wrap: wrap;
 }
-.sched-range-text { font-size: 11px; color: var(--fp-gray-mid); white-space: nowrap; }
+.sched-range-text { font-size: 11px; color: var(--fp-charcoal); font-weight: 500; white-space: nowrap; }
+.sched-invio-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: var(--fp-charcoal);
+  color: #fff;
+  white-space: nowrap;
+}
 .sched-giorni-chips { display: flex; gap: 3px; flex-wrap: wrap; }
 .sched-chip {
   font-size: 10px;

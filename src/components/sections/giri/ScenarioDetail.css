@@ -257,6 +257,36 @@
 }
 .btn-confirm-modal:hover { opacity: .85; }
 
+/* Orario invio row */
+.sched-invio-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sched-time-input {
+  width: 110px !important;
+  flex-shrink: 0;
+}
+.sched-invio-hint {
+  font-size: 11px;
+  color: var(--fp-gray-mid);
+  font-style: italic;
+}
+
+/* Modal info note */
+.risorse-modal-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 24px;
+  background: #e3f0fb;
+  color: #1565C0;
+  font-size: 12px;
+  border-bottom: 1px solid #bbdefb;
+}
+.risorse-modal-note svg { flex-shrink: 0; }
+
 /* Responsive */
 @media (max-width: 900px) {
   .sc-detail-grid { grid-template-columns: 1fr; }

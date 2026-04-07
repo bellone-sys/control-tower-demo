@@ -37,6 +37,7 @@ export default function ScenarioDetail({ scenario, risorse, onBack, onMetaChange
     dataInizio: new Date().toISOString().slice(0, 10),
     dataFine: '',
     giorni: [1, 2, 3, 4, 5],
+    orarioInvio: '',
   })
   const [schedDirty, setSchedDirty] = useState(false)
   const [showRisorse, setShowRisorse] = useState(false)
@@ -51,6 +52,10 @@ export default function ScenarioDetail({ scenario, risorse, onBack, onMetaChange
     })
     return map
   })
+
+  // Filter resources by filiale
+  const mezziFiliale   = MEZZI.filter(m => m.filialeId === filiale.id && m.stato !== 'Manutenzione')
+  const driversFiliale = DRIVERS.filter(d => d.filialeId === filiale.id && (d.stato === 'In servizio' || d.stato === 'Disponibile'))
 
   function toggleGiorno(i) {
     setSched(s => {
@@ -146,6 +151,8 @@ export default function ScenarioDetail({ scenario, risorse, onBack, onMetaChange
                 <button className="btn-save-sched" onClick={saveSched}>Salva</button>
               )}
             </div>
+
+            {/* Date range */}
             <div className="sched-fields">
               <label className="sched-field">
                 <span className="sched-field-label">Data inizio</span>
@@ -166,6 +173,8 @@ export default function ScenarioDetail({ scenario, risorse, onBack, onMetaChange
                 />
               </label>
             </div>
+
+            {/* Giorni attivi */}
             <div className="sched-label-row">
               <span className="sched-field-label">Giorni attivi</span>
             </div>
@@ -177,6 +186,28 @@ export default function ScenarioDetail({ scenario, risorse, onBack, onMetaChange
                   onClick={() => toggleGiorno(i)}
                 >{g}</button>
               ))}
+            </div>
+
+            {/* Orario invio percorsi */}
+            <div className="sched-label-row" style={{ marginTop: 14 }}>
+              <span className="sched-field-label">Invio percorsi ai driver</span>
+            </div>
+            <div className="sched-invio-row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--fp-gray-mid)', flexShrink: 0 }}>
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <input
+                type="time"
+                className="sched-date-input sched-time-input"
+                value={sched.orarioInvio || ''}
+                placeholder="HH:MM"
+                onChange={e => { setSched(s => ({ ...s, orarioInvio: e.target.value })); setSchedDirty(true) }}
+              />
+              <span className="sched-invio-hint">
+                {sched.orarioInvio
+                  ? `I percorsi saranno inviati automaticamente alle ${sched.orarioInvio}`
+                  : 'Nessun invio automatico'}
+              </span>
             </div>
           </div>
 
@@ -258,13 +289,17 @@ export default function ScenarioDetail({ scenario, risorse, onBack, onMetaChange
               <h3>Assegna risorse — {filiale.nome}</h3>
               <button className="risorse-modal-close" onClick={() => setShowRisorse(false)}>×</button>
             </div>
+            <div className="risorse-modal-note">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Visualizzati solo mezzi e autisti assegnati alla filiale <strong>{filiale.nome}</strong>
+            </div>
             <div className="risorse-modal-body">
               <table className="risorse-table">
                 <thead>
                   <tr>
                     <th>Giro</th>
-                    <th>Mezzo</th>
-                    <th>Autista</th>
+                    <th>Mezzo ({mezziFiliale.length} disponibili)</th>
+                    <th>Autista ({driversFiliale.length} disponibili)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -284,11 +319,11 @@ export default function ScenarioDetail({ scenario, risorse, onBack, onMetaChange
                           }))}
                         >
                           <option value="">— Seleziona mezzo —</option>
-                          {MEZZI.filter(m => m.stato !== 'Manutenzione').map(m => {
+                          {mezziFiliale.map(m => {
                             const mod = MODELLI_MEZZI.find(mm => mm.catalogoId === m.catalogoId)
                             return (
                               <option key={m.id} value={m.id}>
-                                {m.targa}{mod ? ` — ${mod.marca} ${mod.modello.split(' ')[0]}` : ''}
+                                {m.targa}{mod ? ` — ${mod.marca} ${mod.modello.split(' ')[0]}` : ''} ({m.stato})
                               </option>
                             )
                           })}
@@ -304,9 +339,9 @@ export default function ScenarioDetail({ scenario, risorse, onBack, onMetaChange
                           }))}
                         >
                           <option value="">— Seleziona autista —</option>
-                          {DRIVERS.filter(d => d.stato === 'In servizio' || d.stato === 'Disponibile').map(d => (
+                          {driversFiliale.map(d => (
                             <option key={d.id} value={d.id}>
-                              {d.cognome} {d.nome} — {d.patente}
+                              {d.cognome} {d.nome} — {d.patente} ({d.stato})
                             </option>
                           ))}
                         </select>
