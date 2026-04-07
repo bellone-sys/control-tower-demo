@@ -193,7 +193,7 @@ export default function TabScenari({ giri, onStartJob, addNotification }) {
     <div>
       {/* Toolbar */}
       <div className="scenari-toolbar">
-        <span className="scenari-title">Scenari per filiale</span>
+        <span className="scenari-title">Scenari</span>
         <div className="scenari-filter-tabs">
           <button
             className={`scenari-ftab${filter === 'tutti' ? ' active' : ''}`}

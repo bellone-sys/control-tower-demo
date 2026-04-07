@@ -38,7 +38,15 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--fp-font, Inter, sans-serif);
+  padding: 4px 8px;
+  border-radius: var(--radius, 6px);
+  transition: background .15s;
 }
+.header-user:hover { background: rgba(0,0,0,.05); }
 .user-avatar {
   width: 32px;
   height: 32px;

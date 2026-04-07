@@ -23,10 +23,17 @@ const LANG_OPTIONS = [
   { value: 'de', flag: '🇩🇪', label: 'Deutsch' },
 ]
 
-export default function SettingsPanel({ onClose }) {
+export default function SettingsPanel({ onClose, hiddenTabs = [], defaultTab }) {
   const { settings, resetTutorial, resetAllTutorials, setTutorialsEnabled } = useTutorial()
   const { lang, setLang, t } = useI18n()
-  const [activeTab, setActiveTab] = useState('tutorials')
+
+  const ALL_TABS = [
+    { id: 'tutorials', label: t('settings.tab.tutorials', 'Tutorial') },
+    { id: 'interface', label: t('settings.tab.interface', 'Interfaccia') },
+    { id: 'about',     label: t('settings.tab.about', 'Info') },
+  ].filter(tab => !hiddenTabs.includes(tab.id))
+
+  const [activeTab, setActiveTab] = useState(() => defaultTab ?? ALL_TABS[0]?.id ?? 'tutorials')
   const [confirmReset, setConfirmReset] = useState(false)
 
   return (
@@ -41,15 +48,11 @@ export default function SettingsPanel({ onClose }) {
 
         {/* Tabs */}
         <div className="settings-tabs">
-          <button className={`settings-tab ${activeTab === 'tutorials' ? 'active' : ''}`} onClick={() => setActiveTab('tutorials')}>
-            {t('settings.tab.tutorials', 'Tutorial')}
-          </button>
-          <button className={`settings-tab ${activeTab === 'interface' ? 'active' : ''}`} onClick={() => setActiveTab('interface')}>
-            {t('settings.tab.interface', 'Interfaccia')}
-          </button>
-          <button className={`settings-tab ${activeTab === 'about' ? 'active' : ''}`} onClick={() => setActiveTab('about')}>
-            {t('settings.tab.about', 'Info')}
-          </button>
+          {ALL_TABS.map(tab => (
+            <button key={tab.id} className={`settings-tab ${activeTab === tab.id ? 'active' : ''}`} onClick={() => setActiveTab(tab.id)}>
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         <div className="settings-content">

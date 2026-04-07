@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react'
 import { APP_VERSION } from '../version'
 import { getVisibleMenuGroups, getMenuGroupState, setMenuGroupState } from '../config/menuStructure'
 import { useI18n } from '../contexts/I18nContext'
+import SettingsPanel from './SettingsPanel/SettingsPanel'
 
 // Mappa item.id → chiave i18n
 const SECTION_KEYS = {
@@ -58,6 +59,7 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
   const { t } = useI18n()
   const isAdmin = user?.ruolo === 'admin'
   const visibleGroups = useMemo(() => getVisibleMenuGroups(isAdmin), [isAdmin])
+  const [showAbout, setShowAbout] = useState(false)
   const [groupStates, setGroupStates] = useState(() => {
     const states = {}
     getVisibleMenuGroups(isAdmin).forEach(group => {
@@ -143,8 +145,18 @@ export default function Sidebar({ active, onNav, eccezioniCount, user, open, onC
       </nav>
 
 <div className="sidebar-footer">
-        <div className="sidebar-version">v{APP_VERSION} · Demo</div>
+        <button className="sidebar-version sidebar-version-btn" onClick={() => setShowAbout(true)} title="Info applicazione">
+          v{APP_VERSION} · Demo
+        </button>
       </div>
+
+      {showAbout && (
+        <SettingsPanel
+          hiddenTabs={['tutorials', 'interface']}
+          defaultTab="about"
+          onClose={() => setShowAbout(false)}
+        />
+      )}
     </aside>
   )
 }
