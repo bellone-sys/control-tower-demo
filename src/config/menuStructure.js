@@ -60,6 +60,16 @@ export const MENU_GROUPS = [
     ],
   },
   {
+    id: 'esecuzione',
+    label: 'Esecuzione',
+    icon: 'IconPlay',
+    collapsed: true,
+    collapsible: true,
+    items: [
+      { id: 'esecuzioneGiri', label: 'Giri', icon: 'IconRoute', section: 'esecuzioneGiri' },
+    ],
+  },
+  {
     id: 'monitoraggio',
     label: 'Monitoraggio',
     icon: 'IconChart',

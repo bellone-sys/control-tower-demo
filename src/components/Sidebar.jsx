@@ -20,14 +20,16 @@ const SECTION_KEYS = {
   utenti:         'nav.utenti',
   eccezioni:      'nav.eccezioni',
   report:         'nav.report',
-  economics:      'nav.economics',
-  releaseNotes:   'nav.releaseNotes',
-  credits:        'nav.credits',
+  economics:        'nav.economics',
+  esecuzioneGiri:   'nav.esecuzioneGiri',
+  releaseNotes:     'nav.releaseNotes',
+  credits:          'nav.credits',
 }
 
 // Mappa group.id → chiave i18n
 const GROUP_KEYS = {
   pianificazione:  'nav.group.planning',
+  esecuzione:      'nav.group.execution',
   amministrazione: 'nav.group.administration',
   anagrafiche:     'nav.group.registry',
   dati:            'nav.group.data',
@@ -53,6 +55,7 @@ const ICON_MAP = {
   IconScenario:  IconScenario,
   IconPerson:    IconPerson,
   IconCoin:      IconCoin,
+  IconPlay:      IconPlay,
 }
 
 export default function Sidebar({ active, onNav, eccezioniCount, user, open, onClose }) {
@@ -324,6 +327,15 @@ function IconCoin() {
       <circle cx="12" cy="12" r="9"/>
       <path d="M14.5 8.5C14 7.5 13 7 12 7c-1.7 0-3 1.1-3 2.5 0 1.8 2 2.5 3 3s3 1.2 3 3c0 1.4-1.3 2.5-3 2.5-1 0-2-.5-2.5-1.5"/>
       <line x1="12" y1="5" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="19"/>
+    </svg>
+  )
+}
+/** Esecuzione / play */
+function IconPlay() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/>
     </svg>
   )
 }

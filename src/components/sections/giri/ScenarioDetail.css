@@ -457,6 +457,49 @@
 .sc-map-legend-square { border-radius: 2px; transform: rotate(45deg); }
 .sc-map-legend-name { font-size: 11px; color: var(--fp-charcoal); }
 
+/* Toggle all */
+.sc-map-legend-toggle-all {
+  background: none;
+  border: 1px solid var(--fp-border);
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--fp-gray-mid);
+  white-space: nowrap;
+  transition: border-color .15s, color .15s;
+  align-self: center;
+}
+.sc-map-legend-toggle-all:hover {
+  border-color: var(--fp-charcoal);
+  color: var(--fp-charcoal);
+}
+
+/* Legenda interattiva */
+.sc-map-legend-btn {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 2px 5px 2px 2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: border-color .15s, opacity .15s;
+}
+.sc-map-legend-btn:hover {
+  border-color: var(--fp-border);
+  background: var(--fp-bg);
+}
+.sc-map-legend-btn.sc-legend-hidden {
+  opacity: .4;
+}
+.sc-map-legend-btn.sc-legend-hidden .sc-map-legend-name {
+  text-decoration: line-through;
+  color: var(--fp-gray-light);
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .sc-detail-grid { grid-template-columns: 1fr; }

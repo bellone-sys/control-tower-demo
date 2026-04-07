@@ -1,3 +1,68 @@
+/* ── Layout split lista + panel ─────────────────────────────────────────── */
+
+.pr-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.pr-layout > .section-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Panel dettaglio laterale ────────────────────────────────────────────── */
+
+.pr-detail-panel {
+  width: 420px;
+  flex-shrink: 0;
+  background: #fff;
+  border: 1px solid var(--fp-border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  position: sticky;
+  top: 0;
+}
+
+.pr-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--fp-border);
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.pr-panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pr-panel-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--fp-gray-mid);
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background .15s;
+  flex-shrink: 0;
+}
+.pr-panel-close:hover { background: var(--fp-cool-gray); }
+
+/* ── ─────────────────────────────────────────────────────────────────────── */
+
 .copy-id-btn {
   display: inline-flex;
   align-items: center;
@@ -53,6 +118,10 @@
 .pudo-tipo-icon { margin-right: 6px; font-size: 14px; }
 
 .coord-cell { font-family: 'Courier New', monospace; font-size: 11px; }
+
+.coord-inline { margin-top: 3px; }
+.coord-inline .copy-id-btn { font-size: 10px; opacity: .75; }
+.coord-inline .id-code { font-size: 10px; color: var(--fp-gray-mid); }
 
 .orari-oggi {
   font-size: 12px;

@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { DRIVERS, MEZZI, MODELLI_MEZZI } from '../../../data/flotta'
 import './ScenarioDetail.css'
+import GiroSequenceEditor from './GiroSequenceEditor'
 
 const GIORNI_LABEL = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab']
 
@@ -98,6 +100,21 @@ export default function ScenarioDetail({ scenario, risorse, onBack }) {
     ...g,
     color: GIRO_COLORS[i % GIRO_COLORS.length],
   }))
+
+  // Visibilità giri sulla mappa — tutti visibili per default
+  const [hiddenGiri, setHiddenGiri] = useState(new Set())
+  function toggleGiro(id) {
+    setHiddenGiri(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
+  const allIds = giriWithColor.map(g => g.id)
+  const allHidden = allIds.length > 0 && allIds.every(id => hiddenGiri.has(id))
+  function toggleAll() {
+    setHiddenGiri(allHidden ? new Set() : new Set(allIds))
+  }
 
   // Collect all lat/lng points for bounds
   const allPoints = giriWithColor.flatMap(g => [
@@ -213,12 +230,27 @@ export default function ScenarioDetail({ scenario, risorse, onBack }) {
           <h3>Mappa PUDO</h3>
           {/* Legend */}
           <div className="sc-map-legend">
-            {giriWithColor.map(g => (
-              <div key={g.id} className="sc-map-legend-item">
-                <span className="sc-map-legend-dot" style={{ background: g.color }} />
-                <span className="sc-map-legend-name">{g.nome}</span>
-              </div>
-            ))}
+            <button
+              className="sc-map-legend-toggle-all"
+              onClick={toggleAll}
+              title={allHidden ? 'Mostra tutti' : 'Nascondi tutti'}
+            >
+              {allHidden ? 'Seleziona tutti' : 'Deseleziona tutti'}
+            </button>
+            {giriWithColor.map(g => {
+              const hidden = hiddenGiri.has(g.id)
+              return (
+                <button
+                  key={g.id}
+                  className={`sc-map-legend-item sc-map-legend-btn${hidden ? ' sc-legend-hidden' : ''}`}
+                  onClick={() => toggleGiro(g.id)}
+                  title={hidden ? `Mostra ${g.nome}` : `Nascondi ${g.nome}`}
+                >
+                  <span className="sc-map-legend-dot" style={{ background: hidden ? '#ccc' : g.color }} />
+                  <span className="sc-map-legend-name">{g.nome}</span>
+                </button>
+              )
+            })}
             <div className="sc-map-legend-item sc-map-legend-sep">
               <span className="sc-map-legend-shape sc-map-legend-circle" />
               <span className="sc-map-legend-name">Negozio</span>
@@ -245,6 +277,7 @@ export default function ScenarioDetail({ scenario, risorse, onBack }) {
 
               {/* Polylines per giro */}
               {giriWithColor.map(g => {
+                if (hiddenGiri.has(g.id)) return null
                 const sorted = [...(g.tappe || [])].sort((a, b) => a.ordine - b.ordine)
                 if (!sorted.length) return null
                 const pts = [
@@ -266,8 +299,9 @@ export default function ScenarioDetail({ scenario, risorse, onBack }) {
               )}
 
               {/* PUDO markers */}
-              {giriWithColor.map(g =>
-                (g.tappe || []).map(t => (
+              {giriWithColor.map(g => {
+                if (hiddenGiri.has(g.id)) return null
+                return (g.tappe || []).map(t => (
                   <Marker
                     key={`${g.id}-${t.pudoId}-${t.ordine}`}
                     position={[t.lat, t.lng]}
@@ -281,7 +315,7 @@ export default function ScenarioDetail({ scenario, risorse, onBack }) {
                     </Popup>
                   </Marker>
                 ))
-              )}
+              })}
             </MapContainer>
           )}
         </div>
@@ -355,6 +389,8 @@ export default function ScenarioDetail({ scenario, risorse, onBack }) {
           </table>
         </div>
       </div>
+
+      <GiroSequenceEditor key={scenario.id} giriWithColor={giriWithColor} scenario={scenario} />
     </div>
   )
 }

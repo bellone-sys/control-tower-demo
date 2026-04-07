@@ -18,6 +18,7 @@ import Eccezioni from './components/sections/Eccezioni'
 import Report from './components/sections/Report'
 import ReleaseNotes from './components/sections/ReleaseNotes'
 import Credits from './components/sections/Credits'
+import EsecuzioneGiri from './components/sections/EsecuzioneGiri'
 import ProgressToast from './components/ui/ProgressToast'
 import { seedDemoHistory } from './services/historyService'
 import { TutorialProvider } from './contexts/TutorialContext'
@@ -146,7 +147,8 @@ export default function App() {
     report:       <Report />,
     releaseNotes: <ReleaseNotes />,
     credits:      <Credits />,
-    economics:    <PlaceholderSection title="Economics" icon="💰" desc="Dashboard economica in sviluppo: margini per filiale, costo per consegna, revenue per giro." />,
+    economics:      <PlaceholderSection title="Economics" icon="💰" desc="Dashboard economica in sviluppo: margini per filiale, costo per consegna, revenue per giro." />,
+    esecuzioneGiri: <EsecuzioneGiri />,
   }
 
   return (

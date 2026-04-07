@@ -368,7 +368,7 @@ export default function TabScenari({ giri, onStartJob, addNotification }) {
               {/* Stats */}
               <div className="scenario-stats">
                 <button className="scenario-stat scenario-stat-btn" onClick={() => setGiriModalId(sc.id)} title="Vedi dettaglio giri">
-                  <span className="scenario-stat-val sc-stat-link">{sc.giri.length}</span>
+                  <span className="scenario-stat-val">{sc.giri.length}</span>
                   <span className="scenario-stat-label">Giri</span>
                 </button>
                 <div className="scenario-stat">
@@ -387,11 +387,6 @@ export default function TabScenari({ giri, onStartJob, addNotification }) {
 
               {/* Actions */}
               <div className="scenario-card-actions">
-                {!canAct && !attivo && (
-                  <span className="sc-res-warn">
-                    {!schedOk && !risorseOk ? '⚠ Sched. + risorse' : !schedOk ? '⚠ Schedulazione' : '⚠ Risorse'}
-                  </span>
-                )}
                 <button
                   className="scenario-action-btn"
                   onClick={() => handleClone(sc)}

@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { FILIALI } from '../../../data/filiali'
 import { DRIVERS } from '../../../data/flotta'
 import { STATI_GIRO } from '../../../data/giri'
+import { getExtraScenari } from '../../../services/scenariService'
 import MultiSelect from '../../ui/MultiSelect'
 import DetailGiro from './DetailGiro'
 import '../Sections.css'
@@ -11,6 +12,9 @@ const PAGE_SIZE = 15
 const FILIALI_OPT = FILIALI.map(f => ({ value: f.id, label: f.nome }))
 const DRIVERS_OPT = DRIVERS.map(d => ({ value: d.id, label: `${d.cognome} ${d.nome}` }))
 const STATI_OPT   = STATI_GIRO.map(s => ({ value: s, label: s }))
+
+// mappa filialeId → nome scenario base
+const FILIALE_MAP = Object.fromEntries(FILIALI.map(f => [f.id, f.nome]))
 
 function formatData(iso) {
   if (!iso) return '—'
@@ -75,22 +79,27 @@ function PaginationPages({ current, total, onPage }) {
   )
 }
 
-export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
-  const [search,        setSearch]        = useState('')
-  const [filterFiliale, setFilterFiliale] = useState([])
-  const [filterAutore,  setFilterAutore]  = useState([])
-  const [filterStato,   setFilterStato]   = useState([])
-  const [page,          setPage]          = useState(1)
-  const [selectedId,    setSelectedId]    = useState(null)
-  const [savedMsg,      setSavedMsg]      = useState('')
+export default function TabGiri({ giri, setGiri }) {
+  const [search,         setSearch]         = useState('')
+  const [filterFiliale,  setFilterFiliale]  = useState([])
+  const [filterAutore,   setFilterAutore]   = useState([])
+  const [filterStato,    setFilterStato]    = useState([])
+  const [filterScenario, setFilterScenario] = useState([])
+  const [page,           setPage]           = useState(1)
+  const [selectedId,     setSelectedId]     = useState(null)
 
-  // Set degli id giro già salvati come template (via sourceGiroId)
-  const savedGiroIds = useMemo(
-    () => new Set(templates.map(t => t.sourceGiroId).filter(Boolean)),
-    [templates]
-  )
+  // Opzioni scenari: base (1 per filiale) + clonati
+  const scenariOpt = useMemo(() => {
+    const base   = FILIALI.map(f => ({ value: `SC_${f.id}`, label: f.nome, filialeId: f.id }))
+    const extras = getExtraScenari().map(e => ({
+      value: e.id,
+      label: e.label,
+      filialeId: e.filialeId,
+    }))
+    return [...base, ...extras]
+  }, [])
 
-  const oggi = new Date().toISOString().slice(0, 10) // '2026-04-03'
+  const oggi = new Date().toISOString().slice(0, 10)
 
   // KPI
   const giriOggi      = useMemo(() => giri.filter(g => isSameDay(g.data, oggi)), [giri, oggi])
@@ -110,46 +119,26 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
         g.id.toLowerCase().includes(q)
       )
     }
-    if (filterFiliale.length) list = list.filter(g => filterFiliale.includes(g.filialeId))
-    if (filterAutore.length)  list = list.filter(g => filterAutore.includes(g.autoreId))
-    if (filterStato.length)   list = list.filter(g => filterStato.includes(g.stato))
+    if (filterFiliale.length)  list = list.filter(g => filterFiliale.includes(g.filialeId))
+    if (filterAutore.length)   list = list.filter(g => filterAutore.includes(g.autoreId))
+    if (filterStato.length)    list = list.filter(g => filterStato.includes(g.stato))
+    if (filterScenario.length) {
+      const filialeIds = new Set(
+        scenariOpt.filter(o => filterScenario.includes(o.value)).map(o => o.filialeId)
+      )
+      list = list.filter(g => filialeIds.has(g.filialeId))
+    }
 
-    // Ordinamento: prima per data desc, poi per id
     return [...list].sort((a, b) => {
       if (b.data !== a.data) return b.data.localeCompare(a.data)
       return a.id.localeCompare(b.id)
     })
-  }, [giri, search, filterFiliale, filterAutore, filterStato])
+  }, [giri, search, filterFiliale, filterAutore, filterStato, filterScenario, scenariOpt])
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   function handleSearch(v) { setSearch(v); setPage(1) }
-
-  function handleToggleTemplate(giro) {
-    const exists = templates.find(t => t.sourceGiroId === giro.id)
-    if (exists) {
-      // già salvato → rimuovi
-      setTemplates(prev => prev.filter(t => t.sourceGiroId !== giro.id))
-    } else {
-      // non salvato → crea template
-      const tpl = {
-        id: 'TPL' + Date.now(),
-        nome: 'Template ' + giro.nome,
-        filialeId: giro.filialeId,
-        autoreId: giro.autoreId,
-        mezzoId: giro.mezzoId,
-        depotLat: giro.depotLat,
-        depotLng: giro.depotLng,
-        note: '',
-        sourceGiroId: giro.id,
-        tappe: giro.tappe,
-      }
-      setTemplates(prev => [tpl, ...prev])
-      setSavedMsg('Template salvato!')
-      setTimeout(() => setSavedMsg(''), 2500)
-    }
-  }
 
   const selectedGiro = selectedId ? giri.find(g => g.id === selectedId) : null
 
@@ -179,12 +168,7 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
       <div className="card">
         <div className="card-header">
           <h3>Giri di consegna</h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {savedMsg && (
-              <span style={{ fontSize: 12, color: '#2E7D32', fontWeight: 500 }}>{savedMsg}</span>
-            )}
-            <span className="card-label">{filtered.length} giri</span>
-          </div>
+          <span className="card-label">{filtered.length} giri</span>
         </div>
 
         {/* Toolbar */}
@@ -221,6 +205,12 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
             value={filterStato}
             onChange={v => { setFilterStato(v); setPage(1) }}
           />
+          <MultiSelect
+            placeholder="Tutti gli scenari"
+            options={scenariOpt}
+            value={filterScenario}
+            onChange={v => { setFilterScenario(v); setPage(1) }}
+          />
         </div>
 
         {/* Tabella */}
@@ -228,8 +218,8 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Data</th>
                 <th>Giro</th>
+                <th>Scenario</th>
                 <th>Filiale</th>
                 <th>Autista</th>
                 <th>Tappe</th>
@@ -249,8 +239,8 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
                     style={{ cursor: 'pointer' }}
                     onClick={() => setSelectedId(g.id === selectedId ? null : g.id)}
                   >
-                    <td className="td-small">{formatData(g.data)}</td>
                     <td style={{ fontWeight: 500 }}>{g.nome}</td>
+                    <td className="td-small">{FILIALE_MAP[g.filialeId] ?? g.filialeId}</td>
                     <td className="td-small">{filiale ? filiale.nome : g.filialeId}</td>
                     <td className="td-small">{driver ? `${driver.cognome} ${driver.nome}` : g.autoreId}</td>
                     <td>
@@ -286,13 +276,6 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                             <circle cx="12" cy="12" r="3"/>
                           </svg>
-                        </button>
-                        <button
-                          className={`btn-icon btn-star${savedGiroIds.has(g.id) ? ' saved' : ''}`}
-                          title={savedGiroIds.has(g.id) ? 'Rimuovi template' : 'Salva come template'}
-                          onClick={() => handleToggleTemplate(g)}
-                        >
-                          {savedGiroIds.has(g.id) ? '★' : '☆'}
                         </button>
                       </div>
                     </td>
@@ -330,8 +313,6 @@ export default function TabGiri({ giri, setGiri, templates, setTemplates }) {
         <DetailGiro
           giro={selectedGiro}
           onClose={() => setSelectedId(null)}
-          isSaved={savedGiroIds.has(selectedGiro.id)}
-          onToggleTemplate={handleToggleTemplate}
         />
       </div>
     )

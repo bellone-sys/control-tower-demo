@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import pudosRoma from '../../data/pudosRoma.json'
 import PuntiRitiroDetail from './PuntiRitiroDetail'
+import AuditPanel from '../ui/AuditPanel'
 import MultiSelect from '../ui/MultiSelect'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
@@ -94,7 +95,8 @@ export default function PuntiRitiro() {
   const [filterTipo, setFilterTipo] = useState([])
   const [sort, setSort]         = useState('name-asc')
   const [page, setPage]         = useState(1)
-  const [selected, setSelected] = useState(null)
+  const [selected,   setSelected]   = useState(null)
+  const [auditPudo,  setAuditPudo]  = useState(null)
   const [viewMode, setViewMode] = useState('list')
 
   const filtered = useMemo(() => {
@@ -128,15 +130,11 @@ export default function PuntiRitiro() {
   function handleTipo(v)   { setFilterTipo(v); setPage(1) }
   function handleSort(v)   { setSort(v); setPage(1) }
 
-  if (selected) {
-    return <PuntiRitiroDetail pudo={selected} onBack={() => setSelected(null)} />
-  }
-
-  return (
+  const listBlock = (
     <div className="section-content">
       <div className="card">
         <div className="card-header">
-          <h3>PUDO — Roma</h3>
+          <h3>Pudo e Locker</h3>
           <div className="card-actions">
             <span className="card-label">{filtered.length} PUDO su {pudosRoma.length}</span>
             <div style={{ display: 'flex', border: '1px solid var(--fp-border)', borderRadius: 7, overflow: 'hidden' }}>
@@ -237,8 +235,7 @@ export default function PuntiRitiro() {
                 <th>Codice</th>
                 <th>Nome</th>
                 <th>Indirizzo</th>
-                <th>Coordinate</th>
-                <th>Vol. disp.</th>
+                <th>Capienza</th>
                 <th>Orari</th>
                 <th></th>
               </tr>
@@ -255,10 +252,10 @@ export default function PuntiRitiro() {
                       {p.name}
                     </td>
                     <td className="td-addr">
-                      {p.via ? `${p.via}${p.civico ? `, ${p.civico}` : ''}, ` : ''}{p.cap} — Roma (RM)
-                    </td>
-                    <td className="td-small coord-cell">
-                      <CopyId id={`${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}`} />
+                      <div>{p.via ? `${p.via}${p.civico ? `, ${p.civico}` : ''}, ` : ''}{p.cap} — Roma (RM)</div>
+                      <div className="coord-inline">
+                        <CopyId id={`${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}`} />
+                      </div>
                     </td>
                     <td className="td-small">
                       {getPudoVolumeLibero(p)} m³
@@ -274,13 +271,17 @@ export default function PuntiRitiro() {
                         <span className="orari-chiuso">—</span>
                       )}
                     </td>
-                    <td>
-                      <button className="btn-detail" onClick={e => { e.stopPropagation(); setSelected(p) }}>
+                    <td onClick={e => e.stopPropagation()} style={{ whiteSpace: 'nowrap' }}>
+                      <button className="btn-icon" title="Dettaglio" onClick={e => { e.stopPropagation(); setSelected(p) }}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                           <circle cx="12" cy="12" r="3"/>
                         </svg>
-                        Dettaglio
+                      </button>
+                      <button className="btn-icon" title="Cronologia" style={{ marginLeft: 4 }} onClick={e => { e.stopPropagation(); setAuditPudo(p) }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                        </svg>
                       </button>
                     </td>
                   </tr>
@@ -307,7 +308,24 @@ export default function PuntiRitiro() {
           </div>
         )}
       </div>
+
+      {auditPudo && (
+        <AuditPanel
+          open={true}
+          onClose={() => setAuditPudo(null)}
+          entityType="pudo"
+          entityId={auditPudo.id}
+          entityLabel={`${auditPudo.id} · ${auditPudo.name}`}
+        />
+      )}
     </div>
+  )
+
+  return (
+    <>
+      {listBlock}
+      {selected && <PuntiRitiroDetail pudo={selected} onClose={() => setSelected(null)} />}
+    </>
   )
 }
 

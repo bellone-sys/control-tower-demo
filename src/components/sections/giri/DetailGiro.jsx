@@ -52,8 +52,7 @@ function getStatoClass(stato) {
   return map[stato] || ''
 }
 
-export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate }) {
-  const [justSaved, setJustSaved] = useState(false)
+export default function DetailGiro({ giro, onClose }) {
   const [auditOpen, setAuditOpen] = useState(false)
 
   const filiale = FILIALI.find(f => f.id === giro.filialeId)
@@ -70,22 +69,6 @@ export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate })
   const oraPartenza = tappeOrd.length > 0 ? subMinutes(tappeOrd[0].oraArrivo, 15) : '07:00'
   const oraRientro  = tappeOrd.length > 0 ? addMinutes(tappeOrd[tappeOrd.length - 1].oraPartenza, 20) : '—'
 
-  function handleToggle() {
-    onToggleTemplate(giro)
-    if (!isSaved) {
-      // appena salvato: feedback breve
-      setJustSaved(true)
-      setTimeout(() => setJustSaved(false), 2000)
-    }
-  }
-
-  // Classe bottone: giallo se già salvato, verde breve se appena salvato
-  const btnClass = [
-    'btn-template',
-    justSaved  ? 'just-saved' : '',
-    isSaved && !justSaved ? 'is-saved' : '',
-  ].filter(Boolean).join(' ')
-
   return (
     <div className="giro-detail-panel">
       {/* Header */}
@@ -93,10 +76,6 @@ export default function DetailGiro({ giro, onClose, isSaved, onToggleTemplate })
         <button className="giro-detail-back" onClick={onClose} title="Chiudi">←</button>
         <span className="giro-detail-title">{giro.nome}</span>
         <span className={`giro-stato-badge ${getStatoClass(giro.stato)}`}>{giro.stato}</span>
-        <button className={btnClass} onClick={handleToggle} title={isSaved ? 'Rimuovi template' : 'Salva come template'}>
-          <span className="star-icon">{isSaved ? '★' : '☆'}</span>
-          {justSaved ? 'Salvato!' : isSaved ? 'Template' : 'Template'}
-        </button>
         <button className="giro-detail-close" onClick={onClose} title="Chiudi">×</button>
       </div>
 

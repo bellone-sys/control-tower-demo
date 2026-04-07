@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import AuditPanel from '../ui/AuditPanel'
 import './PuntiRitiroDetail.css'
 
 const DAYS = ['lun','mar','mer','gio','ven','sab','dom']
@@ -32,10 +31,9 @@ function getPudoVolumeLibero(pudo) {
   return +(tot * (1 - pct)).toFixed(2)
 }
 
-export default function PuntiRitiroDetail({ pudo, onBack }) {
+export default function PuntiRitiroDetail({ pudo, onClose }) {
   const mapRef = useRef(null)
   const mapInstance = useRef(null)
-  const [auditOpen, setAuditOpen] = useState(false)
 
   const todayIdx = [0,1,2,3,4,5,6][(new Date().getDay() + 6) % 7] // Mon=0
   const todayKey = DAYS[todayIdx]
@@ -107,40 +105,27 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
   const maxSlots = Math.max(...DAYS.map(d => (pudo.hours[d] || []).length), 1)
 
   return (
-    <div className="section-content">
-      {/* Back button + title */}
-      <div className="detail-header">
-        <button className="btn-back" onClick={onBack} aria-label="Torna all'elenco PUDO">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <path d="M19 12H5M12 5l-7 7 7 7"/>
-          </svg>
-          Torna all'elenco
-        </button>
-        <h2 className="detail-title">
-          Dettagli <span className="text-red">PUDO</span>
-          <button className="pudo-id-chip" onClick={copyId} title="Copia ID">
-            <code>{pudo.id}</code>
-            {copied
-              ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            }
-          </button>
-        </h2>
-        <button className="btn-audit" onClick={() => setAuditOpen(true)} title="Cronologia modifiche" style={{ marginLeft: 'auto' }}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-          </svg>
-          Cronologia
-        </button>
-      </div>
+    <>
+      {/* Backdrop */}
+      <div className="audit-backdrop open" onClick={onClose} aria-hidden="true" />
 
-      <AuditPanel
-        open={auditOpen}
-        onClose={() => setAuditOpen(false)}
-        entityType="pudo"
-        entityId={pudo.id}
-        entityLabel={`${pudo.id} · ${pudo.name}`}
-      />
+      {/* Panel slide-in */}
+      <aside className="audit-panel open pr-detail-panel" aria-label="Dettaglio PUDO">
+        {/* Header — stile identico AuditPanel */}
+        <div className="audit-panel-header">
+          <div className="audit-panel-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>Dettaglio PUDO</span>
+          </div>
+          <span className="audit-panel-entity">{pudo.id} · {pudo.name}</span>
+          <button className="audit-panel-close" onClick={onClose} title="Chiudi" aria-label="Chiudi">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        {/* Body scrollabile */}
+        <div className="audit-panel-body pr-panel-body">
+
 
       <div className="detail-grid">
 
@@ -239,6 +224,8 @@ export default function PuntiRitiroDetail({ pudo, onBack }) {
 
         </div>
       </div>
-    </div>
+      </div>
+      </aside>
+    </>
   )
 }
