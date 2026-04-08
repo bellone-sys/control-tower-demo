@@ -1,0 +1,47 @@
+{
+  "latest": "0.24.0",
+  "releases": [
+    {
+      "version": "0.24.0",
+      "date": "2026-04-08",
+      "title": "Sezione Densità di Popolazione",
+      "changelog": [
+        "Nuova sezione Densità di Popolazione nel modulo Dati",
+        "Visualizzazione in lista (tabella paginata, ordinabile, filtrabile) e mappa interattiva",
+        "Traduzioni i18n complete per la nuova sezione (it, en, fr, de)",
+        "Miglioramenti ai wizard step 2 e 5",
+        "Rimosso footer versione ridondante"
+      ]
+    },
+    {
+      "version": "0.23.0",
+      "date": "2026-04-07",
+      "title": "Miglioramenti Wizard e Heatmap",
+      "changelog": [
+        "Aggiunto autocomplete per nome scenario con filtri Densità estesi",
+        "Heatmap densità di popolazione su mappa wizard step 2",
+        "CI medio e popolazione nel riepilogo step 2",
+        "Spostamento legenda distribuzione CI sulla mappa"
+      ]
+    },
+    {
+      "version": "0.22.0",
+      "date": "2026-03-15",
+      "title": "Autocomplete e Filtri Avanzati",
+      "changelog": [
+        "Autocomplete nome scenario con filtri Densità estesi",
+        "Miglioramenti interfaccia wizard",
+        "Ottimizzazioni performance"
+      ]
+    },
+    {
+      "version": "0.21.0",
+      "date": "2026-03-01",
+      "title": "Modulo Dati",
+      "changelog": [
+        "Nuova sezione Densità di Popolazione nel modulo Dati",
+        "Visualizzazione dei dati di popolazione per area"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+.pf-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+}
+
+/* KPI Cards */
+.pf-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.pf-kpi-card {
+  padding: 20px;
+  background: #fff;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  text-align: center;
+  transition: all var(--transition);
+}
+
+.pf-kpi-card:hover {
+  border-color: var(--fp-charcoal);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pf-kpi-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--fp-charcoal);
+  margin-bottom: 8px;
+}
+
+.pf-kpi-label {
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.pf-kpi-trend {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--fp-gray-light);
+}
+
+/* Section */
+.pf-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pf-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+  margin: 0;
+}
+
+/* Chart Container */
+.pf-chart-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.pf-metric-chart {
+  padding: 16px;
+  background: #fff;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pf-metric-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pf-metric-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--fp-gray-mid);
+  font-weight: 500;
+}
+
+/* Weekly Grid */
+.pf-weekly-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.pf-weekly-card {
+  padding: 16px;
+  background: #fff;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all var(--transition);
+}
+
+.pf-weekly-card:hover {
+  border-color: var(--fp-charcoal);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pf-weekly-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--fp-cool-gray);
+}
+
+.pf-weekly-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pf-weekly-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.pf-label {
+  color: var(--fp-gray-mid);
+  font-weight: 500;
+}
+
+.pf-value {
+  font-weight: 700;
+  color: var(--fp-charcoal);
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+/* Tabella */
+.pf-tabella-wrapper {
+  overflow-x: auto;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.pf-tabella {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.pf-tabella thead {
+  background: var(--fp-bg);
+  border-bottom: 1px solid var(--fp-cool-gray);
+}
+
+.pf-tabella th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+  white-space: nowrap;
+  border-right: 1px solid var(--fp-cool-gray);
+}
+
+.pf-tabella th:last-child {
+  border-right: none;
+}
+
+.pf-tabella td {
+  padding: 12px;
+  border-right: 1px solid var(--fp-cool-gray);
+  border-bottom: 1px solid var(--fp-cool-gray);
+}
+
+.pf-tabella td:last-child {
+  border-right: none;
+}
+
+.pf-tabella tbody tr:hover {
+  background: #f9f9f9;
+}
+
+.pf-text-center {
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pf-container {
+    padding: 12px;
+  }
+
+  .pf-kpi-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pf-chart-container {
+    grid-template-columns: 1fr;
+  }
+
+  .pf-weekly-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pf-tabella {
+    font-size: 10px;
+  }
+
+  .pf-tabella td,
+  .pf-tabella th {
+    padding: 8px;
+  }
+}

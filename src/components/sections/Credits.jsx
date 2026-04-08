@@ -11,11 +11,11 @@ export default function Credits() {
         <div className="credits-hero-inner">
           <div className="credits-hero-badge">
             <span className="credits-dpd-dot" />
-            DPD
+            Fermopoint
           </div>
           <h1 className="credits-title">Fermopoint Control Tower</h1>
           <p className="credits-subtitle">
-            Sistema di monitoraggio e gestione della rete DPD Fermopoint
+            Sistema di monitoraggio e gestione della rete BRT Fermopoint
           </p>
           <span className="credits-version-pill">v{APP_VERSION}</span>
         </div>
@@ -34,13 +34,13 @@ export default function Credits() {
           </div>
           <p className="credits-card-desc">
             Software house italiana specializzata in soluzioni gestionali, logistica
-            e digital transformation. Fondata a Milano, Elipse progetta e sviluppa
+            e digital transformation. Fondata a Torino, Elipse progetta e sviluppa
             applicazioni su misura per aziende che operano in settori complessi e
             ad alto volume operativo.
           </p>
           <div className="credits-info-row">
             <span className="credits-info-label">Sede</span>
-            <span className="credits-info-value">Milano, Italia</span>
+            <span className="credits-info-value">Torino, Italia</span>
           </div>
           <div className="credits-info-row">
             <span className="credits-info-label">Web</span>
@@ -60,7 +60,7 @@ export default function Credits() {
           </p>
           <div className="credits-info-row">
             <span className="credits-info-label">Cliente</span>
-            <span className="credits-info-value">DPD Italia / Fermopoint</span>
+            <span className="credits-info-value">BRT italia / Fermopoint</span>
           </div>
           <div className="credits-info-row">
             <span className="credits-info-label">Versione</span>

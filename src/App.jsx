@@ -21,8 +21,14 @@ import ReleaseNotes from './components/sections/ReleaseNotes'
 import Credits from './components/sections/Credits'
 import EsecuzioneGiri from './components/sections/EsecuzioneGiri'
 import Segnalazioni from './components/sections/Segnalazioni'
+import AnalisiCoperturaPudo from './components/sections/AnalisiCoperturaPudo'
+import MonitoraggioEconomics from './components/sections/MonitoraggioEconomics'
+import MonitoraggioQuality from './components/sections/MonitoraggioQuality'
+import MonitoraggioPerformance from './components/sections/MonitoraggioPerformance'
 import ProgressToast from './components/ui/ProgressToast'
+import VersionUpdateModal from './components/VersionUpdateModal'
 import { seedDemoHistory } from './services/historyService'
+import { useVersionCheck } from './hooks/useVersionCheck'
 import { TutorialProvider } from './contexts/TutorialContext'
 import { I18nProvider } from './contexts/I18nContext'
 import { ThemeProvider } from './contexts/ThemeContext'
@@ -60,6 +66,7 @@ export default function App() {
   const [sidebarOpen,   setSidebarOpen]   = useState(false)
   const [notifications, setNotifications] = useState([])
   const [activeJob,     setActiveJob]     = useState(null)
+  const [newRelease,    setNewRelease]    = useState(null)
 
   useEffect(() => {
     if (user) localStorage.setItem(SESSION_KEY, JSON.stringify(user))
@@ -67,6 +74,14 @@ export default function App() {
   }, [user])
 
   useEffect(() => { seedDemoHistory() }, [])
+
+  // ── Version check ────────────────────────────────────────────────
+  useVersionCheck((releaseInfo) => {
+    if (releaseInfo) {
+      setNewRelease(releaseInfo)
+      addNotification('info', 'Nuova versione disponibile', `v${releaseInfo.version} è pronta per il download`)
+    }
+  })
 
   const eccezioniAperte   = ECCEZIONI.filter(e => e.stato === 'Aperta').length
   const segnalazioniNonLette = SEGNALAZIONI_INIT.filter(s => s.stato === 'Non letta').length
@@ -152,7 +167,10 @@ export default function App() {
     report:       <Report />,
     releaseNotes: <ReleaseNotes />,
     credits:      <Credits />,
-    economics:      <PlaceholderSection title="Economics" icon="💰" desc="Dashboard economica in sviluppo: margini per filiale, costo per consegna, revenue per giro." />,
+    economics:      <MonitoraggioEconomics />,
+    quality:        <MonitoraggioQuality />,
+    performance:    <MonitoraggioPerformance />,
+    analisiCopertura: <AnalisiCoperturaPudo />,
     esecuzioneGiri: <EsecuzioneGiri />,
     segnalazioni:   <Segnalazioni />,
   }
@@ -229,6 +247,8 @@ export default function App() {
           <ProgressToast job={activeJob} />
         </div>
       )}
+
+      <VersionUpdateModal release={newRelease} onClose={() => setNewRelease(null)} />
 
     </TutorialProvider>
     </I18nProvider>

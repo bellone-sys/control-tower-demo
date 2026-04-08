@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import L from 'leaflet'
 import { MapContainer, TileLayer, CircleMarker, Marker } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
 import { FILIALI_BRT } from '../../../../data/filialiBrt'
-import { PROVINCE_PER_REGIONE } from '../../../../data/province'
 import pudosRoma from '../../../../data/pudosRoma.json'
 import TutorialOverlay from '../../../tutorials/TutorialOverlay'
+import FilialeSelector from './FilialeSelector'
 import 'leaflet/dist/leaflet.css'
 
 const MONTHS_IT = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
@@ -28,90 +28,20 @@ function makeLockerIcon() {
 
 const LOCKER_ICON = makeLockerIcon()
 
-// BRT selection modal
-function BrtModal({ onSelect, onClose }) {
-  const [search, setSearch] = useState('')
-  const [sel, setSel] = useState(null)
-
-  const filtered = FILIALI_BRT.filter(f =>
-    f.nome.toLowerCase().includes(search.toLowerCase()) ||
-    f.citta.toLowerCase().includes(search.toLowerCase()) ||
-    f.provincia.toLowerCase().includes(search.toLowerCase())
-  )
-
-  return (
-    <div className="brt-modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="brt-modal-box">
-        <div className="brt-modal-header">
-          <span className="brt-modal-title">Filiali BRT — Seleziona deposito</span>
-          <button className="modal-close" onClick={onClose} style={{ fontSize: 22, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--fp-gray-mid)' }}>×</button>
-        </div>
-
-        <div className="brt-modal-search">
-          <input
-            type="text"
-            placeholder="Cerca per nome, città, provincia…"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            autoFocus
-          />
-        </div>
-
-        <div className="brt-modal-list">
-          {filtered.map(f => (
-            <div
-              key={f.id}
-              className={`brt-item${sel?.id === f.id ? ' selected' : ''}`}
-              onClick={() => setSel(f)}
-            >
-              <div className="brt-item-badge">BRT</div>
-              <div>
-                <div className="brt-item-nome">{f.nome}</div>
-                <div className="brt-item-prov">{f.citta} ({f.provincia}) · {f.cap}</div>
-              </div>
-              {sel?.id === f.id && (
-                <span style={{ marginLeft: 'auto', color: '#1565C0', fontWeight: 700, fontSize: 18 }}>✓</span>
-              )}
-            </div>
-          ))}
-          {filtered.length === 0 && (
-            <div style={{ padding: 20, textAlign: 'center', color: 'var(--fp-gray-mid)', fontSize: 13 }}>
-              Nessuna filiale trovata
-            </div>
-          )}
-        </div>
-
-        <div className="brt-modal-footer">
-          <button className="btn-secondary" onClick={onClose}>Annulla</button>
-          <button
-            className="btn-primary"
-            disabled={!sel}
-            onClick={() => sel && onSelect(sel)}
-          >
-            Seleziona
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export default function WizardStep1({ data, onChange, errors = [] }) {
-  const [showBrt, setShowBrt] = useState(false)
-  const [showProvinceDropdown, setShowProvinceDropdown] = useState(false)
-  const [provSearch, setProvSearch] = useState('')
-  const provRef = useRef(null)
+  // Handle filiale selection (both Fermopoint and BRT from suggestion)
+  const handleFilialeSelect = (filialeId) => {
+    // Check if it's a Fermopoint or BRT
+    const fpFiliale = FILIALI.find(f => f.id === filialeId)
+    const brtFiliale = FILIALI_BRT.find(f => f.id === filialeId)
 
-  // Close dropdown on outside click
-  useEffect(() => {
-    function handler(e) {
-      if (provRef.current && !provRef.current.contains(e.target)) {
-        setShowProvinceDropdown(false)
-      }
+    if (fpFiliale) {
+      onChange({ filialeId, province: [] })
+    } else if (brtFiliale) {
+      const extraFiliali = [...(data.extraFiliali || []), brtFiliale]
+      onChange({ extraFiliali, filialeId, province: [] })
     }
-    if (showProvinceDropdown) document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [showProvinceDropdown])
+  }
 
   // Auto-populate scenario name based on selected filiale
   useEffect(() => {
@@ -140,28 +70,6 @@ export default function WizardStep1({ data, onChange, errors = [] }) {
   // Validation flags
   const errNome    = errors.some(e => e.toLowerCase().includes('nome'))
   const errFiliale = errors.some(e => e.toLowerCase().includes('filiale'))
-
-  // Filter province dropdown
-  const filteredRegioni = PROVINCE_PER_REGIONE.map(r => ({
-    ...r,
-    province: r.province.filter(p =>
-      p.nome.toLowerCase().includes(provSearch.toLowerCase()) ||
-      p.codice.toLowerCase().includes(provSearch.toLowerCase())
-    ),
-  })).filter(r => r.province.length > 0)
-
-  function toggleProv(codice) {
-    const next = data.province.includes(codice)
-      ? data.province.filter(c => c !== codice)
-      : [...data.province, codice]
-    onChange({ province: next })
-  }
-
-  function handleBrtSelect(brtFiliale) {
-    const extraFiliali = [...(data.extraFiliali || []), brtFiliale]
-    onChange({ extraFiliali, filialeId: brtFiliale.id })
-    setShowBrt(false)
-  }
 
   // Split PUDOs into lockers and regular for map rendering
   const { pudosRegolari, pudosLocker } = useMemo(() => ({
@@ -204,121 +112,15 @@ export default function WizardStep1({ data, onChange, errors = [] }) {
           )}
         </div>
 
-        {/* Filiale — scelta primaria */}
+        {/* Filiale selector con tab Fermopoint e Suggerimento intelligente */}
         <div className="ws-row">
-          <div className="ws-section-title">
-            Filiale di riferimento <span style={{ color: 'var(--fp-red)' }}>*</span>
-          </div>
-          <div className={`wizard-filiale-list${errFiliale ? ' ws-list-error' : ''}`}>
-            {allFilialiCombo.map(f => (
-              <button
-                key={f.id}
-                className={`wizard-filiale-item${data.filialeId === f.id ? ' selected' : ''}`}
-                onClick={() => onChange({ filialeId: f.id, province: [] })}
-              >
-                <div className={`wfi-avatar${f.tipo === 'brt' ? ' brt' : ''}`}>
-                  {f.tipo === 'brt' ? 'B' : f.nome.charAt(0)}
-                </div>
-                <div className="wfi-info">
-                  <div className="wfi-nome">{f.nome}</div>
-                  <div className="wfi-citta">{f.citta} ({f.provincia})</div>
-                </div>
-                {data.filialeId === f.id && (
-                  <span style={{ color: 'var(--fp-red)', fontWeight: 700, fontSize: 16, flexShrink: 0 }}>✓</span>
-                )}
-              </button>
-            ))}
-
-            <button className="wizard-filiale-add-btn" onClick={() => setShowBrt(true)}>
-              <span style={{ fontSize: 16 }}>＋</span>
-              Aggiungi filiale da elenco filiali BRT
-            </button>
-          </div>
-          {errFiliale && (
-            <div className="ws-field-error">Seleziona una filiale di riferimento</div>
-          )}
+          <FilialeSelector
+            selectedFilialeId={data.filialeId}
+            onSelect={handleFilialeSelect}
+            errors={errors}
+          />
         </div>
 
-        {/* Selezione zona — alternativa quando non c'è filiale */}
-        {!data.filialeId && (
-          <div className="ws-row" ref={provRef}>
-            <div className="ws-zona-divider">
-              <span>oppure seleziona zona</span>
-            </div>
-            <div className="ws-section-title" style={{ marginTop: 10 }}>Selezione zona</div>
-            <div style={{ position: 'relative' }}>
-              <button
-                type="button"
-                className="province-trigger"
-                onClick={() => setShowProvinceDropdown(o => !o)}
-                style={{ width: '100%' }}
-              >
-                <span>
-                  {data.province.length === 0
-                    ? 'Seleziona province…'
-                    : `${data.province.length} province selezionate`}
-                </span>
-                <span style={{ fontSize: 10, color: 'var(--fp-gray-mid)' }}>{showProvinceDropdown ? '▲' : '▼'}</span>
-              </button>
-
-              {showProvinceDropdown && (
-                <div className="province-dropdown" style={{ position: 'absolute', zIndex: 500, width: '100%' }}>
-                  <div className="province-search">
-                    <input
-                      type="text"
-                      placeholder="Cerca provincia…"
-                      value={provSearch}
-                      onChange={e => setProvSearch(e.target.value)}
-                      autoFocus
-                    />
-                  </div>
-                  <div className="province-quick">
-                    <button type="button" onClick={() => onChange({ province: PROVINCE_PER_REGIONE.flatMap(r => r.province.map(p => p.codice)) })}>Tutte</button>
-                    <button type="button" onClick={() => onChange({ province: [] })}>Nessuna</button>
-                  </div>
-                  <div className="province-list">
-                    {filteredRegioni.map(region => (
-                      <div key={region.regione}>
-                        <button type="button" className="province-region-header">
-                          <span>{region.regione}</span>
-                        </button>
-                        <div className="province-items">
-                          {region.province.map(p => {
-                            const isSel = data.province.includes(p.codice)
-                            return (
-                              <button
-                                key={p.codice}
-                                type="button"
-                                className={`province-item${isSel ? ' selected' : ''}`}
-                                onClick={() => toggleProv(p.codice)}
-                              >
-                                <span className="province-check">{isSel ? '✓' : ' '}</span>
-                                <span className="province-code">{p.codice}</span>
-                                <span className="province-nome">{p.nome}</span>
-                              </button>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Selected province chips */}
-            {data.province.length > 0 && (
-              <div className="wizard-province-pills" style={{ marginTop: 6 }}>
-                {data.province.map(cod => (
-                  <span key={cod} className="wizard-prov-chip">
-                    {cod}
-                    <button onClick={() => toggleProv(cod)} title="Rimuovi">×</button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
 
         {/* PUDO count info */}
         <div className="ws-filter-info">
@@ -408,7 +210,6 @@ export default function WizardStep1({ data, onChange, errors = [] }) {
         </div>
       </div>
 
-      {showBrt && <BrtModal onSelect={handleBrtSelect} onClose={() => setShowBrt(false)} />}
     </div>
   )
 }

@@ -22,6 +22,9 @@ const SECTION_KEYS = {
   eccezioni:      'nav.eccezioni',
   report:         'nav.report',
   economics:        'nav.economics',
+  quality:          'nav.quality',
+  performance:      'nav.performance',
+  analisiCopertura: 'nav.analisiCopertura',
   esecuzioneGiri:   'nav.esecuzioneGiri',
   segnalazioni:     'nav.segnalazioni',
   releaseNotes:     'nav.releaseNotes',
@@ -85,7 +88,7 @@ export default function Sidebar({ active, onNav, eccezioniCount, segnalazioniCou
   return (
     <aside className={`sidebar${open ? ' open' : ''}`}>
       <div className="sidebar-logo">
-        <svg viewBox="0 0 110 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 140 36" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="36" height="36" rx="4" fill="#DC0032"/>
           <text x="18" y="25" textAnchor="middle" fontSize="14" fontFamily="Inter,sans-serif" fontWeight="700" fill="white">FP</text>
           <text x="44" y="14" fontSize="8" fontFamily="Inter,sans-serif" fontWeight="300" fill="rgba(255,255,255,.6)" letterSpacing="1.5">FERMOPOINT</text>

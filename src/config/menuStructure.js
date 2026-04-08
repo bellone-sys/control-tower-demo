@@ -78,9 +78,12 @@ export const MENU_GROUPS = [
     collapsed: true,
     collapsible: true,
     items: [
-      { id: 'eccezioni',  label: 'Qualità',       icon: 'IconAlert', section: 'eccezioni', badge: true },
-      { id: 'report',     label: 'Performances',  icon: 'IconChart', section: 'report' },
       { id: 'economics',  label: 'Economics',     icon: 'IconCoin',  section: 'economics' },
+      { id: 'quality',    label: 'Qualità',       icon: 'IconAlert', section: 'quality' },
+      { id: 'performance', label: 'Performance',  icon: 'IconChart', section: 'performance' },
+      { id: 'eccezioni',  label: 'Eccezioni',     icon: 'IconAlert', section: 'eccezioni', badge: true },
+      { id: 'report',     label: 'Report',        icon: 'IconChart', section: 'report' },
+      { id: 'analisiCopertura', label: 'Copertura PUDO', icon: 'IconMap', section: 'analisiCopertura' },
     ],
   },
 ]
