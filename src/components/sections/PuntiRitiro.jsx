@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import pudosRoma from '../../data/pudosRoma.json'
+import { usePudosLoader } from '../../hooks/usePudosLoader'
 import PuntiRitiroDetail from './PuntiRitiroDetail'
 import AuditPanel from '../ui/AuditPanel'
 import MultiSelect from '../ui/MultiSelect'
@@ -90,6 +91,11 @@ function PudoBoundsSync({ points }) {
 }
 
 export default function PuntiRitiro() {
+  // Loader per CSV Fermopoint
+  const { allPudos: fermoPointPudos, loading: loadingFermoPoint, stats } = usePudosLoader()
+
+  // UI State
+  const [dataSource, setDataSource] = useState('roma') // 'roma' | 'fermopoint'
   const [search, setSearch]     = useState('')
   const [filterCap, setFilterCap] = useState([])
   const [filterTipo, setFilterTipo] = useState([])
@@ -99,17 +105,25 @@ export default function PuntiRitiro() {
   const [auditPudo,  setAuditPudo]  = useState(null)
   const [viewMode, setViewMode] = useState('list')
 
+  // Scegli datasource
+  const pudosData = dataSource === 'fermopoint' ? (fermoPointPudos || []) : pudosRoma
+
   const filtered = useMemo(() => {
-    let list = pudosRoma
+    let list = pudosData
     if (search.trim()) {
       const q = search.trim().toLowerCase()
-      list = list.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        p.id.toLowerCase().includes(q) ||
-        p.cap.includes(q)
-      )
+      list = list.filter(p => {
+        const name = p.name ? p.name.toLowerCase() : ''
+        const id = p.id ? p.id.toLowerCase() : ''
+        const cap = p.cap ? p.cap.toString() : (p.postalCode || '')
+        return name.includes(q) || id.includes(q) || cap.includes(q)
+      })
     }
-    if (filterCap.length)  list = list.filter(p => filterCap.includes(p.cap))
+
+    // Per Fermopoint CSV: filterCap non è disponibile, filtra solo per tipo
+    if (dataSource === 'roma') {
+      if (filterCap.length) list = list.filter(p => filterCap.includes(p.cap))
+    }
     if (filterTipo.length) list = list.filter(p => filterTipo.includes(getPudoTipo(p)))
 
     const [field, dir] = sort.split('-')
@@ -120,7 +134,7 @@ export default function PuntiRitiro() {
         : String(bv).localeCompare(String(av))
     })
     return list
-  }, [search, filterCap, filterTipo, sort])
+  }, [search, filterCap, filterTipo, sort, pudosData, dataSource])
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -136,7 +150,34 @@ export default function PuntiRitiro() {
         <div className="card-header">
           <h3>Pudo e Locker</h3>
           <div className="card-actions">
-            <span className="card-label">{filtered.length} PUDO su {pudosRoma.length}</span>
+            {/* Data source selector */}
+            <select
+              value={dataSource}
+              onChange={(e) => {
+                setDataSource(e.target.value)
+                setPage(1)
+                setFilterCap([])
+              }}
+              style={{
+                padding: '6px 10px',
+                border: '1px solid var(--fp-border)',
+                borderRadius: 6,
+                fontSize: 12,
+                cursor: 'pointer',
+                background: '#fff',
+                marginRight: 12,
+              }}
+            >
+              <option value="roma">📍 Roma (demo)</option>
+              <option value="fermopoint" disabled={loadingFermoPoint}>
+                {loadingFermoPoint ? '📦 Fermopoint (caricamento...)' : '📦 Fermopoint'}
+              </option>
+            </select>
+
+            <span className="card-label">
+              {filtered.length} PUDO su {pudosData.length}
+              {dataSource === 'fermopoint' && stats && ` (${stats.total.toLocaleString('it-IT')} totali)`}
+            </span>
             <div style={{ display: 'flex', border: '1px solid var(--fp-border)', borderRadius: 7, overflow: 'hidden' }}>
               <button onClick={() => setViewMode('list')} title="Elenco"
                 style={{ padding: '5px 10px', background: viewMode === 'list' ? 'var(--fp-charcoal)' : 'white', color: viewMode === 'list' ? 'white' : 'var(--fp-gray-mid)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>

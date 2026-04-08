@@ -13,7 +13,6 @@ const SECTION_KEYS = {
   scenari:        'nav.scenari',
   giri:           'nav.giri',
   punti:          'nav.punti',
-  pudiRicerca:    'nav.pudiRicerca',
   autisti:        'nav.autisti',
   flotta:         'nav.flotta',
   filiali:        'nav.filiali',
