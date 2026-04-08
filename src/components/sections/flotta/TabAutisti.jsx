@@ -14,7 +14,7 @@ const STATO_CFG = {
 
 const STATI_OPT   = Object.keys(STATO_CFG).map(s => ({ value: s, label: s }))
 const PATENTE_OPT = ['B', 'B+C', 'C', 'D'].map(p => ({ value: p, label: p }))
-const EMPTY_FORM  = { nome: '', cognome: '', patente: 'B', telefono: '', email: '', dataNascita: '', stato: 'In servizio', km_anno: 0 }
+const EMPTY_FORM  = { nome: '', cognome: '', patente: 'B', telefono: '', email: '', dataNascita: '', stato: 'In servizio' }
 
 function SortTh({ field, sk, sd, onSort, children, style }) {
   const active = sk === field
@@ -72,7 +72,7 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
     setForm({
       nome: driver.nome, cognome: driver.cognome, patente: driver.patente,
       telefono: driver.telefono, email: driver.email, dataNascita: driver.dataNascita,
-      stato: driver.stato, km_anno: driver.km_anno
+      stato: driver.stato
     })
     setErrors({})
     setModal({ mode: 'edit', driver })
@@ -90,8 +90,7 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
     const e = validate()
     if (Object.keys(e).length) { setErrors(e); return }
 
-    const km_anno = Number(form.km_anno) || 0
-    const payload = { ...form, km_anno }
+    const payload = { ...form }
 
     if (modal.mode === 'add') {
       const maxId = drivers.length ? Math.max(...drivers.map(d => parseInt(d.id.slice(1)))) : 0
@@ -122,7 +121,6 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
     if (filterPatente.length) list = list.filter(d => filterPatente.includes(d.patente))
     return [...list].sort((a, b) => {
       let av = a[sortKey] ?? '', bv = b[sortKey] ?? ''
-      if (sortKey === 'km_anno') { av = Number(av); bv = Number(bv) }
       const cmp = typeof av === 'number' ? av - bv : String(av).localeCompare(String(bv), 'it')
       return sortDir === 'asc' ? cmp : -cmp
     })
@@ -163,7 +161,6 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
                 <SortTh field="patente"      sk={sortKey} sd={sortDir} onSort={handleSort}>Patente</SortTh>
                 <th>Contatti</th>
                 <SortTh field="dataNascita" sk={sortKey} sd={sortDir} onSort={handleSort}>Nascita</SortTh>
-                <SortTh field="km_anno"     sk={sortKey} sd={sortDir} onSort={handleSort}>Km/anno</SortTh>
                 <SortTh field="stato"       sk={sortKey} sd={sortDir} onSort={handleSort}>Stato</SortTh>
                 <th style={{ width: 70 }}></th>
               </tr>
@@ -187,7 +184,6 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
                       <div className="td-small">{d.email}</div>
                     </td>
                     <td className="td-small">{d.dataNascita}</td>
-                    <td className="td-small">{d.km_anno.toLocaleString('it-IT')} km</td>
                     <td>
                       <span className="status-badge" style={{ color: cfg.color, background: cfg.bg }}>{d.stato}</span>
                     </td>
@@ -267,10 +263,6 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
                   <select className="form-select" value={form.stato} onChange={setF('stato')}>
                     {Object.keys(STATO_CFG).map(s => <option key={s}>{s}</option>)}
                   </select>
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Km/anno</label>
-                  <input type="number" className="form-input" value={form.km_anno} onChange={setF('km_anno')} min="0" />
                 </div>
               </div>
             </div>
