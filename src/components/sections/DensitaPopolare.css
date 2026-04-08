@@ -92,6 +92,11 @@
   color: var(--fp-gray-mid);
 }
 
+.densita-location {
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+}
+
 .densita-val {
   text-align: right;
   font-variant-numeric: tabular-nums;

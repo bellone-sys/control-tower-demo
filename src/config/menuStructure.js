@@ -57,7 +57,7 @@ export const MENU_GROUPS = [
     collapsible: true,
     items: [
       { id: 'spedizioni', label: 'Spedizioni', icon: 'IconBox', section: 'spedizioni' },
-      { id: 'densita', label: 'Densità', icon: 'IconMap', section: 'densita' },
+      { id: 'densita', label: 'Densità', icon: 'IconDensity', section: 'densita' },
     ],
   },
   {

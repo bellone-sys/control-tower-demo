@@ -59,6 +59,7 @@ const ICON_MAP = {
   IconCoin:      IconCoin,
   IconPlay:      IconPlay,
   IconFlag:      IconFlag,
+  IconDensity:   IconDensity,
 }
 
 export default function Sidebar({ active, onNav, eccezioniCount, segnalazioniCount, user, open, onClose }) {
@@ -359,6 +360,29 @@ function IconFlag({ size = 16 }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
       <line x1="4" y1="22" x2="4" y2="15"/>
+    </svg>
+  )
+}
+/** Densità di Popolazione — Heatmap a densità */
+function IconDensity() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <rect x="3" y="3" width="4" height="4" opacity="0.3"/>
+      <rect x="8" y="3" width="4" height="4" opacity="0.5"/>
+      <rect x="13" y="3" width="4" height="4" opacity="0.8"/>
+      <rect x="18" y="3" width="3" height="4" opacity="1"/>
+      <rect x="3" y="8" width="4" height="4" opacity="0.4"/>
+      <rect x="8" y="8" width="4" height="4" opacity="0.7"/>
+      <rect x="13" y="8" width="4" height="4" opacity="0.9"/>
+      <rect x="18" y="8" width="3" height="4" opacity="1"/>
+      <rect x="3" y="13" width="4" height="4" opacity="0.5"/>
+      <rect x="8" y="13" width="4" height="4" opacity="0.8"/>
+      <rect x="13" y="13" width="4" height="4" opacity="1"/>
+      <rect x="18" y="13" width="3" height="4" opacity="1"/>
+      <rect x="3" y="18" width="4" height="3" opacity="0.6"/>
+      <rect x="8" y="18" width="4" height="3" opacity="0.9"/>
+      <rect x="13" y="18" width="4" height="3" opacity="1"/>
+      <rect x="18" y="18" width="3" height="3" opacity="1"/>
     </svg>
   )
 }

@@ -8,6 +8,9 @@ import pudosRoma from '../../../../data/pudosRoma.json'
 import TutorialOverlay from '../../../tutorials/TutorialOverlay'
 import 'leaflet/dist/leaflet.css'
 
+const MONTHS_IT = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+  'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre']
+
 function isLocker(p) {
   return p.name.toLowerCase().includes('locker')
 }
@@ -109,6 +112,23 @@ export default function WizardStep1({ data, onChange, errors = [] }) {
     if (showProvinceDropdown) document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [showProvinceDropdown])
+
+  // Auto-populate scenario name based on selected filiale
+  useEffect(() => {
+    if (!data.nomeScenario.trim() && data.filialeId) {
+      const allFilialiCombo = [
+        ...FILIALI.map(f => ({ ...f, tipo: 'fp' })),
+        ...(data.extraFiliali || []).map(f => ({ ...f, tipo: 'brt' })),
+      ]
+      const filiale = allFilialiCombo.find(f => f.id === data.filialeId)
+      if (filiale) {
+        const now = new Date()
+        const mese = MONTHS_IT[now.getMonth()]
+        const anno = now.getFullYear()
+        onChange({ nomeScenario: `${filiale.nome} — ${mese} ${anno}` })
+      }
+    }
+  }, [data.filialeId, data.extraFiliali])
 
   const allFilialiCombo = [
     ...FILIALI.map(f => ({ ...f, tipo: 'fp' })),

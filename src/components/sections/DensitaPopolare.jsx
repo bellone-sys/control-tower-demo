@@ -62,7 +62,10 @@ export default function DensitaPopolare() {
         d =>
           d.area.toLowerCase().includes(q) ||
           d.cap.toLowerCase().includes(q) ||
-          d.zona.toLowerCase().includes(q)
+          d.zona.toLowerCase().includes(q) ||
+          d.citta.toLowerCase().includes(q) ||
+          d.provincia.toLowerCase().includes(q) ||
+          d.regione.toLowerCase().includes(q)
       )
     }
     return [...list].sort((a, b) => {
@@ -143,7 +146,7 @@ export default function DensitaPopolare() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Cerca area, CAP, zona…"
+                  placeholder="Cerca area, CAP, zona, città, provincia, regione…"
                   value={search}
                   onChange={e => {
                     setSearch(e.target.value)
@@ -174,6 +177,15 @@ export default function DensitaPopolare() {
                     <SortTh field="area" sk={sortKey} sd={sortDir} onSort={handleSort}>
                       Area
                     </SortTh>
+                    <SortTh field="citta" sk={sortKey} sd={sortDir} onSort={handleSort}>
+                      Città
+                    </SortTh>
+                    <SortTh field="provincia" sk={sortKey} sd={sortDir} onSort={handleSort}>
+                      Provincia
+                    </SortTh>
+                    <SortTh field="regione" sk={sortKey} sd={sortDir} onSort={handleSort}>
+                      Regione
+                    </SortTh>
                     <SortTh field="zona" sk={sortKey} sd={sortDir} onSort={handleSort}>
                       Zona
                     </SortTh>
@@ -203,6 +215,9 @@ export default function DensitaPopolare() {
                           <code className="id-code">{area.cap}</code>
                         </td>
                         <td className="densita-area">{area.area}</td>
+                        <td className="densita-location">{area.citta}</td>
+                        <td className="densita-location">{area.provincia}</td>
+                        <td className="densita-location">{area.regione}</td>
                         <td className="densita-zona">{area.zona}</td>
                         <td className="densita-val">{area.abitanti.toLocaleString('it-IT')}</td>
                         <td className="densita-val">{area.kmq}</td>
