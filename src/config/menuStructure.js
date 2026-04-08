@@ -44,9 +44,10 @@ export const MENU_GROUPS = [
     collapsed: true,
     collapsible: true,
     items: [
-      { id: 'punti',      label: 'PUDO',       icon: 'IconMap',      section: 'punti' },
-      { id: 'filialiBrt', label: 'Filiali BRT', icon: 'IconBuilding', section: 'filialiBrt' },
-      { id: 'filiali',    label: 'Filiali',     icon: 'IconBuilding', section: 'filiali' },
+      { id: 'pudiRicerca', label: 'PUDO Ricerca',  icon: 'IconMap',      section: 'pudiRicerca' },
+      { id: 'punti',       label: 'PUDO',          icon: 'IconMap',      section: 'punti' },
+      { id: 'filialiBrt',  label: 'Filiali BRT',   icon: 'IconBuilding', section: 'filialiBrt' },
+      { id: 'filiali',     label: 'Filiali',       icon: 'IconBuilding', section: 'filiali' },
     ],
   },
   {

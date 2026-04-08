@@ -25,6 +25,7 @@ import AnalisiCoperturaPudo from './components/sections/AnalisiCoperturaPudo'
 import MonitoraggioEconomics from './components/sections/MonitoraggioEconomics'
 import MonitoraggioQuality from './components/sections/MonitoraggioQuality'
 import MonitoraggioPerformance from './components/sections/MonitoraggioPerformance'
+import PudiRicerca from './components/sections/PudiRicerca'
 import ProgressToast from './components/ui/ProgressToast'
 import VersionUpdateModal from './components/VersionUpdateModal'
 import { seedDemoHistory } from './services/historyService'
@@ -171,6 +172,7 @@ export default function App() {
     quality:        <MonitoraggioQuality />,
     performance:    <MonitoraggioPerformance />,
     analisiCopertura: <AnalisiCoperturaPudo />,
+    pudiRicerca:    <PudiRicerca />,
     esecuzioneGiri: <EsecuzioneGiri />,
     segnalazioni:   <Segnalazioni />,
   }
