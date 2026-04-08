@@ -389,11 +389,13 @@ export default function TabScenari({ giri, onStartJob, addNotification }) {
 
               {/* Actions */}
               <div className="scenario-card-actions">
-                <button
-                  className="scenario-action-btn"
-                  onClick={() => handleClone(sc)}
-                  title="Clona questo scenario"
-                >Clona</button>
+                {!sc.isClone && (
+                  <button
+                    className="scenario-action-btn"
+                    onClick={() => handleClone(sc)}
+                    title="Salva questo scenario come template"
+                  >💾 Salva come template</button>
+                )}
                 {sc.isClone && (
                   <button
                     className="scenario-action-btn sc-btn-danger"
