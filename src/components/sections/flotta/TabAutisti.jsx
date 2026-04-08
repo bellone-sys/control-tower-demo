@@ -14,7 +14,7 @@ const STATO_CFG = {
 
 const STATI_OPT   = Object.keys(STATO_CFG).map(s => ({ value: s, label: s }))
 const PATENTE_OPT = ['B', 'B+C', 'C', 'D'].map(p => ({ value: p, label: p }))
-const EMPTY_FORM  = { nome: '', cognome: '', patente: 'B', telefono: '', email: '', dataNascita: '', stato: 'In servizio', mezzoId: '', km_anno: 0 }
+const EMPTY_FORM  = { nome: '', cognome: '', patente: 'B', telefono: '', email: '', dataNascita: '', stato: 'In servizio', km_anno: 0 }
 
 function SortTh({ field, sk, sd, onSort, children, style }) {
   const active = sk === field
@@ -59,14 +59,6 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
   const [errors,       setErrors]       = useState({})
   const [deleteId,     setDeleteId]     = useState(null)
 
-  function getMezzoLabel(mezzoId) {
-    if (!mezzoId) return null
-    const m = mezzi.find(x => x.id === mezzoId)
-    if (!m) return null
-    const cat = modelli.find(c => c.catalogoId === m.catalogoId)
-    return cat ? `${cat.marca} ${cat.modello.split(' ').slice(0,2).join(' ')} · ${m.targa}` : m.targa
-  }
-
   function handleSort(key) {
     if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
     else { setSortKey(key); setSortDir('asc') }
@@ -80,7 +72,7 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
     setForm({
       nome: driver.nome, cognome: driver.cognome, patente: driver.patente,
       telefono: driver.telefono, email: driver.email, dataNascita: driver.dataNascita,
-      stato: driver.stato, mezzoId: driver.mezzoId || '', km_anno: driver.km_anno
+      stato: driver.stato, km_anno: driver.km_anno
     })
     setErrors({})
     setModal({ mode: 'edit', driver })
@@ -98,40 +90,23 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
     const e = validate()
     if (Object.keys(e).length) { setErrors(e); return }
 
-    const mezzoId  = form.mezzoId || null
-    const km_anno  = Number(form.km_anno) || 0
-    const payload  = { ...form, mezzoId, km_anno }
+    const km_anno = Number(form.km_anno) || 0
+    const payload = { ...form, km_anno }
 
     if (modal.mode === 'add') {
       const maxId = drivers.length ? Math.max(...drivers.map(d => parseInt(d.id.slice(1)))) : 0
       const newId = `D${String(maxId + 1).padStart(3, '0')}`
       setDrivers(prev => [...prev, { id: newId, ...payload }])
-      if (mezzoId) setMezzi(prev => prev.map(m => m.id === mezzoId ? { ...m, autoreId: newId } : m))
     } else {
-      const oldMezzo = modal.driver.mezzoId
       setDrivers(prev => prev.map(d => d.id === modal.driver.id ? { ...d, ...payload } : d))
-      setMezzi(prev => prev.map(m => {
-        if (m.id === oldMezzo && oldMezzo !== mezzoId) return { ...m, autoreId: null }
-        if (m.id === mezzoId && mezzoId) return { ...m, autoreId: modal.driver.id }
-        return m
-      }))
     }
     setModal(null)
   }
 
   function handleDelete(id) {
-    const driver = drivers.find(d => d.id === id)
-    if (driver?.mezzoId) setMezzi(prev => prev.map(m => m.id === driver.mezzoId ? { ...m, autoreId: null } : m))
     setDrivers(prev => prev.filter(d => d.id !== id))
     setDeleteId(null)
   }
-
-  // Mezzi available for assignment: unassigned OR currently assigned to this driver
-  const originalMezzoId = modal?.driver?.mezzoId ?? null
-  const availableMezzi  = useMemo(
-    () => mezzi.filter(m => m.stato !== 'Manutenzione' && (!m.autoreId || m.id === originalMezzoId)),
-    [mezzi, originalMezzoId]
-  )
 
   const filtered = useMemo(() => {
     let list = drivers
@@ -188,7 +163,6 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
                 <SortTh field="patente"      sk={sortKey} sd={sortDir} onSort={handleSort}>Patente</SortTh>
                 <th>Contatti</th>
                 <SortTh field="dataNascita" sk={sortKey} sd={sortDir} onSort={handleSort}>Nascita</SortTh>
-                <th>Mezzo assegnato</th>
                 <SortTh field="km_anno"     sk={sortKey} sd={sortDir} onSort={handleSort}>Km/anno</SortTh>
                 <SortTh field="stato"       sk={sortKey} sd={sortDir} onSort={handleSort}>Stato</SortTh>
                 <th style={{ width: 70 }}></th>
@@ -197,7 +171,6 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
             <tbody>
               {pageData.map(d => {
                 const cfg   = STATO_CFG[d.stato] || {}
-                const mezzo = getMezzoLabel(d.mezzoId)
                 const isDel = deleteId === d.id
                 return (
                   <tr key={d.id} className={isDel ? 'row-deleting' : ''}>
@@ -214,11 +187,6 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
                       <div className="td-small">{d.email}</div>
                     </td>
                     <td className="td-small">{d.dataNascita}</td>
-                    <td>
-                      {mezzo
-                        ? <span className="mezzo-ref">{mezzo}</span>
-                        : <span className="td-small text-gray">—</span>}
-                    </td>
                     <td className="td-small">{d.km_anno.toLocaleString('it-IT')} km</td>
                     <td>
                       <span className="status-badge" style={{ color: cfg.color, background: cfg.bg }}>{d.stato}</span>
@@ -303,20 +271,6 @@ export default function TabAutisti({ drivers, setDrivers, mezzi, setMezzi, model
                 <div className="form-field">
                   <label className="form-label">Km/anno</label>
                   <input type="number" className="form-input" value={form.km_anno} onChange={setF('km_anno')} min="0" />
-                </div>
-                <div className="form-field full">
-                  <label className="form-label">Mezzo assegnato</label>
-                  <select className="form-select" value={form.mezzoId} onChange={setF('mezzoId')}>
-                    <option value="">— Nessun mezzo —</option>
-                    {availableMezzi.map(m => {
-                      const cat = modelli.find(c => c.catalogoId === m.catalogoId)
-                      return (
-                        <option key={m.id} value={m.id}>
-                          {m.targa} — {cat ? `${cat.marca} ${cat.modello.split(' ').slice(0,2).join(' ')}` : m.catalogoId} ({m.stato})
-                        </option>
-                      )
-                    })}
-                  </select>
                 </div>
               </div>
             </div>
