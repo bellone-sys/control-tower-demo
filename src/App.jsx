@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import Overview from './components/sections/Overview'
 import Spedizioni from './components/sections/Spedizioni'
-// import DensitaPopolare from './components/sections/DensitaPopolare'
+import DensitaPopolare from './components/sections/DensitaPopolare'
 import Giri from './components/sections/Giri'
 import Scenari from './components/sections/Scenari'
 import PuntiRitiro from './components/sections/PuntiRitiro'
@@ -153,7 +153,7 @@ export default function App() {
   const SECTIONS = {
     overview:     <Overview />,
     spedizioni:   <Spedizioni onStartJob={startJob} addNotification={addNotification} onNav={handleNav} />,
-    // densita:      <DensitaPopolare />,
+    densita:      <DensitaPopolare />,
     scenari:      <Scenari onStartJob={startJob} addNotification={addNotification} />,
     giri:         <Giri onStartJob={startJob} addNotification={addNotification} />,
     punti:        <PuntiRitiro />,
