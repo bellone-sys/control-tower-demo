@@ -277,6 +277,33 @@ export default function WizardStep2({ data, onChange }) {
             ))}
           </div>
 
+          {/* Distribuzione CI legend */}
+          <div style={{
+            position: 'absolute',
+            top: 16,
+            left: 16,
+            background: '#fff',
+            borderRadius: 6,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            padding: 12,
+            zIndex: 400,
+            fontSize: 11,
+            maxWidth: 180,
+          }}>
+            <div style={{ fontWeight: 600, marginBottom: 8, color: 'var(--fp-charcoal)' }}>Distribuzione CI</div>
+            {[
+              { label: 'Alto (≥ 4)', color: '#2E7D32', count: pudosFiltered.filter(p => p.ci >= 4).length },
+              { label: 'Medio (2.5–4)', color: '#E65100', count: pudosFiltered.filter(p => p.ci >= 2.5 && p.ci < 4).length },
+              { label: 'Basso (< 2.5)', color: '#1565C0', count: pudosFiltered.filter(p => p.ci > 0 && p.ci < 2.5).length },
+            ].map(({ label, color, count }, idx) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: idx < 2 ? 6 : 0 }}>
+                <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
+                <span style={{ fontSize: 11, flex: 1, color: 'var(--fp-gray-mid)' }}>{label}</span>
+                <span style={{ fontSize: 11, fontWeight: 600, color }}>{count}</span>
+              </div>
+            ))}
+          </div>
+
           {/* Excluded PUDOs (dimmed) */}
           {pudosRoma.slice(0, 600).map(p => {
             const ci = getCiPudo(p.id, data.periodoGg)
