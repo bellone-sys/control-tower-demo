@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 import L from 'leaflet'
 import { MapContainer, TileLayer, CircleMarker, Circle, useMap, Rectangle, FeatureGroup, Tooltip } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
@@ -37,14 +37,22 @@ function RadiusFitter({ center, radiusM }) {
 }
 
 export default function WizardStep2({ data, onChange }) {
+  const [customPeriodo, setCustomPeriodo] = useState('')
+  const [showCustomInput, setShowCustomInput] = useState(false)
+
   const allFiliali = [
     ...FILIALI,
     ...(data.extraFiliali || []),
   ]
   const filiale = allFiliali.find(f => f.id === data.filialeId)
 
+  // Helper to check if PUDO is a locker
+  function isLocker(p) {
+    return p.name.toLowerCase().includes('locker')
+  }
+
   // Compute filtered PUDOs
-  const { pudosFiltered, pudosTotali, ciMedio, popolazioneRaggio } = useMemo(() => {
+  const { pudosFiltered, pudosTotali, ciMedio, ciTotale, popolazioneRaggio, densitaMedia, pudoCount, lockerCount } = useMemo(() => {
     const withCi = pudosRoma.map(p => ({
       ...p,
       ci: getCiPudo(p.id, data.periodoGg),
@@ -61,24 +69,49 @@ export default function WizardStep2({ data, onChange }) {
       return true
     })
 
-    // Calculate average CI
-    const avgCi = filtered.length > 0
-      ? filtered.reduce((sum, p) => sum + p.ci, 0) / filtered.length
-      : 0
+    // Count PUDO vs Locker
+    const pCount = filtered.filter(p => !isLocker(p)).length
+    const lCount = filtered.filter(p => isLocker(p)).length
 
-    // Calculate population from density zones within radius
+    // Calculate total CI (sum)
+    const totalCi = filtered.reduce((sum, p) => sum + p.ci, 0)
+
+    // Calculate average CI
+    const avgCi = filtered.length > 0 ? totalCi / filtered.length : 0
+
+    // Calculate population and density average from zones containing filtered PUDOs
     let popRaggio = 0
-    if (filiale) {
-      popRaggio = DENSITA_AREE.reduce((sum, area) => {
-        // Check if area center is within radius
-        const areaLat = (area.bounds.lat1 + area.bounds.lat2) / 2
-        const areaLng = (area.bounds.lng1 + area.bounds.lng2) / 2
-        const dist = distKm(filiale.lat, filiale.lng, areaLat, areaLng)
-        return dist <= data.raggioKm ? sum + area.abitanti : sum
-      }, 0)
+    let densAvg = 0
+    if (filtered.length > 0) {
+      // Find which density zones contain the filtered PUDOs
+      const zonesWithPudos = new Map() // Map of area.id -> area
+      filtered.forEach(pudo => {
+        DENSITA_AREE.forEach(area => {
+          // Check if PUDO is within zone bounds
+          const inZone =
+            pudo.lat >= area.bounds.lat1 && pudo.lat <= area.bounds.lat2 &&
+            pudo.lng >= area.bounds.lng1 && pudo.lng <= area.bounds.lng2
+          if (inZone) {
+            zonesWithPudos.set(area.id, area)
+          }
+        })
+      })
+      // Sum population and calculate average density
+      const zones = Array.from(zonesWithPudos.values())
+      popRaggio = zones.reduce((sum, area) => sum + area.abitanti, 0)
+      densAvg = zones.length > 0 ? zones.reduce((sum, area) => sum + area.densita, 0) / zones.length : 0
     }
 
-    return { pudosFiltered: filtered, pudosTotali: totali, ciMedio: avgCi, popolazioneRaggio: popRaggio }
+    return {
+      pudosFiltered: filtered,
+      pudosTotali: totali,
+      ciMedio: avgCi,
+      ciTotale: totalCi,
+      popolazioneRaggio: popRaggio,
+      densitaMedia: densAvg,
+      pudoCount: pCount,
+      lockerCount: lCount
+    }
   }, [data.ciMin, data.raggioKm, data.periodoGg, data.filialeId, data.extraFiliali])
 
   const mapCenter = (filiale?.lat != null) ? [filiale.lat, filiale.lng] : [41.9028, 12.4964]
@@ -99,20 +132,70 @@ export default function WizardStep2({ data, onChange }) {
           <div className="ws-section-title">Periodo CI (storico)</div>
           <div className="wizard-periodo-pills">
             {[
-              { val: 7,  label: '7gg' },
-              { val: 14, label: '14gg' },
-              { val: 30, label: '1 mese' },
               { val: 60, label: '2 mesi' },
+              { val: 180, label: '6 mesi' },
+              { val: 365, label: '1 anno' },
+              { val: 'custom', label: 'Personalizzato' },
             ].map(p => (
               <button
                 key={p.val}
-                className={`wizard-periodo-pill${data.periodoGg === p.val ? ' active' : ''}`}
-                onClick={() => onChange({ periodoGg: p.val })}
+                className={`wizard-periodo-pill${(p.val === 'custom' ? showCustomInput : data.periodoGg === p.val) ? ' active' : ''}`}
+                onClick={() => {
+                  if (p.val === 'custom') {
+                    setShowCustomInput(true)
+                  } else {
+                    setShowCustomInput(false)
+                    setCustomPeriodo('')
+                    onChange({ periodoGg: p.val })
+                  }
+                }}
               >
                 {p.label}
               </button>
             ))}
           </div>
+          {showCustomInput && (
+            <div style={{ display: 'flex', gap: 8, marginTop: 8, alignItems: 'center' }}>
+              <input
+                type="number"
+                min={1}
+                max={1095}
+                placeholder="Giorni (1-1095)"
+                value={customPeriodo}
+                onChange={e => setCustomPeriodo(e.target.value)}
+                style={{
+                  flex: 1,
+                  padding: '6px 8px',
+                  border: '1px solid var(--fp-cool-gray)',
+                  borderRadius: 'var(--radius)',
+                  fontSize: 12,
+                  fontFamily: 'var(--fp-font)',
+                }}
+              />
+              <button
+                onClick={() => {
+                  const days = parseInt(customPeriodo, 10)
+                  if (days > 0 && days <= 1095) {
+                    onChange({ periodoGg: days })
+                    setShowCustomInput(false)
+                  }
+                }}
+                style={{
+                  padding: '6px 12px',
+                  background: 'var(--fp-charcoal)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 'var(--radius)',
+                  fontSize: 12,
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  fontFamily: 'var(--fp-font)',
+                }}
+              >
+                OK
+              </button>
+            </div>
+          )}
           <div style={{ fontSize: 11, color: 'var(--fp-gray-mid)', marginTop: 2 }}>
             Il CI medio per PUDO viene calcolato sul periodo selezionato.
           </div>
@@ -167,40 +250,35 @@ export default function WizardStep2({ data, onChange }) {
 
         {/* Result summary */}
         <div className="ws-filter-info" style={{ marginTop: 16 }}>
-          <span className="ws-filter-count">{pudosFiltered.length}</span>
-          PUDO inclusi nello scenario
-          <div style={{ fontSize: 11, color: 'var(--fp-gray-mid)', marginTop: 4 }}>
-            su {pudosTotali} PUDO con CI disponibile
+          <div style={{ marginBottom: 8 }}>
+            <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--fp-charcoal)' }}>{pudoCount} PUDO</span>
+            <span style={{ fontSize: 12, color: 'var(--fp-gray-mid)', marginLeft: 8 }}>+ {lockerCount} Locker</span>
           </div>
+          <span className="ws-filter-count">{pudosFiltered.length}</span>
+          inclusi nello scenario
 
           <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--fp-cool-gray)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
               <span style={{ fontSize: 12, color: 'var(--fp-gray-mid)' }}>CI medio</span>
               <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--fp-charcoal)' }}>{ciMedio.toFixed(2)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+              <span style={{ fontSize: 12, color: 'var(--fp-gray-mid)' }}>CI totale</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--fp-charcoal)' }}>{ciTotale.toFixed(2)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+              <span style={{ fontSize: 12, color: 'var(--fp-gray-mid)' }}>Densità media</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--fp-charcoal)' }}>
+                {densitaMedia.toFixed(0)} <span style={{ fontSize: 10, fontWeight: 400 }}>ab/km²</span>
+              </span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ fontSize: 12, color: 'var(--fp-gray-mid)' }}>Popolazione raggio</span>
               <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--fp-charcoal)' }}>
-                {(popolazioneRaggio / 1000).toFixed(0)}k
+                {(popolazioneRaggio / 1000).toFixed(0)}k <span style={{ fontSize: 10, fontWeight: 400 }}>ab</span>
               </span>
             </div>
           </div>
-        </div>
-
-        {/* CI distribution preview */}
-        <div style={{ marginTop: 4 }}>
-          <div className="ws-section-title">Distribuzione CI</div>
-          {[
-            { label: 'Alto (≥ 4)',    color: '#2E7D32', count: pudosFiltered.filter(p => p.ci >= 4).length },
-            { label: 'Medio (2.5–4)', color: '#E65100', count: pudosFiltered.filter(p => p.ci >= 2.5 && p.ci < 4).length },
-            { label: 'Basso (< 2.5)', color: '#1565C0', count: pudosFiltered.filter(p => p.ci > 0 && p.ci < 2.5).length },
-          ].map(({ label, color, count }) => (
-            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-              <div style={{ width: 10, height: 10, borderRadius: '50%', background: color, flexShrink: 0 }} />
-              <span style={{ fontSize: 12, flex: 1 }}>{label}</span>
-              <span style={{ fontSize: 12, fontWeight: 700, color }}>{count}</span>
-            </div>
-          ))}
         </div>
       </div>
 
@@ -249,35 +327,7 @@ export default function WizardStep2({ data, onChange }) {
             })}
           </FeatureGroup>
 
-          {/* Densità legend */}
-          <div style={{
-            position: 'absolute',
-            bottom: 16,
-            left: 16,
-            background: '#fff',
-            borderRadius: 6,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-            padding: 12,
-            zIndex: 400,
-            fontSize: 11,
-            maxWidth: 180,
-          }}>
-            <div style={{ fontWeight: 600, marginBottom: 8, color: 'var(--fp-charcoal)' }}>Densità ab/km²</div>
-            {[
-              { label: '≥ 3500 Densitissimo', color: '#8B0000' },
-              { label: '2500–3499 Molto denso', color: '#DC143C' },
-              { label: '1500–2499 Denso', color: '#FF6347' },
-              { label: '800–1499 Moderato', color: '#FFA500' },
-              { label: '< 800 Basso', color: '#FFD700' },
-            ].map(({ label, color }) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                <div style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: color, flexShrink: 0 }} />
-                <span style={{ color: 'var(--fp-gray-mid)' }}>{label}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Distribuzione CI legend */}
+          {/* Combined legends — CI + Densità */}
           <div style={{
             position: 'absolute',
             top: 16,
@@ -288,20 +338,43 @@ export default function WizardStep2({ data, onChange }) {
             padding: 12,
             zIndex: 400,
             fontSize: 11,
-            maxWidth: 180,
+            maxWidth: 220,
           }}>
-            <div style={{ fontWeight: 600, marginBottom: 8, color: 'var(--fp-charcoal)' }}>Distribuzione CI</div>
-            {[
-              { label: 'Alto (≥ 4)', color: '#2E7D32', count: pudosFiltered.filter(p => p.ci >= 4).length },
-              { label: 'Medio (2.5–4)', color: '#E65100', count: pudosFiltered.filter(p => p.ci >= 2.5 && p.ci < 4).length },
-              { label: 'Basso (< 2.5)', color: '#1565C0', count: pudosFiltered.filter(p => p.ci > 0 && p.ci < 2.5).length },
-            ].map(({ label, color, count }, idx) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: idx < 2 ? 6 : 0 }}>
-                <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
-                <span style={{ fontSize: 11, flex: 1, color: 'var(--fp-gray-mid)' }}>{label}</span>
-                <span style={{ fontSize: 11, fontWeight: 600, color }}>{count}</span>
-              </div>
-            ))}
+            {/* Distribuzione CI */}
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ fontWeight: 600, marginBottom: 6, color: 'var(--fp-charcoal)', fontSize: 12 }}>Distribuzione CI</div>
+              {[
+                { label: 'Alto (≥ 4)', color: '#2E7D32', count: pudosFiltered.filter(p => p.ci >= 4).length },
+                { label: 'Medio (2.5–4)', color: '#E65100', count: pudosFiltered.filter(p => p.ci >= 2.5 && p.ci < 4).length },
+                { label: 'Basso (< 2.5)', color: '#1565C0', count: pudosFiltered.filter(p => p.ci > 0 && p.ci < 2.5).length },
+              ].map(({ label, color, count }, idx) => (
+                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: idx < 2 ? 5 : 0 }}>
+                  <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
+                  <span style={{ fontSize: 11, flex: 1, color: 'var(--fp-gray-mid)' }}>{label}</span>
+                  <span style={{ fontSize: 11, fontWeight: 600, color }}>{count}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Divider */}
+            <div style={{ height: 1, background: 'var(--fp-cool-gray)', marginBottom: 12 }} />
+
+            {/* Densità ab/km² */}
+            <div>
+              <div style={{ fontWeight: 600, marginBottom: 6, color: 'var(--fp-charcoal)', fontSize: 12 }}>Densità ab/km²</div>
+              {[
+                { label: '≥ 3500 Densitissimo', color: '#8B0000' },
+                { label: '2500–3499 Molto denso', color: '#DC143C' },
+                { label: '1500–2499 Denso', color: '#FF6347' },
+                { label: '800–1499 Moderato', color: '#FFA500' },
+                { label: '< 800 Basso', color: '#FFD700' },
+              ].map(({ label, color }, idx) => (
+                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: idx < 4 ? 5 : 0 }}>
+                  <div style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: color, flexShrink: 0 }} />
+                  <span style={{ color: 'var(--fp-gray-mid)', fontSize: 11 }}>{label}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Excluded PUDOs (dimmed) */}

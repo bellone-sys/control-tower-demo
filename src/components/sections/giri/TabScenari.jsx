@@ -6,6 +6,7 @@ import ScenarioWizard from './wizard/ScenarioWizard'
 import ScenarioDetail from './ScenarioDetail'
 import SchedModal from './SchedModal'
 import RisorseModal from './RisorseModal'
+import GiroSequenceEditor from './GiroSequenceEditor'
 import ErrorBoundary from '../../ui/ErrorBoundary'
 import {
   getScenarioMeta,
@@ -76,6 +77,7 @@ export default function TabScenari({ giri, onStartJob, addNotification }) {
   const [showWizard,     setShowWizard]     = useState(false)
   const [editScenario,   setEditScenario]   = useState(null)
   const [detailId,       setDetailId]       = useState(null)
+  const [sequenceId,     setSequenceId]     = useState(null)
   const [risorse,        setRisorse]        = useState(() => getAllRisorse())
   const [metaVer,        setMetaVer]        = useState(0)
   const [schedModalId,   setSchedModalId]   = useState(null)
@@ -401,11 +403,16 @@ export default function TabScenari({ giri, onStartJob, addNotification }) {
                 )}
                 <button
                   className="scenario-action-btn"
+                  onClick={() => setSequenceId(sc.id)}
+                  title="Modifica sequenza PUDO"
+                >📋 Sequenza</button>
+                <button
+                  className="scenario-action-btn"
                   onClick={() => {
                     setEditScenario({ nomeScenario: `${sc.label ?? sc.filiale.nome} — Modifica`, filialeId: sc.filiale.id })
                     setShowWizard(true)
                   }}
-                >✏️ Modifica</button>
+                >⚙️ Configura</button>
                 <button
                   className="scenario-action-btn primary"
                   onClick={() => setDetailId(sc.id)}
@@ -507,6 +514,32 @@ export default function TabScenari({ giri, onStartJob, addNotification }) {
           onClose={() => setRisorseModalId(null)}
         />
       )}
+
+      {/* Sequence editor modal */}
+      {sequenceId && (() => {
+        const sc = scenari.find(s => s.id === sequenceId)
+        if (!sc) return null
+        const giriWithColor = sc.giri.map((g, i) => ({
+          ...g,
+          color: ['#DC0032', '#1565C0', '#2E7D32', '#E65100', '#6A1B9A', '#00695C', '#F57F17', '#AD1457', '#0277BD', '#558B2F', '#4527A0', '#00838F'][i % 12],
+        }))
+        return (
+          <div className="sc-modal-backdrop" onClick={() => setSequenceId(null)}>
+            <div className="sc-modal sc-modal-wide sc-modal-tall" onClick={e => e.stopPropagation()}>
+              <div className="sc-modal-header">
+                <div>
+                  <div className="sc-modal-title">Modifica Sequenza PUDO</div>
+                  <div className="sc-modal-sub">{sc.label ?? sc.filiale.nome} · {sc.filiale.citta}</div>
+                </div>
+                <button className="sc-modal-close" onClick={() => setSequenceId(null)}>×</button>
+              </div>
+              <div style={{ flex: 1, overflow: 'auto' }}>
+                <GiroSequenceEditor giriWithColor={giriWithColor} scenario={sc} />
+              </div>
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Wizard */}
       {showWizard && (

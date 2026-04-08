@@ -8,6 +8,7 @@ import './Header.css'
 const SECTION_I18N = {
   overview:     'nav.overview',
   spedizioni:   'nav.spedizioni',
+  densita:      'nav.densita',
   scenari:      'nav.scenari',
   giri:         'nav.giri',
   punti:        'nav.punti',

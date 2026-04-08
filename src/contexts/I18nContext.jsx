@@ -8,6 +8,7 @@ const TRANSLATIONS = {
     // Navigazione / sezioni
     'nav.overview':    'Panoramica',
     'nav.spedizioni':  'Spedizioni',
+    'nav.densita':     'Densità',
     'nav.giri':        'Giri',
     'nav.scenari':     'Scenari',
     'nav.punti':       'PUDO',
@@ -86,6 +87,7 @@ const TRANSLATIONS = {
   en: {
     'nav.overview':    'Overview',
     'nav.spedizioni':  'Shipments',
+    'nav.densita':     'Density',
     'nav.giri':        'Routes',
     'nav.scenari':     'Scenarios',
     'nav.punti':       'PUDO',
@@ -163,6 +165,7 @@ const TRANSLATIONS = {
   fr: {
     'nav.overview':    'Vue d\'ensemble',
     'nav.spedizioni':  'Expéditions',
+    'nav.densita':     'Densité',
     'nav.giri':        'Tournées',
     'nav.scenari':     'Scénarios',
     'nav.punti':       'PUDO',
@@ -240,6 +243,7 @@ const TRANSLATIONS = {
   de: {
     'nav.overview':    'Übersicht',
     'nav.spedizioni':  'Sendungen',
+    'nav.densita':     'Bevölkerungsdichte',
     'nav.giri':        'Touren',
     'nav.scenari':     'Szenarien',
     'nav.punti':       'PUDO',

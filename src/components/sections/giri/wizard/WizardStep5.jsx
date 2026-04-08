@@ -74,28 +74,11 @@ export default function WizardStep5({ data }) {
 
       <div className="wizard-confirm-grid">
 
-        {/* Scenario */}
+        {/* Step 1: Area & Filiale */}
         <div className="wc-card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <div className="wc-card-title">Scenario</div>
-            <button
-              className="favorite-btn"
-              onClick={handleToggleFavorite}
-              title={isFav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 20,
-                opacity: isFav ? 1 : 0.5,
-                transition: 'opacity 150ms ease',
-              }}
-            >
-              {isFav ? '❤️' : '🤍'}
-            </button>
-          </div>
+          <div className="wc-card-title">1. Area & Filiale</div>
           <div className="wc-row">
-            <span className="wc-key">Nome</span>
+            <span className="wc-key">Nome scenario</span>
             <span className="wc-val red">{data.nomeScenario || '—'}</span>
           </div>
           <div className="wc-row">
@@ -103,9 +86,14 @@ export default function WizardStep5({ data }) {
             <span className="wc-val">{filiale?.nome || '—'}</span>
           </div>
           <div className="wc-row">
-            <span className="wc-key">Province selezionate</span>
+            <span className="wc-key">Province</span>
             <span className="wc-val">{data.province.length > 0 ? data.province.join(', ') : 'Tutte'}</span>
           </div>
+        </div>
+
+        {/* Step 2: Filtri */}
+        <div className="wc-card">
+          <div className="wc-card-title">2. Filtri</div>
           <div className="wc-row">
             <span className="wc-key">Periodo CI</span>
             <span className="wc-val">{data.periodoGg} giorni</span>
@@ -115,16 +103,16 @@ export default function WizardStep5({ data }) {
             <span className="wc-val">{data.ciMin.toFixed(1)}</span>
           </div>
           <div className="wc-row">
-            <span className="wc-key">Raggio dalla filiale</span>
+            <span className="wc-key">Raggio filiale</span>
             <span className="wc-val">{data.raggioKm} km</span>
           </div>
         </div>
 
-        {/* PUDO */}
+        {/* Step 3: Selezione PUDO */}
         <div className="wc-card">
-          <div className="wc-card-title">PUDO selezionati</div>
+          <div className="wc-card-title">3. Selezione PUDO</div>
           <div className="wc-row">
-            <span className="wc-key">Totale PUDO</span>
+            <span className="wc-key">Totale inclusi</span>
             <span className="wc-val red">{data.pudoSelezionati.size}</span>
           </div>
           <div className="wc-row">
@@ -145,9 +133,9 @@ export default function WizardStep5({ data }) {
           </div>
         </div>
 
-        {/* Pianificazione */}
+        {/* Step 4: Parametri routing */}
         <div className="wc-card">
-          <div className="wc-card-title">Pianificazione</div>
+          <div className="wc-card-title">4. Parametri routing</div>
           <div className="wc-row">
             <span className="wc-key">Data giri</span>
             <span className="wc-val">{formatData(data.dataGiri)}</span>
@@ -160,7 +148,7 @@ export default function WizardStep5({ data }) {
             <span className="wc-key">Pausa pranzo</span>
             <span className="wc-val">
               {data.pausaPranzo
-                ? `${data.pausaPranzoDurata ?? 30} min (${data.pausaPranzoStart ?? '12:00'}–${data.pausaPranzoEnd ?? '14:00'})`
+                ? `${data.pausaPranzoDurata ?? 30} min`
                 : 'Off'}
             </span>
           </div>
@@ -168,58 +156,30 @@ export default function WizardStep5({ data }) {
             <span className="wc-key">Durata fermata</span>
             <span className="wc-val">
               {(data.durataFermataMode ?? 'fixed') === 'fixed'
-                ? `${data.durataFermata} min (fisso)`
-                : `${data.durataFermataMin ?? 5}–${data.durataFermataMax ?? 20} min (prop. CI)`}
+                ? `${data.durataFermata} min`
+                : `${data.durataFermataMin ?? 5}–${data.durataFermataMax ?? 20} min`}
             </span>
           </div>
-        </div>
-
-        {/* OptimoRoute params */}
-        <div className="wc-card">
-          <div className="wc-card-title">Parametri OptimoRoute</div>
-
-          {/* Flotta */}
-          {(data.flotta ?? []).map(({ modelloId, quantita }) => {
-            const m = MODELLI_MEZZI.find(v => v.catalogoId === modelloId)
-            if (!m) return null
-            return (
-              <div key={modelloId} className="wc-row">
-                <span className="wc-key">{m.marca} {m.modello}</span>
-                <span className="wc-val">×{quantita}</span>
-              </div>
-            )
-          })}
-
-          <div className="wc-row">
-            <span className="wc-key">Bilanciamento</span>
-            <span className="wc-val">{formatBal(data.balancing)}</span>
-          </div>
-          {data.balancing !== 'OFF' && (
+          {(data.flotta ?? []).length > 0 && (
             <>
-              <div className="wc-row">
-                <span className="wc-key">Criterio</span>
-                <span className="wc-val">{data.balanceBy === 'WT' ? 'Ore lavoro' : 'N° fermate'}</span>
+              <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--fp-cool-gray)' }}>
+                {(data.flotta ?? []).map(({ modelloId, quantita }) => {
+                  const m = MODELLI_MEZZI.find(v => v.catalogoId === modelloId)
+                  if (!m) return null
+                  return (
+                    <div key={modelloId} className="wc-row">
+                      <span className="wc-key">{m.marca} {m.modello}</span>
+                      <span className="wc-val">×{quantita}</span>
+                    </div>
+                  )
+                })}
               </div>
-              <div className="wc-row">
-                <span className="wc-key">Intensità</span>
-                <span className="wc-val">{data.balancingFactor.toFixed(2)}</span>
+              <div className="wc-row" style={{ marginTop: 8 }}>
+                <span className="wc-key">Bilanciamento</span>
+                <span className="wc-val">{formatBal(data.balancing)}</span>
               </div>
             </>
           )}
-          <div className="wc-row">
-            <span className="wc-key">Cluster geografico</span>
-            <span className="wc-val">{data.clustering ? '✓ Attivo' : 'Off'}</span>
-          </div>
-          <div className="wc-row">
-            <span className="wc-key">Rientro deposito</span>
-            <span className="wc-val">
-              {data.depotTrips ? `✓ Attivo (${data.depotVisitDuration} min sosta)` : 'Off'}
-            </span>
-          </div>
-          <div className="wc-row">
-            <span className="wc-key">Priorità default</span>
-            <span className="wc-val">{data.prioritaDefault}</span>
-          </div>
         </div>
 
       </div>

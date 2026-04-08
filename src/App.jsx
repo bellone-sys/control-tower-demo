@@ -223,11 +223,6 @@ export default function App() {
                   <button className="app-footer-nav" onClick={() => handleNav('credits')}>Credits</button>
                 </div>
               </div>
-              <span className="app-footer-divider" />
-              <div className="app-footer-section app-footer-version">
-                <span className="app-footer-label">Versione</span>
-                <span className="app-footer-ver-val">v{APP_VERSION} · Demo</span>
-              </div>
             </footer>
           </div>
 
