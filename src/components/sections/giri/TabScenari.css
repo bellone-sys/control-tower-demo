@@ -328,6 +328,121 @@
 /* Scenario header info area */
 .scenario-header-info { flex: 1; min-width: 0; }
 
+/* Template card styles */
+.scenario-card-badge {
+  background: var(--fp-red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  align-self: flex-start;
+  margin: 12px 12px 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.scenario-card-filiale {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.scenario-card-title {
+  flex: 1;
+  min-width: 0;
+  padding: 0 12px;
+}
+
+.scenario-card-filiale-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fp-charcoal);
+}
+
+.scenario-card-label {
+  font-size: 11px;
+  color: var(--fp-gray-mid);
+  margin-top: 2px;
+}
+
+.scenario-card-meta {
+  flex: 1;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--fp-cool-gray);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scenario-card-meta-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.scenario-card-meta-label {
+  font-size: 12px;
+  color: var(--fp-gray-mid);
+  flex-shrink: 0;
+}
+
+.stato-attivo {
+  font-size: 12px;
+  font-weight: 500;
+  color: #2E7D32;
+}
+
+.stato-non-attivo {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fp-gray-mid);
+}
+
+.scenario-card-footer {
+  padding: 12px 18px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.scenario-card-action-btn {
+  background: none;
+  border: 1.5px solid var(--fp-cool-gray);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--fp-charcoal);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--fp-font);
+  white-space: nowrap;
+}
+
+.scenario-card-action-btn:hover {
+  border-color: var(--fp-red);
+  color: var(--fp-red);
+  background: #fff0f3;
+}
+
+.scenario-card-delete-btn {
+  border-color: #ffc9d3;
+  color: #DC0032;
+}
+
+.scenario-card-delete-btn:hover {
+  border-color: #DC0032;
+  color: #DC0032;
+  background: #fff0f3;
+}
+
 /* Responsive */
 @media (max-width: 1100px) { .scenari-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 768px) {
