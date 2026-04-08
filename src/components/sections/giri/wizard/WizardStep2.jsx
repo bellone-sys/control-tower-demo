@@ -3,7 +3,7 @@ import L from 'leaflet'
 import { MapContainer, TileLayer, CircleMarker, Circle, useMap, Rectangle, FeatureGroup, Tooltip } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
 import { getCiPudo } from '../../../../data/spedizioni'
-import { DENSITA_AREE, getDensitaColor } from '../../../../data/densitaPopolare'
+// import { DENSITA_AREE, getDensitaColor } from '../../../../data/densitaPopolare'
 import pudosRoma from '../../../../data/pudosRoma.json'
 import 'leaflet/dist/leaflet.css'
 
@@ -82,25 +82,26 @@ export default function WizardStep2({ data, onChange }) {
     // Calculate population and density average from zones containing filtered PUDOs
     let popRaggio = 0
     let densAvg = 0
-    if (filtered.length > 0) {
-      // Find which density zones contain the filtered PUDOs
-      const zonesWithPudos = new Map() // Map of area.id -> area
-      filtered.forEach(pudo => {
-        DENSITA_AREE.forEach(area => {
-          // Check if PUDO is within zone bounds
-          const inZone =
-            pudo.lat >= area.bounds.lat1 && pudo.lat <= area.bounds.lat2 &&
-            pudo.lng >= area.bounds.lng1 && pudo.lng <= area.bounds.lng2
-          if (inZone) {
-            zonesWithPudos.set(area.id, area)
-          }
-        })
-      })
-      // Sum population and calculate average density
-      const zones = Array.from(zonesWithPudos.values())
-      popRaggio = zones.reduce((sum, area) => sum + area.abitanti, 0)
-      densAvg = zones.length > 0 ? zones.reduce((sum, area) => sum + area.densita, 0) / zones.length : 0
-    }
+    // TODO: Re-enable DENSITA_AREE calculation once densitaPopolare.js is properly loaded
+    // if (filtered.length > 0) {
+    //   // Find which density zones contain the filtered PUDOs
+    //   const zonesWithPudos = new Map() // Map of area.id -> area
+    //   filtered.forEach(pudo => {
+    //     DENSITA_AREE.forEach(area => {
+    //       // Check if PUDO is within zone bounds
+    //       const inZone =
+    //         pudo.lat >= area.bounds.lat1 && pudo.lat <= area.bounds.lat2 &&
+    //         pudo.lng >= area.bounds.lng1 && pudo.lng <= area.bounds.lng2
+    //       if (inZone) {
+    //         zonesWithPudos.set(area.id, area)
+    //       }
+    //     })
+    //   })
+    //   // Sum population and calculate average density
+    //   const zones = Array.from(zonesWithPudos.values())
+    //   popRaggio = zones.reduce((sum, area) => sum + area.abitanti, 0)
+    //   densAvg = zones.length > 0 ? zones.reduce((sum, area) => sum + area.densita, 0) / zones.length : 0
+    // }
 
     return {
       pudosFiltered: filtered,
@@ -297,7 +298,8 @@ export default function WizardStep2({ data, onChange }) {
           />
 
           {/* Densità di Popolazione — heatmap zones */}
-          <FeatureGroup>
+          {/* TODO: Re-enable density zones once densitaPopolare.js is properly loaded */}
+          {/* <FeatureGroup>
             {DENSITA_AREE.map(area => {
               const color = getDensitaColor(area.densita)
               return (
@@ -325,7 +327,7 @@ export default function WizardStep2({ data, onChange }) {
                 </Rectangle>
               )
             })}
-          </FeatureGroup>
+          </FeatureGroup> */}
 
           {/* Combined legends — CI + Densità */}
           <div style={{
