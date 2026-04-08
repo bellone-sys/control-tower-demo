@@ -1,8 +1,9 @@
 import { useMemo, useEffect } from 'react'
 import L from 'leaflet'
-import { MapContainer, TileLayer, CircleMarker, Circle, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker, Circle, useMap, Rectangle, FeatureGroup, Tooltip } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
 import { getCiPudo } from '../../../../data/spedizioni'
+import { DENSITA_AREE, getDensitaColor } from '../../../../data/densitaPopolare'
 import pudosRoma from '../../../../data/pudosRoma.json'
 import 'leaflet/dist/leaflet.css'
 
@@ -186,6 +187,65 @@ export default function WizardStep2({ data, onChange }) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+
+          {/* Densità di Popolazione — heatmap zones */}
+          <FeatureGroup>
+            {DENSITA_AREE.map(area => {
+              const color = getDensitaColor(area.densita)
+              return (
+                <Rectangle
+                  key={area.id}
+                  bounds={[
+                    [area.bounds.lat1, area.bounds.lng1],
+                    [area.bounds.lat2, area.bounds.lng2],
+                  ]}
+                  pathOptions={{
+                    color: color,
+                    weight: 1,
+                    opacity: 0.7,
+                    fill: true,
+                    fillColor: color,
+                    fillOpacity: 0.3,
+                  }}
+                >
+                  <Tooltip sticky>
+                    <div style={{ fontSize: 12 }}>
+                      <div style={{ fontWeight: 600, marginBottom: 2 }}>{area.area}</div>
+                      <div>{area.densita} ab/km²</div>
+                    </div>
+                  </Tooltip>
+                </Rectangle>
+              )
+            })}
+          </FeatureGroup>
+
+          {/* Densità legend */}
+          <div style={{
+            position: 'absolute',
+            bottom: 16,
+            left: 16,
+            background: '#fff',
+            borderRadius: 6,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            padding: 12,
+            zIndex: 400,
+            fontSize: 11,
+            maxWidth: 180,
+          }}>
+            <div style={{ fontWeight: 600, marginBottom: 8, color: 'var(--fp-charcoal)' }}>Densità ab/km²</div>
+            {[
+              { label: '≥ 3500 Densitissimo', color: '#8B0000' },
+              { label: '2500–3499 Molto denso', color: '#DC143C' },
+              { label: '1500–2499 Denso', color: '#FF6347' },
+              { label: '800–1499 Moderato', color: '#FFA500' },
+              { label: '< 800 Basso', color: '#FFD700' },
+            ].map(({ label, color }) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                <div style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: color, flexShrink: 0 }} />
+                <span style={{ color: 'var(--fp-gray-mid)' }}>{label}</span>
+              </div>
+            ))}
+          </div>
 
           {/* Excluded PUDOs (dimmed) */}
           {pudosRoma.slice(0, 600).map(p => {
