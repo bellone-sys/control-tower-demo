@@ -203,3 +203,16 @@
   color: var(--fp-gray-mid);
   margin-left: 8px;
 }
+
+/* ===== LEAFLET MAP Z-INDEX ===== */
+.leaflet-container {
+  z-index: 100 !important;
+}
+.leaflet-pane,
+.leaflet-popup,
+.leaflet-control {
+  z-index: 101 !important;
+}
+.leaflet-tooltip {
+  z-index: 102 !important;
+}
