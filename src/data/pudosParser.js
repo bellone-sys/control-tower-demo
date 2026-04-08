@@ -84,7 +84,7 @@ async function loadAndParsePudos() {
   PARSING_PROMISE = (async () => {
     try {
       console.log('📦 Caricamento PUDO in corso...')
-      const response = await fetch('/control-tower-demo/src/data/csv/pudos_202604081423.csv')
+      const response = await fetch('/data/pudos_202604081423.csv')
       const text = await response.text()
 
       const lines = text.split('\n').slice(1) // Skip header
