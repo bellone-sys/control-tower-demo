@@ -208,6 +208,7 @@
 .sc-sched-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   flex-wrap: wrap;
 }

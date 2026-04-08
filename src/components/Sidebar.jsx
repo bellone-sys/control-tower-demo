@@ -9,6 +9,7 @@ import SettingsPanel from './SettingsPanel/SettingsPanel'
 const SECTION_KEYS = {
   overview:       'nav.overview',
   spedizioni:     'nav.spedizioni',
+  densita:        'nav.densita',
   scenari:        'nav.scenari',
   giri:           'nav.giri',
   punti:          'nav.punti',
