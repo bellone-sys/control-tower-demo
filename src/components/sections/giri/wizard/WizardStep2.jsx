@@ -44,7 +44,7 @@ export default function WizardStep2({ data, onChange }) {
   const filiale = allFiliali.find(f => f.id === data.filialeId)
 
   // Compute filtered PUDOs
-  const { pudosFiltered, pudosTotali } = useMemo(() => {
+  const { pudosFiltered, pudosTotali, ciMedio, popolazioneRaggio } = useMemo(() => {
     const withCi = pudosRoma.map(p => ({
       ...p,
       ci: getCiPudo(p.id, data.periodoGg),
@@ -61,7 +61,24 @@ export default function WizardStep2({ data, onChange }) {
       return true
     })
 
-    return { pudosFiltered: filtered, pudosTotali: totali }
+    // Calculate average CI
+    const avgCi = filtered.length > 0
+      ? filtered.reduce((sum, p) => sum + p.ci, 0) / filtered.length
+      : 0
+
+    // Calculate population from density zones within radius
+    let popRaggio = 0
+    if (filiale) {
+      popRaggio = DENSITA_AREE.reduce((sum, area) => {
+        // Check if area center is within radius
+        const areaLat = (area.bounds.lat1 + area.bounds.lat2) / 2
+        const areaLng = (area.bounds.lng1 + area.bounds.lng2) / 2
+        const dist = distKm(filiale.lat, filiale.lng, areaLat, areaLng)
+        return dist <= data.raggioKm ? sum + area.abitanti : sum
+      }, 0)
+    }
+
+    return { pudosFiltered: filtered, pudosTotali: totali, ciMedio: avgCi, popolazioneRaggio: popRaggio }
   }, [data.ciMin, data.raggioKm, data.periodoGg, data.filialeId, data.extraFiliali])
 
   const mapCenter = (filiale?.lat != null) ? [filiale.lat, filiale.lng] : [41.9028, 12.4964]
@@ -154,6 +171,19 @@ export default function WizardStep2({ data, onChange }) {
           PUDO inclusi nello scenario
           <div style={{ fontSize: 11, color: 'var(--fp-gray-mid)', marginTop: 4 }}>
             su {pudosTotali} PUDO con CI disponibile
+          </div>
+
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--fp-cool-gray)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontSize: 12, color: 'var(--fp-gray-mid)' }}>CI medio</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--fp-charcoal)' }}>{ciMedio.toFixed(2)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 12, color: 'var(--fp-gray-mid)' }}>Popolazione raggio</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--fp-charcoal)' }}>
+                {(popolazioneRaggio / 1000).toFixed(0)}k
+              </span>
+            </div>
           </div>
         </div>
 
