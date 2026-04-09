@@ -4,6 +4,7 @@ import { FILIALI } from '../../data/filiali'
 import { DRIVERS, MEZZI, MODELLI_MEZZI } from '../../data/flotta'
 import { getExtraScenari } from '../../services/scenariService'
 import MultiSelect from '../ui/MultiSelect'
+import SortTh from '../ui/SortTh'
 import Pagination from '../ui/Pagination'
 import './EsecuzioneGiri.css'
 
@@ -87,11 +88,6 @@ const STATI_OPT   = [
 ]
 
 // ── Sub-components ─────────────────────────────────────────────────────────
-
-function SortIcon({ dir }) {
-  if (!dir) return <span className="sort-neutral">⇅</span>
-  return <span className="sort-active">{dir === 'asc' ? '↑' : '↓'}</span>
-}
 
 function PudoBadge({ count, type }) {
   if (count === 0) return <span className="pudo-badge pudo-zero">—</span>
@@ -227,11 +223,10 @@ export default function EsecuzioneGiri() {
     setPage(1)
   }
   function th(key, label, title) {
-    const active = sortKey === key
     return (
-      <th className={`sortable${active ? ' sort-on' : ''}`} onClick={() => handleSort(key)} title={title}>
-        {label} <SortIcon dir={active ? sortDir : null} />
-      </th>
+      <SortTh field={key} sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>
+        {label}
+      </SortTh>
     )
   }
 

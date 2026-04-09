@@ -2,6 +2,7 @@ import { useState, useMemo, Fragment } from 'react'
 import { SPEDIZIONI_INIT } from '../../data/spedizioni'
 import pudosRoma from '../../data/pudosRoma.json'
 import MultiSelect from '../ui/MultiSelect'
+import SortTh from '../ui/SortTh'
 import Pagination from '../ui/Pagination'
 import ImportModal from './spedizioni/ImportModal'
 import PudoDetailModal from './spedizioni/PudoDetailModal'
@@ -43,15 +44,6 @@ const PUDO_OPT = [...new Map(SPEDIZIONI_INIT.map(s => [s.pudoId, s])).values()]
     const fullName = PUDOS_MAP[s.pudoId]?.name ?? s.pudoNome
     return { value: s.pudoId, label: `[${s.pudoId}] ${fullName}` }
   })
-
-const SORT_OPT = [
-  { value: 'data-desc',   label: 'Data (recente)' },
-  { value: 'data-asc',    label: 'Data (vecchia)'  },
-  { value: 'peso-desc',   label: 'Peso ↓' },
-  { value: 'peso-asc',    label: 'Peso ↑' },
-  { value: 'volume-desc', label: 'Volume ↓' },
-  { value: 'volume-asc',  label: 'Volume ↑' },
-]
 
 const PERIODO_OPT = [
   { value: 'all',       label: 'Tutto il periodo'  },
@@ -116,7 +108,8 @@ export default function Spedizioni({ onStartJob, onNav }) {
   const [periodo,         setPeriodo]         = useState('all')
   const [dateFrom,        setDateFrom]        = useState('')
   const [dateTo,          setDateTo]          = useState('')
-  const [sort,            setSort]            = useState('data-desc')
+  const [sortKey,         setSortKey]         = useState('data')
+  const [sortDir,         setSortDir]         = useState('desc')
   const [page,            setPage]            = useState(1)
   const [showImport,      setShowImport]      = useState(false)
   const [expandedRows,    setExpandedRows]    = useState(new Set())
@@ -142,16 +135,23 @@ export default function Spedizioni({ onStartJob, onNav }) {
     if (rangeTo)               list = list.filter(s => s.data <= rangeTo)
 
     return [...list].sort((a, b) => {
-      switch (sort) {
-        case 'data-asc':    return a.data.localeCompare(b.data)    || a.id.localeCompare(b.id)
-        case 'peso-desc':   return b.peso   - a.peso
-        case 'peso-asc':    return a.peso   - b.peso
-        case 'volume-desc': return b.volume - a.volume
-        case 'volume-asc':  return a.volume - b.volume
-        default:            return b.data.localeCompare(a.data)    || a.id.localeCompare(b.id)
+      let cmp = 0
+      const av = a[sortKey] ?? '', bv = b[sortKey] ?? ''
+
+      // Numeric fields
+      if (sortKey === 'peso' || sortKey === 'volume') {
+        cmp = av - bv
+      } else {
+        // String fields
+        cmp = String(av).localeCompare(String(bv))
       }
+
+      // Secondary sort by ID for consistency
+      if (cmp === 0) cmp = a.id.localeCompare(b.id)
+
+      return sortDir === 'asc' ? cmp : -cmp
     })
-  }, [search, filterTipo, filterTipoPudo, filterPudo, sort, rangeFrom, rangeTo])
+  }, [search, filterTipo, filterTipoPudo, filterPudo, sortKey, sortDir, rangeFrom, rangeTo])
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -161,7 +161,11 @@ export default function Spedizioni({ onStartJob, onNav }) {
   function handleTipo(v)            { setFilterTipo(v);      resetPage() }
   function handleTipoPudo(v)        { setFilterTipoPudo(v);  resetPage() }
   function handlePudo(v)            { setFilterPudo(v);      resetPage() }
-  function handleSort(v)            { setSort(v);            resetPage() }
+  function handleSort(field) {
+    if (sortKey === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+    else { setSortKey(field); setSortDir('desc') } // Default desc for most fields
+    resetPage()
+  }
   function handlePeriodo(v)         { setPeriodo(v);         resetPage() }
   function handleDateFrom(v)        { setDateFrom(v);        resetPage() }
   function handleDateTo(v)          { setDateTo(v);          resetPage() }
@@ -288,20 +292,6 @@ export default function Spedizioni({ onStartJob, onNav }) {
             <button className="spd-reset-btn" onClick={resetPeriod}>× reset</button>
           )}
 
-          <div className="spd-toolbar-spacer" />
-
-          <select
-            className="sort-select"
-            value={sort}
-            onChange={e => handleSort(e.target.value)}
-            style={{
-              height: 34, border: '1px solid var(--fp-border)', borderRadius: 'var(--radius)',
-              padding: '0 10px', fontSize: 13, color: 'var(--fp-charcoal)',
-              background: '#fff', cursor: 'pointer', outline: 'none', minWidth: 150,
-            }}
-          >
-            {SORT_OPT.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-          </select>
         </div>
 
         {/* ── Table ── */}
@@ -309,14 +299,14 @@ export default function Spedizioni({ onStartJob, onNav }) {
           <table className="data-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Tipo</th>
-                <th>Destinatario</th>
-                <th>PUDO</th>
-                <th>Data</th>
-                <th>Peso</th>
+                <SortTh field="id" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>ID</SortTh>
+                <SortTh field="tipo" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Tipo</SortTh>
+                <SortTh field="destinatario" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Destinatario</SortTh>
+                <SortTh field="pudoNome" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>PUDO</SortTh>
+                <SortTh field="data" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Data</SortTh>
+                <SortTh field="peso" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Peso</SortTh>
                 <th>Dimensioni</th>
-                <th>Volume</th>
+                <SortTh field="volume" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Volume</SortTh>
                 <th style={{ width: 28 }} title="Dettagli" />
               </tr>
             </thead>

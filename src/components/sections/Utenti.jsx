@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { UTENTI_INIT, RUOLI, RUOLO_CFG, STATI_UTENTE, STATO_UTENTE_CFG, AUTH_TYPES, AUTH_TYPE_CFG } from '../../data/utenti'
 import { FILIALI } from '../../data/filiali'
 import MultiSelect from '../ui/MultiSelect'
+import SortTh from '../ui/SortTh'
 import Pagination from '../ui/Pagination'
 import './Sections.css'
 import './Utenti.css'
@@ -24,15 +25,6 @@ function avatar(nome) {
 
 function generateToken() {
   return Math.random().toString(36).slice(2, 10) + Date.now().toString(36)
-}
-
-function SortTh({ field, sk, sd, onSort, children, style }) {
-  const active = sk === field
-  return (
-    <th className={`sortable${active ? ' sort-active' : ''}`} onClick={() => onSort(field)} style={style}>
-      {children}{active ? <span className="sort-arrow">{sd === 'asc' ? ' ↑' : ' ↓'}</span> : null}
-    </th>
-  )
 }
 
 function FilialeChips({ ids }) {
@@ -234,14 +226,14 @@ export default function Utenti({ currentUser }) {
           <table className="data-table">
             <thead>
               <tr>
-                <SortTh field="id"           sk={sortKey} sd={sortDir} onSort={handleSort}>ID</SortTh>
-                <SortTh field="nome"         sk={sortKey} sd={sortDir} onSort={handleSort}>Utente</SortTh>
-                <SortTh field="ruolo"        sk={sortKey} sd={sortDir} onSort={handleSort}>Ruolo</SortTh>
-                <SortTh field="authType"     sk={sortKey} sd={sortDir} onSort={handleSort}>Autenticazione</SortTh>
+                <SortTh field="id"           sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>ID</SortTh>
+                <SortTh field="nome"         sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Utente</SortTh>
+                <SortTh field="ruolo"        sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Ruolo</SortTh>
+                <SortTh field="authType"     sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Autenticazione</SortTh>
                 <th>Accesso filiali</th>
                 <th>Stato</th>
-                <SortTh field="dataCreazione" sk={sortKey} sd={sortDir} onSort={handleSort}>Creato il</SortTh>
-                <SortTh field="ultimoAccesso" sk={sortKey} sd={sortDir} onSort={handleSort}>Ultimo accesso</SortTh>
+                <SortTh field="dataCreazione" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Creato il</SortTh>
+                <SortTh field="ultimoAccesso" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Ultimo accesso</SortTh>
                 {isAdmin && <th style={{ width: 100 }}></th>}
               </tr>
             </thead>

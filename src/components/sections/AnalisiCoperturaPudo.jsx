@@ -3,15 +3,22 @@ import { MapContainer, TileLayer, Rectangle, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import { useAnalisiCopertura } from '../../hooks/useAnalisiCopertura'
 import { calculateCarenzaIndex, getStatoCobertura } from '../../data/analisiCopertura'
+import SortTh from '../ui/SortTh'
 import './AnalisiCoperturaPudo.css'
 
 export default function AnalisiCoperturaPudo() {
   const [stato, setStato] = useState('tutti')
   const [regione, setRegione] = useState(null)
-  const [ordinamento, setOrdinamento] = useState('criticita')
+  const [sortKey, setSortKey] = useState('criticita')
+  const [sortDir, setSortDir] = useState('desc')
   const [selectedProvincia, setSelectedProvincia] = useState(null)
 
-  const { province, statistiche, top10Criticita, regioni } = useAnalisiCopertura({ stato, regione, ordinamento })
+  const { province, statistiche, top10Criticita, regioni } = useAnalisiCopertura({ stato, regione, ordinamento: sortKey })
+
+  function handleSort(field) {
+    if (sortKey === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+    else { setSortKey(field); setSortDir('desc') }
+  }
 
   // Funzione per ottenere colore basato su carenza index
   function getColoreStato(statoCobertura) {
@@ -155,15 +162,6 @@ export default function AnalisiCoperturaPudo() {
               ))}
             </select>
           </div>
-
-          <div className="acp-filter-group">
-            <label>Ordinamento:</label>
-            <select value={ordinamento} onChange={e => setOrdinamento(e.target.value)}>
-              <option value="criticita">Per criticità</option>
-              <option value="nome">Per provincia</option>
-              <option value="spedizioni">Per volume spedizioni</option>
-            </select>
-          </div>
         </div>
       </div>
 
@@ -174,13 +172,13 @@ export default function AnalisiCoperturaPudo() {
           <table className="acp-tabella">
             <thead>
               <tr>
-                <th>Provincia</th>
+                <SortTh field="nome" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Provincia</SortTh>
                 <th>Densità (ab/km²)</th>
-                <th>Spedizioni/mese</th>
+                <SortTh field="spedizioni" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Spedizioni/mese</SortTh>
                 <th>PUDO</th>
                 <th>Capacità</th>
                 <th>Utilizz. %</th>
-                <th>Indice</th>
+                <SortTh field="criticita" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Indice</SortTh>
                 <th>Stato</th>
                 <th>Azione consigliata</th>
               </tr>

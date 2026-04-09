@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { FILIALI_BRT, PROVINCE_BRT, REGIONI_BRT } from '../../data/filialiBrt'
 import MultiSelect from '../ui/MultiSelect'
+import SortTh from '../ui/SortTh'
 import Pagination from '../ui/Pagination'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
@@ -12,20 +13,6 @@ const PAGE_SIZE = 20
 
 const REGIONI_OPT  = REGIONI_BRT.map(r => ({ value: r, label: r }))
 const PROVINCE_OPT = PROVINCE_BRT.map(p => ({ value: p, label: p }))
-
-function SortTh({ field, sk, sd, onSort, children, style }) {
-  const active = sk === field
-  return (
-    <th
-      className={`sortable${active ? ' sort-active' : ''}`}
-      onClick={() => onSort(field)}
-      style={style}
-    >
-      {children}
-      {active ? <span className="sort-arrow">{sd === 'asc' ? ' ↑' : ' ↓'}</span> : null}
-    </th>
-  )
-}
 
 export default function FilialiBrt() {
   const [search,         setSearch]         = useState('')
@@ -183,12 +170,12 @@ export default function FilialiBrt() {
             <thead>
               <tr>
                 <th style={{ width: 64 }}>ID</th>
-                <SortTh field="nome"      sk={sortKey} sd={sortDir} onSort={handleSort}>Nome</SortTh>
+                <SortTh field="nome"      sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Nome</SortTh>
                 <th>Indirizzo</th>
                 <th style={{ width: 60 }}>CAP</th>
-                <SortTh field="citta"     sk={sortKey} sd={sortDir} onSort={handleSort}>Città</SortTh>
-                <SortTh field="provincia" sk={sortKey} sd={sortDir} onSort={handleSort} style={{ width: 70 }}>Prov.</SortTh>
-                <SortTh field="regione"   sk={sortKey} sd={sortDir} onSort={handleSort}>Regione</SortTh>
+                <SortTh field="citta"     sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Città</SortTh>
+                <SortTh field="provincia" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} style={{ width: 70 }}>Prov.</SortTh>
+                <SortTh field="regione"   sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Regione</SortTh>
                 <th style={{ width: 110 }}>Telefono</th>
               </tr>
             </thead>

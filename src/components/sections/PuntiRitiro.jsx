@@ -4,6 +4,7 @@ import { usePudosLoader } from '../../hooks/usePudosLoader'
 import PuntiRitiroDetail from './PuntiRitiroDetail'
 import AuditPanel from '../ui/AuditPanel'
 import MultiSelect from '../ui/MultiSelect'
+import SortTh from '../ui/SortTh'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -49,13 +50,6 @@ function getPudoVolumeLibero(pudo) {
   return +(tot * (1 - pct)).toFixed(2)
 }
 
-const SORT_OPTIONS = [
-  { value: 'name-asc',  label: 'Nome A→Z' },
-  { value: 'name-desc', label: 'Nome Z→A' },
-  { value: 'id-asc',   label: 'Codice A→Z' },
-  { value: 'cap-asc',  label: 'CAP ↑' },
-]
-
 function CopyId({ id }) {
   const [copied, setCopied] = useState(false)
   function copy(e) {
@@ -100,7 +94,8 @@ export default function PuntiRitiro() {
   const [search, setSearch]     = useState('')
   const [filterCap, setFilterCap] = useState([])
   const [filterTipo, setFilterTipo] = useState([])
-  const [sort, setSort]         = useState('name-asc')
+  const [sortKey, setSortKey]   = useState('name')
+  const [sortDir, setSortDir]   = useState('asc')
   const [page, setPage]         = useState(1)
   const [selected,   setSelected]   = useState(null)
   const [auditPudo,  setAuditPudo]  = useState(null)
@@ -127,15 +122,13 @@ export default function PuntiRitiro() {
     }
     if (filterTipo.length) list = list.filter(p => filterTipo.includes(getPudoTipo(p)))
 
-    const [field, dir] = sort.split('-')
     list = [...list].sort((a, b) => {
-      const av = a[field] ?? '', bv = b[field] ?? ''
-      return dir === 'asc'
-        ? String(av).localeCompare(String(bv))
-        : String(bv).localeCompare(String(av))
+      const av = a[sortKey] ?? '', bv = b[sortKey] ?? ''
+      const cmp = String(av).localeCompare(String(bv))
+      return sortDir === 'asc' ? cmp : -cmp
     })
     return list
-  }, [search, filterCap, filterTipo, sort, pudosData, dataSource])
+  }, [search, filterCap, filterTipo, sortKey, sortDir, pudosData, dataSource])
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const pageData   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -143,7 +136,11 @@ export default function PuntiRitiro() {
   function handleSearch(v) { setSearch(v); setPage(1) }
   function handleCap(v)    { setFilterCap(v);  setPage(1) }
   function handleTipo(v)   { setFilterTipo(v); setPage(1) }
-  function handleSort(v)   { setSort(v); setPage(1) }
+  function handleSort(field) {
+    if (sortKey === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+    else { setSortKey(field); setSortDir('asc') }
+    setPage(1)
+  }
 
   const listBlock = (
     <div className="section-content">
@@ -198,10 +195,6 @@ export default function PuntiRitiro() {
             value={filterTipo}
             onChange={handleTipo}
           />
-
-          <select className="pr-select" value={sort} onChange={e => handleSort(e.target.value)}>
-            {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-          </select>
         </div>
 
         {/* MAP VIEW */}
@@ -250,8 +243,8 @@ export default function PuntiRitiro() {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Codice</th>
-                <th>Nome</th>
+                <SortTh field="id" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Codice</SortTh>
+                <SortTh field="name" sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Nome</SortTh>
                 <th>Indirizzo</th>
                 <th>Capienza</th>
                 <th>Orari</th>

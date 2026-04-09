@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { FILIALI as FILIALI_INIT, STATI_FILIALE, REGIONI } from '../../data/filiali'
 import { FILIALI_BRT } from '../../data/filialiBrt'
 import MultiSelect from '../ui/MultiSelect'
+import SortTh from '../ui/SortTh'
 import Pagination from '../ui/Pagination'
 import EntityHistory from '../ui/EntityHistory'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
@@ -27,15 +28,6 @@ const EMPTY_FORM = {
   lat: '', lng: '', telefono: '', email: '', responsabile: '',
   emailResponsabile: '', stato: 'Attiva', superficie: '', puntiRitiro: 0,
   dataApertura: '',
-}
-
-function SortTh({ field, sk, sd, onSort, children, style }) {
-  const active = sk === field
-  return (
-    <th className={`sortable${active ? ' sort-active' : ''}`} onClick={() => onSort(field)} style={style}>
-      {children}{active ? <span className="sort-arrow">{sd === 'asc' ? ' ↑' : ' ↓'}</span> : null}
-    </th>
-  )
 }
 
 export default function Filiali() {
@@ -434,15 +426,15 @@ export default function Filiali() {
           <table className="data-table">
             <thead>
               <tr>
-                <SortTh field="id"          sk={sortKey} sd={sortDir} onSort={handleSort}>ID</SortTh>
-                <SortTh field="nome"        sk={sortKey} sd={sortDir} onSort={handleSort}>Filiale</SortTh>
+                <SortTh field="id"          sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>ID</SortTh>
+                <SortTh field="nome"        sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Filiale</SortTh>
                 <th>Indirizzo</th>
-                <SortTh field="regione"     sk={sortKey} sd={sortDir} onSort={handleSort}>Regione</SortTh>
+                <SortTh field="regione"     sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Regione</SortTh>
                 <th>Responsabile</th>
-                <SortTh field="puntiRitiro" sk={sortKey} sd={sortDir} onSort={handleSort} style={{ textAlign: 'right' }}>PUDO</SortTh>
-                <SortTh field="superficie"  sk={sortKey} sd={sortDir} onSort={handleSort} style={{ textAlign: 'right' }}>Superficie</SortTh>
-                <SortTh field="dataApertura"sk={sortKey} sd={sortDir} onSort={handleSort}>Apertura</SortTh>
-                <SortTh field="stato"       sk={sortKey} sd={sortDir} onSort={handleSort}>Stato</SortTh>
+                <SortTh field="puntiRitiro" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} style={{ textAlign: 'right' }}>PUDO</SortTh>
+                <SortTh field="superficie"  sortKey={sortKey} sortDir={sortDir} onSort={handleSort} style={{ textAlign: 'right' }}>Superficie</SortTh>
+                <SortTh field="dataApertura"sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Apertura</SortTh>
+                <SortTh field="stato"       sortKey={sortKey} sortDir={sortDir} onSort={handleSort}>Stato</SortTh>
                 <th style={{ width: 70 }}></th>
               </tr>
             </thead>
