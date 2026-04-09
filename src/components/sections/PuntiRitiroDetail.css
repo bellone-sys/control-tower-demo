@@ -19,11 +19,12 @@ aside.pr-detail-panel {
 }
 
 .pr-panel-body .detail-map-wrap {
-  width: 100%;
+  width: calc(100% + 40px);
   height: 280px;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
   overflow: hidden;
   order: -1;
+  margin: 0 -20px 16px -20px;
 }
 
 .pr-panel-body .detail-map {
