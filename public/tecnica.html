@@ -466,13 +466,16 @@
   <!-- ── 1. STACK TECNOLOGICO ── -->
   <section class="doc-section" id="stack">
     <h2>Stack Tecnologico</h2>
+
+    <h3>Frontend</h3>
     <p>
       Il frontend del Control Tower è una Single Page Application costruita interamente
-      con tecnologie web standard. Non sono presenti backend proprietari: tutta la logica
-      risiede nel browser e i dati persistono in <code>localStorage</code>.
+      con tecnologie web standard. L'intera applicazione viene servita da un unico file
+      <code>index.html</code> generato da Vite, con logica resiede nel browser e i dati
+      persistono in <code>localStorage</code>.
     </p>
     <div class="table-responsive">
-      <table class="data-table" aria-label="Stack tecnologico">
+      <table class="data-table" aria-label="Stack frontend">
         <thead>
           <tr>
             <th>Libreria / Strumento</th>
@@ -514,9 +517,60 @@
         </tbody>
       </table>
     </div>
+
+    <h3>Backend &amp; Cloud (Produzione)</h3>
+    <p>
+      L'infrastruttura di produzione del Control Tower è ospitata su Amazon Web Services (AWS)
+      con un'architettura scalabile, resiliente e multi-region.
+    </p>
+    <div class="table-responsive">
+      <table class="data-table" aria-label="Stack backend e cloud">
+        <thead>
+          <tr>
+            <th>Componente</th>
+            <th>Tecnologia</th>
+            <th>Ruolo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Backend API</strong></td>
+            <td>Java / Spring Boot</td>
+            <td>REST API gateway per orchestrazione logica, validazione, integrazione sistemi esterni (AS/400, OptimoRoute, BRTAUT, PUDO Anagrafica)</td>
+          </tr>
+          <tr>
+            <td><strong>Database</strong></td>
+            <td>Amazon Aurora PostgreSQL</td>
+            <td>Database relazionale managed con replica automatiche multi-AZ, backup continuo, recovery point objective (RPO) minuto</td>
+          </tr>
+          <tr>
+            <td><strong>Cache</strong></td>
+            <td>Amazon ElastiCache (Redis)</td>
+            <td>Cache distribuita per sessioni utente, risultati query frequenti, riduzione latenza database</td>
+          </tr>
+          <tr>
+            <td><strong>CDN</strong></td>
+            <td>Amazon CloudFront</td>
+            <td>Content delivery network globale — distribuzione bundle frontend, media, asset statici con edge caching</td>
+          </tr>
+          <tr>
+            <td><strong>Autenticazione</strong></td>
+            <td>Amazon Cognito</td>
+            <td>Identity provider managed — user pool, SSO, OAuth2 multi-factor authentication (MFA), federazione SAML/OIDC</td>
+          </tr>
+          <tr>
+            <td><strong>Email</strong></td>
+            <td>Amazon SES</td>
+            <td>Simple Email Service — notifiche transazionali, report, allerte operazionali con deliverability tracking</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="info-box">
-      Nessuna dipendenza da framework di routing esterni: la navigazione tra le viste avviene
+      Nessuna dipendenza da framework di routing esterni nel frontend: la navigazione tra le viste avviene
       tramite stato React (variabile <code>activeView</code> nel contesto applicativo principale).
+      Backend e cloud services sono configurati in produzione mediante Infrastructure-as-Code (IaC) via CloudFormation/Terraform.
     </div>
   </section>
 
@@ -550,9 +604,33 @@
       <li><strong>Stub data</strong> — tutti i dati operativi (PUDO, giri, spedizioni) sono definiti in file <code>.js</code> statici in <code>src/data/</code>. Sostituibili con chiamate API reali senza modificare i componenti.</li>
       <li><strong>Componenti controllati</strong> — form e filtri utilizzano pattern controlled component per mantenere lo stato in React.</li>
     </ul>
+
+    <h3>Infrastruttura AWS</h3>
+    <p>
+      L'applicazione di produzione è distribuita su Amazon Web Services con un'architettura multi-region
+      per alta disponibilità e disaster recovery. La topologia segue il modello di regione primaria + DR.
+    </p>
+    <div class="formula-box">
+      <table>
+        <thead>
+          <tr><th>Elemento</th><th>Descrizione</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Regione Primaria</strong></td><td><code>eu-west-1</code> (Irlanda) — datacenter principale con latenza ottimale per European users</td></tr>
+          <tr><td><strong>Regione DR</strong></td><td><code>eu-central-1</code> (Francoforte) — replica per disaster recovery, failover automatico con RTO &lt; 15 min</td></tr>
+          <tr><td><strong>Topologia VPC</strong></td><td>VPC multi-AZ con 3 zone disponibilità (1a, 1b, 1c); subnet pubblica per ALB, subnet privata per compute e database</td></tr>
+          <tr><td><strong>Load Balancing</strong></td><td>Application Load Balancer (ALB) con health check intelligente, routing path-based verso backend API e frontend CloudFront</td></tr>
+          <tr><td><strong>Auto Scaling</strong></td><td>EC2 Auto Scaling Group (ASG) per backend Spring Boot; scaling policy basata su CPU (target 70%), memoria, o custom metrics CloudWatch</td></tr>
+          <tr><td><strong>CI/CD Pipeline</strong></td><td>Bitbucket repository → CloudFormation deploy → S3 artifacts → CloudFront invalidation; deploy automatico su push main branch</td></tr>
+          <tr><td><strong>API Gateway</strong></td><td>FermoPoint API espone single endpoint di contatto verso integrazioni esterne (AS/400, OptimoRoute, BRTAUT, PUDO Anagrafica)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="warn-box">
       La demo non include autenticazione reale. Il modulo di login è puramente client-side
-      e non deve essere utilizzato in ambienti di produzione senza integrare un Identity Provider.
+      e non deve essere utilizzato in ambienti di produzione senza integrare Amazon Cognito o altro Identity Provider.
+      Produzione richiede SSL/TLS, WAF, e conformità GDPR/LCC per dati sensibili.
     </div>
   </section>
 
