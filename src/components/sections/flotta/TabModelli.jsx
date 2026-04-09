@@ -12,7 +12,6 @@ const CARB_CFG   = {
   'Elettrico': { color: '#1565C0', bg: '#e3f0fb' },
   'Ibrido':    { color: '#2E7D32', bg: '#e8f5e9' },
 }
-const MARCA_LOGO = {}
 
 const TIPO_OPT = Object.keys(TIPO_LABEL).map(t => ({ value: t, label: TIPO_LABEL[t] }))
 const CARB_OPT = Object.keys(CARB_CFG).map(c => ({ value: c, label: c }))
@@ -217,21 +216,9 @@ export default function TabModelli({ modelli, setModelli, mezzi }) {
                   <tr key={mod.catalogoId} className={isDel && !hasErr ? 'row-deleting' : ''}>
                     <td><code className="id-code">{mod.catalogoId}</code></td>
                     <td>
-                      <div className="mezzo-modello">
-                        {MARCA_LOGO[mod.marca] ? (
-                          <img
-                            src={MARCA_LOGO[mod.marca]}
-                            alt={mod.marca}
-                            className="mezzo-marca-logo"
-                            onError={(e) => { e.target.style.display = 'none' }}
-                          />
-                        ) : (
-                          <span className="mezzo-marca-icon">🚗</span>
-                        )}
-                        <div>
-                          <span className="mezzo-marca">{mod.marca}</span>
-                          <span className="td-small">{mod.modello}</span>
-                        </div>
+                      <div>
+                        <span className="mezzo-marca">{mod.marca}</span>
+                        <span className="td-small">{mod.modello}</span>
                       </div>
                     </td>
                     <td>
