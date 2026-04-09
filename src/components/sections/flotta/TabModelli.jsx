@@ -217,8 +217,7 @@ export default function TabModelli({ modelli, setModelli, mezzi }) {
                     <td><code className="id-code">{mod.catalogoId}</code></td>
                     <td>
                       <div>
-                        <span className="mezzo-marca">{mod.marca}</span>
-                        <span className="td-small">{mod.modello}</span>
+                        <span className="mezzo-marca">{mod.marca}</span>{' '}<span className="td-small">{mod.modello}</span>
                       </div>
                     </td>
                     <td>
