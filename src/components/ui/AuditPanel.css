@@ -14,21 +14,24 @@
 
 .audit-panel {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  top: 50%;
+  left: 50%;
+  max-height: 90vh;
   width: 420px;
-  max-width: 100vw;
+  max-width: 90vw;
   background: #fff;
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.14);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   z-index: 601;
   display: flex;
   flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translate(-50%, -50%) scale(0.95);
+  opacity: 0;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.28s ease;
 }
 .audit-panel.open {
-  transform: translateX(0);
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
 }
 
 /* Header */
@@ -87,4 +90,5 @@
   flex: 1;
   overflow-y: auto;
   padding: 20px 20px 32px;
+  min-height: 0;
 }
