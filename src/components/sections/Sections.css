@@ -630,6 +630,11 @@
 .page-btn:hover:not(:disabled) { border-color: var(--fp-red); color: var(--fp-red); }
 .page-btn.active { background: var(--fp-red); border-color: var(--fp-red); color: #fff; font-weight: 600; }
 .page-btn:disabled { opacity: .35; cursor: not-allowed; }
+.page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 .page-ellipsis { color: var(--fp-gray-light); font-size: 13px; padding: 0 4px; }
 .page-info { font-size: 12px; color: var(--fp-gray-mid); margin-left: 8px; }
 
