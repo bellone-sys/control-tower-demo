@@ -142,6 +142,34 @@ export default function TabGiri({ giri, setGiri }) {
 
   const selectedGiro = selectedId ? giri.find(g => g.id === selectedId) : null
 
+  const modal = selectedGiro && (
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+      backdropFilter: 'blur(4px)',
+    }}>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '12px',
+        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)',
+        maxHeight: '90vh',
+        maxWidth: '90vw',
+        overflow: 'auto',
+        position: 'relative',
+      }}>
+        <DetailGiro
+          giro={selectedGiro}
+          onClose={() => setSelectedId(null)}
+        />
+      </div>
+    </div>
+  )
+
   const tableBlock = (
     <div className="giri-table-col">
       {/* KPI */}
@@ -306,17 +334,10 @@ export default function TabGiri({ giri, setGiri }) {
     </div>
   )
 
-  if (selectedGiro) {
-    return (
-      <div className="giri-layout">
-        {tableBlock}
-        <DetailGiro
-          giro={selectedGiro}
-          onClose={() => setSelectedId(null)}
-        />
-      </div>
-    )
-  }
-
-  return tableBlock
+  return (
+    <>
+      {tableBlock}
+      {modal}
+    </>
+  )
 }

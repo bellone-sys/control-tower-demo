@@ -31,8 +31,17 @@
   color: var(--fp-charcoal);
 }
 .mezzo-ref { font-size: 12px; color: var(--fp-charcoal); }
-.mezzo-modello { display: flex; flex-direction: column; gap: 2px; }
-.mezzo-marca { font-weight: 600; font-size: 13px; }
+.mezzo-modello { display: flex; align-items: center; gap: 10px; }
+.mezzo-marca-logo {
+  height: 28px;
+  width: auto;
+  max-width: 50px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.mezzo-marca-icon { font-size: 20px; flex-shrink: 0; }
+.mezzo-marca { font-weight: 600; font-size: 13px; color: var(--fp-charcoal); }
+.mezzo-modello > div { display: flex; flex-direction: column; gap: 2px; }
 
 /* ===== SPECS ===== */
 .spec-cell { white-space: nowrap; }

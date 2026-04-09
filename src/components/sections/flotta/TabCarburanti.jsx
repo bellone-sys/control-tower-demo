@@ -5,6 +5,7 @@ import './Flotta.css'
 import './TabCarburanti.css'
 
 const CARB_KEYS = ['diesel', 'benzina', 'gpl', 'elettrico']
+const PAGE_SIZE = 10
 const RANGE_OPT = [
   { value: 7,  label: '7 giorni'  },
   { value: 15, label: '15 giorni' },
@@ -56,6 +57,7 @@ function Sparkline({ values, color }) {
 
 export default function TabCarburanti() {
   const [range,   setRange]   = useState(30)
+  const [page,    setPage]    = useState(1)
   const [sortKey, setSortKey] = useState('data')
   const [sortDir, setSortDir] = useState('desc')
 
@@ -87,6 +89,9 @@ export default function TabCarburanti() {
       return sortDir === 'asc' ? cmp : -cmp
     })
   }, [sliced, sortKey, sortDir])
+
+  const totalPages = Math.ceil(sorted.length / PAGE_SIZE) || 1
+  const pageData = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   // KPI: latest row
   const latest = rowsWithDelta[0]
@@ -152,7 +157,7 @@ export default function TabCarburanti() {
                 <button
                   key={o.value}
                   className={`carb-range-tab${range === o.value ? ' active' : ''}`}
-                  onClick={() => setRange(o.value)}
+                  onClick={() => { setRange(o.value); setPage(1) }}
                 >
                   {o.label}
                 </button>
@@ -178,7 +183,7 @@ export default function TabCarburanti() {
               </tr>
             </thead>
             <tbody>
-              {sorted.map((row, i) => {
+              {pageData.map((row, i) => {
                 const isToday = row.data === ALL_ROWS[0].data
                 return (
                   <tr key={row.data} className={isToday ? 'carb-row-today' : ''}>
@@ -206,6 +211,27 @@ export default function TabCarburanti() {
             </tbody>
           </table>
         </div>
+
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button className="page-btn" onClick={() => setPage(1)} disabled={page === 1}>«</button>
+            <button className="page-btn" onClick={() => setPage(p => p - 1)} disabled={page === 1}>‹</button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+              <button
+                key={p}
+                className={`page-btn${p === page ? ' active' : ''}`}
+                onClick={() => setPage(p)}
+              >
+                {p}
+              </button>
+            ))}
+            <button className="page-btn" onClick={() => setPage(p => p + 1)} disabled={page === totalPages}>›</button>
+            <button className="page-btn" onClick={() => setPage(totalPages)} disabled={page === totalPages}>»</button>
+            <span className="page-info">
+              {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, sorted.length)} di {sorted.length}
+            </span>
+          </div>
+        )}
 
         <div className="carb-footer">
           <span>Prezzi medi nazionali al consumo · Fonte: elaborazione interna</span>

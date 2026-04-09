@@ -15,7 +15,7 @@ export default function WizardStep4({ data, onChange }) {
   const today = new Date().toISOString().split('T')[0]
 
   // ── Flotta ─────────────────────────────────────────────────────────────────
-  const flotta = data.flotta ?? [{ modelloId: 'CAT005', quantita: 3 }]
+  const flotta = data.flotta ?? []
 
   function setFlotta(next) { onChange({ flotta: next }) }
 

@@ -14,7 +14,7 @@ const AUTH_TYPE_OPT = AUTH_TYPES.map(t => ({ value: t, label: AUTH_TYPE_CFG[t].l
 
 const EMPTY_FORM = {
   nome: '', email: '', authType: 'password',
-  ruolo: 'user', filialiIds: [], stato: 'Attivo',
+  ruolo: 'user', filialiIds: [], permessi: 'read',
 }
 
 function avatar(nome) {
@@ -110,7 +110,7 @@ export default function Utenti({ currentUser }) {
   function openEdit(u) {
     setForm({
       nome: u.nome, email: u.email, authType: u.authType ?? 'password',
-      ruolo: u.ruolo, filialiIds: u.filialiIds ?? [], stato: u.stato,
+      ruolo: u.ruolo, filialiIds: u.filialiIds ?? [], permessi: u.permessi ?? 'read',
     })
     setErrors({}); setModal({ mode: 'edit', utente: u })
   }
@@ -126,7 +126,7 @@ export default function Utenti({ currentUser }) {
     const e = validate()
     if (Object.keys(e).length) { setErrors(e); return }
     const filialiIds = form.ruolo === 'admin' ? null : (form.filialiIds.length ? form.filialiIds : [])
-    const payload = { nome: form.nome, email: form.email, authType: form.authType, ruolo: form.ruolo, filialiIds, stato: form.stato }
+    const payload = { nome: form.nome, email: form.email, authType: form.authType, ruolo: form.ruolo, filialiIds, permessi: form.ruolo === 'admin' ? null : form.permessi }
 
     if (modal.mode === 'add') {
       const maxId = utenti.length ? Math.max(...utenti.map(u => parseInt(u.id.slice(1)))) : 0
@@ -410,14 +410,7 @@ export default function Utenti({ currentUser }) {
 
                 <div className="form-field">
                   <label className="form-label">Email *</label>
-                  <input className={`form-input${errors.email ? ' error' : ''}`} value={form.email} onChange={setF('email')} placeholder="nome@fermopoint.it" />
-                </div>
-
-                <div className="form-field">
-                  <label className="form-label">Stato</label>
-                  <select className="form-select" value={form.stato} onChange={setF('stato')}>
-                    {STATI_UTENTE.map(s => <option key={s}>{s}</option>)}
-                  </select>
+                  <input className={`form-input${errors.email ? ' error' : ''}`} value={form.email} onChange={setF('email')} placeholder="nome@fermopoint.it" readOnly={modal.mode === 'edit'} style={modal.mode === 'edit' ? { backgroundColor: 'var(--fp-bg)', color: 'var(--fp-gray-mid)', cursor: 'not-allowed' } : {}} />
                 </div>
 
                 {/* Tipo autenticazione */}
@@ -473,6 +466,32 @@ export default function Utenti({ currentUser }) {
                     ))}
                   </div>
                 </div>
+
+                {form.ruolo === 'user' && (
+                  <div className="form-field full">
+                    <label className="form-label">Livello di accesso</label>
+                    <div className="ruolo-picker">
+                      {[
+                        { value: 'read', label: 'Sola lettura', icon: '👁️', desc: 'Accesso in lettura ai dati delle filiali assegnate' },
+                        { value: 'write', label: 'Lettura e scrittura', icon: '✏️', desc: 'Accesso completo alle filiali assegnate' },
+                      ].map(p => (
+                        <button
+                          key={p.value}
+                          type="button"
+                          className={`ruolo-option${form.permessi === p.value ? ' selected' : ''}`}
+                          style={form.permessi === p.value ? { borderColor: '#1565C0', background: '#E3F2FD', color: '#1565C0' } : {}}
+                          onClick={() => setForm(f => ({ ...f, permessi: p.value }))}
+                        >
+                          <span className="ruolo-icon">{p.icon}</span>
+                          <div>
+                            <div className="ruolo-nome">{p.label}</div>
+                            <div className="ruolo-desc">{p.desc}</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {form.ruolo === 'user' && (
                   <div className="form-field full">

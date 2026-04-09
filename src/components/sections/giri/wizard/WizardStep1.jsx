@@ -120,13 +120,6 @@ export default function WizardStep1({ data, onChange, errors = [] }) {
             errors={errors}
           />
         </div>
-
-
-        {/* PUDO count info */}
-        <div className="ws-filter-info">
-          <span className="ws-filter-count">{pudosRoma.length}</span>
-          PUDO disponibili nell'area ({pudosRoma.filter(p => isLocker(p)).length} locker)
-        </div>
       </div>
 
       {/* Map panel */}

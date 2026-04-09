@@ -1,10 +1,21 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import L from 'leaflet'
-import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker, useMap } from 'react-leaflet'
 import { FILIALI } from '../../../../data/filiali'
 import { getCiPudo } from '../../../../data/spedizioni'
 import pudosRoma from '../../../../data/pudosRoma.json'
 import 'leaflet/dist/leaflet.css'
+
+// Helper component to center map on PUDO
+function MapCenterHelper({ center, zoom }) {
+  const map = useMap()
+  useEffect(() => {
+    if (center) {
+      map.setView(center, zoom || 14, { animate: true })
+    }
+  }, [center, zoom, map])
+  return null
+}
 
 function ciColor(ci) {
   if (ci >= 4)   return '#2E7D32'
@@ -41,6 +52,7 @@ export default function WizardStep3({ data, onChange }) {
   const [search, setSearch]   = useState('')
   const [sortBy, setSortBy]   = useState('ci') // 'ci' | 'dist' | 'name'
   const [filterType, setFilterType] = useState('all') // 'all' | 'pudo' | 'locker'
+  const [highlightedPudo, setHighlightedPudo] = useState(null) // PUDO evidenziato sulla mappa
 
   const allFiliali = [...FILIALI, ...(data.extraFiliali || [])]
   const filiale = allFiliali.find(f => f.id === data.filialeId)
@@ -200,9 +212,46 @@ export default function WizardStep3({ data, onChange }) {
                 <span className="step3-pudo-ci" style={{ color: ciColor(p.ci) }}>
                   {p.ci > 0 ? p.ci.toFixed(1) : '—'}
                 </span>
-                <span style={{ fontSize: 14, color: isSel ? '#2E7D32' : '#ccc', marginLeft: 4 }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    togglePudo(p.id)
+                  }}
+                  style={{
+                    background: isSel ? '#E8F5E9' : 'transparent',
+                    border: isSel ? '1px solid #2E7D32' : '1px solid transparent',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: 14,
+                    color: isSel ? '#2E7D32' : '#ccc',
+                    marginLeft: 4,
+                    padding: '2px 6px',
+                    transition: 'all 0.2s',
+                  }}
+                  title={isSel ? 'Click per escludere' : 'Click per includere'}
+                >
                   {isSel ? '✓' : '○'}
-                </span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setHighlightedPudo(p.id)
+                  }}
+                  style={{
+                    background: highlightedPudo === p.id ? '#E3F2FD' : 'transparent',
+                    border: highlightedPudo === p.id ? '1px solid #1565C0' : '1px solid transparent',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: 14,
+                    color: highlightedPudo === p.id ? '#1565C0' : '#ccc',
+                    marginLeft: 6,
+                    padding: '2px 6px',
+                    transition: 'all 0.2s',
+                  }}
+                  title="Localizza su mappa"
+                >
+                  📍
+                </button>
               </div>
             )
           })}
@@ -231,23 +280,31 @@ export default function WizardStep3({ data, onChange }) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
+          {highlightedPudo && visibleCandidates.find(p => p.id === highlightedPudo) && (
+            <MapCenterHelper
+              center={[visibleCandidates.find(p => p.id === highlightedPudo).lat, visibleCandidates.find(p => p.id === highlightedPudo).lng]}
+              zoom={14}
+            />
+          )}
+
           {visibleCandidates.map(p => {
             const isSel = data.pudoSelezionati.has(p.id)
+            const isHighlighted = highlightedPudo === p.id
             return (
               <CircleMarker
                 key={p.id}
                 center={[p.lat, p.lng]}
-                radius={isSel ? 11 : 7}
+                radius={isHighlighted ? 15 : (isSel ? 11 : 7)}
                 pathOptions={{
-                  color: isSel ? ciColor(p.ci) : '#ccc',
-                  fillColor: isSel ? ciColor(p.ci) : '#e0e0e0',
-                  fillOpacity: isSel ? 0.9 : 0.6,
-                  weight: isSel ? 2.5 : 1,
+                  color: isHighlighted ? '#1565C0' : (isSel ? ciColor(p.ci) : '#ccc'),
+                  fillColor: isHighlighted ? '#1565C0' : (isSel ? ciColor(p.ci) : '#e0e0e0'),
+                  fillOpacity: isHighlighted ? 1 : (isSel ? 0.9 : 0.6),
+                  weight: isHighlighted ? 3 : (isSel ? 2.5 : 1),
                 }}
                 eventHandlers={{
                   click: () => togglePudo(p.id),
                   mouseover: (e) => e.target.bindTooltip(
-                    `<b>${p.locker ? '🔒 ' : ''}${p.name}</b><br/>CI: ${p.ci > 0 ? p.ci.toFixed(2) : 'N/D'}<br/>${isSel ? '✓ click per escludere' : '○ click per includere'}`,
+                    `<b>${p.locker ? '🔒 ' : ''}${p.name}</b><br/>CI: ${p.ci > 0 ? p.ci.toFixed(2) : 'N/D'}<br/>${isSel ? '✓ click per escludere' : '○ click per includere'}${isHighlighted ? '<br/>📍 Localizzato' : ''}`,
                     { direction: 'top', offset: L.point(0, -8) }
                   ).openTooltip(),
                   mouseout: (e) => { e.target.closeTooltip(); e.target.unbindTooltip() },
