@@ -12,16 +12,7 @@ const CARB_CFG   = {
   'Elettrico': { color: '#1565C0', bg: '#e3f0fb' },
   'Ibrido':    { color: '#2E7D32', bg: '#e8f5e9' },
 }
-const MARCA_LOGO = {
-  'Ford':     'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60"%3E%3Crect fill="%23003C71" width="200" height="60"/%3E%3Ctext x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="32" font-weight="bold" fill="%23fff" font-family="Arial"%3EFORD%3C/text%3E%3C/svg%3E',
-  'Mercedes': 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"%3E%3Ccircle cx="30" cy="30" r="28" fill="none" stroke="%23000" stroke-width="2"/%3E%3Ccircle cx="30" cy="30" r="25" fill="none" stroke="%23000" stroke-width="1"/%3E%3Cline x1="30" y1="5" x2="30" y2="55" stroke="%23000" stroke-width="1"/%3E%3Cline x1="5" y1="30" x2="55" y2="30" stroke="%23000" stroke-width="1"/%3E%3C/svg%3E',
-  'Renault':  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"%3E%3Cdiamond cx="30" cy="30" r="20" fill="%23FFD700" stroke="%23000" stroke-width="1"/%3E%3Ctext x="30" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="%23000" font-family="Arial"%3ER%3C/text%3E%3C/svg%3E',
-  'Fiat':     'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"%3E%3Crect fill="%230066CC" width="60" height="60"/%3E%3Ctext x="30" y="35" text-anchor="middle" font-size="24" font-weight="bold" fill="%23fff" font-family="Arial"%3EFIAT%3C/text%3E%3C/svg%3E',
-  'Iveco':    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60"%3E%3Crect fill="%23C1121F" width="80" height="60"/%3E%3Ctext x="40" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="%23fff" font-family="Arial"%3EIVECO%3C/text%3E%3C/svg%3E',
-  'Volvo':    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"%3E%3Ccircle cx="30" cy="30" r="25" fill="%23003DA5" stroke="%23fff" stroke-width="2"/%3E%3Ctext x="30" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="%23fff" font-family="Arial"%3EV%3C/text%3E%3C/svg%3E',
-  'MAN':      'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60"%3E%3Crect fill="%23001438" width="80" height="60"/%3E%3Ctext x="40" y="35" text-anchor="middle" font-size="22" font-weight="bold" fill="%23fff" font-family="Arial"%3EMAN%3C/text%3E%3C/svg%3E',
-  'Scania':   'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"%3E%3Crect fill="%23E60000" width="60" height="60"/%3E%3Ctext x="30" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="%23fff" font-family="Arial"%3ES%3C/text%3E%3C/svg%3E',
-}
+const MARCA_LOGO = {}
 
 const TIPO_OPT = Object.keys(TIPO_LABEL).map(t => ({ value: t, label: TIPO_LABEL[t] }))
 const CARB_OPT = Object.keys(CARB_CFG).map(c => ({ value: c, label: c }))
