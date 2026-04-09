@@ -14,7 +14,7 @@ const TRANSLATIONS = {
     'nav.punti':       'PUDO',
     'nav.autisti':     'Autisti',
     'nav.flotta':      'Flotta',
-    'nav.filiali':     'Filiali',
+    'nav.filiali':     'Filiali Fermopoint',
     'nav.contratti':   'Contratti',
     'nav.utenti':      'Utenti',
     'nav.eccezioni':   'Eccezioni',
