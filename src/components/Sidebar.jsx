@@ -1,9 +1,9 @@
 import './Sidebar.css'
 import { useState, useMemo } from 'react'
-import { APP_VERSION } from '../version'
 import { getVisibleMenuGroups, getMenuGroupState, setMenuGroupState } from '../config/menuStructure'
 import { useI18n } from '../contexts/I18nContext'
 import SettingsPanel from './SettingsPanel/SettingsPanel'
+import VersionBadge from './ui/VersionBadge'
 
 // Mappa item.id → chiave i18n
 const SECTION_KEYS = {
@@ -158,7 +158,7 @@ export default function Sidebar({ active, onNav, eccezioniCount, segnalazioniCou
 
 <div className="sidebar-footer">
         <button className="sidebar-version sidebar-version-btn" onClick={() => setShowAbout(true)} title="Info applicazione">
-          v{APP_VERSION} · Demo
+          <VersionBadge format="demo" />
         </button>
       </div>
 

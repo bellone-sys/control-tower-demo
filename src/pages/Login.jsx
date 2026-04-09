@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { APP_VERSION } from '../version'
 import { DEMO_USERS } from '../data/stub'
+import VersionBadge from '../components/ui/VersionBadge'
 import './Login.css'
 
 export default function Login({ onLogin }) {
@@ -126,7 +126,7 @@ export default function Login({ onLogin }) {
       </div>
 
       <p className="login-footer">
-        © 2026 DPD Italy — Fermopoint Control Tower v{APP_VERSION} · Demo
+        © 2026 DPD Italy — <VersionBadge format="full" /> · Demo
       </p>
     </div>
   )

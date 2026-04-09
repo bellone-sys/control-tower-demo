@@ -1,6 +1,6 @@
-import { APP_VERSION } from '../../version'
 import './Sections.css'
 import './Credits.css'
+import VersionBadge from '../ui/VersionBadge'
 
 export default function Credits() {
   return (
@@ -17,7 +17,7 @@ export default function Credits() {
           <p className="credits-subtitle">
             Sistema di monitoraggio e gestione della rete BRT Fermopoint
           </p>
-          <span className="credits-version-pill">v{APP_VERSION}</span>
+          <VersionBadge format="simple" className="credits-version-pill" />
         </div>
       </div>
 
@@ -65,7 +65,7 @@ export default function Credits() {
           <div className="credits-info-row">
             <span className="credits-info-label">Versione</span>
             <span className="credits-info-value">
-              <span className="credits-version-inline">v{APP_VERSION}</span>
+              <VersionBadge format="simple" className="credits-version-inline" />
             </span>
           </div>
           <div className="credits-info-row">
@@ -147,7 +147,7 @@ export default function Credits() {
         </span>
         <span className="credits-footer-sep">·</span>
         <span className="credits-footer-note">
-          Fermopoint Control Tower v{APP_VERSION}
+          <VersionBadge format="full" />
         </span>
       </div>
 

@@ -1,5 +1,5 @@
-import { APP_VERSION } from '../version'
 import TutorialOverlay from '../components/tutorials/TutorialOverlay'
+import VersionBadge from '../components/ui/VersionBadge'
 import './Landing.css'
 
 export default function Landing({ isAuthenticated, onGoToDashboard, onGoToLogin }) {
@@ -25,7 +25,7 @@ export default function Landing({ isAuthenticated, onGoToDashboard, onGoToLogin 
           </svg>
         </div>
         <div className="landing-nav-right">
-          <span className="landing-version">v{APP_VERSION}</span>
+          <VersionBadge format="simple" className="landing-version" />
           {isAuthenticated ? (
             <button className="btn-landing-primary" onClick={onGoToDashboard}>
               Vai alla Dashboard →
@@ -101,7 +101,7 @@ export default function Landing({ isAuthenticated, onGoToDashboard, onGoToLogin 
 
       {/* Footer */}
       <footer className="landing-footer">
-        © 2026 DPD Italy · Fermopoint Control Tower v{APP_VERSION} · Demo
+        © 2026 DPD Italy · <VersionBadge format="full" /> · Demo
       </footer>
     </div>
   )

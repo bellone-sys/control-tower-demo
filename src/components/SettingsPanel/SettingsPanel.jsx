@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTutorial } from '../../contexts/TutorialContext'
 import { useI18n } from '../../contexts/I18nContext'
-import { APP_VERSION } from '../../version'
+import VersionBadge from '../ui/VersionBadge'
 import './SettingsPanel.css'
 
 const TUTORIALS_LIST = [
@@ -149,7 +149,7 @@ export default function SettingsPanel({ onClose, hiddenTabs = [], defaultTab }) 
                   </svg>
                 </div>
                 <div className="settings-about-title">Control Tower</div>
-                <div className="settings-about-version">v{APP_VERSION}</div>
+                <div className="settings-about-version"><VersionBadge format="simple" /></div>
                 <div className="settings-about-desc">Sistema di gestione logistica con raccolta DPD</div>
 
                 <div className="settings-about-divider" />
@@ -157,7 +157,7 @@ export default function SettingsPanel({ onClose, hiddenTabs = [], defaultTab }) 
                 <div className="settings-about-info">
                   <div className="settings-about-item">
                     <span className="settings-about-label">Versione</span>
-                    <span>{APP_VERSION}</span>
+                    <VersionBadge format="minimal" />
                   </div>
                   <div className="settings-about-item">
                     <span className="settings-about-label">Sviluppato da</span>
