@@ -420,17 +420,29 @@
   </div>
 
   <nav class="sidebar-nav" aria-label="Sezioni documento" role="navigation">
-    <div class="sidebar-label">Sezioni</div>
-    <a href="#stack"           class="active"><span class="dot" aria-hidden="true"></span>Stack Tecnologico</a>
-    <a href="#architettura">   <span class="dot" aria-hidden="true"></span>Architettura</a>
-    <a href="#context">        <span class="dot" aria-hidden="true"></span>Context API</a>
+    <div class="sidebar-label">UX/UI Design</div>
     <a href="#tema">           <span class="dot" aria-hidden="true"></span>Gestione del Tema</a>
     <a href="#i18n">           <span class="dot" aria-hidden="true"></span>Internazionalizzazione</a>
+    <a href="#accessibilita">  <span class="dot" aria-hidden="true"></span>Accessibilità WCAG 2.1</a>
+
+    <div class="sidebar-label">Front-end</div>
+    <a href="#stack"           class="active"><span class="dot" aria-hidden="true"></span>Stack Tecnologico</a>
+    <a href="#context">        <span class="dot" aria-hidden="true"></span>Context API</a>
+    <a href="#architettura">   <span class="dot" aria-hidden="true"></span>Architettura Applicativa</a>
+
+    <div class="sidebar-label">Backend</div>
+    <a href="#backend-stack">   <span class="dot" aria-hidden="true"></span>Backend & Cloud</a>
     <a href="#services">       <span class="dot" aria-hidden="true"></span>Service Layer</a>
+
+    <div class="sidebar-label">Database</div>
     <a href="#modelli">        <span class="dot" aria-hidden="true"></span>Modelli Dati</a>
     <a href="#storage">        <span class="dot" aria-hidden="true"></span>Persistenza localStorage</a>
+
+    <div class="sidebar-label">Infrastruttura</div>
+    <a href="#infra-aws">      <span class="dot" aria-hidden="true"></span>Architettura AWS</a>
+
+    <div class="sidebar-label">Operations</div>
     <a href="#csv">            <span class="dot" aria-hidden="true"></span>Importazione CSV</a>
-    <a href="#accessibilita">  <span class="dot" aria-hidden="true"></span>Accessibilità WCAG 2.1</a>
     <a href="#build">          <span class="dot" aria-hidden="true"></span>Build e Deploy</a>
 
     <hr class="sidebar-divider" aria-hidden="true"/>
@@ -518,10 +530,19 @@
       </table>
     </div>
 
-    <h3>Backend &amp; Cloud (Produzione)</h3>
+    <div class="info-box">
+      Nessuna dipendenza da framework di routing esterni: la navigazione tra le viste avviene
+      tramite stato React (variabile <code>activeView</code> nel contesto applicativo principale).
+    </div>
+  </section>
+
+  <!-- ── BACKEND & CLOUD ── -->
+  <section class="doc-section" id="backend-stack">
+    <h2>Backend &amp; Cloud (Produzione)</h2>
     <p>
       L'infrastruttura di produzione del Control Tower è ospitata su Amazon Web Services (AWS)
-      con un'architettura scalabile, resiliente e multi-region.
+      con un'architettura scalabile, resiliente e multi-region. Backend e cloud services sono
+      configurati in produzione mediante Infrastructure-as-Code (IaC) via CloudFormation/Terraform.
     </p>
     <div class="table-responsive">
       <table class="data-table" aria-label="Stack backend e cloud">
@@ -566,12 +587,6 @@
         </tbody>
       </table>
     </div>
-
-    <div class="info-box">
-      Nessuna dipendenza da framework di routing esterni nel frontend: la navigazione tra le viste avviene
-      tramite stato React (variabile <code>activeView</code> nel contesto applicativo principale).
-      Backend e cloud services sono configurati in produzione mediante Infrastructure-as-Code (IaC) via CloudFormation/Terraform.
-    </div>
   </section>
 
   <!-- ── 2. ARCHITETTURA APPLICATIVA ── -->
@@ -605,10 +620,18 @@
       <li><strong>Componenti controllati</strong> — form e filtri utilizzano pattern controlled component per mantenere lo stato in React.</li>
     </ul>
 
-    <h3>Infrastruttura AWS</h3>
+    <div class="warn-box">
+      La demo non include autenticazione reale. Il modulo di login è puramente client-side
+      e non deve essere utilizzato in ambienti di produzione senza integrare un Identity Provider.
+    </div>
+  </section>
+
+  <!-- ── INFRASTRUTTURA AWS ── -->
+  <section class="doc-section" id="infra-aws">
+    <h2>Architettura AWS</h2>
     <p>
       L'applicazione di produzione è distribuita su Amazon Web Services con un'architettura multi-region
-      per alta disponibilità e disaster recovery. La topologia segue il modello di regione primaria + DR.
+      per alta disponibilità e disaster recovery. La topologia segue il modello di regione primaria + regione DR.
     </p>
     <div class="formula-box">
       <table>
@@ -628,9 +651,8 @@
     </div>
 
     <div class="warn-box">
-      La demo non include autenticazione reale. Il modulo di login è puramente client-side
-      e non deve essere utilizzato in ambienti di produzione senza integrare Amazon Cognito o altro Identity Provider.
-      Produzione richiede SSL/TLS, WAF, e conformità GDPR/LCC per dati sensibili.
+      Produzione richiede SSL/TLS, WAF (Web Application Firewall), e conformità GDPR/LCC per dati sensibili.
+      Tutti i servizi AWS operano con crittografia in transit e at-rest.
     </div>
   </section>
 
