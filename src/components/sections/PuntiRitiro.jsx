@@ -150,30 +150,6 @@ export default function PuntiRitiro() {
         <div className="card-header">
           <h3>Pudo e Locker</h3>
           <div className="card-actions">
-            {/* Data source selector */}
-            <select
-              value={dataSource}
-              onChange={(e) => {
-                setDataSource(e.target.value)
-                setPage(1)
-                setFilterCap([])
-              }}
-              style={{
-                padding: '6px 10px',
-                border: '1px solid var(--fp-border)',
-                borderRadius: 6,
-                fontSize: 12,
-                cursor: 'pointer',
-                background: '#fff',
-                marginRight: 12,
-              }}
-            >
-              <option value="roma">📍 Roma (demo)</option>
-              <option value="fermopoint" disabled={loadingFermoPoint}>
-                {loadingFermoPoint ? '📦 Fermopoint (caricamento...)' : '📦 Fermopoint'}
-              </option>
-            </select>
-
             <span className="card-label">
               {filtered.length} PUDO su {pudosData.length}
               {dataSource === 'fermopoint' && stats && ` (${stats.total.toLocaleString('it-IT')} totali)`}
