@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import '../ui/AuditPanel.css'
 import './PuntiRitiroDetail.css'
 
 const DAYS = ['lun','mar','mer','gio','ven','sab','dom']
@@ -104,13 +106,13 @@ export default function PuntiRitiroDetail({ pudo, onClose }) {
   // Build max slots per day for table rows
   const maxSlots = Math.max(...DAYS.map(d => (pudo.hours[d] || []).length), 1)
 
-  return (
+  const content = (
     <>
       {/* Backdrop */}
       <div className="audit-backdrop open" onClick={onClose} aria-hidden="true" />
 
       {/* Panel slide-in */}
-      <aside className="audit-panel open pr-detail-panel" aria-label="Dettaglio PUDO">
+      <aside className="audit-panel open pr-detail-panel" style={{ position: 'fixed' }} aria-label="Dettaglio PUDO">
         {/* Header — stile identico AuditPanel */}
         <div className="audit-panel-header">
           <div className="audit-panel-title">
@@ -228,4 +230,6 @@ export default function PuntiRitiroDetail({ pudo, onClose }) {
       </aside>
     </>
   )
+
+  return createPortal(content, document.body)
 }
