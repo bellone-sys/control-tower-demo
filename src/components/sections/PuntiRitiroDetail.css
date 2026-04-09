@@ -1,12 +1,21 @@
-/* ===== OVERRIDE per slide-in panel ===== */
+/* ===== OVERRIDE per modal centrato ===== */
 aside.pr-detail-panel {
-  width: 520px;
+  width: 620px;
+  max-width: 90vw;
+  max-height: 90vh;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  border-radius: 12px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
 }
 
 .pr-panel-body .detail-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 20px;
 }
 
 .pr-panel-body .detail-map-wrap {
@@ -184,17 +193,25 @@ aside.pr-detail-panel {
   align-items: center;
   gap: 10px;
   font-size: 13px;
+  flex-wrap: wrap;
 }
 .info-list li svg { color: var(--fp-gray-light); flex-shrink: 0; }
+.info-list li:has(.info-label) {
+  flex-wrap: nowrap;
+}
 .info-label {
   font-size: 11px;
   font-weight: 700;
   color: var(--fp-gray-mid);
   letter-spacing: 1px;
-  width: 28px;
-  flex-shrink: 0;
+  min-width: max-content;
+  flex-shrink: 1;
 }
-.info-value { color: var(--fp-charcoal); }
+.info-value {
+  color: var(--fp-charcoal);
+  margin-left: auto;
+  font-weight: 600;
+}
 .info-status.open  { color: #2E7D32; font-weight: 500; }
 .info-status.closed { color: var(--fp-red); font-weight: 500; }
 
