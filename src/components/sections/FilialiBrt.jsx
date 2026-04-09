@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { FILIALI_BRT, PROVINCE_BRT, REGIONI_BRT } from '../../data/filialiBrt'
 import MultiSelect from '../ui/MultiSelect'
+import Pagination from '../ui/Pagination'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -23,30 +24,6 @@ function SortTh({ field, sk, sd, onSort, children, style }) {
       {children}
       {active ? <span className="sort-arrow">{sd === 'asc' ? ' ↑' : ' ↓'}</span> : null}
     </th>
-  )
-}
-
-function Pagination({ page, total, onPage, pageSize, total_items }) {
-  if (total <= 1) return null
-  const pages = []
-  for (let i = 1; i <= total; i++) {
-    if (i === 1 || i === total || (i >= page - 2 && i <= page + 2)) pages.push(i)
-    else if (pages[pages.length - 1] !== '…') pages.push('…')
-  }
-  return (
-    <div className="pagination">
-      <button className="page-btn" onClick={() => onPage(1)}        disabled={page === 1}>«</button>
-      <button className="page-btn" onClick={() => onPage(page - 1)} disabled={page === 1}>‹</button>
-      {pages.map((p, i) => p === '…'
-        ? <span key={`e${i}`} className="page-ellipsis">…</span>
-        : <button key={p} className={`page-btn${p === page ? ' active' : ''}`} onClick={() => onPage(p)}>{p}</button>
-      )}
-      <button className="page-btn" onClick={() => onPage(page + 1)} disabled={page === total}>›</button>
-      <button className="page-btn" onClick={() => onPage(total)}    disabled={page === total}>»</button>
-      <span className="page-info">
-        {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, total_items)} di {total_items}
-      </span>
-    </div>
   )
 }
 

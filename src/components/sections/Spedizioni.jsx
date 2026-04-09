@@ -2,6 +2,7 @@ import { useState, useMemo, Fragment } from 'react'
 import { SPEDIZIONI_INIT } from '../../data/spedizioni'
 import pudosRoma from '../../data/pudosRoma.json'
 import MultiSelect from '../ui/MultiSelect'
+import Pagination from '../ui/Pagination'
 import ImportModal from './spedizioni/ImportModal'
 import PudoDetailModal from './spedizioni/PudoDetailModal'
 import TutorialOverlay from '../tutorials/TutorialOverlay'
@@ -105,25 +106,6 @@ const KPI_TOTALI   = SPEDIZIONI_INIT.length
 const KPI_CONSEGNE = SPEDIZIONI_INIT.filter(s => s.tipo === 'consegna').length
 const KPI_RITIRI   = SPEDIZIONI_INIT.filter(s => s.tipo === 'ritiro').length
 const KPI_PESO     = +(SPEDIZIONI_INIT.reduce((s, sp) => s + sp.peso, 0).toFixed(1))
-
-// ── Pagination component ─────────────────────────────────
-function PaginationPages({ current, total, onPage }) {
-  const pages = []
-  const delta = 2
-  for (let i = 1; i <= total; i++) {
-    if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) pages.push(i)
-    else if (pages[pages.length - 1] !== '…') pages.push('…')
-  }
-  return (
-    <>
-      {pages.map((p, i) =>
-        p === '…'
-          ? <span key={`e${i}`} className="page-ellipsis">…</span>
-          : <button key={p} className={`page-btn${p === current ? ' active' : ''}`} onClick={() => onPage(p)}>{p}</button>
-      )}
-    </>
-  )
-}
 
 // ── Main component ───────────────────────────────────────
 export default function Spedizioni({ onStartJob, onNav }) {
@@ -473,16 +455,7 @@ export default function Spedizioni({ onStartJob, onNav }) {
 
         {/* ── Pagination ── */}
         {totalPages > 1 && (
-          <div className="pagination">
-            <button className="page-btn" onClick={() => setPage(1)}        disabled={page === 1}>«</button>
-            <button className="page-btn" onClick={() => setPage(p => p-1)} disabled={page === 1}>‹</button>
-            <PaginationPages current={page} total={totalPages} onPage={setPage} />
-            <button className="page-btn" onClick={() => setPage(p => p+1)} disabled={page === totalPages}>›</button>
-            <button className="page-btn" onClick={() => setPage(totalPages)} disabled={page === totalPages}>»</button>
-            <span className="page-info">
-              {(page-1)*PAGE_SIZE+1}–{Math.min(page*PAGE_SIZE, filtered.length)} di {filtered.length}
-            </span>
-          </div>
+          <Pagination page={page} total={totalPages} onPage={setPage} pageSize={PAGE_SIZE} total_items={filtered.length} />
         )}
       </div>
 

@@ -8,6 +8,7 @@ import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaf
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './Sections.css'
+import Pagination from '../ui/Pagination'
 import './PuntiRitiro.css'
 
 const PAGE_SIZE = 25
@@ -313,16 +314,7 @@ export default function PuntiRitiro() {
 
         {/* Pagination */}
         {viewMode === 'list' && totalPages > 1 && (
-          <div className="pagination">
-            <button className="page-btn" onClick={() => setPage(1)} disabled={page === 1}>«</button>
-            <button className="page-btn" onClick={() => setPage(p => p - 1)} disabled={page === 1}>‹</button>
-            <PaginationPages current={page} total={totalPages} onPage={setPage} />
-            <button className="page-btn" onClick={() => setPage(p => p + 1)} disabled={page === totalPages}>›</button>
-            <button className="page-btn" onClick={() => setPage(totalPages)} disabled={page === totalPages}>»</button>
-            <span className="page-info">
-              {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} di {filtered.length}
-            </span>
-          </div>
+          <Pagination page={page} total={totalPages} onPage={setPage} pageSize={PAGE_SIZE} total_items={filtered.length} />
         )}
       </div>
 
@@ -342,35 +334,6 @@ export default function PuntiRitiro() {
     <>
       {listBlock}
       {selected && <PuntiRitiroDetail pudo={selected} onClose={() => setSelected(null)} />}
-    </>
-  )
-}
-
-function PaginationPages({ current, total, onPage }) {
-  const pages = []
-  const delta = 2
-  for (let i = 1; i <= total; i++) {
-    if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
-      pages.push(i)
-    } else if (pages[pages.length - 1] !== '…') {
-      pages.push('…')
-    }
-  }
-  return (
-    <>
-      {pages.map((p, i) =>
-        p === '…' ? (
-          <span key={`e${i}`} className="page-ellipsis">…</span>
-        ) : (
-          <button
-            key={p}
-            className={`page-btn ${p === current ? 'active' : ''}`}
-            onClick={() => onPage(p)}
-          >
-            {p}
-          </button>
-        )
-      )}
     </>
   )
 }
