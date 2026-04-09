@@ -36,10 +36,18 @@ export default function WizardStep1({ data, onChange, errors = [] }) {
     const brtFiliale = FILIALI_BRT.find(f => f.id === filialeId)
 
     if (fpFiliale) {
-      onChange({ filialeId, province: [] })
+      // Auto-generate scenario name
+      const now = new Date()
+      const mese = MONTHS_IT[now.getMonth()]
+      const anno = now.getFullYear()
+      onChange({ filialeId, province: [], nomeScenario: `${fpFiliale.nome} — ${mese} ${anno}` })
     } else if (brtFiliale) {
       const extraFiliali = [...(data.extraFiliali || []), brtFiliale]
-      onChange({ extraFiliali, filialeId, province: [] })
+      // Auto-generate scenario name
+      const now = new Date()
+      const mese = MONTHS_IT[now.getMonth()]
+      const anno = now.getFullYear()
+      onChange({ extraFiliali, filialeId, province: [], nomeScenario: `${brtFiliale.nome} — ${mese} ${anno}` })
     }
   }
 
